@@ -8,6 +8,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <vector>
 
 
 void chk_SDL(int return_value, const char* error_string)
@@ -45,7 +46,10 @@ int main(int argc, char* argv[])
 	chk_SDL(SDL_RenderSetLogicalSize(renderer, 1280, 720), SDL_GetError());
 	chk_SDL(SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND), SDL_GetError());
 
-	Image yuri("img/yuri_tea.png", renderer);
+	//std::vector<Image> images = {Image("img/ai-blob-walk.gif", renderer, 1), Image("img/yuri_tea.png", renderer, 2)};
+	//std::vector<Image> images = {Image("img/yuri_tea.png", renderer, 1)}; //=> problème : le destructeur est appelé immédiatement
+
+	Image yuri("img/yuri_tea.png", renderer, 1);
 
 	bool game_running = true;
 	while(game_running)
@@ -69,42 +73,6 @@ int main(int argc, char* argv[])
 							game_running = false;
 							break;
 
-						case SDLK_a:
-							yuri.flip_horizontally();
-							break;
-
-						case SDLK_z:
-							yuri.flip_vertically();
-							break;
-
-						case SDLK_e:
-							yuri.flip_normal();
-							break;
-
-						case SDLK_h:
-							yuri.hide(renderer);
-							break;
-
-						case SDLK_s:
-							yuri.show(renderer);
-							break;
-
-						case SDLK_UP:
-							yuri.angle += 1;
-							break;
-
-						case SDLK_DOWN:
-							yuri.angle -= 1;
-							break;
-
-						case SDLK_LEFT:
-							yuri.position(yuri.rect.x - 10, yuri.rect.y - 10);
-							break;
-
-						case SDLK_RIGHT:
-							yuri.position(yuri.rect.x + 10, yuri.rect.y + 10);
-							break;
-
 						default:
 							break;
 					}
@@ -119,7 +87,9 @@ int main(int argc, char* argv[])
 		}
 		
 		SDL_RenderClear(renderer);
-		SDL_RenderCopyEx(renderer, yuri.texture, nullptr, &(yuri.rect), yuri.angle, nullptr, yuri.flip);
+
+		yuri.draw(renderer);
+
 		SDL_RenderPresent(renderer);
 	}
 
