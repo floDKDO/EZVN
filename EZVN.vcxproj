@@ -134,15 +134,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\image.cpp" />
+    <ClCompile Include="src\inputfield.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\music.cpp" />
     <ClCompile Include="src\sound.cpp" />
+    <ClCompile Include="src\toggle.cpp" />
+    <ClCompile Include="src\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\button.h" />
     <ClInclude Include="include\image.h" />
+    <ClInclude Include="include\inputfield.h" />
+    <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\music.h" />
     <ClInclude Include="include\sound.h" />
+    <ClInclude Include="include\toggle.h" />
+    <ClInclude Include="include\ui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

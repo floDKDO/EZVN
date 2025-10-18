@@ -6,6 +6,7 @@
 #include "image.h"
 #include "sound.h"
 #include "music.h"
+#include "button.h"
 
 #include <iostream>
 #include <chrono>
@@ -38,6 +39,12 @@ bool cmp(const Image& a, const Image& b)
 }
 
 
+void button_function(void)
+{
+	std::cout << "Clicked !" << std::endl;
+}
+
+
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -65,6 +72,8 @@ int main(int argc, char* argv[])
 	images.push_back(blob);
 
 	std::stable_sort(images.begin(), images.end(), &cmp);
+
+	Ui* button = new Button("img/button.png", 200, 200, renderer, &button_function);
 
 	bool game_running = true;
 	while(game_running)
@@ -95,10 +104,12 @@ int main(int argc, char* argv[])
 
 				case SDL_KEYUP:
 					break;
-
+					
 				default:
 					break;
 			}
+
+			button->handle_events(e);
 		}
 		
 		SDL_RenderClear(renderer);
@@ -107,6 +118,8 @@ int main(int argc, char* argv[])
 		{
 			i.draw(renderer);
 		}
+
+		button->draw(renderer);
 
 		SDL_RenderPresent(renderer);
 	}
