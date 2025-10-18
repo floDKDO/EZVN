@@ -1,7 +1,12 @@
 #include "image.h"
 
+Image::Image()
+{
+	std::cout << "Default constructor called" << std::endl;
+}
+
 Image::Image(std::string path, SDL_Renderer* renderer)
-	: alpha(255), angle(0), zorder(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
+	: name(path), alpha(255), angle(0), zorder(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
 {
 	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
 
@@ -27,7 +32,7 @@ Image::Image(std::string path, SDL_Renderer* renderer)
 }
 
 Image::Image(std::string path, SDL_Renderer* renderer, int zorder)
-	: alpha(255), angle(0), zorder(zorder), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
+	: name(path), alpha(255), angle(0), zorder(zorder), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
 {
 	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
 
@@ -52,10 +57,10 @@ Image::Image(std::string path, SDL_Renderer* renderer, int zorder)
 	this->rect = {1280 / 4, 720 / 4, w, h};
 }
 
-
+//TODO : rule of 3/5
 Image::~Image()
 {
-	std::cout << "Destructeur !" << std::endl;
+	std::cout << "Destructeur " << this->name << std::endl;
 	SDL_DestroyTexture(this->texture);
 }
 

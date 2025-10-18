@@ -8,6 +8,7 @@
 class Image
 {
 	public:
+		Image();
 		Image(std::string path, SDL_Renderer* renderer);
 		Image(std::string path, SDL_Renderer* renderer, int zorder);
 		~Image();
@@ -27,6 +28,7 @@ class Image
 
 		void draw(SDL_Renderer* renderer);
 
+		std::string name;
 		SDL_Rect rect;
 		int alpha;
 		double angle;

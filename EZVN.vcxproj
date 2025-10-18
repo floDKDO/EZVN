@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\Florian\source\repos\EZVN\include;$(IncludePath)</IncludePath>
-    <SourcePath>C:\Users\Florian\source\repos\EZVN\src;$(SourcePath)</SourcePath>
+    <IncludePath>D:\GitHub\EZVN\include;$(IncludePath)</IncludePath>
+    <SourcePath>D:\GitHub\EZVN\src;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -136,9 +136,13 @@
   <ItemGroup>
     <ClCompile Include="src\image.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\music.cpp" />
+    <ClCompile Include="src\sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\image.h" />
+    <ClInclude Include="include\music.h" />
+    <ClInclude Include="include\sound.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

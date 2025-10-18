@@ -4,11 +4,14 @@
 #include <SDL2/SDL_mixer.h>
 
 #include "image.h"
+#include "sound.h"
+#include "music.h"
 
 #include <iostream>
 #include <chrono>
 #include <thread>
 #include <vector>
+#include <algorithm>
 
 
 void chk_SDL(int return_value, const char* error_string)
@@ -27,6 +30,11 @@ void nchk_SDL(void* return_value, const char* error_string)
 		std::cerr << error_string << std::endl;
 		exit(EXIT_FAILURE);
 	}
+}
+
+bool cmp(const Image& a, const Image& b)
+{
+	return a.zorder < b.zorder;
 }
 
 
@@ -50,6 +58,13 @@ int main(int argc, char* argv[])
 	//std::vector<Image> images = {Image("img/yuri_tea.png", renderer, 1)}; //=> problème : le destructeur est appelé immédiatement
 
 	Image yuri("img/yuri_tea.png", renderer, 1);
+	Image blob("img/ai-blob-walk.gif", renderer, 1);
+	std::vector<Image> images;
+	images.reserve(10);
+	images.push_back(yuri);
+	images.push_back(blob);
+
+	std::stable_sort(images.begin(), images.end(), &cmp);
 
 	bool game_running = true;
 	while(game_running)
@@ -88,7 +103,10 @@ int main(int argc, char* argv[])
 		
 		SDL_RenderClear(renderer);
 
-		yuri.draw(renderer);
+		for(Image& i : images) //TODO : sans référence sur i, le destructeur de chaque élément de images est appelé à chaque tour de boucle
+		{
+			i.draw(renderer);
+		}
 
 		SDL_RenderPresent(renderer);
 	}
