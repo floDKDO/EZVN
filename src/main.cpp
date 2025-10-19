@@ -7,6 +7,9 @@
 #include "sound.h"
 #include "music.h"
 #include "button.h"
+#include "textbutton.h"
+#include "toggle.h"
+#include "inputfield.h"
 
 #include <iostream>
 #include <chrono>
@@ -44,6 +47,11 @@ void button_function(void)
 	std::cout << "Clicked !" << std::endl;
 }
 
+void inputfield_function(std::string text)
+{
+	std::cout << text << std::endl;
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -53,9 +61,12 @@ int main(int argc, char* argv[])
 	chk_SDL(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_CHANNELS, 1024), Mix_GetError());
 	TTF_Init();
 
+	SDL_StartTextInput();
+
 	SDL_Window* window;
 	nchk_SDL(window = SDL_CreateWindow("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_RESIZABLE), SDL_GetError());
 
+	//TODO : l'utiliser en extern dans les autres classes ?
 	SDL_Renderer* renderer;
 	nchk_SDL(renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_TARGETTEXTURE), SDL_GetError());
 	chk_SDL(SDL_RenderSetLogicalSize(renderer, 1280, 720), SDL_GetError());
@@ -73,7 +84,12 @@ int main(int argc, char* argv[])
 
 	std::stable_sort(images.begin(), images.end(), &cmp);
 
-	Ui* button = new Button("img/button.png", 200, 200, renderer, &button_function);
+	Ui* button = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 200, 200, renderer, &button_function);
+	Ui* textbutton = new TextButton("My text", {255, 255, 255, 255}, {255, 0, 0, 255}, {0, 0, 255, 255}, 500, 500, renderer, &button_function);
+	Ui* toggle = new Toggle("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", "img/checked.png", 100, 600, renderer, &button_function);
+	Ui* inputfield = new Inputfield("img/inputfield.png", {0, 0, 0, 255}, 100, 0, renderer, &inputfield_function);
+
+	Uint32 time_step = SDL_GetTicks();
 
 	bool game_running = true;
 	while(game_running)
@@ -110,6 +126,9 @@ int main(int argc, char* argv[])
 			}
 
 			button->handle_events(e);
+			textbutton->handle_events(e);
+			toggle->handle_events(e);
+			inputfield->handle_events(e);
 		}
 		
 		SDL_RenderClear(renderer);
@@ -120,12 +139,18 @@ int main(int argc, char* argv[])
 		}
 
 		button->draw(renderer);
+		textbutton->draw(renderer);
+		toggle->draw(renderer);
+		inputfield->draw(renderer);
+		inputfield->update(time_step);
 
 		SDL_RenderPresent(renderer);
 	}
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+
+	SDL_StopTextInput();
 
 	TTF_Quit();
 	Mix_CloseAudio();

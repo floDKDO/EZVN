@@ -3,7 +3,7 @@
 #include <iostream>
 
 Ui::Ui()
-	:select_on_up(nullptr), select_on_down(nullptr), select_on_left(nullptr), select_on_right(nullptr), state(State::NORMAL), select_sound("sounds/base_select.ogg"), click_sound("sounds/base_click.ogg")
+	:select_on_up(nullptr), select_on_down(nullptr), select_on_left(nullptr), select_on_right(nullptr), state(State::NORMAL), select_sound("sounds/base_select.ogg"), click_sound("sounds/base_click.ogg"), is_selected_sound_played(false)
 {
 	std::cout << "Constructor from base class" << std::endl;
 }
@@ -29,11 +29,11 @@ void Ui::handle_events(SDL_Event e)
 	switch(e.type)
 	{
 		case SDL_KEYDOWN:
-			this->on_key_pressed();
+			this->on_key_pressed(e);
 			break;
 
 		case SDL_KEYUP:
-			this->on_key_released();
+			this->on_key_released(e);
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
@@ -59,5 +59,8 @@ void Ui::handle_events(SDL_Event e)
 			else this->on_pointer_exit();
 		}
 		break;
+
+		default:
+			break;
 	}
 }
