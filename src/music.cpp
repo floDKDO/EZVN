@@ -47,7 +47,7 @@ void Music::stop_music(const int fadeout_length) const
 void Music::change_volume(const int volume) const //[0; MIX_MAX_VOLUME(=128)]
 {
 	//0 = 0%, 128 = 100%
-	Mix_VolumeMusic(volume * 128 / 100);
+	Mix_VolumeMusic(volume * MIX_MAX_VOLUME / 100);
 }
 
 void Music::set_position(const double position) const 

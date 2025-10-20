@@ -17,9 +17,14 @@
 #include <vector>
 #include <algorithm>
 
-//TODO : const dans constructeurs
-//TODO : utiliser de meilleurs types 
+//TODO : la classe Image est générale pour toutes les images, et créer une classe Sprite/Character/... pour les personnages
+//TODO : corriger les warnings
 //TODO : =delete
+//TODO : ordre des attributs dans les classes
+//TODO : retirer les include inutiles
+//TODO : convention dans l'ordre des include
+//TODO : init des arg des constructeurs sur plusieurs lignes si nécessaire
+//TODO : ajouter un compteur de FPS (et limiter les FPS / caper les mouvements selon les FPS)
 
 
 void chk_SDL(const int return_value, const char* error_string)
@@ -46,61 +51,57 @@ bool cmp(const Image& a, const Image& b)
 }
 
 
-void button_function(void)
+void button_function(Ui* ui)
 {
 	std::cout << "Clicked !" << std::endl;
 }
 
-void inputfield_function(std::string text)
+void inputfield_function(Ui* ui)
 {
-	std::cout << text << std::endl;
+	std::cout << dynamic_cast<Inputfield*>(ui)->text.text << std::endl;
 }
 
 
 int main(int argc, char* argv[])
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
-	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-	Mix_Init(MIX_INIT_OGG);
+	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG); //TODO : quels flags ?
+	Mix_Init(MIX_INIT_OGG); //TODO : quels flags ?
 	chk_SDL(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_CHANNELS, 1024), Mix_GetError());
 	TTF_Init();
 
 	SDL_StartTextInput();
 
 	SDL_Window* window;
-	nchk_SDL(window = SDL_CreateWindow("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_RESIZABLE), SDL_GetError());
+	nchk_SDL(window = SDL_CreateWindow("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, SDL_WINDOW_RESIZABLE), SDL_GetError()); //TODO : constantes
 
 	//TODO : l'utiliser en extern dans les autres classes ?
 	SDL_Renderer* renderer;
-	nchk_SDL(renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_TARGETTEXTURE), SDL_GetError());
-	chk_SDL(SDL_RenderSetLogicalSize(renderer, 1280, 720), SDL_GetError());
-	chk_SDL(SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND), SDL_GetError());
+	nchk_SDL(renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_TARGETTEXTURE), SDL_GetError()); //TODO : quels flags ? (SDL_RENDERER_TARGETTEXTURE utile ?)
+	chk_SDL(SDL_RenderSetLogicalSize(renderer, 1280, 720), SDL_GetError()); //TODO : constantes
+	chk_SDL(SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND), SDL_GetError()); //TODO : utile ??
 
 	//std::vector<Image> images = {Image("img/ai-blob-walk.gif", renderer, 1), Image("img/yuri_tea.png", renderer, 2)};
 	//std::vector<Image> images = {Image("img/yuri_tea.png", renderer, 1)}; //=> problème : le destructeur est appelé immédiatement
 
-	Image yuri("img/yuri_tea.png", renderer, 1);
-	Image blob("img/ai-blob-walk.gif", renderer, 1);
+	Image yuri("img/yuri_tea.png", 100, 100, renderer, 1);
+	Image blob("img/ai-blob-walk.gif", 500, 200, renderer, 1);
 	std::vector<Image> images;
 	images.reserve(10);
 	images.push_back(yuri);
 	images.push_back(blob);
 
-	std::cout << "Taille : " << sizeof(yuri) << std::endl;
-	//TODO : const référence pour des gros objets "If you don’t want to change the object passed and it is big, call by const reference; e.g., void f(const X&);."
+	//TODO : utiliser "const référence" pour des gros objets "If you don’t want to change the object passed and it is big, call by const reference; e.g., void f(const X&);."
 
 	std::stable_sort(images.begin(), images.end(), &cmp);
 
 	Ui* button = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 200, 200, renderer, &button_function);
 	Ui* textbutton = new TextButton("My text", {255, 255, 255, 255}, {255, 0, 0, 255}, {0, 0, 255, 255}, 500, 500, renderer, &button_function);
-	Ui* toggle = new Toggle("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", "img/checked.png", 100, 600, renderer, &button_function);
+	Ui* toggle = new Toggle("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", "img/checked.png", 100, 600, true, renderer, &button_function);
 	Ui* inputfield = new Inputfield("img/inputfield.png", {0, 0, 0, 255}, 100, 0, renderer, &inputfield_function);
 	//TODO : ne pas oublier les delete
 
-	std::cout << "Taille : " << sizeof(*inputfield) << std::endl;
-	std::cout << "Taille : " << sizeof(SDL_Event) << std::endl;
-
-	Uint32 time_step = SDL_GetTicks();
+	Uint64 time_step = SDL_GetTicks64(); 
 
 	bool game_running = true;
 	while(game_running)

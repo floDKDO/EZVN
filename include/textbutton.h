@@ -7,15 +7,13 @@
 class TextButton : public Ui
 {
 	public:
-		TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void));
+		TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, SDL_Renderer* renderer, void(*callback_function)(Ui* ui));
 
 		Text text;
 
 		SDL_Color color_normal;
 		SDL_Color color_selected;
 		SDL_Color color_clicked;
-
-		void(*function_ptr)(void);
 
 		void on_pointer_down() override;
 		void on_pointer_enter() override;
@@ -27,7 +25,7 @@ class TextButton : public Ui
 		void on_key_released(const SDL_Event& e) override;
 
 		void draw(SDL_Renderer* renderer) override;
-		void update(Uint32& timeStep) override;
+		void update(Uint64& timeStep) override;
 
 	protected:
 

@@ -2,26 +2,24 @@
 
 #include "ui.h"
 #include "text.h"
+#include "image.h"
 
 class Inputfield : public Ui
 {
 	public:
-		Inputfield(const std::string path, const SDL_Color color, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(std::string text));
-		~Inputfield();
+		Inputfield(const std::string path, const SDL_Color color_normal, const int x, const int y, SDL_Renderer* renderer, void(*callback_function)(Ui* ui));
 
-		SDL_Texture* image;
+		Image normal;
 
-		SDL_Color color;
+		SDL_Color color_normal;
 
 		Text text;
 		Text text_caret;
 		Text text_placeholder;
 
-		bool is_editing; //TODO : renommer en is_editing
+		bool is_editing;
 		bool is_writing;
-		int character_limit;
-
-		void(*function_ptr)(std::string text);
+		unsigned int character_limit;
 
 		void on_pointer_down() override;
 		void on_pointer_enter() override;
@@ -36,7 +34,7 @@ class Inputfield : public Ui
 
 		void handle_events(const SDL_Event& e) override;
 		void draw(SDL_Renderer* renderer) override;
-		void update(Uint32& timeStep) override;
+		void update(Uint64& timeStep) override;
 
 	protected:
 

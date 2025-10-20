@@ -1,10 +1,10 @@
 #include "text.h"
 #include <iostream>
 
-Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int x, const int y, SDL_Renderer* renderer)
-	:text(text), color(color)
+Text::Text(const std::string text, const SDL_Color color, const std::string font_path, int font_size, const int x, const int y, SDL_Renderer* renderer)
+	:text(text), color(color), font_size(font_size)
 {
-	this->font = TTF_OpenFont(font_path.c_str(), 50); //TODO : taille ?
+	this->font = TTF_OpenFont(font_path.c_str(), this->font_size); 
 
 	int w, h;
 	TTF_SizeUTF8(this->font, this->text.c_str(), &w, &h);
@@ -26,6 +26,8 @@ Text::Text(const std::string text, const SDL_Color color, const std::string font
 Text::~Text()
 {
 	TTF_CloseFont(this->font);
+	SDL_DestroyTexture(this->texture);
+	SDL_FreeSurface(this->surface);
 }
 
 //TODO : renommer en text_updated ??

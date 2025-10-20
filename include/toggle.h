@@ -1,21 +1,19 @@
 #pragma once
 
 #include "ui.h"
+#include "image.h"
 
 class Toggle : public Ui
 {
 	public:
-		Toggle(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void));
-		~Toggle();
+		Toggle(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, void(*callback_function)(Ui* ui));
 
-		SDL_Texture* normal_image;
-		SDL_Texture* selected_image;
-		SDL_Texture* clicked_image;
+		Image normal;
+		Image selected;
+		Image clicked;
+		Image checked; //TODO : renommer ??*/
 
-		SDL_Texture* checked_image; //TODO : renommer ??
 		bool is_checked;
-
-		void(*function_ptr)(void);
 
 		void on_pointer_down() override;
 		void on_pointer_enter() override;
@@ -27,7 +25,7 @@ class Toggle : public Ui
 		void on_key_released(const SDL_Event& e) override;
 
 		void draw(SDL_Renderer* renderer) override;
-		void update(Uint32& timeStep) override;
+		void update(Uint64& timeStep) override;
 
 	protected:
 

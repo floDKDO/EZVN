@@ -30,6 +30,8 @@ class Ui
 
 		bool is_selected_sound_played;
 
+		void(*callback_function)(Ui* ui);
+
 		virtual void on_pointer_down() = 0;
 		virtual void on_pointer_enter() = 0;
 		virtual void on_pointer_exit() = 0;
@@ -40,10 +42,10 @@ class Ui
 		virtual void on_key_released(const SDL_Event& e) = 0;
 
 		virtual void draw(SDL_Renderer* renderer) = 0;
-		virtual void update(Uint32& timeStep) = 0;
-		virtual void handle_events(const SDL_Event& e); //TODO : garder virtual ?
+		virtual void update(Uint64& timeStep) = 0;
+		virtual void handle_events(const SDL_Event& e); 
 
-		virtual bool is_mouse_on_ui() const; //TODO : garder virtual ?
+		bool is_mouse_on_ui() const;
 
 	protected:
 		Ui(); //TODO : pour initialiser les attributs communs à toutes les classes filles

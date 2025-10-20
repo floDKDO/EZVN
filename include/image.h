@@ -8,10 +8,11 @@
 class Image
 {
 	public:
-		Image();
-		Image(const std::string path, SDL_Renderer* renderer);
-		Image(const std::string path, SDL_Renderer* renderer, const int zorder);
+		Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder=0);
 		~Image();
+		//Image(const Image& i);
+		//Image& operator=(const Image& i);
+
 		void show();
 		void hide();
 
@@ -20,7 +21,7 @@ class Image
 		void flip_normal();
 
 		void resize(const int w, const int h);
-		void position(const int x, const int y);
+		void set_position(const int x, const int y);
 
 		void night_filter();
 		void afternoon_filter();
@@ -29,7 +30,7 @@ class Image
 		void draw(SDL_Renderer* renderer);
 
 		std::string name;
-		SDL_Rect rect;
+		SDL_Rect position; 
 		Uint8 alpha;
 		double angle;
 		int zorder;
@@ -37,7 +38,7 @@ class Image
 		Uint8 r, g, b; 
 
 		bool is_gif;
-		int frame_number;
+		size_t frame_index; 
 		IMG_Animation* gif;
 
 		SDL_Texture* texture;

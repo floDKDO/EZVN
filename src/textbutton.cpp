@@ -2,9 +2,10 @@
 #include <iostream>
 
 //TODO : trop de code dupliqué avec la classe Button
-TextButton::TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void))
-	: text(text, color_normal, "fonts/Aller_Rg.ttf", x, y, renderer), color_normal(color_normal), color_selected(color_selected), color_clicked(color_clicked), function_ptr(function_ptr)
+TextButton::TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, SDL_Renderer* renderer, void(*callback_function)(Ui* ui))
+	: text(text, color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer), color_normal(color_normal), color_selected(color_selected), color_clicked(color_clicked)
 {
+	this->callback_function = callback_function;
 	this->position = this->text.position;
 }
 
@@ -33,9 +34,8 @@ void TextButton::on_pointer_exit()
 
 void TextButton::on_pointer_up() //<=> on_click (l'action se lance quand le clic est relaché)
 {
-	//TODO : créer une fonction on_click ?
 	this->state = State::SELECTED;
-	function_ptr();
+	callback_function(this);
 	this->click_sound.play_sound();
 }
 
@@ -83,7 +83,7 @@ void TextButton::on_key_released(const SDL_Event& e)
 			break;
 
 		case SDLK_RETURN:
-			this->on_pointer_up(); //TODO : créer une fonction on_click ?
+			this->on_pointer_up(); 
 			break;
 
 		default:
@@ -104,7 +104,7 @@ void TextButton::draw(SDL_Renderer* renderer)
 	this->text.draw(renderer);
 }
 
-void TextButton::update(Uint32& timeStep)
+void TextButton::update(Uint64& timeStep) //TODO : inutilisée
 {
 
 }

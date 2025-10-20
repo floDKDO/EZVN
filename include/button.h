@@ -1,18 +1,16 @@
 #pragma once
 
 #include "ui.h"
+#include "image.h"
 
 class Button : public Ui
 {
 	public:
-		Button(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void)); //TODO : au moins une image pour l'état NORMAL, le reste est optionnel
-		~Button();
+		Button(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, SDL_Renderer* renderer, void(*callback_function)(Ui* ui)); //TODO : au moins une image pour l'état NORMAL, le reste est optionnel
 
-		SDL_Texture* normal_image;
-		SDL_Texture* selected_image;
-		SDL_Texture* clicked_image;
-
-		void(*function_ptr)(void);
+		Image normal;
+		Image selected;
+		Image clicked;
 
 		void on_pointer_down() override;
 		void on_pointer_enter() override;
@@ -24,7 +22,7 @@ class Button : public Ui
 		void on_key_released(const SDL_Event& e) override;
 
 		void draw(SDL_Renderer* renderer) override;
-		void update(Uint32& timeStep) override;
+		void update(Uint64& timeStep) override;
 
 	protected:
 

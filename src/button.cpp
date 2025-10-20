@@ -3,25 +3,11 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
-Button::Button(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void))
-	: function_ptr(function_ptr)
+Button::Button(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, SDL_Renderer* renderer, void(*callback_function)(Ui* ui))
+	: normal(path_normal, x, y, renderer), selected(path_selected, x, y, renderer), clicked(path_clicked, x, y, renderer)
 {
-	this->normal_image = IMG_LoadTexture(renderer, path_normal.c_str());
-	this->selected_image = IMG_LoadTexture(renderer, path_selected.c_str());
-	this->clicked_image = IMG_LoadTexture(renderer, path_clicked.c_str());
-
-	int w, h;
-	SDL_QueryTexture(this->normal_image, nullptr, nullptr, &w, &h);
-	this->position = {x, y, w, h};
-
-	std::cout << "Constructor from base Button" << std::endl;
-}
-
-Button::~Button()
-{
-	SDL_DestroyTexture(this->normal_image);
-	SDL_DestroyTexture(this->selected_image);
-	SDL_DestroyTexture(this->clicked_image);
+	this->callback_function = callback_function;
+	this->position = this->normal.position;
 }
 
 void Button::on_pointer_down()
@@ -47,9 +33,8 @@ void Button::on_pointer_exit()
 
 void Button::on_pointer_up()
 {
-	//TODO : créer une fonction on_click ?
 	this->state = State::SELECTED;
-	function_ptr();
+	callback_function(this);
 	this->click_sound.play_sound();
 }
 
@@ -95,7 +80,7 @@ void Button::on_key_released(const SDL_Event& e)
 			break;
 
 		case SDLK_RETURN:
-			this->on_pointer_up(); //TODO : créer une fonction on_click ?
+			this->on_pointer_up(); 
 			break;
 
 		default:
@@ -106,14 +91,14 @@ void Button::on_key_released(const SDL_Event& e)
 void Button::draw(SDL_Renderer* renderer)
 {
 	if(this->state == State::NORMAL)
-		SDL_RenderCopy(renderer, this->normal_image, nullptr, &position);
+		this->normal.draw(renderer);
 	else if(this->state == State::SELECTED)
-		SDL_RenderCopy(renderer, this->selected_image, nullptr, &position);
+		this->selected.draw(renderer);
 	else if(this->state == State::CLICKED)
-		SDL_RenderCopy(renderer, this->clicked_image, nullptr, &position);
+		this->clicked.draw(renderer);
 }
 
-void Button::update(Uint32& timeStep)
+void Button::update(Uint64& timeStep) //TODO : inutilisée
 {
 
 }

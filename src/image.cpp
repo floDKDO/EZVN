@@ -1,25 +1,23 @@
 #include "image.h"
 
-Image::Image()
-{
-	std::cout << "Default constructor called" << std::endl;
-}
-
-Image::Image(const std::string path, SDL_Renderer* renderer)
-	: name(path), alpha(255), angle(0), zorder(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
+Image::Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder)
+	: name(path), alpha(255), angle(0), zorder(zorder), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0)
 {
 	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
 
+	std::cout << "Constructeur " << this->name << std::endl;
+
 	if(IMG_isGIF(ops))
 	{
+		SDL_RWclose(ops);
 		this->is_gif = true;
-		this->frame_number = 0;
 		this->gif = IMG_LoadAnimation(path.c_str());
-		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_number]);
+		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_index]);
 	}
 	else
 	{
-		is_gif = false;
+		this->is_gif = false;
+		this->gif = nullptr; 
 		this->texture = IMG_LoadTexture(renderer, path.c_str());
 	}
 
@@ -28,41 +26,32 @@ Image::Image(const std::string path, SDL_Renderer* renderer)
 	int w, h;
 	SDL_QueryTexture(this->texture, nullptr, nullptr, &w, &h);
 
-	this->rect = {1280 / 4, 720 / 4, w, h};
+	this->position = {x, y, w, h};
 }
 
-Image::Image(const std::string path, SDL_Renderer* renderer, const int zorder)
-	: name(path), alpha(255), angle(0), zorder(zorder), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
-{
-	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
-
-	if(IMG_isGIF(ops))
-	{
-		this->is_gif = true;
-		this->frame_number = 0;
-		this->gif = IMG_LoadAnimation(path.c_str());
-		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_number]);
-	}
-	else
-	{
-		is_gif = false;
-		this->texture = IMG_LoadTexture(renderer, path.c_str());
-	}
-
-	SDL_SetTextureBlendMode(this->texture, SDL_BLENDMODE_BLEND);
-
-	int w, h;
-	SDL_QueryTexture(this->texture, nullptr, nullptr, &w, &h);
-
-	this->rect = {1280 / 4, 720 / 4, w, h};
-}
-
-//TODO : rule of 3/5
+//TODO : rule of 3/5 
+//TODO : retirer les commentaires !!!
 Image::~Image()
 {
+	/*
 	std::cout << "Destructeur " << this->name << std::endl;
 	SDL_DestroyTexture(this->texture);
+	if(this->is_gif)
+		IMG_FreeAnimation(this->gif);*/
 }
+
+/*
+Image::Image(const Image& i)
+{
+	std::cout << "Copy constructor" << std::endl;
+}
+
+Image& Image::operator=(const Image& i)
+{
+	std::cout << "= operator" << std::endl;
+	//return *(const_cast<Image*>(&i));
+}
+*/
 
 void Image::show()
 {
@@ -93,12 +82,12 @@ void Image::flip_normal()
 
 void Image::resize(const int w, const int h)
 {
-	this->rect = {rect.x, rect.y, w, h};
+	this->position = {position.x, position.y, w, h};
 }
 
-void Image::position(const int x, const int y)
+void Image::set_position(const int x, const int y)
 {
-	this->rect = {x, y, rect.w, rect.h};
+	this->position = {x, y, position.w, position.h};
 }
 
 void Image::night_filter()
@@ -127,15 +116,25 @@ void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 
 void Image::draw(SDL_Renderer* renderer)
 {
-	SDL_RenderCopyEx(renderer, this->texture, nullptr, &(this->rect), this->angle, nullptr, this->flip);
-	if(is_gif)
+	if(this->texture == nullptr)
+	{
+		std::cout << "texture nulle" << std::endl;
+	}
+
+	if(this->is_gif && this->gif == nullptr)
+	{
+		std::cout << "gif nul" << std::endl;
+	}
+
+	SDL_RenderCopyEx(renderer, this->texture, nullptr, &(this->position), this->angle, nullptr, this->flip);
+	if(is_gif && this->gif != nullptr)
 	{
 		SDL_DestroyTexture(this->texture);
-		if(this->frame_number < this->gif->count - 1)
+		if(this->frame_index < this->gif->count - 1)
 		{
-			this->frame_number += 1;
+			this->frame_index += 1;
 		}
-		else this->frame_number = 0;
-		this->texture = SDL_CreateTextureFromSurface(renderer, this->gif->frames[this->frame_number]);
+		else this->frame_index = 0;
+		this->texture = SDL_CreateTextureFromSurface(renderer, this->gif->frames[this->frame_index]);
 	}
 }
