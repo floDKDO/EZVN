@@ -17,8 +17,12 @@
 #include <vector>
 #include <algorithm>
 
+//TODO : const dans constructeurs
+//TODO : utiliser de meilleurs types 
+//TODO : =delete
 
-void chk_SDL(int return_value, const char* error_string)
+
+void chk_SDL(const int return_value, const char* error_string)
 {
 	if(return_value < 0)
 	{
@@ -27,7 +31,7 @@ void chk_SDL(int return_value, const char* error_string)
 	}
 }
 
-void nchk_SDL(void* return_value, const char* error_string)
+void nchk_SDL(const void* return_value, const char* error_string)
 {
 	if(return_value == nullptr)
 	{
@@ -82,12 +86,19 @@ int main(int argc, char* argv[])
 	images.push_back(yuri);
 	images.push_back(blob);
 
+	std::cout << "Taille : " << sizeof(yuri) << std::endl;
+	//TODO : const référence pour des gros objets "If you don’t want to change the object passed and it is big, call by const reference; e.g., void f(const X&);."
+
 	std::stable_sort(images.begin(), images.end(), &cmp);
 
 	Ui* button = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 200, 200, renderer, &button_function);
 	Ui* textbutton = new TextButton("My text", {255, 255, 255, 255}, {255, 0, 0, 255}, {0, 0, 255, 255}, 500, 500, renderer, &button_function);
 	Ui* toggle = new Toggle("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", "img/checked.png", 100, 600, renderer, &button_function);
 	Ui* inputfield = new Inputfield("img/inputfield.png", {0, 0, 0, 255}, 100, 0, renderer, &inputfield_function);
+	//TODO : ne pas oublier les delete
+
+	std::cout << "Taille : " << sizeof(*inputfield) << std::endl;
+	std::cout << "Taille : " << sizeof(SDL_Event) << std::endl;
 
 	Uint32 time_step = SDL_GetTicks();
 

@@ -13,7 +13,7 @@ Ui::~Ui()
 	std::cout << "Destructor from base class" << std::endl;
 }
 
-bool Ui::is_mouse_on_ui()
+bool Ui::is_mouse_on_ui() const
 {
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -24,7 +24,7 @@ bool Ui::is_mouse_on_ui()
 		 && this->position.x < mouse_x);
 }
 
-void Ui::handle_events(SDL_Event e)
+void Ui::handle_events(const SDL_Event& e)
 {
 	switch(e.type)
 	{

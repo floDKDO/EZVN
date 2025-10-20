@@ -7,9 +7,8 @@
 
 enum class State
 {
-	NORMAL, //TODO : renommer NORMAL en IDLE ??
-	HOVERED,
-	CLICKED, //TODO : SELECTED <=> HOVERED ?? Si oui, garder SELECTED
+	NORMAL, 
+	CLICKED, 
 	SELECTED
 };
 
@@ -37,14 +36,14 @@ class Ui
 		virtual void on_pointer_up() = 0; //<=> on click (l'action se lance quand le clic est relaché)
 
 		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
-		virtual void on_key_pressed(SDL_Event e) = 0;
-		virtual void on_key_released(SDL_Event e) = 0;
+		virtual void on_key_pressed(const SDL_Event& e) = 0;
+		virtual void on_key_released(const SDL_Event& e) = 0;
 
 		virtual void draw(SDL_Renderer* renderer) = 0;
 		virtual void update(Uint32& timeStep) = 0;
-		virtual void handle_events(SDL_Event e); //TODO : garder virtual ?
+		virtual void handle_events(const SDL_Event& e); //TODO : garder virtual ?
 
-		virtual bool is_mouse_on_ui(); //TODO : garder virtual ?
+		virtual bool is_mouse_on_ui() const; //TODO : garder virtual ?
 
 	protected:
 		Ui(); //TODO : pour initialiser les attributs communs à toutes les classes filles

@@ -6,13 +6,13 @@
 class Sound
 {
 	public:
-		Sound(std::string path);
+		Sound(const std::string path);
 		~Sound();
-		void play_sound(bool loop=false, int fadein_length=0); //TODO : loop, fadein/fadeout
-		void pause_sound();
-		void resume_sound();
-		void stop_sound(int fadeout_length = 0); //TODO : fadein/fadeout
-		void change_volume(int volume);
+		void play_sound(const bool loop=false, const int fadein_length=0); //TODO : loop, fadein/fadeout
+		void pause_sound() const;
+		void resume_sound() const;
+		void stop_sound(const int fadeout_length = 0) const; //TODO : fadein/fadeout
+		void change_volume(const int volume) const;
 
 		std::string name;
 		Mix_Chunk* sound;

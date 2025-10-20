@@ -5,7 +5,7 @@ Image::Image()
 	std::cout << "Default constructor called" << std::endl;
 }
 
-Image::Image(std::string path, SDL_Renderer* renderer)
+Image::Image(const std::string path, SDL_Renderer* renderer)
 	: name(path), alpha(255), angle(0), zorder(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
 {
 	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
@@ -31,7 +31,7 @@ Image::Image(std::string path, SDL_Renderer* renderer)
 	this->rect = {1280 / 4, 720 / 4, w, h};
 }
 
-Image::Image(std::string path, SDL_Renderer* renderer, int zorder)
+Image::Image(const std::string path, SDL_Renderer* renderer, const int zorder)
 	: name(path), alpha(255), angle(0), zorder(zorder), flip(SDL_FLIP_NONE), r(255), g(255), b(255)
 {
 	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
@@ -91,12 +91,12 @@ void Image::flip_normal()
 	this->flip = SDL_FLIP_NONE;
 }
 
-void Image::resize(int w, int h)
+void Image::resize(const int w, const int h)
 {
 	this->rect = {rect.x, rect.y, w, h};
 }
 
-void Image::position(int x, int y)
+void Image::position(const int x, const int y)
 {
 	this->rect = {x, y, rect.w, rect.h};
 }
@@ -117,7 +117,7 @@ void Image::afternoon_filter()
 	SDL_SetTextureColorMod(this->texture, this->r, this->g, this->b);
 }
 
-void Image::own_filter(int r, int g, int b)
+void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 {
 	this->r = r;
 	this->g = g;

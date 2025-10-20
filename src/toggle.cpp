@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL_image.h>
 
-Toggle::Toggle(std::string path_normal, std::string path_selected, std::string path_clicked, std::string path_checked, int x, int y, SDL_Renderer* renderer, void(*function_ptr)(void))
+Toggle::Toggle(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void))
 	:function_ptr(function_ptr), is_checked(false) //TODO : pas forcément checked ??
 {
 	this->normal_image = IMG_LoadTexture(renderer, path_normal.c_str());
@@ -53,7 +53,7 @@ void Toggle::on_pointer_up()
 	this->is_checked = !this->is_checked;
 }
 
-void Toggle::on_key_pressed(SDL_Event e)
+void Toggle::on_key_pressed(const SDL_Event& e)
 {
 	switch(e.key.keysym.sym)
 	{
@@ -78,7 +78,7 @@ void Toggle::on_key_pressed(SDL_Event e)
 	}
 }
 
-void Toggle::on_key_released(SDL_Event e)
+void Toggle::on_key_released(const SDL_Event& e)
 {
 	switch(e.key.keysym.sym)
 	{

@@ -7,7 +7,7 @@
 class TextButton : public Ui
 {
 	public:
-		TextButton(std::string text, SDL_Color color_normal, SDL_Color color_selected, SDL_Color color_clicked, int x, int y, SDL_Renderer* renderer, void(*function_ptr)(void));
+		TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void));
 
 		Text text;
 
@@ -17,18 +17,17 @@ class TextButton : public Ui
 
 		void(*function_ptr)(void);
 
-		//TODO : ajouter les override
-		void on_pointer_down();
-		void on_pointer_enter();
-		void on_pointer_exit();
-		void on_pointer_up(); //<=> on_click (l'action se lance quand le clic est relaché)
+		void on_pointer_down() override;
+		void on_pointer_enter() override;
+		void on_pointer_exit() override;
+		void on_pointer_up() override; //<=> on_click (l'action se lance quand le clic est relaché)
 
 		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
-		void on_key_pressed(SDL_Event e);
-		void on_key_released(SDL_Event e);
+		void on_key_pressed(const SDL_Event& e) override;
+		void on_key_released(const SDL_Event& e) override;
 
-		void draw(SDL_Renderer* renderer);
-		void update(Uint32& timeStep);
+		void draw(SDL_Renderer* renderer) override;
+		void update(Uint32& timeStep) override;
 
 	protected:
 

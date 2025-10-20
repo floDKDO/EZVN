@@ -6,7 +6,7 @@
 class Inputfield : public Ui
 {
 	public:
-		Inputfield(std::string path, SDL_Color color, int x, int y, SDL_Renderer* renderer, void(*function_ptr)(std::string text));
+		Inputfield(const std::string path, const SDL_Color color, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(std::string text));
 		~Inputfield();
 
 		SDL_Texture* image;
@@ -23,21 +23,20 @@ class Inputfield : public Ui
 
 		void(*function_ptr)(std::string text);
 
-		//TODO : ajouter les override
-		void on_pointer_down();
-		void on_pointer_enter();
-		void on_pointer_exit();
-		void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
+		void on_pointer_down() override;
+		void on_pointer_enter() override;
+		void on_pointer_exit() override;
+		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 
-		void on_input(SDL_Event e);
+		void on_input(const SDL_Event& e);
 
 		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
-		void on_key_pressed(SDL_Event e);
-		void on_key_released(SDL_Event e);
+		void on_key_pressed(const SDL_Event& e) override;
+		void on_key_released(const SDL_Event& e) override;
 
-		void handle_events(SDL_Event e) override;
-		void draw(SDL_Renderer* renderer);
-		void update(Uint32& timeStep);
+		void handle_events(const SDL_Event& e) override;
+		void draw(SDL_Renderer* renderer) override;
+		void update(Uint32& timeStep) override;
 
 	protected:
 

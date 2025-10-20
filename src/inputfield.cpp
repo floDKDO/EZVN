@@ -3,7 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
-Inputfield::Inputfield(std::string path, SDL_Color color, int x, int y, SDL_Renderer* renderer, void(*function_ptr)(std::string text))
+Inputfield::Inputfield(const std::string path, const SDL_Color color, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(std::string text))
 	: character_limit(7),/*TODO : 7 ??*/ color(color), text("", color, "fonts/Aller_Rg.ttf", x, y, renderer), text_caret("|", color, "fonts/Aller_Rg.ttf", x, y, renderer), text_placeholder("...", color, "fonts/Aller_Rg.ttf", x, y, renderer), is_editing(false), is_writing(false), function_ptr(function_ptr)
 {
 	this->image = IMG_LoadTexture(renderer, path.c_str());
@@ -52,7 +52,7 @@ void Inputfield::on_pointer_up()
 	this->is_editing = !this->is_editing;
 }
 
-void Inputfield::on_key_pressed(SDL_Event e)
+void Inputfield::on_key_pressed(const SDL_Event& e)
 {
 	this->is_writing = true;
 	switch(e.key.keysym.sym)
@@ -85,7 +85,7 @@ void Inputfield::on_key_pressed(SDL_Event e)
 	}
 }
 
-void Inputfield::on_key_released(SDL_Event e)
+void Inputfield::on_key_released(const SDL_Event& e)
 {
 	this->is_writing = false;
 	switch(e.key.keysym.sym)
@@ -111,7 +111,7 @@ void Inputfield::on_key_released(SDL_Event e)
 	}
 }
 
-void Inputfield::on_input(SDL_Event e)
+void Inputfield::on_input(const SDL_Event& e)
 {
 	if(this->is_editing)
 	{
@@ -119,7 +119,7 @@ void Inputfield::on_input(SDL_Event e)
 	}
 }
 
-void Inputfield::handle_events(SDL_Event e)
+void Inputfield::handle_events(const SDL_Event& e)
 {
 	Ui::handle_events(e);
 
@@ -134,7 +134,7 @@ void Inputfield::draw(SDL_Renderer* renderer)
 {
 	SDL_RenderCopy(renderer, this->image, nullptr, &(this->position));
 	text.draw(renderer);
-	text.edit_text(text.text, renderer);
+	text.edit_text(renderer);
 
 	if(text.text.empty() || text.text == " ") //TODO : bizarre...
 	{

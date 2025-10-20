@@ -2,7 +2,7 @@
 #include <iostream>
 
 //TODO : trop de code dupliqué avec la classe Button
-TextButton::TextButton(std::string text, SDL_Color color_normal, SDL_Color color_selected, SDL_Color color_clicked, int x, int y, SDL_Renderer* renderer, void(*function_ptr)(void))
+TextButton::TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void))
 	: text(text, color_normal, "fonts/Aller_Rg.ttf", x, y, renderer), color_normal(color_normal), color_selected(color_selected), color_clicked(color_clicked), function_ptr(function_ptr)
 {
 	this->position = this->text.position;
@@ -41,7 +41,7 @@ void TextButton::on_pointer_up() //<=> on_click (l'action se lance quand le clic
 
 
 //TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
-void TextButton::on_key_pressed(SDL_Event e)
+void TextButton::on_key_pressed(const SDL_Event& e)
 {
 	switch(e.key.keysym.sym)
 	{
@@ -66,7 +66,7 @@ void TextButton::on_key_pressed(SDL_Event e)
 	}
 }
 
-void TextButton::on_key_released(SDL_Event e)
+void TextButton::on_key_released(const SDL_Event& e)
 {
 	switch(e.key.keysym.sym)
 	{

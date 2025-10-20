@@ -6,14 +6,14 @@
 class Music
 {
 	public:
-	Music(std::string path);
+	Music(const std::string path);
 	~Music();
-	void play_music(bool loop = false, int fadein_length = 0); //unité = s
-	void pause_music();
-	void resume_music();
-	void stop_music(int fadeout_length=0); //unité = s
-	void change_volume(int volume); //unité = pourcentage
-	void set_position(double position); //unité = seconde
+	void play_music(const bool loop = false, const int fadein_length = 0); //unité = s
+	void pause_music() const;
+	void resume_music() const;
+	void stop_music(const int fadeout_length=0) const; //unité = s
+	void change_volume(const int volume) const; //unité = pourcentage
+	void set_position(const double position) const; //unité = seconde
 
 	std::string name;
 	Mix_Music* music;

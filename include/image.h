@@ -9,8 +9,8 @@ class Image
 {
 	public:
 		Image();
-		Image(std::string path, SDL_Renderer* renderer);
-		Image(std::string path, SDL_Renderer* renderer, int zorder);
+		Image(const std::string path, SDL_Renderer* renderer);
+		Image(const std::string path, SDL_Renderer* renderer, const int zorder);
 		~Image();
 		void show();
 		void hide();
@@ -19,22 +19,22 @@ class Image
 		void flip_horizontally();
 		void flip_normal();
 
-		void resize(int w, int h);
-		void position(int x, int y);
+		void resize(const int w, const int h);
+		void position(const int x, const int y);
 
 		void night_filter();
 		void afternoon_filter();
-		void own_filter(int r, int g, int b);
+		void own_filter(const Uint8 r, const Uint8 g, const Uint8 b);
 
 		void draw(SDL_Renderer* renderer);
 
 		std::string name;
 		SDL_Rect rect;
-		int alpha;
+		Uint8 alpha;
 		double angle;
 		int zorder;
 		SDL_RendererFlip flip;
-		int r, g, b;
+		Uint8 r, g, b; 
 
 		bool is_gif;
 		int frame_number;

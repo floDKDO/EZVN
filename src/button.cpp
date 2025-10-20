@@ -1,9 +1,9 @@
 #include "button.h"
 
 #include <SDL2/SDL_image.h>
+#include <iostream>
 
-//TODO : TextButton
-Button::Button(std::string path_normal, std::string path_selected, std::string path_clicked, int x, int y, SDL_Renderer* renderer, void(*function_ptr)(void))
+Button::Button(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, SDL_Renderer* renderer, void(*function_ptr)(void))
 	: function_ptr(function_ptr)
 {
 	this->normal_image = IMG_LoadTexture(renderer, path_normal.c_str());
@@ -13,6 +13,8 @@ Button::Button(std::string path_normal, std::string path_selected, std::string p
 	int w, h;
 	SDL_QueryTexture(this->normal_image, nullptr, nullptr, &w, &h);
 	this->position = {x, y, w, h};
+
+	std::cout << "Constructor from base Button" << std::endl;
 }
 
 Button::~Button()
@@ -51,7 +53,7 @@ void Button::on_pointer_up()
 	this->click_sound.play_sound();
 }
 
-void Button::on_key_pressed(SDL_Event e)
+void Button::on_key_pressed(const SDL_Event& e)
 {
 	switch(e.key.keysym.sym)
 	{
@@ -76,7 +78,7 @@ void Button::on_key_pressed(SDL_Event e)
 	}
 }
 
-void Button::on_key_released(SDL_Event e)
+void Button::on_key_released(const SDL_Event& e)
 {
 	switch(e.key.keysym.sym)
 	{

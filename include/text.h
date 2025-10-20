@@ -6,7 +6,7 @@
 class Text
 {
 	public:
-		Text(std::string text, SDL_Color color, std::string font_path, int x, int y, SDL_Renderer* renderer); //TODO : police = argument par défaut
+		Text(const std::string text, const SDL_Color color, const std::string font_path, const int x, const int y, SDL_Renderer* renderer); //TODO : police = argument par défaut
 		~Text();
 
 		TTF_Font* font;
@@ -17,7 +17,7 @@ class Text
 		SDL_Surface* surface;
 		SDL_Texture* texture;
 
-		void edit_text(std::string new_text, SDL_Renderer* renderer);
+		void edit_text(SDL_Renderer* renderer);
 		void draw(SDL_Renderer* renderer);
 
 	protected:
