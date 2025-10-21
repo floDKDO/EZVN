@@ -1,1 +1,1 @@
-# EZVN
+# EaZy Visual Novel (EZVN) engine
