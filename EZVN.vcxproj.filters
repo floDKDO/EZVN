@@ -48,6 +48,9 @@
     <ClCompile Include="src\text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\texttoggle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\image.h">
@@ -78,6 +81,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\texttoggle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

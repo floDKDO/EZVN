@@ -3,15 +3,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <string>
-#include <iostream>
 
 class Image
 {
 	public:
 		Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder=0);
 		~Image();
-		//Image(const Image& i);
-		//Image& operator=(const Image& i);
+		Image(const Image& i);
+		Image& operator=(const Image& i);
 
 		void show();
 		void hide();
@@ -29,24 +28,25 @@ class Image
 
 		void draw(SDL_Renderer* renderer);
 
-		std::string name;
-		SDL_Rect position; 
-		Uint8 alpha;
-		double angle;
 		int zorder;
-		SDL_RendererFlip flip;
-		Uint8 r, g, b; 
-
-		bool is_gif;
-		size_t frame_index; 
-		IMG_Animation* gif;
-
-		SDL_Texture* texture;
+		SDL_Rect position;
 
 	protected:
 		
 
 	private:
+		std::string name;
 		
-};
+		Uint8 alpha;
+		double angle;
+		
+		SDL_RendererFlip flip;
+		Uint8 r, g, b;
 
+		int frame_index;
+		bool is_gif;
+		IMG_Animation* gif;
+
+		SDL_Texture* texture;
+		SDL_Renderer* renderer; //solution temporaire
+};

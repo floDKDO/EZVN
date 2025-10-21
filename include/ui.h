@@ -1,9 +1,8 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
-
 #include "sound.h"
+
+#include <SDL2/SDL.h>
 
 enum class State
 {
@@ -15,41 +14,45 @@ enum class State
 class Ui
 {
 	public:
-		State state;
+		virtual ~Ui();
+
+		//TODO : laisser virtual ??
+		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
+		void on_pointer_down();
+		void on_pointer_enter();
+		void on_pointer_exit();
+
+		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
+		virtual void on_key_pressed(const SDL_Event& e);
+		virtual void on_key_released(const SDL_Event& e);
+
+		virtual void on_button_pressed(const SDL_Event& e);
+		virtual void on_button_released(const SDL_Event& e);
+
+		virtual void handle_events(const SDL_Event& e);
+		virtual void draw(SDL_Renderer* renderer) = 0;
+		virtual void update(Uint64& time_step) = 0;
+
+		bool is_mouse_on_ui() const;
+
+	protected:
+		Ui(); 
 
 		Ui* select_on_up;
 		Ui* select_on_down;
 		Ui* select_on_left;
 		Ui* select_on_right;
 
+		State state;
+
 		//TODO : stocker en "variables globales" select_sound, click_sound et une police par défaut ?
 		Sound select_sound;
 		Sound click_sound;
+		bool is_selected_sound_played;
 
 		SDL_Rect position;
 
-		bool is_selected_sound_played;
-
 		void(*callback_function)(Ui* ui);
-
-		virtual void on_pointer_down() = 0;
-		virtual void on_pointer_enter() = 0;
-		virtual void on_pointer_exit() = 0;
-		virtual void on_pointer_up() = 0; //<=> on click (l'action se lance quand le clic est relaché)
-
-		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
-		virtual void on_key_pressed(const SDL_Event& e) = 0;
-		virtual void on_key_released(const SDL_Event& e) = 0;
-
-		virtual void draw(SDL_Renderer* renderer) = 0;
-		virtual void update(Uint64& timeStep) = 0;
-		virtual void handle_events(const SDL_Event& e); 
-
-		bool is_mouse_on_ui() const;
-
-	protected:
-		Ui(); //TODO : pour initialiser les attributs communs à toutes les classes filles
-		virtual ~Ui();
 
 
 	private:

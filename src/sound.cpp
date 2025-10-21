@@ -2,18 +2,19 @@
 
 int Sound::unused_channel = 0;
 
-#include <iostream>
-
 Sound::Sound(const std::string path)
 	: name(path), channel(this->unused_channel), loop(false)
 {
 	this->sound = Mix_LoadWAV(path.c_str());
 	this->unused_channel += 1;
+	if(this->unused_channel == MIX_CHANNELS)
+	{
+		this->unused_channel = 0;
+	}
 }
 
 Sound::~Sound()
 {
-	std::cout << "CALLED" << std::endl;
 	Mix_FreeChunk(this->sound);
 }
 

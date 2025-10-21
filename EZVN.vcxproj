@@ -145,6 +145,7 @@
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\textbutton.cpp" />
+    <ClCompile Include="src\texttoggle.cpp" />
     <ClCompile Include="src\toggle.cpp" />
     <ClCompile Include="src\ui.cpp" />
   </ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />
     <ClInclude Include="include\textbutton.h" />
+    <ClInclude Include="include\texttoggle.h" />
     <ClInclude Include="include\toggle.h" />
     <ClInclude Include="include\ui.h" />
   </ItemGroup>
