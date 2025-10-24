@@ -35,8 +35,7 @@ class Ui
 
 		bool is_mouse_on_ui() const;
 
-	protected:
-		Ui(); 
+		SDL_Rect position;
 
 		Ui* select_on_up;
 		Ui* select_on_down;
@@ -45,17 +44,25 @@ class Ui
 
 		State state;
 
+		std::string name;
+
+		static bool lock; 
+
+	protected:
+		Ui(); 
+
+		
+
 		//TODO : stocker en "variables globales" select_sound, click_sound et une police par défaut ?
 		Sound select_sound;
 		Sound click_sound;
 		bool is_selected_sound_played;
 
-		SDL_Rect position;
-
 		void(*callback_function)(Ui* ui);
 
 
 	private:
+		void select_new(Ui* ui);
 
 };
 
