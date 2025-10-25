@@ -94,7 +94,30 @@ int main(int argc, char* argv[])
 			return a.zorder < b.zorder;
 		}); */
 
-	Ui* button1 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 0, 0, renderer, &button_function);
+	std::cout << sizeof(Ui*) << std::endl;
+
+	Ui* button1 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 400, 100, renderer, &button_function);
+	Ui* button2 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 620, 100, renderer, &button_function);
+	Ui* button3 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 300, 320, renderer, &button_function);
+	Ui* button4 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 520, 320, renderer, &button_function);
+	Ui* button5 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 740, 320, renderer, &button_function);
+
+	Ui* button6 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 520, 540, renderer, &button_function);
+	Ui* button7 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 100, 540, renderer, &button_function);
+
+	std::vector<Ui*> ui;
+	ui.reserve(10);
+
+	ui.push_back(button1);
+	ui.push_back(button2);
+	ui.push_back(button3);
+	ui.push_back(button4);
+	ui.push_back(button5);
+
+	ui.push_back(button6);
+	ui.push_back(button7);
+
+	/*Ui* button1 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 0, 0, renderer, &button_function);
 	Ui* button2 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 220, 0, renderer, &button_function);
 	Ui* button3 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 440, 0, renderer, &button_function);
 	Ui* button4 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 660, 0, renderer, &button_function);
@@ -115,8 +138,6 @@ int main(int argc, char* argv[])
 	std::vector<Ui*> ui;
 	ui.reserve(10);
 
-	button1->state = State::SELECTED;
-
 	ui.push_back(button1);
 	ui.push_back(button2);
 	ui.push_back(button3);
@@ -133,9 +154,9 @@ int main(int argc, char* argv[])
 	ui.push_back(button12);
 	ui.push_back(button13);
 	ui.push_back(button14);
-	ui.push_back(button15);
+	ui.push_back(button15);*/
 
-	Menu menu(ui);
+	Menu menu(ui, button1);
 
 	Uint64 time_step = SDL_GetTicks64(); 
 	Uint64 second = 0;

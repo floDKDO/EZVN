@@ -7,7 +7,7 @@ Button::Button(const std::string path_normal, const std::string path_selected, c
 	: normal(path_normal, x, y, renderer), selected(path_selected, x, y, renderer), clicked(path_clicked, x, y, renderer)
 {
 	this->name = "button" + std::to_string(this->num);
-	std::cout << "CALLED (button), " << &(this->lock) << std::endl;
+	//std::cout << "CALLED (button), " << &(this->lock) << std::endl;
 	this->callback_function = callback_function;
 	this->position = this->normal.position;
 

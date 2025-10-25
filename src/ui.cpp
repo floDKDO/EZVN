@@ -66,7 +66,7 @@ void Ui::on_key_pressed(const SDL_Event& e)
 		case SDLK_UP:
 			if(this->lock && this->state == State::SELECTED && this->select_on_up != nullptr)
 			{
-				std::cout << "LA, " << this->name << "\n";
+				//std::cout << "LA, " << this->name << "\n";
 				this->select_new(this->select_on_up);
 				this->lock = false;
 			}
@@ -75,7 +75,7 @@ void Ui::on_key_pressed(const SDL_Event& e)
 		case SDLK_DOWN:
 			if(this->lock && this->state == State::SELECTED && this->select_on_down != nullptr)
 			{
-				std::cout << "ICI, " << this->name << "\n";
+				//std::cout << "ICI, " << this->name << "\n";
 				this->select_new(this->select_on_down);
 				this->lock = false;
 			}
@@ -90,7 +90,7 @@ void Ui::on_key_pressed(const SDL_Event& e)
 			break;
 
 		case SDLK_RIGHT:
-			std::cout << this->name << ", " << this->lock << ", " << int(this->state) << std::endl;
+			//std::cout << this->name << ", " << this->lock << ", " << int(this->state) << ", " << this->is_selected_sound_played << std::endl;
 			if(this->lock && this->state == State::SELECTED && this->select_on_right != nullptr)
 			{
 				this->select_new(this->select_on_right);
@@ -100,8 +100,11 @@ void Ui::on_key_pressed(const SDL_Event& e)
 			break;
 
 		case SDLK_RETURN:
-			this->on_pointer_down();
-			this->lock = false;
+			if(this->state == State::SELECTED)
+			{
+				this->on_pointer_down();
+				this->lock = false;
+			}
 			break;
 
 		default:
@@ -116,23 +119,31 @@ void Ui::on_key_released(const SDL_Event& e)
 	{
 		case SDLK_UP:
 			this->lock = true;
+			this->is_selected_sound_played = false;
 			break;
 
 		case SDLK_DOWN:
 			this->lock = true;
+			this->is_selected_sound_played = false;
 			break;
 
 		case SDLK_LEFT:
 			this->lock = true;
+			this->is_selected_sound_played = false;
 			break;
 
 		case SDLK_RIGHT:
 			this->lock = true;
+			this->is_selected_sound_played = false;
 			break;
 
 		case SDLK_RETURN:
-			this->on_pointer_up();
-			this->lock = true;
+			if(this->state == State::CLICKED)
+			{
+				this->on_pointer_up();
+				this->lock = true;
+				this->is_selected_sound_played = false;
+			}
 			break;
 
 		default:
@@ -176,7 +187,10 @@ void Ui::on_button_pressed(const SDL_Event& e)
 				break;
 
 			case SDL_CONTROLLER_BUTTON_A:
-				this->on_pointer_down();
+				if(this->state == State::SELECTED)
+				{
+					this->on_pointer_down();
+				}
 				break;
 
 			default:
