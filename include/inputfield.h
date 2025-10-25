@@ -11,8 +11,8 @@ class Inputfield : public Ui
 
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
-		void on_key_pressed(const SDL_Event& e) override;
-		void on_key_released(const SDL_Event& e) override;
+		void on_input_pressed(const SDL_Event& e) override;
+		void on_input_released(const SDL_Event& e) override;
 		void handle_events(const SDL_Event& e) override;
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64& time_step) override;

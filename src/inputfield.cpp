@@ -19,10 +19,10 @@ void Inputfield::on_pointer_up()
 	this->is_editing = !this->is_editing;
 }
 
-void Inputfield::on_key_pressed(const SDL_Event& e)
+void Inputfield::on_input_pressed(const SDL_Event& e)
 {
 	this->is_writing = true;
-	Ui::on_key_pressed(e);
+	Ui::on_input_pressed(e);
 	if(e.key.keysym.sym == SDLK_BACKSPACE)
 	{
 		if(this->is_editing && !text.text.empty())
@@ -32,10 +32,10 @@ void Inputfield::on_key_pressed(const SDL_Event& e)
 	}
 }
 
-void Inputfield::on_key_released(const SDL_Event& e)
+void Inputfield::on_input_released(const SDL_Event& e)
 {
 	this->is_writing = false;
-	Ui::on_key_released(e);
+	Ui::on_input_released(e);
 }
 
 void Inputfield::handle_events(const SDL_Event& e)

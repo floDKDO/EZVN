@@ -1,7 +1,5 @@
 #include "menu.h"
 
-#include <iostream>
-
 Menu::Menu(std::vector<Ui*> ui, Ui* ui_selected)
 	: ui(ui), previous_selected(nullptr), current_selected(ui_selected)
 {

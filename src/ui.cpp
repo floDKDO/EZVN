@@ -1,7 +1,5 @@
 #include "ui.h"
 
-#include <iostream>
-
 bool Ui::lock = true;
 
 Ui::Ui()
@@ -12,7 +10,7 @@ Ui::Ui()
 	position{0, 0, 0, 0},
 	callback_function(nullptr)
 {
-	std::cout << "CALLED (base)!\n";
+
 }
 
 Ui::~Ui()
@@ -55,195 +53,98 @@ void Ui::on_pointer_enter()
 
 void Ui::on_pointer_exit() 
 {
-	//this->state = State::NORMAL;
 	this->is_selected_sound_played = false;
 }
 
-void Ui::on_key_pressed(const SDL_Event& e)
+void Ui::on_input_pressed(const SDL_Event& e)
 {
-	switch(e.key.keysym.sym)
+	if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP || e.key.keysym.sym == SDLK_UP)
 	{
-		case SDLK_UP:
-			if(this->lock && this->state == State::SELECTED && this->select_on_up != nullptr)
-			{
-				//std::cout << "LA, " << this->name << "\n";
-				this->select_new(this->select_on_up);
-				this->lock = false;
-			}
-			break;
-
-		case SDLK_DOWN:
-			if(this->lock && this->state == State::SELECTED && this->select_on_down != nullptr)
-			{
-				//std::cout << "ICI, " << this->name << "\n";
-				this->select_new(this->select_on_down);
-				this->lock = false;
-			}
-			break;
-
-		case SDLK_LEFT:
-			if(this->lock && this->state == State::SELECTED && this->select_on_left != nullptr)
-			{
-				this->select_new(this->select_on_left);
-				this->lock = false;
-			}
-			break;
-
-		case SDLK_RIGHT:
-			//std::cout << this->name << ", " << this->lock << ", " << int(this->state) << ", " << this->is_selected_sound_played << std::endl;
-			if(this->lock && this->state == State::SELECTED && this->select_on_right != nullptr)
-			{
-				this->select_new(this->select_on_right);
-				this->lock = false;
-			}
-			
-			break;
-
-		case SDLK_RETURN:
-			if(this->state == State::SELECTED)
-			{
-				this->on_pointer_down();
-				this->lock = false;
-			}
-			break;
-
-		default:
-			break;
-	}
-	
-}
-
-void Ui::on_key_released(const SDL_Event& e) 
-{
-	switch(e.key.keysym.sym)
-	{
-		case SDLK_UP:
-			this->lock = true;
-			this->is_selected_sound_played = false;
-			break;
-
-		case SDLK_DOWN:
-			this->lock = true;
-			this->is_selected_sound_played = false;
-			break;
-
-		case SDLK_LEFT:
-			this->lock = true;
-			this->is_selected_sound_played = false;
-			break;
-
-		case SDLK_RIGHT:
-			this->lock = true;
-			this->is_selected_sound_played = false;
-			break;
-
-		case SDLK_RETURN:
-			if(this->state == State::CLICKED)
-			{
-				this->on_pointer_up();
-				this->lock = true;
-				this->is_selected_sound_played = false;
-			}
-			break;
-
-		default:
-			break;
-	}
-	
-}
-
-void Ui::on_button_pressed(const SDL_Event& e)
-{
-	//if(this->lock)
-	{
-		switch(e.cbutton.button)
+		if(this->lock && this->state == State::SELECTED && this->select_on_up != nullptr)
 		{
-			case SDL_CONTROLLER_BUTTON_DPAD_UP:
-				if(this->state == State::SELECTED && this->select_on_up != nullptr)
-				{
-					this->select_new(this->select_on_up);
-				}
-				break;
-
-			case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-				if(this->state == State::SELECTED && this->select_on_down != nullptr)
-				{
-					this->select_new(this->select_on_down);
-				}
-				break;
-
-			case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-				if(this->state == State::SELECTED && this->select_on_left != nullptr)
-				{
-					this->select_new(this->select_on_left);
-				}
-				break;
-
-			case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-				if(this->state == State::SELECTED && this->select_on_right != nullptr)
-				{
-					this->select_new(this->select_on_right);
-				}
-				break;
-
-			case SDL_CONTROLLER_BUTTON_A:
-				if(this->state == State::SELECTED)
-				{
-					this->on_pointer_down();
-				}
-				break;
-
-			default:
-				break;
+			this->select_new(this->select_on_up);
+			this->lock = false;
 		}
 	}
-	//this->lock = false;
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN || e.key.keysym.sym == SDLK_DOWN)
+	{
+		if(this->lock && this->state == State::SELECTED && this->select_on_down != nullptr)
+		{
+			this->select_new(this->select_on_down);
+			this->lock = false;
+		}
+	}
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT || e.key.keysym.sym == SDLK_LEFT)
+	{
+		if(this->lock && this->state == State::SELECTED && this->select_on_left != nullptr)
+		{
+			this->select_new(this->select_on_left);
+			this->lock = false;
+		}
+	}
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || e.key.keysym.sym == SDLK_RIGHT)
+	{
+		if(this->lock && this->state == State::SELECTED && this->select_on_right != nullptr)
+		{
+			this->select_new(this->select_on_right);
+			this->lock = false;
+		}
+	}
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
+	{
+		if(this->lock && this->state == State::SELECTED)
+		{
+			this->on_pointer_down();
+			this->lock = false;
+		}
+	}
 }
 
-void Ui::on_button_released(const SDL_Event& e)
+void Ui::on_input_released(const SDL_Event& e)
 {
-	switch(e.cbutton.button)
+	if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP || e.key.keysym.sym == SDLK_UP)
 	{
-		case SDL_CONTROLLER_BUTTON_DPAD_UP:
-			break;
-
-		case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-			break;
-
-		case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-			break;
-
-		case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-			break;
-
-		case SDL_CONTROLLER_BUTTON_A:
-			this->on_pointer_up();
-			break;
-
-		default:
-			break;
+		this->lock = true;
+		this->is_selected_sound_played = false;
 	}
-	//this->lock = true;
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN || e.key.keysym.sym == SDLK_DOWN)
+	{
+		this->lock = true;
+		this->is_selected_sound_played = false;
+	}
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT || e.key.keysym.sym == SDLK_LEFT)
+	{
+		this->lock = true;
+		this->is_selected_sound_played = false;
+	}
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || e.key.keysym.sym == SDLK_RIGHT)
+	{
+		this->lock = true;
+		this->is_selected_sound_played = false;
+	}
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
+	{
+		if(this->state == State::CLICKED)
+		{
+			this->on_pointer_up();
+			this->lock = true;
+			this->is_selected_sound_played = false;
+		}
+	}
 }
 
 void Ui::handle_events(const SDL_Event& e)
 {
 	switch(e.type)
 	{
-		case SDL_KEYDOWN:
-			this->on_key_pressed(e);
-			break;
-
-		case SDL_KEYUP:
-			this->on_key_released(e);
-			break;
-
 		case SDL_CONTROLLERBUTTONDOWN:
-			this->on_button_pressed(e);
+		case SDL_KEYDOWN:
+			this->on_input_pressed(e);
 			break;
 
 		case SDL_CONTROLLERBUTTONUP:
-			this->on_button_released(e);
+		case SDL_KEYUP:
+			this->on_input_released(e);
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:

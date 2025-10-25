@@ -23,11 +23,9 @@ class Ui
 		void on_pointer_exit();
 
 		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
-		virtual void on_key_pressed(const SDL_Event& e);
-		virtual void on_key_released(const SDL_Event& e);
 
-		virtual void on_button_pressed(const SDL_Event& e);
-		virtual void on_button_released(const SDL_Event& e);
+		virtual void on_input_pressed(const SDL_Event& e);
+		virtual void on_input_released(const SDL_Event& e);
 
 		virtual void handle_events(const SDL_Event& e);
 		virtual void draw(SDL_Renderer* renderer) = 0;
