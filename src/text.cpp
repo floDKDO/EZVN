@@ -55,6 +55,7 @@ void Text::draw(SDL_Renderer* renderer)
 
 void Text::update(Uint64& time_step)
 {
+	(void)time_step;
 	static std::string previous_text;
 	if(previous_text != this->text) //the text has been modified (in a inputfield for example)
 	{

@@ -37,6 +37,7 @@ bool Menu::is_candidate_closer(const Ui* const ui, const Ui* const candidate, co
 	{
 		return diff_best_y > diff_candidate_y || (diff_best_y == diff_candidate_y && diff_best_x > diff_candidate_x);
 	}
+	return false;
 }
 
 //ui = ui to which we assign a "select_on"

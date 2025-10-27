@@ -1,6 +1,6 @@
 #include "texttoggle.h"
 
-TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, void(*callback_function)(Ui* ui))
+TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
 	: text(text, color_unchecked, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
 	  color_unchecked(color_unchecked), color_selected(color_selected), color_checked(color_checked),
 	  is_checked(is_checked)

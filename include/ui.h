@@ -3,6 +3,7 @@
 #include "sound.h"
 
 #include <SDL2/SDL.h>
+#include <functional>
 
 enum class State
 {
@@ -16,13 +17,10 @@ class Ui
 	public:
 		virtual ~Ui();
 
-		//TODO : laisser virtual ??
 		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
-		void on_pointer_down();
-		void on_pointer_enter();
-		void on_pointer_exit();
-
-		//TODO : abstraire le fait que ça soit une touche du clavier ou la manette dans les if
+		virtual void on_pointer_down();
+		virtual void on_pointer_enter();
+		virtual void on_pointer_exit();
 
 		virtual void on_input_pressed(const SDL_Event& e);
 		virtual void on_input_released(const SDL_Event& e);
@@ -49,14 +47,13 @@ class Ui
 	protected:
 		Ui(); 
 
-		
-
 		//TODO : stocker en "variables globales" select_sound, click_sound et une police par défaut ?
 		Sound select_sound;
 		Sound click_sound;
 		bool is_selected_sound_played;
 
-		void(*callback_function)(Ui* ui);
+		//TODO : utiliser std::function
+		std::function<void(Ui* ui)> callback_function;
 
 
 	private:

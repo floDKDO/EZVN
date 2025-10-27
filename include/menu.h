@@ -1,9 +1,12 @@
 #pragma once
 
-#include <vector>
+#include "gamestate.h"
 #include "button.h"
+#include "slider.h"
 
-class Menu
+#include <vector>
+
+class Menu : public GameState
 {
 	public:
 		Menu(std::vector<Ui*> ui, Ui* ui_selected);

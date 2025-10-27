@@ -1,6 +1,6 @@
 #include "inputfield.h"
 
-Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, SDL_Renderer* renderer, void(*callback_function)(Ui* ui))
+Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
 	: text("", color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer),
 	  normal(path, x, y, renderer), color_normal(color_normal), 
 	  character_limit(character_limit),
@@ -44,7 +44,7 @@ void Inputfield::handle_events(const SDL_Event& e)
 
 	if(e.type == SDL_TEXTINPUT)
 	{
-		this->on_input(e);
+		this->on_typing(e);
 	}
 }
 
@@ -84,7 +84,7 @@ void Inputfield::update(Uint64& time_step)
 	}
 }
 
-void Inputfield::on_input(const SDL_Event& e)
+void Inputfield::on_typing(const SDL_Event& e)
 {
 	if(this->is_editing && this->text.text.length() <= this->character_limit)
 	{

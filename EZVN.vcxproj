@@ -104,7 +104,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\SDL2-2.30.3\x86_64-w64-mingw32\include</AdditionalIncludeDirectories>
@@ -137,11 +137,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\gamestate.cpp" />
     <ClCompile Include="src\image.cpp" />
     <ClCompile Include="src\inputfield.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\music.cpp" />
+    <ClCompile Include="src\slider.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\textbutton.cpp" />
@@ -151,10 +154,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\button.h" />
+    <ClInclude Include="include\game.h" />
+    <ClInclude Include="include\gamestate.h" />
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\inputfield.h" />
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\music.h" />
+    <ClInclude Include="include\slider.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />
     <ClInclude Include="include\textbutton.h" />

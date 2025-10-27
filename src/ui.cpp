@@ -148,14 +148,14 @@ void Ui::handle_events(const SDL_Event& e)
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if(e.button.button == SDL_BUTTON_LEFT && this->is_mouse_on_ui())
+			if(e.button.button == SDL_BUTTON_LEFT && this->is_mouse_on_ui()) //TODO : non compatible avec le Slider (this->is_mouse_on_ui())
 			{
 				this->on_pointer_down();
 			}
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			if(e.button.button == SDL_BUTTON_LEFT && this->is_mouse_on_ui())
+			if(e.button.button == SDL_BUTTON_LEFT && this->is_mouse_on_ui()) //TODO : non compatible avec le Slider (this->is_mouse_on_ui())
 			{
 				this->on_pointer_up();
 			}
@@ -163,7 +163,7 @@ void Ui::handle_events(const SDL_Event& e)
 
 		case SDL_MOUSEMOTION:
 		{
-			if(this->is_mouse_on_ui())
+			if(this->is_mouse_on_ui()) //TODO : non compatible avec le Slider (this->is_mouse_on_ui())
 			{
 				this->on_pointer_enter();
 			}
