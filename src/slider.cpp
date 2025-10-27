@@ -9,7 +9,7 @@ Slider::Slider(const std::string path_bar, const std::string path_handle, unsign
 	//this->handle_position = this->handle.position; //TODO : problème utiliser l'un ou l'autre mais pas les deux en même temps
 }
 
-//TODO : position dans Image, Text et Ui... => pk pas retirer la position de Ui vu que on copie celle de l'Image/Text dans celle de Ui ?
+//TODO : position dans Image, Text et Ui... => pk pas retirer la position de Ui vu qu'on copie celle de l'Image/Text dans celle de Ui ?
 bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y)
 {
 	return (this->handle.position.y + this->handle.position.h > mouse_y
@@ -21,14 +21,16 @@ bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y)
 void Slider::on_pointer_up()
 {
 	this->is_dragged = false;
+	Ui::on_pointer_up();
 }
 
 void Slider::on_pointer_down()
 {
+	Ui::on_pointer_down();
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 
-	std::cout << "**************************************************mouse button down! " << "mouse_x : " << mouse_x << " et " << handle.position.x << std::endl;
+	//std::cout << "**************************************************mouse button down! " << "mouse_x : " << mouse_x << " et " << handle.position.x << std::endl;
 
 	if(is_mouse_on_handle(mouse_x, mouse_y))
 	{
@@ -54,6 +56,8 @@ void Slider::on_pointer_down()
 
 void Slider::on_pointer_enter()
 {
+	Ui::on_pointer_enter();
+
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
 
@@ -77,6 +81,68 @@ void Slider::on_pointer_enter()
 	}
 }
 
+void Slider::on_input_pressed(const SDL_Event& e)
+{
+	if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
+	{
+		if(/*this->lock &&*/ this->state == State::SELECTED)
+		{
+			this->is_dragged = !this->is_dragged;
+			//this->lock = false;
+		}
+	}
+
+	if(this->is_dragged)
+	{
+		if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT || e.key.keysym.sym == SDLK_LEFT)
+		{
+			if(this->lock && this->state == State::SELECTED)
+			{
+				this->lock = false;
+				handle.position.x -= 20;
+				if(handle.position.x < bar.position.x)
+					handle.position.x = bar.position.x;
+			}
+		}
+		else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || e.key.keysym.sym == SDLK_RIGHT)
+		{
+			if(this->lock && this->state == State::SELECTED)
+			{
+				this->lock = false;
+				handle.position.x += 20;
+				if(handle.position.x + handle.position.w > bar.position.x + bar.position.w)
+					handle.position.x = bar.position.x + bar.position.w - handle.position.w;
+			}
+		}
+	}
+	else
+	{
+		Ui::on_input_pressed(e);
+	}
+}
+
+
+void Slider::on_input_released(const SDL_Event& e)
+{
+	if(this->is_dragged)
+	{
+		if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
+		{
+			if(this->state == State::CLICKED)
+			{
+				this->is_dragged = false;
+				this->lock = true;
+				this->is_selected_sound_played = false;
+			}
+		}
+	}
+	else
+	{
+		Ui::on_input_released(e);
+	}
+}
+
+
 void Slider::draw(SDL_Renderer* renderer)
 {
 	this->bar.draw(renderer);
@@ -88,5 +154,5 @@ void Slider::update(Uint64& time_step)
 	(void)time_step;
 	int mouse_x, mouse_y;
 	SDL_GetMouseState(&mouse_x, &mouse_y);
-	std::cout << "is_dragged: " << is_dragged << ", mouse pos: (" << mouse_x << ", " << mouse_y << "), handle pos_x: (" << handle.position.x << ")" << std::boolalpha << ", is_mouse_on_handle: " << is_mouse_on_handle(mouse_x, mouse_y) << std::endl;
+	//std::cout << "is_dragged: " << is_dragged << ", mouse pos: (" << mouse_x << ", " << mouse_y << "), handle pos_x: (" << handle.position.x << ")" << std::boolalpha << ", is_mouse_on_handle: " << is_mouse_on_handle(mouse_x, mouse_y) << std::endl;
 }

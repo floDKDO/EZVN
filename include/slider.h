@@ -14,6 +14,8 @@ class Slider : public Ui
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		void on_pointer_down() override;
 		void on_pointer_enter() override;
+		void on_input_pressed(const SDL_Event& e) override;
+		void on_input_released(const SDL_Event& e) override;
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64& time_step) override;
 
