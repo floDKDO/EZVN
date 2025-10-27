@@ -8,6 +8,8 @@
 
 #include "gamestate.h"
 #include "menu.h"
+#include "textbutton.h"
+#include "textbox.h"
 
 class Game
 {
@@ -35,6 +37,7 @@ class Game
 		bool game_running;
 		SDL_Window* window;
 
+		Textbox* textbox;
 
 	protected:
 

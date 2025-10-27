@@ -147,6 +147,7 @@
     <ClCompile Include="src\slider.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\text.cpp" />
+    <ClCompile Include="src\textbox.cpp" />
     <ClCompile Include="src\textbutton.cpp" />
     <ClCompile Include="src\texttoggle.cpp" />
     <ClCompile Include="src\toggle.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="include\slider.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />
+    <ClInclude Include="include\textbox.h" />
     <ClInclude Include="include\textbutton.h" />
     <ClInclude Include="include\texttoggle.h" />
     <ClInclude Include="include\toggle.h" />
