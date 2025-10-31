@@ -10,6 +10,7 @@
 #include "menu.h"
 #include "textbutton.h"
 #include "textbox.h"
+#include "inputfield.h"
 
 class Game
 {

@@ -54,6 +54,14 @@ void Text::change_color(SDL_Color color)
 	SDL_SetTextureColorMod(this->texture, this->color.r, this->color.g, this->color.b);
 }
 
+int Text::get_width_one_char(char c)
+{
+	std::string s(1, c);
+	int w;
+	TTF_SizeUTF8(this->font, s.c_str(), &w, nullptr);
+	return w;
+}
+
 void Text::draw(SDL_Renderer* renderer)
 {
 	SDL_RenderCopy(renderer, this->texture, nullptr, &position);
@@ -75,13 +83,13 @@ void Text::update(Uint64& time_step)
 		}
 	}
 	static std::string previous_text;
-	if(previous_text != this->text || previous_text != this->text_dialogue) //the text has been modified (in a inputfield for example)
+	if(previous_text != this->text || (this->wrap_length != 0 && previous_text != this->text_dialogue)) //the text has been modified (in a inputfield for example)
 	{
 		std::cout << "TEXT EDITED\n";
 		SDL_DestroyTexture(this->texture);
 		SDL_FreeSurface(this->surface);
 
-		if(this->text.empty() || this->text_dialogue.empty())
+		if(this->text.empty() || (this->wrap_length != 0 && this->text_dialogue.empty()))
 		{
 			this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, " ", this->color, wrap_length);
 		}

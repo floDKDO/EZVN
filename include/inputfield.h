@@ -35,5 +35,7 @@ class Inputfield : public Ui
 		bool is_editing;
 		bool is_writing;
 		
+		unsigned int index_caret;
+		int offset_caret; 
 };
 

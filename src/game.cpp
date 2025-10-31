@@ -25,7 +25,7 @@ Game::Game()
 	SDL_RenderSetLogicalSize(this->renderer, WINDOW_WIDTH, WINDOW_HEIGHT);
 	SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
 
-	this->textbox = new Textbox({255, 255, 255, 255}, this->renderer);
+	//this->textbox = new Textbox({255, 255, 255, 255}, this->renderer);
 	this->create_main_menu();
 	this->push_state(this->main_menu);
 }
@@ -56,6 +56,7 @@ void Game::create_main_menu()
 	Ui* button7 = new Button("img/button_normal.png", "img/button_selected.png", "img/button_clicked.png", 100, 540, renderer, std::bind(&Game::button_function, this, std::placeholders::_1));
 	Ui* slider1 = new Slider("img/slider_bar.png", "img/slider_handle.png", 0, 100, 800, 620, renderer, std::bind(&Game::button_function, this, std::placeholders::_1));
 	Ui* textbtn = new TextButton("tetetete", {255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255}, 200, 200, this->renderer, nullptr);
+	Ui* inputfield = new Inputfield("img/inputfield.png", {0, 0, 0, 255}, 7, 100, 100, renderer, std::bind(&Game::button_function, this, std::placeholders::_1));
 
 	std::vector<Ui*> ui;
 	ui.reserve(10);
@@ -69,8 +70,9 @@ void Game::create_main_menu()
 	ui.push_back(button7);
 	ui.push_back(slider1);
 	ui.push_back(textbtn);
+	ui.push_back(inputfield);
 
-	this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring. Plus I\'ll make Sayori happy. She is very deserving with all the happiness she brings me.";
+	//this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring. Plus I\'ll make Sayori happy. She is very deserving with all the happiness she brings me.";
 
 	this->main_menu = new Menu(ui, button1);
 }
@@ -164,13 +166,13 @@ void Game::draw()
 {
 	SDL_RenderClear(renderer);
 	this->get_state()->draw(renderer);
-	this->textbox->draw(renderer);
+	//this->textbox->draw(renderer);
 	SDL_RenderPresent(renderer);
 }
 
 void Game::update(Uint64& time_step)
 {
 	this->get_state()->update(time_step);
-	this->textbox->update(time_step);
+	//this->textbox->update(time_step);
 }
 

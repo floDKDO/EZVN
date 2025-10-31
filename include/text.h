@@ -12,6 +12,7 @@ class Text
 		void show();
 		void hide();
 		void change_color(SDL_Color color);
+		int get_width_one_char(char c);
 		void draw(SDL_Renderer* renderer);
 		void update(Uint64& time_step);
 
@@ -25,10 +26,11 @@ class Text
 		std::string text_dialogue;
 		int index_dialogue;
 
+		TTF_Font* font;
+
 	protected:
 
 	private:
-		TTF_Font* font;
 		SDL_Surface* surface;
 		SDL_Texture* texture; 
 };
