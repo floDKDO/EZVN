@@ -17,12 +17,23 @@ class Ui
 	public:
 		virtual ~Ui();
 
-		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
+		virtual void on_pointer_up(bool pointer_on_ui_when_pointer_up); //<=> on click (l'action se lance quand le clic est relaché)
 		virtual void on_pointer_down();
 		virtual void on_pointer_enter();
 		virtual void on_pointer_exit();
 
+		virtual void on_up_pressed();
+		virtual void on_down_pressed();
+		virtual void on_left_pressed();
+		virtual void on_right_pressed();
+		virtual void on_enter_pressed();
 		virtual void on_input_pressed(const SDL_Event& e);
+
+		virtual void on_up_released();
+		virtual void on_down_released();
+		virtual void on_left_released();
+		virtual void on_right_released();
+		virtual void on_enter_released();
 		virtual void on_input_released(const SDL_Event& e);
 
 		virtual void handle_events(const SDL_Event& e);
@@ -51,8 +62,8 @@ class Ui
 		Sound select_sound;
 		Sound click_sound;
 		bool is_selected_sound_played;
+		bool pointer_on_ui_when_pointer_up; //TODO
 
-		//TODO : utiliser std::function
 		std::function<void(Ui* ui)> callback_function;
 
 

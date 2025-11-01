@@ -128,8 +128,10 @@ void Menu::handle_events(const SDL_Event& e)
 		{
 			if(ui->is_mouse_on_ui())
 			{
-				if(this->previous_selected != nullptr)
-					previous_selected->state = State::NORMAL;
+				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) 
+				{
+					previous_selected->state = State::NORMAL; 
+				}
 				this->previous_selected = this->current_selected;
 				this->current_selected = ui;
 			}

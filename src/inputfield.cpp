@@ -1,5 +1,4 @@
 #include "inputfield.h"
-#include <iostream>
 
 Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
 	: text("", color_normal, "fonts/Aller_Rg.ttf", 50, x+7, y, renderer),
@@ -12,72 +11,97 @@ Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, uns
 	this->callback_function = callback_function;
 	this->position = this->normal.position;
 	SDL_SetTextInputRect(&(this->position));
+
+	this->pointer_on_ui_when_pointer_up = true;
 }
 
-void Inputfield::on_pointer_up()
+void Inputfield::on_pointer_up(bool pointer_on_ui_when_pointer_up)
 {
-	Ui::on_pointer_up();
+	Ui::on_pointer_up(pointer_on_ui_when_pointer_up);
 	this->is_editing = !this->is_editing;
+}
+
+void Inputfield::on_left_pressed()
+{
+	if(this->is_editing)
+	{
+		if(this->index_caret > 0)
+		{
+			int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret - 1]);
+			this->offset_caret += -current_char_width;
+			this->index_caret -= 1;
+		}
+	}
+	else
+	{
+		Ui::on_left_pressed();
+	}
+}
+
+void Inputfield::on_right_pressed()
+{
+	if(this->is_editing)
+	{
+		if(this->index_caret < this->character_limit && this->index_caret < this->text.text.length())
+		{
+			int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret]);
+			this->offset_caret += current_char_width;
+			this->index_caret += 1;
+		}
+	}
+	else
+	{
+		Ui::on_right_pressed();
+	}
+}
+
+void Inputfield::on_enter_pressed()
+{
+	this->is_editing = !this->is_editing;
+	Ui::on_enter_pressed();
+}
+
+void Inputfield::on_backspace_pressed()
+{
+	if(this->is_editing && !text.text.empty())
+	{
+		if(this->index_caret > 0)
+		{
+			this->text.text.erase(this->index_caret - 1, 1);
+			this->index_caret -= 1;
+		}
+	}
+}
+
+void Inputfield::on_delete_pressed()
+{
+	if(this->is_editing && !text.text.empty())
+	{
+		if(this->index_caret < this->text.text.length())
+		{
+			int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret]);
+			this->offset_caret += current_char_width;
+			this->text.text.erase(this->index_caret, 1);
+		}
+	}
 }
 
 void Inputfield::on_input_pressed(const SDL_Event& e)
 {
-	this->is_writing = true;
-	if(!this->is_editing)
+	Ui::on_input_pressed(e);
+
+	if(this->is_editing)
 	{
-		Ui::on_input_pressed(e);
+		this->is_writing = true;
 	}
-	else
+
+	if(e.key.keysym.sym == SDLK_BACKSPACE)
 	{
-		if(e.key.keysym.sym == SDLK_BACKSPACE)
-		{
-			if(!text.text.empty())
-			{
-				if(this->index_caret > 0)
-				{
-					this->text.text.erase(this->index_caret - 1, 1);
-					this->index_caret -= 1;
-				}
-			}
-		}
-		else if(e.key.keysym.sym == SDLK_DELETE)
-		{
-			if(!text.text.empty())
-			{
-				if(this->index_caret < this->text.text.length())
-				{
-					int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret]);
-					this->offset_caret += current_char_width;
-					this->text.text.erase(this->index_caret, 1);
-				}
-			}
-		}
-		else if(e.key.keysym.sym == SDLK_LEFT)
-		{
-			if(this->index_caret > 0)
-			{
-				int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret - 1]);
-				this->offset_caret += -current_char_width;
-				this->index_caret -= 1;
-			}
-		}
-		else if(e.key.keysym.sym == SDLK_RIGHT)
-		{
-			if(this->index_caret < this->character_limit && this->index_caret < this->text.text.length())
-			{
-				int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret]);
-				this->offset_caret += current_char_width;
-				this->index_caret += 1;
-			}
-		}
-		else if(e.key.keysym.sym == SDLK_RETURN) //TODO : même code que UI...
-		{
-			if(this->lock && this->state == State::SELECTED)
-			{
-				this->on_pointer_down();
-				this->lock = false;
-			}
-		}
+		this->on_backspace_pressed();
+	}
+	else if(e.key.keysym.sym == SDLK_DELETE)
+	{
+		this->on_delete_pressed();
 	}
 }
 

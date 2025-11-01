@@ -3,7 +3,6 @@
 #include "image.h"
 #include "text.h"
 
-//TODO : se baser sur le code de boiteDeDialogue mais ne pas découper les string selon les \n, les laisser aller à la ligne normalement
 class Textbox
 {
 	public:

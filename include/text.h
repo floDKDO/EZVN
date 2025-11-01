@@ -26,12 +26,11 @@ class Text
 		std::string text_dialogue;
 		int index_dialogue;
 
-		TTF_Font* font;
-
 	protected:
 
 	private:
 		SDL_Surface* surface;
 		SDL_Texture* texture; 
+		TTF_Font* font;
 };
 

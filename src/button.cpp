@@ -10,6 +10,8 @@ Button::Button(const std::string path_normal, const std::string path_selected, c
 	this->position = this->normal.position;
 
 	this->num += 1;
+
+	this->pointer_on_ui_when_pointer_up = true;
 }
 
 void Button::draw(SDL_Renderer* renderer) 

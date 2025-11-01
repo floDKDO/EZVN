@@ -98,7 +98,6 @@ void Game::create_settings_menu()
 	ui.push_back(button6);
 	ui.push_back(button7);
 
-
 	this->settings_menu = new Menu(ui, button1);
 }
 
