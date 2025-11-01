@@ -18,10 +18,10 @@ bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y)
 		 && this->handle.position.x < mouse_x);
 }
 
-void Slider::on_pointer_up(bool pointer_on_ui_when_pointer_up)
+void Slider::on_pointer_up()
 {
 	this->is_dragged = false; 
-	Ui::on_pointer_up(pointer_on_ui_when_pointer_up);
+	Ui::on_pointer_up();
 }
 
 void Slider::on_pointer_down()

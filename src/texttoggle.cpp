@@ -10,9 +10,9 @@ TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Co
 	this->pointer_on_ui_when_pointer_up = true;
 }
 
-void TextToggle::on_pointer_up(bool pointer_on_ui_when_pointer_up)
+void TextToggle::on_pointer_up()
 {
-	Ui::on_pointer_up(pointer_on_ui_when_pointer_up);
+	Ui::on_pointer_up();
 	this->is_checked = !this->is_checked;
 }
 

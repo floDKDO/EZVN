@@ -9,9 +9,9 @@ Toggle::Toggle(const std::string path_normal, const std::string path_selected, c
 	this->pointer_on_ui_when_pointer_up = true;
 }
 
-void Toggle::on_pointer_up(bool pointer_on_ui_when_pointer_up)
+void Toggle::on_pointer_up()
 {
-	Ui::on_pointer_up(pointer_on_ui_when_pointer_up);
+	Ui::on_pointer_up();
 	this->is_checked = !this->is_checked;
 }
 

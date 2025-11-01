@@ -23,8 +23,11 @@ class Text
 		SDL_Renderer* renderer; //solution temporaire
 		Uint32 wrap_length;
 
+		bool is_dialogue;
 		std::string text_dialogue;
 		int index_dialogue;
+
+		std::string previous_text;
 
 	protected:
 

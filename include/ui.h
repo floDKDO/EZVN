@@ -17,7 +17,7 @@ class Ui
 	public:
 		virtual ~Ui();
 
-		virtual void on_pointer_up(bool pointer_on_ui_when_pointer_up); //<=> on click (l'action se lance quand le clic est relaché)
+		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
 		virtual void on_pointer_down();
 		virtual void on_pointer_enter();
 		virtual void on_pointer_exit();

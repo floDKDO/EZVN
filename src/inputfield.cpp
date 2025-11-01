@@ -15,9 +15,9 @@ Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, uns
 	this->pointer_on_ui_when_pointer_up = true;
 }
 
-void Inputfield::on_pointer_up(bool pointer_on_ui_when_pointer_up)
+void Inputfield::on_pointer_up()
 {
-	Ui::on_pointer_up(pointer_on_ui_when_pointer_up);
+	Ui::on_pointer_up();
 	this->is_editing = !this->is_editing;
 }
 
@@ -57,8 +57,12 @@ void Inputfield::on_right_pressed()
 
 void Inputfield::on_enter_pressed()
 {
-	this->is_editing = !this->is_editing;
-	Ui::on_enter_pressed();
+	if(this->lock && this->state == State::SELECTED)
+	{
+		this->state = State::CLICKED;
+		this->lock = false;
+		this->is_editing = !this->is_editing;
+	}
 }
 
 void Inputfield::on_backspace_pressed()

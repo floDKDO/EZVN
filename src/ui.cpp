@@ -1,5 +1,4 @@
 #include "ui.h"
-#include <iostream>
 
 bool Ui::lock = true;
 
@@ -31,9 +30,9 @@ void Ui::select_new(Ui* ui)
 	}
 }
 
-void Ui::on_pointer_up(bool pointer_on_ui_when_pointer_up)
+void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
 {
-	if(pointer_on_ui_when_pointer_up)
+	if(this->pointer_on_ui_when_pointer_up)
 	{
 		if(this->state == State::CLICKED)
 		{
@@ -114,7 +113,7 @@ void Ui::on_right_pressed()
 
 void Ui::on_enter_pressed()
 {
-	if(this->lock && this->state == State::SELECTED)
+	if(this->lock && this->state == State::SELECTED) //TODO : remettre les if des fonctions on_***_pressed dans on_input_pressed ??
 	{
 		this->state = State::CLICKED;
 		this->lock = false;
@@ -178,7 +177,7 @@ void Ui::on_enter_released()
 		this->click_sound.play_sound();
 
 		this->lock = true;
-		this->is_selected_sound_played = false;
+		this->is_selected_sound_played = false; //TODO : inutile ??
 	}
 }
 
@@ -230,7 +229,7 @@ void Ui::handle_events(const SDL_Event& e)
 		case SDL_MOUSEBUTTONUP:
 			if(e.button.button == SDL_BUTTON_LEFT && (this->state == State::SELECTED || this->state == State::CLICKED)) //cas "this->state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
 			{
-				this->on_pointer_up(this->pointer_on_ui_when_pointer_up);
+				this->on_pointer_up();
 			}
 			break;
 
