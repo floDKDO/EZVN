@@ -162,10 +162,10 @@ void Inputfield::update(Uint64& time_step)
 
 void Inputfield::on_typing(const SDL_Event& e)
 {
-	if(this->is_editing && this->text.text.length() <= this->character_limit)
+	if(this->is_editing && this->text.text.length() < this->character_limit)
 	{
+		this->text.text.insert(this->text.text.begin() + this->index_caret, e.text.text[0]);
 		this->index_caret += 1;
-		this->text.text += e.text.text;
 	}
 }
 
