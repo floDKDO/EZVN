@@ -17,6 +17,8 @@ class Game
 	public:
 		Game();
 		~Game();
+		Game(const Game& g) = delete;
+		Game& operator=(const Game& g) = delete;
 
 		void create_main_menu();
 		void create_settings_menu();

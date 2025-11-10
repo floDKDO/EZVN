@@ -5,6 +5,7 @@
 #include <thread>
 
 Game::Game()
+	: main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr)
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
@@ -32,6 +33,28 @@ Game::Game()
 
 Game::~Game()
 {
+	if(this->main_menu)
+	{
+		delete this->main_menu;
+	}
+
+	if(this->settings_menu)
+	{
+		delete this->settings_menu;
+	}
+
+	if(this->load_menu)
+	{
+		delete this->load_menu;
+	}
+	
+	if(this->save_menu)
+	{
+		delete this->save_menu;
+	}
+
+	delete this->textbox;
+
 	if(this->controller != nullptr)
 		SDL_GameControllerClose(this->controller);
 

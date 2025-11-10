@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gamestate.cpp" />
     <ClCompile Include="src\image.cpp" />
@@ -151,10 +152,12 @@
     <ClCompile Include="src\textbutton.cpp" />
     <ClCompile Include="src\texttoggle.cpp" />
     <ClCompile Include="src\toggle.cpp" />
+    <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\button.h" />
+    <ClInclude Include="include\character.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gamestate.h" />
     <ClInclude Include="include\image.h" />
@@ -168,6 +171,7 @@
     <ClInclude Include="include\textbutton.h" />
     <ClInclude Include="include\texttoggle.h" />
     <ClInclude Include="include\toggle.h" />
+    <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\ui.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

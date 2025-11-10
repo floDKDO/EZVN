@@ -11,6 +11,8 @@ class Menu : public GameState
 	public:
 		Menu(std::vector<Ui*> ui, Ui* ui_selected);
 		~Menu();
+		Menu(const Menu& m) = delete;
+		Menu& operator=(const Menu& m) = delete;
 
 		enum class Axis
 		{

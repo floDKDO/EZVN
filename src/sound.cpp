@@ -3,7 +3,7 @@
 int Sound::unused_channel = 0;
 
 Sound::Sound(const std::string path)
-	: name(path), channel(this->unused_channel), loop(false)
+	: name(path), channel(this->unused_channel), loop(false), path(path)
 {
 	this->sound = Mix_LoadWAV(path.c_str());
 	this->unused_channel += 1;
@@ -16,6 +16,38 @@ Sound::Sound(const std::string path)
 Sound::~Sound()
 {
 	Mix_FreeChunk(this->sound);
+}
+
+Sound::Sound(const Sound& s)
+{
+	this->name = s.name;
+	this->channel = s.channel;
+	this->loop = s.loop;
+	this->path = s.path;
+
+	this->sound = Mix_LoadWAV(this->path.c_str());
+}
+
+Sound& Sound::operator=(const Sound& s)
+{
+	if(this == &s)
+	{
+		return *this;
+	}
+
+	if(this->sound)
+	{
+		Mix_FreeChunk(this->sound);
+	}
+
+	this->name = s.name;
+	this->channel = s.channel;
+	this->loop = s.loop;
+	this->path = s.path;
+
+	this->sound = Mix_LoadWAV(this->path.c_str());
+
+	return *this;
 }
 
 void Sound::play_sound(const bool loop, const int fadein_length)

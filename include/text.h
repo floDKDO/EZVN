@@ -8,6 +8,8 @@ class Text
 	public:
 		Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, SDL_Renderer* renderer, Uint32 wrap_length=0);
 		~Text();
+		Text(const Text& t);
+		Text& operator=(const Text& t);
 
 		void show();
 		void hide();
@@ -28,6 +30,8 @@ class Text
 		int index_dialogue;
 
 		std::string previous_text;
+
+		std::string font_path;
 
 	protected:
 

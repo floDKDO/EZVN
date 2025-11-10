@@ -16,7 +16,7 @@ Ui::Ui()
 
 Ui::~Ui()
 {
-	
+
 }
 
 void Ui::select_new(Ui* ui)

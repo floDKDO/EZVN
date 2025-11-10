@@ -14,6 +14,7 @@ class Textbox
 		Image namebox; //TODO : ne pas l'afficher si le personnage pense / narrateur parle
 		Image textbox;
 		Text text;
+		Text text_name_box;
 
 	protected:
 

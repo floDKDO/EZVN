@@ -1,7 +1,7 @@
 #include "image.h"
 
 Image::Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder)
-	: zorder(zorder), name(path), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer)
+	: zorder(zorder), name(path), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path)
 {
 	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
 
@@ -35,13 +35,81 @@ Image::~Image()
 }
 
 Image::Image(const Image& i)
-	: Image(i.name, i.position.x, i.position.y, i.renderer, i.zorder)
 {
+	this->zorder = i.zorder;
+	this->position = i.position;
+	this->name = i.name;
+	this->path = i.path;
+	this->alpha = i.alpha;
+	this->angle = i.angle;
+	this->flip = i.flip;
+	this->r = i.r;
+	this->g = i.g;
+	this->b = i.b;
+	this->frame_index = i.frame_index;
+	this->is_gif = i.is_gif;
+	this->renderer = i.renderer;
 
+	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
+
+	if(IMG_isGIF(ops))
+	{
+		SDL_RWclose(ops);
+		this->gif = IMG_LoadAnimation(path.c_str());
+		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_index]);
+	}
+	else
+	{
+		this->gif = nullptr;
+		this->texture = IMG_LoadTexture(renderer, path.c_str());
+	}
 }
 
 Image& Image::operator=(const Image& i)
 {
+	if(this == &i)
+	{
+		return *this;
+	}
+
+	if(this->gif)
+	{
+		IMG_FreeAnimation(this->gif);
+	}
+
+	if(this->texture)
+	{
+		SDL_DestroyTexture(this->texture);
+	}
+
+	this->zorder = i.zorder;
+	this->position = i.position;
+	this->name = i.name;
+	this->path = i.path;
+	this->alpha = i.alpha;
+	this->angle = i.angle;
+	this->flip = i.flip;
+	this->r = i.r;
+	this->g = i.g;
+	this->b = i.b;
+	this->frame_index = i.frame_index;
+	this->is_gif = i.is_gif;
+	this->renderer = i.renderer;
+
+	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
+
+	if(IMG_isGIF(ops))
+	{
+		SDL_RWclose(ops);
+		this->gif = IMG_LoadAnimation(path.c_str());
+		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_index]);
+	}
+	else
+	{
+		this->gif = nullptr;
+		this->texture = IMG_LoadTexture(renderer, path.c_str());
+	}
+
 	return *this;
 }
 

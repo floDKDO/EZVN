@@ -1,7 +1,7 @@
 #include "music.h"
 
 Music::Music(const std::string path)
-	: name(path), loop(false)
+	: name(path), loop(false), path(path)
 {
 	this->music = Mix_LoadMUS(path.c_str());
 }
@@ -9,6 +9,36 @@ Music::Music(const std::string path)
 Music::~Music()
 {
 	Mix_FreeMusic(this->music);
+}
+
+Music::Music(const Music& m)
+{
+	this->name = m.name;
+	this->loop = m.loop;
+	this->path = m.path;
+
+	this->music = Mix_LoadMUS(this->path.c_str());
+}
+
+Music& Music::operator=(const Music& m)
+{
+	if(this == &m)
+	{
+		return *this;
+	}
+
+	if(this->music)
+	{
+		Mix_FreeMusic(this->music);
+	}
+
+	this->name = m.name;
+	this->loop = m.loop;
+	this->path = m.path;
+
+	this->music = Mix_LoadMUS(this->path.c_str());
+
+	return *this;
 }
 
 void Music::play_music(const bool loop, const int fadein_length)

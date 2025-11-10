@@ -22,6 +22,8 @@ class Image
 		void resize(const int w, const int h);
 		void set_position(const int x, const int y);
 
+		//TODO : void set_character_position(Transform t);
+
 		void night_filter();
 		void afternoon_filter();
 		void own_filter(const Uint8 r, const Uint8 g, const Uint8 b);
@@ -36,6 +38,7 @@ class Image
 
 	private:
 		std::string name;
+		std::string path;
 		
 		Uint8 alpha;
 		double angle;

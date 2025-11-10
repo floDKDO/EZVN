@@ -8,6 +8,8 @@ class Music
 	public:
 		Music(const std::string path);
 		~Music();
+		Music(const Music& m);
+		Music& operator=(const Music& m);
 
 		void play_music(const bool loop = false, const int fadein_length = 0); //unité = s
 		void pause_music() const;
@@ -21,6 +23,7 @@ class Music
 	private:
 		std::string name;
 		bool loop;
+		std::string path;
 		Mix_Music* music;
 };
 
