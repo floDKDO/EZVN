@@ -50,7 +50,7 @@ Image::Image(const Image& i)
 	this->is_gif = i.is_gif;
 	this->renderer = i.renderer;
 
-	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
+	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb"); //TODO : regarder si path.c_str() fonctionne. Sinon, écrire i.path.c_str()
 
 	if(IMG_isGIF(ops))
 	{
@@ -65,51 +65,9 @@ Image::Image(const Image& i)
 	}
 }
 
-Image& Image::operator=(const Image& i)
+Image& Image::operator=(Image i)
 {
-	if(this == &i)
-	{
-		return *this;
-	}
-
-	if(this->gif)
-	{
-		IMG_FreeAnimation(this->gif);
-	}
-
-	if(this->texture)
-	{
-		SDL_DestroyTexture(this->texture);
-	}
-
-	this->zorder = i.zorder;
-	this->position = i.position;
-	this->name = i.name;
-	this->path = i.path;
-	this->alpha = i.alpha;
-	this->angle = i.angle;
-	this->flip = i.flip;
-	this->r = i.r;
-	this->g = i.g;
-	this->b = i.b;
-	this->frame_index = i.frame_index;
-	this->is_gif = i.is_gif;
-	this->renderer = i.renderer;
-
-	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
-
-	if(IMG_isGIF(ops))
-	{
-		SDL_RWclose(ops);
-		this->gif = IMG_LoadAnimation(path.c_str());
-		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_index]);
-	}
-	else
-	{
-		this->gif = nullptr;
-		this->texture = IMG_LoadTexture(renderer, path.c_str());
-	}
-
+	swap(*this, i);
 	return *this;
 }
 

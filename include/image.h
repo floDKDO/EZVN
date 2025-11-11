@@ -10,7 +10,26 @@ class Image
 		Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder=0);
 		~Image();
 		Image(const Image& i);
-		Image& operator=(const Image& i);
+		Image& operator=(Image i);
+
+		friend void swap(Image& i1, Image& i2)
+		{
+			using std::swap; 
+
+			swap(i1.zorder, i2.zorder);
+			swap(i1.position, i2.position);
+			swap(i1.name, i2.name);
+			swap(i1.path, i2.path);
+			swap(i1.alpha, i2.alpha);
+			swap(i1.angle, i2.angle);
+			swap(i1.flip, i2.flip);
+			swap(i1.r, i2.r); swap(i1.g, i2.g); swap(i1.b, i2.b);
+			swap(i1.frame_index, i2.frame_index);
+			swap(i1.is_gif, i2.is_gif);
+			swap(i1.gif, i2.gif);
+			swap(i1.texture, i2.texture);
+			swap(i1.renderer, i2.renderer);
+		}
 
 		void show();
 		void hide();
@@ -37,7 +56,7 @@ class Image
 		
 
 	private:
-		std::string name;
+		std::string name; //TODO : les deux attributs ont la même valeur...
 		std::string path;
 		
 		Uint8 alpha;
@@ -51,5 +70,5 @@ class Image
 		IMG_Animation* gif;
 
 		SDL_Texture* texture;
-		SDL_Renderer* renderer; //solution temporaire
+		SDL_Renderer* renderer; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
 };

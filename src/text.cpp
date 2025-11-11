@@ -69,54 +69,9 @@ Text::Text(const Text& t)
 	SDL_SetTextureBlendMode(this->texture, SDL_BLENDMODE_BLEND);
 }
 
-Text& Text::operator=(const Text& t)
+Text& Text::operator=(Text t)
 {
-	if(this == &t) //ex : Text text; text = text;
-	{
-		return *this;
-	}
-
-	if(this->font)
-	{
-		TTF_CloseFont(this->font);
-	}
-
-	if(this->texture)
-	{
-		SDL_DestroyTexture(this->texture);
-	}
-
-	if(this->surface)
-	{
-		SDL_FreeSurface(this->surface);
-	}
-
-	this->text = t.text;
-	this->color = t.color;
-	this->font_size = t.font_size;
-	this->position = t.position;
-	this->renderer = t.renderer; //OK in this case
-	this->wrap_length = t.wrap_length;
-	this->is_dialogue = t.is_dialogue;
-	this->text_dialogue = t.text_dialogue;
-	this->index_dialogue = t.index_dialogue;
-	this->previous_text = t.previous_text;
-	this->font_path = t.font_path;
-
-	this->font = TTF_OpenFont(this->font_path.c_str(), this->font_size);
-
-	if(this->text.empty())
-	{
-		this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, " ", this->color, wrap_length);
-	}
-	else
-	{
-		this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, this->text.c_str(), this->color, wrap_length);
-	}
-
-	this->texture = SDL_CreateTextureFromSurface(renderer, this->surface);
-	SDL_SetTextureBlendMode(this->texture, SDL_BLENDMODE_BLEND);
-
+	swap(*this, t);
 	return *this;
 }
 

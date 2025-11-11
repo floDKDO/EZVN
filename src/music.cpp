@@ -20,24 +20,9 @@ Music::Music(const Music& m)
 	this->music = Mix_LoadMUS(this->path.c_str());
 }
 
-Music& Music::operator=(const Music& m)
+Music& Music::operator=(Music m)
 {
-	if(this == &m)
-	{
-		return *this;
-	}
-
-	if(this->music)
-	{
-		Mix_FreeMusic(this->music);
-	}
-
-	this->name = m.name;
-	this->loop = m.loop;
-	this->path = m.path;
-
-	this->music = Mix_LoadMUS(this->path.c_str());
-
+	swap(*this, m);
 	return *this;
 }
 

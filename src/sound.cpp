@@ -28,25 +28,9 @@ Sound::Sound(const Sound& s)
 	this->sound = Mix_LoadWAV(this->path.c_str());
 }
 
-Sound& Sound::operator=(const Sound& s)
+Sound& Sound::operator=(Sound s)
 {
-	if(this == &s)
-	{
-		return *this;
-	}
-
-	if(this->sound)
-	{
-		Mix_FreeChunk(this->sound);
-	}
-
-	this->name = s.name;
-	this->channel = s.channel;
-	this->loop = s.loop;
-	this->path = s.path;
-
-	this->sound = Mix_LoadWAV(this->path.c_str());
-
+	swap(*this, s);
 	return *this;
 }
 
