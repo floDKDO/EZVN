@@ -3,35 +3,13 @@
 int Sound::unused_channel = 0;
 
 Sound::Sound(const std::string path)
-	: name(path), channel(this->unused_channel), loop(false), path(path)
+	: name(path), channel(this->unused_channel), loop(false), path(path), sound(path)
 {
-	this->sound = Mix_LoadWAV(path.c_str());
 	this->unused_channel += 1;
 	if(this->unused_channel == MIX_CHANNELS)
 	{
 		this->unused_channel = 0;
 	}
-}
-
-Sound::~Sound()
-{
-	Mix_FreeChunk(this->sound);
-}
-
-Sound::Sound(const Sound& s)
-{
-	this->name = s.name;
-	this->channel = s.channel;
-	this->loop = s.loop;
-	this->path = s.path;
-
-	this->sound = Mix_LoadWAV(this->path.c_str());
-}
-
-Sound& Sound::operator=(Sound s)
-{
-	swap(*this, s);
-	return *this;
 }
 
 void Sound::play_sound(const bool loop, const int fadein_length)
@@ -47,26 +25,26 @@ void Sound::play_sound(const bool loop, const int fadein_length)
 		loops = 0;
 		this->loop = false;
 	}
-	Mix_FadeInChannel(this->channel, this->sound, loops, fadein_length);
+	this->sound.fade_in(this->channel, loops, fadein_length);
 }
 
-void Sound::pause_sound() const
+void Sound::pause_sound()
 {
-	Mix_Pause(this->channel);
+	this->sound.pause(this->channel);
 }
 
-void Sound::resume_sound() const
+void Sound::resume_sound()
 {
-	Mix_Resume(this->channel);
+	this->sound.resume(this->channel);
 }
 
-void Sound::stop_sound(const int fadeout_length) const
+void Sound::stop_sound(const int fadeout_length) 
 {
-	Mix_FadeOutChannel(this->channel, fadeout_length);
+	this->sound.fade_out(this->channel, fadeout_length);
 }
 
-void Sound::change_volume(const int volume) const //[0; MIX_MAX_VOLUME(=128)]
+void Sound::change_volume(const int volume) //[0; MIX_MAX_VOLUME(=128)]
 {
 	//0 = 0%, 128 = 100%
-	Mix_VolumeChunk(this->sound, volume * MIX_MAX_VOLUME / 100);
+	this->sound.volume(volume * MIX_MAX_VOLUME / 100);
 }

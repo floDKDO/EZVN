@@ -1,0 +1,32 @@
+#pragma once
+
+#include <SDL2/SDL.h>
+
+#include "SDL/window.h" //TODO!
+
+namespace sdl
+{
+	 class Renderer;
+}
+
+class sdl::Renderer
+{
+	public:
+		Renderer(SDL_Window* window, int index, Uint32 flags); //SDL_CreateRenderer()
+		Renderer(const Renderer& renderer);
+		Renderer& operator=(const Renderer& renderer);
+		~Renderer(); //SDL_DestroyRenderer
+
+		SDL_Renderer* Get() const;
+
+		void clear();
+		void present();
+		void set_logical_size(int w, int h);
+		void set_draw_blend_mode(SDL_BlendMode blendMode);
+
+	protected:
+
+	private:
+		SDL_Renderer* renderer;
+};
+

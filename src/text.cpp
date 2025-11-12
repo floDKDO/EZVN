@@ -3,25 +3,26 @@
 Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, SDL_Renderer* renderer, Uint32 wrap_length)
 	:text(text), color(color), font_size(font_size), renderer(renderer), wrap_length(wrap_length), text_dialogue(""), index_dialogue(0), previous_text(""), font_path(font_path)
 {
-	this->font = TTF_OpenFont(font_path.c_str(), this->font_size); 
+	this->font = std::make_unique<sdl::Font>(font_path, this->font_size); 
 
 	int w, h;
-	TTF_SizeUTF8(this->font, this->text.c_str(), &w, &h);
+	this->font->size_UTF8(this->text, &w, &h);
 	this->position = {x, y, w, h};
 
 	if(this->text.empty())
 	{
-		this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, " ", this->color, wrap_length);
+		this->surface = std::make_unique<sdl::Surface>(this->font->Get(), " ", this->color, wrap_length);
 	}
 	else
 	{
-		this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, this->text.c_str(), this->color, wrap_length);
+		this->surface = std::make_unique<sdl::Surface>(this->font->Get(), this->text, this->color, wrap_length);
 	}
 
-	this->position.w = this->surface->w;
-	this->position.h = this->surface->h;
-	this->texture = SDL_CreateTextureFromSurface(renderer, this->surface);
-	SDL_SetTextureBlendMode(this->texture, SDL_BLENDMODE_BLEND);
+	this->position.w = this->surface->Get()->w;
+	this->position.h = this->surface->Get()->h;
+
+	this->texture = std::make_unique<sdl::Texture>(renderer, this->surface->Get());
+	this->texture->set_blend_mode(SDL_BLENDMODE_BLEND);
 
 	if(this->wrap_length != 0)
 	{
@@ -33,77 +34,35 @@ Text::Text(const std::string text, const SDL_Color color, const std::string font
 	}
 }
 
-Text::~Text()
-{
-	TTF_CloseFont(this->font);
-	SDL_DestroyTexture(this->texture);
-	SDL_FreeSurface(this->surface);
-}
-
-Text::Text(const Text& t)
-{
-	this->text = t.text;
-	this->color = t.color;
-	this->font_size = t.font_size;
-	this->position = t.position;
-	this->renderer = t.renderer; //OK in this case
-	this->wrap_length = t.wrap_length;
-	this->is_dialogue = t.is_dialogue;
-	this->text_dialogue = t.text_dialogue;
-	this->index_dialogue = t.index_dialogue;
-	this->previous_text = t.previous_text;
-	this->font_path = t.font_path;
-
-	this->font = TTF_OpenFont(this->font_path.c_str(), this->font_size);
-
-	if(this->text.empty())
-	{
-		this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, " ", this->color, wrap_length);
-	}
-	else
-	{
-		this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, this->text.c_str(), this->color, wrap_length);
-	}
-
-	this->texture = SDL_CreateTextureFromSurface(renderer, this->surface);
-	SDL_SetTextureBlendMode(this->texture, SDL_BLENDMODE_BLEND);
-}
-
-Text& Text::operator=(Text t)
-{
-	swap(*this, t);
-	return *this;
-}
-
 void Text::show()
 {
 	this->color.a = 255;
-	SDL_SetTextureAlphaMod(this->texture, this->color.a);
+	this->texture->set_alpha_mod(this->color.a);
 }
 
 void Text::hide()
 {
 	this->color.a = 0;
-	SDL_SetTextureAlphaMod(this->texture, this->color.a);
+	this->texture->set_alpha_mod(this->color.a);
 }
 
 void Text::change_color(SDL_Color color)
 {
 	this->color = color;
-	SDL_SetTextureColorMod(this->texture, this->color.r, this->color.g, this->color.b);
+	this->texture->set_color_mod(this->color.r, this->color.g, this->color.b);
 }
 
 int Text::get_width_one_char(char c)
 {
 	std::string s(1, c);
 	int w;
-	TTF_SizeUTF8(this->font, s.c_str(), &w, nullptr);
+	this->font->size_UTF8(s, &w, nullptr);
 	return w;
 }
 
 void Text::draw(SDL_Renderer* renderer)
 {
-	SDL_RenderCopy(renderer, this->texture, nullptr, &position);
+	SDL_RenderCopy(renderer, this->texture->Get(), nullptr, &position);
 }
 
 void Text::update(Uint64& time_step)
@@ -122,28 +81,26 @@ void Text::update(Uint64& time_step)
 
 	if(this->previous_text != this->text || (this->is_dialogue && this->previous_text != this->text_dialogue)) //the text has been modified (in a inputfield for example)
 	{
-		SDL_DestroyTexture(this->texture);
-		SDL_FreeSurface(this->surface);
-
 		if(this->text.empty() || (this->is_dialogue && this->text_dialogue.empty()))
 		{
-			this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, " ", this->color, wrap_length);
+			this->surface = std::make_unique<sdl::Surface>(this->font->Get(), " ", this->color, wrap_length);
 		}
 		else
 		{
 			if(this->is_dialogue)
 			{
-				this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, this->text_dialogue.c_str(), this->color, wrap_length);
+				this->surface = std::make_unique<sdl::Surface>(this->font->Get(), this->text_dialogue, this->color, wrap_length);
 			}
 			else
 			{
-				this->surface = TTF_RenderUTF8_Blended_Wrapped(this->font, this->text.c_str(), this->color, wrap_length);
+				this->surface = std::make_unique<sdl::Surface>(this->font->Get(), this->text, this->color, wrap_length);
 			}
 		}
-		this->position.w = this->surface->w;
-		this->position.h = this->surface->h;
-		this->texture = SDL_CreateTextureFromSurface(this->renderer, this->surface);
-		SDL_SetTextureBlendMode(this->texture, SDL_BLENDMODE_BLEND);
+		this->position.w = this->surface->Get()->w;
+		this->position.h = this->surface->Get()->h;
+		
+		this->texture = std::make_unique<sdl::Texture>(renderer, this->surface->Get());
+		this->texture->set_blend_mode(SDL_BLENDMODE_BLEND);
 	}
 	if(this->is_dialogue)
 	{

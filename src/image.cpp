@@ -1,86 +1,41 @@
 #include "image.h"
+#include "SDL/rwops.h"
 
 Image::Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder)
 	: zorder(zorder), name(path), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path)
 {
-	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb");
+	sdl::RWops rwops(path, "rb");
 
-	if(IMG_isGIF(ops))
+	if(IMG_isGIF(rwops.Get()))
 	{
-		SDL_RWclose(ops);
 		this->is_gif = true;
-		this->gif = IMG_LoadAnimation(path.c_str());
-		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_index]);
+		this->gif = std::make_unique<sdl::Animation>(path);
+		this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
 	}
 	else
 	{
 		this->is_gif = false;
-		this->gif = nullptr; 
-		this->texture = IMG_LoadTexture(renderer, path.c_str());
+		this->texture = std::make_unique<sdl::Texture>(renderer, path);
 	}
 
-	SDL_SetTextureBlendMode(this->texture, SDL_BLENDMODE_BLEND);
+	this->texture->set_blend_mode(SDL_BLENDMODE_BLEND);
 
 	int w, h;
-	SDL_QueryTexture(this->texture, nullptr, nullptr, &w, &h);
+	this->texture->query(nullptr, nullptr, &w, &h);
 
 	this->position = {x, y, w, h};
-}
-
-Image::~Image()
-{
-	SDL_DestroyTexture(this->texture);
-	if(this->is_gif)
-		IMG_FreeAnimation(this->gif);
-}
-
-Image::Image(const Image& i)
-{
-	this->zorder = i.zorder;
-	this->position = i.position;
-	this->name = i.name;
-	this->path = i.path;
-	this->alpha = i.alpha;
-	this->angle = i.angle;
-	this->flip = i.flip;
-	this->r = i.r;
-	this->g = i.g;
-	this->b = i.b;
-	this->frame_index = i.frame_index;
-	this->is_gif = i.is_gif;
-	this->renderer = i.renderer;
-
-	SDL_RWops* ops = SDL_RWFromFile(path.c_str(), "rb"); //TODO : regarder si path.c_str() fonctionne. Sinon, écrire i.path.c_str()
-
-	if(IMG_isGIF(ops))
-	{
-		SDL_RWclose(ops);
-		this->gif = IMG_LoadAnimation(path.c_str());
-		this->texture = SDL_CreateTextureFromSurface(renderer, gif->frames[this->frame_index]);
-	}
-	else
-	{
-		this->gif = nullptr;
-		this->texture = IMG_LoadTexture(renderer, path.c_str());
-	}
-}
-
-Image& Image::operator=(Image i)
-{
-	swap(*this, i);
-	return *this;
 }
 
 void Image::show()
 {
 	this->alpha = 255;
-	SDL_SetTextureAlphaMod(this->texture, this->alpha);
+	this->texture->set_alpha_mod(this->alpha);
 }
 
 void Image::hide()
 {
 	this->alpha = 0;
-	SDL_SetTextureAlphaMod(this->texture, this->alpha);
+	this->texture->set_alpha_mod(this->alpha);
 }
 
 void Image::flip_vertically()
@@ -113,7 +68,7 @@ void Image::night_filter()
 	this->r = 127;
 	this->g = 127;
 	this->b = 165;
-	SDL_SetTextureColorMod(this->texture, this->r, this->g, this->b);
+	this->texture->set_color_mod(this->r, this->g, this->b);
 }
 
 void Image::afternoon_filter()
@@ -121,7 +76,7 @@ void Image::afternoon_filter()
 	this->r = 210;
 	this->g = 150;
 	this->b = 130;
-	SDL_SetTextureColorMod(this->texture, this->r, this->g, this->b);
+	this->texture->set_color_mod(this->r, this->g, this->b);
 }
 
 void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
@@ -129,20 +84,19 @@ void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 	this->r = r;
 	this->g = g;
 	this->b = b;
-	SDL_SetTextureColorMod(this->texture, this->r, this->g, this->b);
+	this->texture->set_color_mod(this->r, this->g, this->b);
 }
 
 void Image::draw(SDL_Renderer* renderer)
 {
-	SDL_RenderCopyEx(renderer, this->texture, nullptr, &(this->position), this->angle, nullptr, this->flip);
+	SDL_RenderCopyEx(renderer, this->texture->Get(), nullptr, &(this->position), this->angle, nullptr, this->flip);
 	if(is_gif)
 	{
-		SDL_DestroyTexture(this->texture);
-		if(this->frame_index < this->gif->count - 1)
+		if(this->frame_index < this->gif->Get()->count - 1)
 		{
 			this->frame_index += 1;
 		}
 		else this->frame_index = 0;
-		this->texture = SDL_CreateTextureFromSurface(renderer, this->gif->frames[this->frame_index]);
+		this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
 	}
 }

@@ -1,0 +1,25 @@
+#pragma once
+
+#include <SDL2/SDL.h>
+
+namespace sdl
+{
+	class GameController;
+}
+
+class sdl::GameController
+{
+	public:
+		GameController(); //SDL_GameControllerOpen
+		GameController(const GameController& game_controller);
+		GameController& operator=(const GameController& game_controller);
+		~GameController(); //SDL_GameControllerClose
+
+		SDL_GameController* Get() const;
+
+	protected:
+
+	private:
+		SDL_GameController* game_controller;
+};
+

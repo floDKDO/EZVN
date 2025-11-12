@@ -10,12 +10,18 @@
 #include "menu.h"
 #include "game.h"
 
+//TODO : pas besoin de tous ces includes
+
 #include <iostream>
 #include <chrono>
 #include <thread>
 
 
 //TODO : =delete, explicit, final
+
+//TODO : utiliser les types SDL2 encapsulés
+//TODO : est-ce que je dois utiliser les types SDL2 encapsulés dans les classes des types encapsulés ? (ex : SDL_Renderer qui a besoin d'une SDL_Window)
+//TODO : ne pas mettre de unique_ptr pour SDL_Renderer* des classes autres que Game
 
 
 void chk_SDL(const int return_value, const char* error_string)
@@ -64,7 +70,7 @@ int main(int argc, char* argv[])
 		if(SDL_GetTicks64() - second >= 1000)
 		{
 			std::string window_title = "EZVN, FPS: " + std::to_string(frame_count);
-			SDL_SetWindowTitle(game.window, window_title.c_str());
+			game.window.set_title(window_title);
 			second = SDL_GetTicks64();
 			frame_count = 0;
 		}

@@ -1,29 +1,9 @@
 #include "music.h"
 
 Music::Music(const std::string path)
-	: name(path), loop(false), path(path)
+	: name(path), loop(false), path(path), music(path)
 {
-	this->music = Mix_LoadMUS(path.c_str());
-}
 
-Music::~Music()
-{
-	Mix_FreeMusic(this->music);
-}
-
-Music::Music(const Music& m)
-{
-	this->name = m.name;
-	this->loop = m.loop;
-	this->path = m.path;
-
-	this->music = Mix_LoadMUS(this->path.c_str());
-}
-
-Music& Music::operator=(Music m)
-{
-	swap(*this, m);
-	return *this;
 }
 
 void Music::play_music(const bool loop, const int fadein_length)
@@ -40,31 +20,31 @@ void Music::play_music(const bool loop, const int fadein_length)
 		this->loop = false;
 	}
 
-	Mix_FadeInMusic(this->music, loops, fadein_length * 1000);
+	this->music.fade_in(loops, fadein_length * 1000);
 }
 
-void Music::pause_music() const
+void Music::pause_music() 
 {
-	Mix_PauseMusic();
+	this->music.pause();
 }
 
-void Music::resume_music() const
+void Music::resume_music() 
 {
-	Mix_ResumeMusic();
+	this->music.resume();
 }
 
-void Music::stop_music(const int fadeout_length) const
+void Music::stop_music(const int fadeout_length) 
 {
-	Mix_FadeOutMusic(fadeout_length * 1000);
+	this->music.fade_out(fadeout_length * 1000);
 }
 
-void Music::change_volume(const int volume) const //[0; MIX_MAX_VOLUME(=128)]
+void Music::change_volume(const int volume) //[0; MIX_MAX_VOLUME(=128)]
 {
 	//0 = 0%, 128 = 100%
-	Mix_VolumeMusic(volume * MIX_MAX_VOLUME / 100);
+	this->music.volume(volume * MIX_MAX_VOLUME / 100);
 }
 
-void Music::set_position(const double position) const 
+void Music::set_position(const double position) 
 {
-	Mix_SetMusicPosition(position);
+	this->music.set_position(position);
 }

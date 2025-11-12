@@ -11,6 +11,9 @@
 #include "textbutton.h"
 #include "textbox.h"
 #include "inputfield.h"
+#include "SDL/window.h"
+#include "SDL/renderer.h"
+#include "SDL/gamecontroller.h"
 
 class Game
 {
@@ -38,15 +41,18 @@ class Game
 		Menu* save_menu;
 
 		bool game_running;
-		SDL_Window* window;
+		sdl::Window window;
 
 		Textbox* textbox;
 
 	protected:
 
 	private:
-		SDL_Renderer* renderer;
-		SDL_GameController* controller;
+		sdl::Renderer renderer;
+		sdl::GameController game_controller;
 		std::stack<GameState*> states;
+
+		static const int WINDOW_WIDTH = 1280; 
+		static const int WINDOW_HEIGHT = 720;
 };
 

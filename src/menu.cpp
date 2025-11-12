@@ -116,7 +116,7 @@ Menu::~Menu()
 {
 	for(Ui* ui : this->ui)
 	{
-		delete ui;
+		delete ui; 
 	}
 }
 

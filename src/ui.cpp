@@ -14,9 +14,10 @@ Ui::Ui()
 
 }
 
+#include <iostream>
 Ui::~Ui()
 {
-
+	std::cout << "UI" << std::endl;
 }
 
 void Ui::select_new(Ui* ui)

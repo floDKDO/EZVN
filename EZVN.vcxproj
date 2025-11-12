@@ -111,6 +111,7 @@
       <AdditionalOptions>/external:anglebrackets /external:W0 %(AdditionalOptions)</AdditionalOptions>
       <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
       <TreatAngleIncludeAsExternal>true</TreatAngleIncludeAsExternal>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +146,16 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\music.cpp" />
+    <ClCompile Include="src\SDL\animation.cpp" />
+    <ClCompile Include="src\SDL\chunk.cpp" />
+    <ClCompile Include="src\SDL\font.cpp" />
+    <ClCompile Include="src\SDL\gamecontroller.cpp" />
+    <ClCompile Include="src\SDL\music.cpp" />
+    <ClCompile Include="src\SDL\renderer.cpp" />
+    <ClCompile Include="src\SDL\rwops.cpp" />
+    <ClCompile Include="src\SDL\surface.cpp" />
+    <ClCompile Include="src\SDL\texture.cpp" />
+    <ClCompile Include="src\SDL\window.cpp" />
     <ClCompile Include="src\slider.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\text.cpp" />
@@ -164,6 +175,16 @@
     <ClInclude Include="include\inputfield.h" />
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\music.h" />
+    <ClInclude Include="include\SDL\animation.h" />
+    <ClInclude Include="include\SDL\chunk.h" />
+    <ClInclude Include="include\SDL\font.h" />
+    <ClInclude Include="include\SDL\gamecontroller.h" />
+    <ClInclude Include="include\SDL\music.h" />
+    <ClInclude Include="include\SDL\renderer.h" />
+    <ClInclude Include="include\SDL\rwops.h" />
+    <ClInclude Include="include\SDL\surface.h" />
+    <ClInclude Include="include\SDL\texture.h" />
+    <ClInclude Include="include\SDL\window.h" />
     <ClInclude Include="include\slider.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />
