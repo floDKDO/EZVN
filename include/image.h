@@ -1,12 +1,9 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <string>
-#include <memory>
-
 #include "SDL/texture.h"
 #include "SDL/animation.h"
+
+#include <memory>
 
 class Image
 {
@@ -38,7 +35,6 @@ class Image
 		
 
 	private:
-		std::string name; //TODO : les deux attributs ont la même valeur...
 		std::string path;
 		
 		Uint8 alpha;

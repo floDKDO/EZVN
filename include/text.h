@@ -1,12 +1,10 @@
 #pragma once
 
-#include <SDL2/SDL_ttf.h>
-#include <string>
-#include <memory>
-
 #include "SDL/surface.h"
 #include "SDL/texture.h"
 #include "SDL/font.h"
+
+#include <memory>
 
 class Text
 {

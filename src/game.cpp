@@ -1,8 +1,6 @@
 #include "game.h"
 
 #include <iostream>
-#include <chrono>
-#include <thread>
 
 Game::Game()
 	: main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr), 
@@ -51,11 +49,6 @@ Game::~Game()
 
 	delete this->textbox;
 
-	//if(this->controller != nullptr)
-		//SDL_GameControllerClose(this->controller); //TODO : plus besoin logiquement
-
-	//SDL_DestroyRenderer(this->renderer); //TODO : plus besoin logiquement
-	//SDL_DestroyWindow(this->window); //TODO : plus besoin logiquement
 	SDL_StopTextInput();
 	TTF_Quit();
 	Mix_CloseAudio();

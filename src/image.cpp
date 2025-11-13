@@ -2,7 +2,7 @@
 #include "SDL/rwops.h"
 
 Image::Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder)
-	: zorder(zorder), name(path), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path)
+	: zorder(zorder), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path)
 {
 	sdl::RWops rwops(path, "rb");
 

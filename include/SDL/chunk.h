@@ -11,7 +11,7 @@ namespace sdl
 class sdl::Chunk
 {
 	public:
-		Chunk(const std::string file); //Mix_LoadWAV
+		explicit Chunk(const std::string file); //Mix_LoadWAV
 		Chunk(const Chunk& chunk) = delete;
 		Chunk& operator=(const Chunk& chunk) = delete;
 		~Chunk(); //Mix_FreeChunk

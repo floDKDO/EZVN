@@ -11,9 +11,6 @@ class Button : public Ui
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64& time_step) override;
 
-		//DEBUG
-		static int num;
-
 	protected:
 
 	private:

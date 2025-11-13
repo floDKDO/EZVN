@@ -51,8 +51,6 @@ class Ui
 
 		State state;
 
-		std::string name;
-
 		static bool lock; 
 
 	protected:
@@ -62,7 +60,7 @@ class Ui
 		Sound select_sound;
 		Sound click_sound;
 		bool is_selected_sound_played;
-		bool pointer_on_ui_when_pointer_up; //TODO
+		bool pointer_on_ui_when_pointer_up; 
 
 		std::function<void(Ui* ui)> callback_function;
 

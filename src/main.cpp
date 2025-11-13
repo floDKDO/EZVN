@@ -1,28 +1,8 @@
-#include "image.h"
-#include "sound.h"
-#include "music.h"
-#include "button.h"
-#include "textbutton.h"
-#include "toggle.h"
-#include "inputfield.h"
-#include "texttoggle.h"
-#include "slider.h"
-#include "menu.h"
 #include "game.h"
-
-//TODO : pas besoin de tous ces includes
 
 #include <iostream>
 #include <chrono>
 #include <thread>
-
-
-//TODO : =delete, explicit, final
-
-//TODO : utiliser les types SDL2 encapsulés
-//TODO : est-ce que je dois utiliser les types SDL2 encapsulés dans les classes des types encapsulés ? (ex : SDL_Renderer qui a besoin d'une SDL_Window)
-//TODO : ne pas mettre de unique_ptr pour SDL_Renderer* des classes autres que Game
-
 
 void chk_SDL(const int return_value, const char* error_string)
 {

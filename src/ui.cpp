@@ -175,9 +175,7 @@ void Ui::on_enter_released()
 		this->state = State::SELECTED;
 		callback_function(this);
 		this->click_sound.play_sound();
-
 		this->lock = true;
-		this->is_selected_sound_played = false; //TODO : inutile ??
 	}
 }
 

@@ -1,14 +1,11 @@
 #pragma once
 
-#include <SDL2/SDL_mixer.h>
-#include <string>
-
 #include "SDL/chunk.h"
 
 class Sound
 {
 	public:
-		Sound(const std::string path);
+		explicit Sound(const std::string path);
 
 		void play_sound(const bool loop=false, const int fadein_length=0); 
 		void pause_sound();
@@ -19,7 +16,6 @@ class Sound
 	protected:
 
 	private:
-		std::string name;
 		int channel;
 		bool loop;
 		std::string path;

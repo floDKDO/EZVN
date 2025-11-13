@@ -1,11 +1,5 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_mixer.h>
-#include <stack>
-
 #include "gamestate.h"
 #include "menu.h"
 #include "textbutton.h"
@@ -14,6 +8,8 @@
 #include "SDL/window.h"
 #include "SDL/renderer.h"
 #include "SDL/gamecontroller.h"
+
+#include <stack>
 
 class Game
 {

@@ -3,7 +3,7 @@
 int Sound::unused_channel = 0;
 
 Sound::Sound(const std::string path)
-	: name(path), channel(this->unused_channel), loop(false), path(path), sound(path)
+	: channel(this->unused_channel), loop(false), path(path), sound(path)
 {
 	this->unused_channel += 1;
 	if(this->unused_channel == MIX_CHANNELS)

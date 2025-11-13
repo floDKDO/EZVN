@@ -1,7 +1,7 @@
 #include "music.h"
 
 Music::Music(const std::string path)
-	: name(path), loop(false), path(path), music(path)
+	: loop(false), path(path), music(path)
 {
 
 }

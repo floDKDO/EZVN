@@ -1,14 +1,11 @@
 #pragma once
 
-#include <SDL2/SDL_mixer.h>
-#include <string>
-
 #include "SDL/music.h"
 
 class Music
 {
 	public:
-		Music(const std::string path);
+		explicit Music(const std::string path);
 
 		void play_music(const bool loop = false, const int fadein_length = 0); //unité = s
 		void pause_music();
@@ -20,7 +17,6 @@ class Music
 	protected:
 
 	private:
-		std::string name;
 		bool loop;
 		std::string path;
 		sdl::Music music;

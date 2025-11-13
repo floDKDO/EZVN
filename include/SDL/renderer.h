@@ -2,8 +2,6 @@
 
 #include <SDL2/SDL.h>
 
-#include "SDL/window.h" //TODO!
-
 namespace sdl
 {
 	 class Renderer;
