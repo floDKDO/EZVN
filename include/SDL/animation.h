@@ -12,8 +12,8 @@ class sdl::Animation
 {
 	public:
 		Animation(const std::string file); //IMG_LoadAnimation
-		Animation(const Animation& animation);
-		Animation& operator=(const Animation& animation); 
+		Animation(const Animation& animation) = delete;
+		Animation& operator=(const Animation& animation) = delete; 
 		~Animation(); //IMG_FreeAnimation
 
 		IMG_Animation* Get() const;

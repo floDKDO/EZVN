@@ -13,8 +13,8 @@ class sdl::Renderer
 {
 	public:
 		Renderer(SDL_Window* window, int index, Uint32 flags); //SDL_CreateRenderer()
-		Renderer(const Renderer& renderer);
-		Renderer& operator=(const Renderer& renderer);
+		Renderer(const Renderer& renderer) = delete;
+		Renderer& operator=(const Renderer& renderer) = delete;
 		~Renderer(); //SDL_DestroyRenderer
 
 		SDL_Renderer* Get() const;

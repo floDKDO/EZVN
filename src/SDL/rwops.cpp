@@ -8,17 +8,6 @@ RWops::RWops(const std::string file, const std::string mode) //SDL_RWFromFile
 	this->rwops = SDL_RWFromFile(file.c_str(), mode.c_str());
 }
 
-RWops::RWops(const RWops& rwops)
-{
-	//TODO!
-}
-
-RWops& RWops::operator=(const RWops& rwops)
-{
-	//TODO!
-	return *this;
-}
-
 RWops::~RWops() //SDL_RWclose
 {
 	SDL_RWclose(this->rwops);

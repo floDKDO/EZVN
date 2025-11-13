@@ -12,8 +12,8 @@ class sdl::Chunk
 {
 	public:
 		Chunk(const std::string file); //Mix_LoadWAV
-		Chunk(const Chunk& chunk);
-		Chunk& operator=(const Chunk& chunk);
+		Chunk(const Chunk& chunk) = delete;
+		Chunk& operator=(const Chunk& chunk) = delete;
 		~Chunk(); //Mix_FreeChunk
 
 		Mix_Chunk* Get() const;

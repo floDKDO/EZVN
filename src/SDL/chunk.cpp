@@ -8,17 +8,6 @@ Chunk::Chunk(const std::string file) //Mix_LoadWAV
 	this->chunk = Mix_LoadWAV(file.c_str());
 }
 
-Chunk::Chunk(const Chunk& chunk)
-{
-	//TODO!
-}
-
-Chunk& Chunk::operator=(const Chunk& chunk)
-{
-	//TODO!
-	return *this;
-}
-
 Chunk::~Chunk() //Mix_FreeChunk
 {
 	Mix_FreeChunk(this->chunk);

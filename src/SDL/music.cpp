@@ -8,17 +8,6 @@ Music::Music(const std::string file) //Mix_LoadMUS
 	this->music = Mix_LoadMUS(file.c_str());
 }
 
-Music::Music(const Music& music)
-{
-	//TODO!
-}
-
-Music& Music::operator=(const Music& music)
-{
-	//TODO!
-	return *this;
-}
-
 Music::~Music() //Mix_FreeMusic
 {
 	Mix_FreeMusic(this->music);

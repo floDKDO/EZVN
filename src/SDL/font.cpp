@@ -1,5 +1,5 @@
 #include "SDL/font.h"
-#include <iostream>
+
 namespace sdl
 {
 
@@ -8,21 +8,8 @@ Font::Font(const std::string file, int ptsize) //TTF_OpenFont
 	this->font = TTF_OpenFont(file.c_str(), ptsize);
 }
 
-Font::Font(const Font& font)
-{
-	//TODO!
-}
-
-Font& Font::operator=(const Font& font)
-{
-	//TODO!
-	return *this;
-}
-
-
 Font::~Font() //TTF_CloseFont
 {
-	std::cout << "DESTRUECTEUR DE FONT!\n";
 	TTF_CloseFont(this->font);
 }
 

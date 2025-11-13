@@ -11,8 +11,8 @@ class sdl::GameController
 {
 	public:
 		GameController(); //SDL_GameControllerOpen
-		GameController(const GameController& game_controller);
-		GameController& operator=(const GameController& game_controller);
+		GameController(const GameController& game_controller) = delete;
+		GameController& operator=(const GameController& game_controller) = delete;
 		~GameController(); //SDL_GameControllerClose
 
 		SDL_GameController* Get() const;

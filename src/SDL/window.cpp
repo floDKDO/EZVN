@@ -8,17 +8,6 @@ Window::Window(const std::string title, int x, int y, int w, int h, Uint32 flags
 	this->window = SDL_CreateWindow(title.c_str(), x, y, w, h, flags);
 }
 
-Window::Window(const Window& window)
-{
-	//TODO!
-}
-
-Window& Window::operator=(const Window& window)
-{
-	//TODO!
-	return *this;
-}
-
 Window::~Window() //SDL_DestroyWindow
 {
 	SDL_DestroyWindow(this->window);

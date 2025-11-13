@@ -12,8 +12,8 @@ class sdl::Music
 {
 	public:
 		Music(const std::string file); //Mix_LoadMUS
-		Music(const Music& music);
-		Music& operator=(const Music& music);
+		Music(const Music& music) = delete;
+		Music& operator=(const Music& music) = delete;
 		~Music(); //Mix_FreeMusic
 
 		Mix_Music* Get() const;

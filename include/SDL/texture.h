@@ -16,8 +16,8 @@ class sdl::Texture
 	public:
 		Texture(SDL_Renderer* renderer, SDL_Surface* surface); //SDL_CreateTextureFromSurface()
 		Texture(SDL_Renderer* renderer, const std::string file); //IMG_LoadTexture()
-		Texture(const Texture& texture);
-		Texture& operator=(const Texture& texture);
+		Texture(const Texture& texture) = delete;
+		Texture& operator=(const Texture& texture) = delete;
 		~Texture(); //SDL_DestroyTexture
 
 		SDL_Texture* Get() const;

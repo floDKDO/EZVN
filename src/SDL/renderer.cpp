@@ -8,17 +8,6 @@ Renderer::Renderer(SDL_Window* window, int index, Uint32 flags) //SDL_CreateRend
 	this->renderer = SDL_CreateRenderer(window, index, flags);
 }
 
-Renderer::Renderer(const Renderer& renderer)
-{
-	//TODO!
-}
-
-Renderer& Renderer::operator=(const Renderer& renderer)
-{
-	//TODO!
-	return *this;
-}
-
 Renderer::~Renderer() //SDL_DestroyRenderer
 {
 	SDL_DestroyRenderer(this->renderer);

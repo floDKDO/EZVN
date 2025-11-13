@@ -1,17 +1,10 @@
 #include "SDL/texture.h"
 
-#include <iostream>
-
 namespace sdl
 {
 
 Texture::Texture(SDL_Renderer* renderer, SDL_Surface* surface) //SDL_CreateTextureFromSurface()
 {
-	if(surface == nullptr || renderer == nullptr)
-	{
-		std::cout << "ERREUR : SURFACE NULL!\n";
-	}
-
 	this->texture = SDL_CreateTextureFromSurface(renderer, surface);
 }
 
@@ -20,20 +13,8 @@ Texture::Texture(SDL_Renderer* renderer, const std::string file) //IMG_LoadTextu
 	this->texture = IMG_LoadTexture(renderer, file.c_str());
 }
 
-Texture::Texture(const Texture& texture)
-{
-	//TODO!
-}
-
-Texture& Texture::operator=(const Texture& texture)
-{
-	//TODO!
-	return *this;
-}
-
 Texture::~Texture() //SDL_DestroyTexture
 {
-	std::cout << "Desturcteur de Texture\n";
 	SDL_DestroyTexture(this->texture);
 }
 
