@@ -10,6 +10,21 @@ class Image
 	public:
 		Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder=0);
 
+		enum class ImageType
+		{
+			NONE, //TODO : utile ?
+			BUTTON,
+			INPUTFIELD,
+			SLIDER,
+			TEXTBOX, 
+			TEXTBUTTON, //TODO : utile ?
+			TEXTTOGGLE, //TODO : utile ?
+			TOGGLE,
+			GUI,
+			CHARACTER,
+			BACKGROUND
+		};
+
 		void show();
 		void hide();
 
@@ -31,11 +46,14 @@ class Image
 		int zorder;
 		SDL_Rect position;
 
+		Uint64 last_time; //TODO : trouver un meilleur nom
+
 	protected:
 		
 
 	private:
 		std::string path;
+		ImageType image_type;
 		
 		Uint8 alpha;
 		double angle;

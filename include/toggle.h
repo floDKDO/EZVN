@@ -10,7 +10,7 @@ class Toggle : public Ui
 
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		void draw(SDL_Renderer* renderer) override;
-		void update(Uint64& time_step) override;
+		void update(Uint64 time_step) override;
 
 	protected:
 

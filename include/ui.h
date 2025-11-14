@@ -38,7 +38,7 @@ class Ui
 
 		virtual void handle_events(const SDL_Event& e);
 		virtual void draw(SDL_Renderer* renderer) = 0;
-		virtual void update(Uint64& time_step) = 0;
+		virtual void update(Uint64 time_step) = 0;
 
 		bool is_mouse_on_ui() const;
 
@@ -50,6 +50,8 @@ class Ui
 		Ui* select_on_right;
 
 		State state;
+
+		Uint64 last_time; //TODO : trouver un meilleur nom
 
 		static bool lock; 
 

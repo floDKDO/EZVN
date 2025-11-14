@@ -28,7 +28,7 @@ void Toggle::draw(SDL_Renderer* renderer)
 		this->checked.draw(renderer);
 }
 
-void Toggle::update(Uint64& time_step)
+void Toggle::update(Uint64 time_step)
 {
 	(void)time_step;
 }

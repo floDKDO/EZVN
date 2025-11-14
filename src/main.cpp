@@ -22,6 +22,17 @@ void nchk_SDL(const void* return_value, const char* error_string)
 	}
 }
 
+// TODO : gérer les erreurs des fonctions SDL. 
+// Idée : ne pas crash systématiquement en cas d'erreur (ex avec Ren'Py qui affiche une image noire si l'image qu'on veut afficher n'est pas trouvée)
+// => avoir une image par défaut pour chaque classe d'images (Button, Inputfield, Character...) => détectable par le dossier qui contient l'image (gui pour Button etc., characters pour Character...)
+// De plus, toutes les erreurs n'ont pas le même impact (ex : une erreur pour SDL_RenderClear() n'est pas grave)
+// Il faudrait utiliser SDL_Log à la place de fprintf(stderr, ...), et éventuellement SDL_ShowSimpleMessageBox
+// Préalable : ne pas afficher toutes les erreurs pour le mode Release
+
+//TODO : corriger le problème du time_step et modifier la valeur de last_time dans le update() de toutes les classes
+
+//TODO : time_step <=> end_current_frame ??
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
@@ -55,6 +66,9 @@ int main(int argc, char* argv[])
 			frame_count = 0;
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_TIME - (end_current_frame - begin_current_frame)));
+		 
+		//std::cout << "(MAIN)Valeur de time_step : " << time_step << std::endl;
+		time_step = SDL_GetTicks64();
 	}
 	return 0;
 }

@@ -29,7 +29,7 @@ class Game
 
 		void handle_events();
 		void draw();
-		void update(Uint64& time_step);
+		void update(Uint64 time_step);
 
 		Menu* main_menu;
 		Menu* settings_menu;

@@ -21,7 +21,7 @@ class Slider : public Ui
 		void on_enter_pressed() override;
 
 		void draw(SDL_Renderer* renderer) override;
-		void update(Uint64& time_step) override;
+		void update(Uint64 time_step) override;
 
 		unsigned int min_value;
 		unsigned int max_value;

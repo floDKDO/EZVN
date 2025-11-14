@@ -10,7 +10,8 @@ RWops::RWops(const std::string file, const std::string mode) //SDL_RWFromFile
 
 RWops::~RWops() //SDL_RWclose
 {
-	SDL_RWclose(this->rwops);
+	if(this->rwops != nullptr)
+		SDL_RWclose(this->rwops);
 }
 
 SDL_RWops* RWops::Get() const

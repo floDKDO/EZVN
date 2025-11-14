@@ -148,7 +148,7 @@ void Menu::draw(SDL_Renderer* renderer)
 	}
 }
 
-void Menu::update(Uint64& time_step)
+void Menu::update(Uint64 time_step)
 {
 	for(Ui* ui : this->ui)
 	{

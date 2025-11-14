@@ -8,11 +8,14 @@ class Textbox
 	public:
 		Textbox(SDL_Color text_color, SDL_Renderer* renderer);
 
+		void show_new_dialogue(std::string new_dialogue, std::string speaker="");
 		void draw(SDL_Renderer* renderer);
-		void update(Uint64& time_step);
+		void update(Uint64 time_step);
 
-		Image namebox; //TODO : ne pas l'afficher si le personnage pense / narrateur parle
+		std::string current_speaker; //TODO : à sûrement remplacer par Character
+		Image namebox;
 		Image textbox;
+		Image triangle;
 		Text text;
 		Text text_name_box;
 

@@ -18,7 +18,7 @@ void Button::draw(SDL_Renderer* renderer)
 		this->clicked.draw(renderer);
 }
 
-void Button::update(Uint64& time_step)
+void Button::update(Uint64 time_step)
 {
 	(void)time_step;
 }

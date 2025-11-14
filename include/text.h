@@ -15,8 +15,9 @@ class Text
 		void hide();
 		void change_color(SDL_Color color);
 		int get_width_one_char(char c);
+		int get_width_text();
 		void draw(SDL_Renderer* renderer);
-		void update(Uint64& time_step);
+		void update(Uint64 time_step);
 
 		std::string text;
 		SDL_Color color;
@@ -28,10 +29,13 @@ class Text
 		bool is_dialogue;
 		std::string text_dialogue;
 		int index_dialogue;
+		bool is_finished;
 
 		std::string previous_text;
 
 		std::string font_path;
+
+		Uint64 last_time; //TODO : trouver un meilleur nom
 
 	protected:
 

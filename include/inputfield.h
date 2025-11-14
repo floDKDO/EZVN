@@ -21,7 +21,7 @@ class Inputfield : public Ui
 		void on_input_released(const SDL_Event& e) override;
 		void handle_events(const SDL_Event& e) override;
 		void draw(SDL_Renderer* renderer) override;
-		void update(Uint64& time_step) override;
+		void update(Uint64 time_step) override;
 
 		void on_typing(const SDL_Event& e);
 		void set_character_limit(unsigned int character_limit);

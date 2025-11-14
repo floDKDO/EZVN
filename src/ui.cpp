@@ -9,7 +9,8 @@ Ui::Ui()
 	is_selected_sound_played(false),
 	position{0, 0, 0, 0},
 	callback_function(nullptr),
-	pointer_on_ui_when_pointer_up(true)
+	pointer_on_ui_when_pointer_up(true),
+	last_time(0)
 {
 
 }

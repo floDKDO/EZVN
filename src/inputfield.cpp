@@ -1,5 +1,7 @@
 #include "inputfield.h"
 
+#include <iostream>
+
 Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
 	: text("", color_normal, "fonts/Aller_Rg.ttf", 50, x+7, y, renderer),
 	  normal(path, x, y, renderer), color_normal(color_normal), 
@@ -146,17 +148,18 @@ void Inputfield::draw(SDL_Renderer* renderer)
 	}
 }
 
-void Inputfield::update(Uint64& time_step)
+void Inputfield::update(Uint64 time_step)
 {
 	this->text.update(time_step);
-	if(SDL_GetTicks() - time_step > 500)
+
+	if(time_step - this->last_time > 500)
 	{
 		this->text_caret.show();
 	}
-	if(SDL_GetTicks() - time_step > 1000 && !this->is_writing) //do not hide the caret when writing/deleting
+	if(time_step - this->last_time > 1000 && !this->is_writing) //do not hide the caret when writing/deleting
 	{
 		this->text_caret.hide();
-		time_step = SDL_GetTicks();
+		last_time = SDL_GetTicks64();
 	}
 }
 

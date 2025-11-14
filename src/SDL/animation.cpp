@@ -5,7 +5,7 @@ namespace sdl
 
 Animation::Animation(const std::string file) //IMG_LoadAnimation
 {
-	this->animation = IMG_LoadAnimation(file.c_str());
+	this->animation = IMG_LoadAnimation(file.c_str()); //TODO : utiliser IMG_LoadGIFAnimation_RW si tout le temps des GIF
 }
 
 Animation::~Animation() //IMG_FreeAnimation

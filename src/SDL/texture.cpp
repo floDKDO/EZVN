@@ -11,6 +11,10 @@ Texture::Texture(SDL_Renderer* renderer, SDL_Surface* surface) //SDL_CreateTextu
 Texture::Texture(SDL_Renderer* renderer, const std::string file) //IMG_LoadTexture()
 {
 	this->texture = IMG_LoadTexture(renderer, file.c_str());
+	if(this->texture == nullptr) //TODO: gérer le cas pour les backgrounds
+	{
+		this->texture = IMG_LoadTexture(renderer, "img/characters/image_not_found.png");
+	}
 }
 
 Texture::~Texture() //SDL_DestroyTexture

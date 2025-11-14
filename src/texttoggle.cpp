@@ -21,7 +21,7 @@ void TextToggle::draw(SDL_Renderer* renderer)
 	this->text.draw(renderer);
 }
 
-void TextToggle::update(Uint64& time_step)
+void TextToggle::update(Uint64 time_step)
 {
 	(void)time_step;
 	if(this->is_checked)

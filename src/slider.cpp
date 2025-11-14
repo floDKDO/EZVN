@@ -160,7 +160,7 @@ void Slider::draw(SDL_Renderer* renderer)
 	this->handle.draw(renderer);
 }
 
-void Slider::update(Uint64& time_step)
+void Slider::update(Uint64 time_step)
 {
 	(void)time_step;
 }

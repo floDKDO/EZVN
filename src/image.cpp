@@ -1,16 +1,40 @@
 #include "image.h"
 #include "SDL/rwops.h"
 
-Image::Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder)
-	: zorder(zorder), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path)
-{
-	sdl::RWops rwops(path, "rb");
+#include <iostream>
 
-	if(IMG_isGIF(rwops.Get()))
+Image::Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder)
+	: zorder(zorder), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path), last_time(0)
+{
+	if(this->path.find("img/characters/") != std::string::npos)
 	{
-		this->is_gif = true;
-		this->gif = std::make_unique<sdl::Animation>(path);
-		this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
+		this->image_type = ImageType::CHARACTER;
+	}
+	else if(this->path.find("img/gui/") != std::string::npos)
+	{
+		this->image_type = ImageType::GUI;
+	}
+	else if(this->path.find("img/backgrounds/") != std::string::npos) 
+	{
+		this->image_type = ImageType::BACKGROUND;
+	}
+	else this->image_type = ImageType::NONE;
+
+	if(this->image_type == ImageType::CHARACTER || this->image_type == ImageType::NONE)
+	{
+		sdl::RWops rwops(path, "rb"); 
+
+		if(rwops.Get() != nullptr && IMG_isGIF(rwops.Get())) 
+		{
+			this->is_gif = true;
+			this->gif = std::make_unique<sdl::Animation>(path);
+			this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
+		}
+		else
+		{
+			this->is_gif = false;
+			this->texture = std::make_unique<sdl::Texture>(renderer, path);
+		}
 	}
 	else
 	{

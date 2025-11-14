@@ -14,7 +14,7 @@ void TextButton::draw(SDL_Renderer* renderer)
 	this->text.draw(renderer);
 }
 
-void TextButton::update(Uint64& time_step)
+void TextButton::update(Uint64 time_step)
 {
 	(void)time_step;
 	if(this->state == State::NORMAL)

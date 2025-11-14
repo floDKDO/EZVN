@@ -26,7 +26,7 @@ class Menu : public GameState
 		bool is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode);
 		void handle_events(const SDL_Event& e);
 		void draw(SDL_Renderer* renderer);
-		void update(Uint64& time_step);
+		void update(Uint64 time_step);
 
 		Ui* previous_selected;
 		Ui* current_selected;
