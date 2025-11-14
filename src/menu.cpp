@@ -131,6 +131,10 @@ void Menu::handle_events(const SDL_Event& e)
 				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) 
 				{
 					previous_selected->state = State::NORMAL; 
+					if(dynamic_cast<Slider*>(previous_selected) != nullptr)
+					{
+						dynamic_cast<Slider*>(previous_selected)->is_selected = false;
+					}
 				}
 				this->previous_selected = this->current_selected;
 				this->current_selected = ui;

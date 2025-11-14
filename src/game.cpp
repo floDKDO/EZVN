@@ -20,8 +20,11 @@ Game::Game()
 	this->renderer.set_logical_size(WINDOW_WIDTH, WINDOW_HEIGHT);
 	this->renderer.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
 
-	this->textbox = new Textbox({255, 255, 255, 255}, this->renderer.Get());
+	//this->textbox = new Textbox({255, 255, 255, 255}, this->renderer.Get());
+	//this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring.";
+
 	this->create_main_menu();
+	this->create_settings_menu();
 	this->push_state(this->main_menu);
 }
 
@@ -47,7 +50,7 @@ Game::~Game()
 		delete this->save_menu;
 	}
 
-	delete this->textbox;
+	//delete this->textbox;
 
 	SDL_StopTextInput();
 	TTF_Quit();
@@ -59,65 +62,66 @@ Game::~Game()
 
 void Game::create_main_menu()
 {
-	Ui* button1 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 400, 100, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button2 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 620, 100, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button3 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 300, 320, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button4 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 520, 320, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button5 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 740, 320, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button6 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 520, 540, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button7 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 100, 540, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* slider1 = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 620, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* textbtn = new TextButton("tetetete", {255, 255, 255, 255}, {255, 255, 255, 255}, {255, 255, 255, 255}, 200, 200, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* inputfield = new Inputfield("img/gui/inputfield.png", {0, 0, 0, 255}, 7, 100, 100, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
+	Ui* textbutton_play = new TextButton("Play", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 600, 200, renderer.Get(), std::bind(&Game::play_function, this, std::placeholders::_1));
+	Ui* textbutton_settings = new TextButton("Settings", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 600, 350, renderer.Get(), std::bind(&Game::settings_function, this, std::placeholders::_1));
+	Ui* textbutton_quit = new TextButton("Quit", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 600, 500, renderer.Get(), std::bind(&Game::quit_function, this, std::placeholders::_1));
 
 	std::vector<Ui*> ui;
 	ui.reserve(10);
 
-	ui.push_back(button1);
-	ui.push_back(button2);
-	ui.push_back(button3);
-	ui.push_back(button4);
-	ui.push_back(button5);
-	ui.push_back(button6);
-	ui.push_back(button7);
-	ui.push_back(slider1);
-	ui.push_back(textbtn);
-	ui.push_back(inputfield);
+	ui.push_back(textbutton_play);
+	ui.push_back(textbutton_settings);
+	ui.push_back(textbutton_quit);
 
-	this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring.";
-
-	this->main_menu = new Menu(ui, button1);
+	this->main_menu = new Menu(ui, textbutton_play);
 }
 
 void Game::create_settings_menu()
 {
-	Ui* button1 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 400, 100, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button2 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 620, 100, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button3 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 300, 320, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button4 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 520, 320, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button5 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 740, 320, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button6 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 520, 540, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
-	Ui* button7 = new Button("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", 100, 540, renderer.Get(), std::bind(&Game::button_function, this, std::placeholders::_1));
+	Ui* textbutton_return = new TextButton("Return", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1));
+	Ui* slider = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 600, 200, renderer.Get(), std::bind(&Game::slider_function, this, std::placeholders::_1));
 
 	std::vector<Ui*> ui;
 	ui.reserve(10);
 
-	ui.push_back(button1);
-	ui.push_back(button2);
-	ui.push_back(button3);
-	ui.push_back(button4);
-	ui.push_back(button5);
-	ui.push_back(button6);
-	ui.push_back(button7);
+	ui.push_back(textbutton_return);
+	ui.push_back(slider);
 
-	this->settings_menu = new Menu(ui, button1);
+	this->settings_menu = new Menu(ui, textbutton_return);
 }
 
-void Game::button_function(Ui* ui)
+void Game::play_function(Ui* ui)
 {
 	(void)ui;
-	std::cout << "Clicked !" << std::endl;
-	//this->pop_state(); //TODO : je pop mais la stack devient vide => pose problème dans les handle_events, draw et update
+	std::cout << "Clicked Play!" << std::endl;
+	//this->push_state(); //TODO : créer un état IN_GAME
+}
+
+void Game::settings_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Clicked Settings!" << std::endl;
+	this->push_state(this->settings_menu);
+}
+
+void Game::quit_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Clicked Quit!" << std::endl;
+	this->game_running = false;
+}
+
+void Game::previous_menu_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Clicked go back to previous menu!" << std::endl;
+	this->pop_state();
+}
+
+void Game::slider_function(Ui* ui)
+{
+	Slider* slider = dynamic_cast<Slider*>(ui);
+	std::cout << "Changed value (" << slider->current_value << ") of slider!" << std::endl;
 }
 
 void Game::push_state(GameState* state)
@@ -160,7 +164,7 @@ void Game::handle_events()
 
 					case SDLK_SPACE:
 						//Prochain dialogue
-						this->textbox->show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
+						//this->textbox->show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
 						break;
 
 					default:
@@ -189,13 +193,13 @@ void Game::draw()
 {
 	this->renderer.clear();
 	this->get_state()->draw(renderer.Get());
-	this->textbox->draw(renderer.Get());
+	//this->textbox->draw(renderer.Get());
 	this->renderer.present();
 }
 
 void Game::update(Uint64 time_step)
 {
 	this->get_state()->update(time_step);
-	this->textbox->update(time_step);
+	//this->textbox->update(time_step);
 }
 

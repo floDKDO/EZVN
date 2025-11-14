@@ -33,6 +33,9 @@ void nchk_SDL(const void* return_value, const char* error_string)
 
 //TODO : time_step <=> end_current_frame ??
 
+//TODO : les collisions entre la souris et les éléments de UI ne fonctionnent plus quand le fenêtre est redimensionnée
+
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;

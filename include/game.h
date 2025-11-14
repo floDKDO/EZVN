@@ -21,7 +21,13 @@ class Game
 
 		void create_main_menu();
 		void create_settings_menu();
-		void button_function(Ui* ui);
+
+		void play_function(Ui* ui);
+		void settings_function(Ui* ui);
+		void quit_function(Ui* ui);
+
+		void previous_menu_function(Ui* ui);
+		void slider_function(Ui* ui);
 
 		void push_state(GameState* state);
 		void pop_state(); //TODO : doit retourner un GameState* ??
