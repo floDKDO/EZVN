@@ -8,6 +8,7 @@ TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Co
 	this->callback_function = callback_function;
 	this->position = this->text.position;
 	this->pointer_on_ui_when_pointer_up = true;
+	this->renderer = renderer;
 }
 
 void TextToggle::on_pointer_up()

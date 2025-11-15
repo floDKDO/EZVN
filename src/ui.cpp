@@ -250,13 +250,30 @@ void Ui::handle_events(const SDL_Event& e)
 	}
 }
 
-bool Ui::is_mouse_on_ui() const
+#include <iostream>
+void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
 {
-	int mouse_x, mouse_y;
-	SDL_GetMouseState(&mouse_x, &mouse_y);
+	int real_mouse_x = 0, real_mouse_y = 0;
+	SDL_GetMouseState(&real_mouse_x, &real_mouse_y);
 
-	return (this->position.y + this->position.h > mouse_y
-		 && this->position.y < mouse_y
-		 && this->position.x + this->position.w > mouse_x
-		 && this->position.x < mouse_x);
+	if(this->renderer == nullptr)
+	{
+		std::cout << "RENDERER NULL!\n";
+	}
+
+	float temp_logical_mouse_x = 0, temp_logical_mouse_y = 0;
+	SDL_RenderWindowToLogical(this->renderer, real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
+	*logical_mouse_x = int(temp_logical_mouse_x);
+	*logical_mouse_y = int(temp_logical_mouse_y);
+}
+
+bool Ui::is_mouse_on_ui() const 
+{
+	int logical_mouse_x, logical_mouse_y;
+	this->get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
+
+	return (this->position.y + this->position.h > logical_mouse_y
+		 && this->position.y < logical_mouse_y
+		 && this->position.x + this->position.w > logical_mouse_x
+		 && this->position.x < logical_mouse_x);
 }

@@ -2,13 +2,14 @@
 
 #include "ui.h"
 #include "image.h"
+#include "text.h"
 
 //TODO : que gauche à droite pour l'instant
 //TODO : que des nombres entiers pour l'instant
 class Slider : public Ui
 {
 	public:
-		Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function);
+		Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function);
 
 		bool is_mouse_on_handle(int mouse_x, int mouse_y);
 		void handle_movement();
@@ -42,5 +43,6 @@ class Slider : public Ui
 	private:
 		Image bar;
 		Image handle;
+		Text text;
 };
 

@@ -40,6 +40,7 @@ class Ui
 		virtual void draw(SDL_Renderer* renderer) = 0;
 		virtual void update(Uint64 time_step) = 0;
 
+		void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
 		bool is_mouse_on_ui() const;
 
 		SDL_Rect position;
@@ -63,6 +64,7 @@ class Ui
 		Sound click_sound;
 		bool is_selected_sound_played;
 		bool pointer_on_ui_when_pointer_up; 
+		SDL_Renderer* renderer; //do not own it !!
 
 		std::function<void(Ui* ui)> callback_function;
 

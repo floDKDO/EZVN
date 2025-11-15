@@ -5,6 +5,7 @@
 #include "textbutton.h"
 #include "textbox.h"
 #include "inputfield.h"
+#include "togglegroup.h"
 #include "SDL/window.h"
 #include "SDL/renderer.h"
 #include "SDL/gamecontroller.h"
@@ -28,6 +29,8 @@ class Game
 
 		void previous_menu_function(Ui* ui);
 		void slider_function(Ui* ui);
+
+		void togglegroup_function(Ui* ui);
 
 		void push_state(GameState* state);
 		void pop_state(); //TODO : doit retourner un GameState* ??

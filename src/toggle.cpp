@@ -2,11 +2,12 @@
 
 Toggle::Toggle(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
 	: normal(path_normal, x, y, renderer), selected(path_selected, x, y, renderer), clicked(path_clicked, x, y, renderer), 
-	  checked(path_checked, x, y, renderer), is_checked(is_checked) 
+	  checked(path_checked, x, y, renderer), is_checked(is_checked)
 {
 	this->callback_function = callback_function;
 	this->position = this->normal.position;
 	this->pointer_on_ui_when_pointer_up = true;
+	this->renderer = renderer;
 }
 
 void Toggle::on_pointer_up()

@@ -14,6 +14,17 @@ class Text
 		void show();
 		void hide();
 		void change_color(SDL_Color color);
+
+		void set_italic();
+		void set_bold();
+		void set_underline();
+		void set_strike_through();
+		void unset_italic();
+		void unset_bold();
+		void unset_underline();
+		void unset_strike_through();
+		void unset_all();
+
 		int get_width_one_char(char c);
 		int get_width_text();
 		void draw(SDL_Renderer* renderer);
@@ -22,6 +33,7 @@ class Text
 		std::string text;
 		SDL_Color color;
 		int font_size;
+		int font_style;
 		SDL_Rect position;
 		SDL_Renderer* renderer; //solution temporaire
 		Uint32 wrap_length;
@@ -29,9 +41,14 @@ class Text
 		bool is_dialogue;
 		std::string text_dialogue;
 		int index_dialogue;
+
+		//TODO : faire un réglage "opaque" comme Text Speed dans Options de Ren'Py ??
+		int text_speed; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
+
 		bool is_finished;
 
 		std::string previous_text;
+		int previous_font_style;
 
 		std::string font_path;
 
@@ -40,6 +57,8 @@ class Text
 	protected:
 
 	private:
+		void create_surface_texture();
+
 		std::unique_ptr<sdl::Surface> surface;
 		std::unique_ptr<sdl::Texture> texture;
 		std::unique_ptr<sdl::Font> font;

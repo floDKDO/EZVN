@@ -4,7 +4,7 @@
 
 Game::Game()
 	: main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr), 
-	window("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE), 
+	window("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer(this->window.Get(), -1, SDL_RENDERER_PRESENTVSYNC), game_controller()
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
@@ -20,8 +20,10 @@ Game::Game()
 	this->renderer.set_logical_size(WINDOW_WIDTH, WINDOW_HEIGHT);
 	this->renderer.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
 
-	//this->textbox = new Textbox({255, 255, 255, 255}, this->renderer.Get());
-	//this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring.";
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+
+	this->textbox = new Textbox({255, 255, 255, 255}, this->renderer.Get());
+	this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
 	this->create_main_menu();
 	this->create_settings_menu();
@@ -50,7 +52,7 @@ Game::~Game()
 		delete this->save_menu;
 	}
 
-	//delete this->textbox;
+	delete this->textbox;
 
 	SDL_StopTextInput();
 	TTF_Quit();
@@ -79,13 +81,15 @@ void Game::create_main_menu()
 void Game::create_settings_menu()
 {
 	Ui* textbutton_return = new TextButton("Return", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1));
-	Ui* slider = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 600, 200, renderer.Get(), std::bind(&Game::slider_function, this, std::placeholders::_1));
+	Ui* slider = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 600, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_function, this, std::placeholders::_1));
+	Ui* togglegroup = new ToggleGroup(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
 
 	std::vector<Ui*> ui;
 	ui.reserve(10);
 
 	ui.push_back(textbutton_return);
 	ui.push_back(slider);
+	ui.push_back(togglegroup);
 
 	this->settings_menu = new Menu(ui, textbutton_return);
 }
@@ -124,6 +128,11 @@ void Game::slider_function(Ui* ui)
 	std::cout << "Changed value (" << slider->current_value << ") of slider!" << std::endl;
 }
 
+void Game::togglegroup_function(Ui* ui)
+{
+
+}
+
 void Game::push_state(GameState* state)
 {
 	this->states.push(state);
@@ -144,6 +153,9 @@ GameState* Game::get_state()
 void Game::handle_events()
 {
 	SDL_Event e;
+
+	int w, h; //TODO : temp
+
 	while(SDL_PollEvent(&e))
 	{
 		switch(e.type)
@@ -152,6 +164,16 @@ void Game::handle_events()
 				if(e.window.event == SDL_WINDOWEVENT_CLOSE)
 				{
 					game_running = false;
+				}
+				else if(e.window.event == SDL_WINDOWEVENT_RESIZED)
+				{
+					//TODO
+					std::cout << "RESIZED! " << e.window.data1 << " et " << e.window.data2 << std::endl;
+					SDL_GetWindowSize(this->window.Get(), &w, &h);
+					std::cout << "W : " << w << " et H : " << h << std::endl;
+					/*SDL_RenderSetLogicalSize(this->renderer.Get(), e.window.data1, e.window.data2);
+					SDL_RenderGetLogicalSize(this->renderer.Get(), &w, &h);
+					std::cout << "W : " << w << " et H : " << h << std::endl;*/
 				}
 				break;
 
@@ -164,7 +186,7 @@ void Game::handle_events()
 
 					case SDLK_SPACE:
 						//Prochain dialogue
-						//this->textbox->show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
+						this->textbox->show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
 						break;
 
 					default:
@@ -193,13 +215,13 @@ void Game::draw()
 {
 	this->renderer.clear();
 	this->get_state()->draw(renderer.Get());
-	//this->textbox->draw(renderer.Get());
+	this->textbox->draw(renderer.Get());
 	this->renderer.present();
 }
 
 void Game::update(Uint64 time_step)
 {
 	this->get_state()->update(time_step);
-	//this->textbox->update(time_step);
+	this->textbox->update(time_step);
 }
 

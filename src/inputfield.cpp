@@ -15,6 +15,7 @@ Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, uns
 	SDL_SetTextInputRect(&(this->position));
 
 	this->pointer_on_ui_when_pointer_up = true;
+	this->renderer = renderer;
 }
 
 void Inputfield::on_pointer_up()

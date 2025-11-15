@@ -163,6 +163,7 @@
     <ClCompile Include="src\textbutton.cpp" />
     <ClCompile Include="src\texttoggle.cpp" />
     <ClCompile Include="src\toggle.cpp" />
+    <ClCompile Include="src\togglegroup.cpp" />
     <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\ui.cpp" />
   </ItemGroup>
@@ -192,6 +193,7 @@
     <ClInclude Include="include\textbutton.h" />
     <ClInclude Include="include\texttoggle.h" />
     <ClInclude Include="include\toggle.h" />
+    <ClInclude Include="include\togglegroup.h" />
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\ui.h" />
   </ItemGroup>

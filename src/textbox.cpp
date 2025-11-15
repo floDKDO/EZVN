@@ -15,21 +15,24 @@ Textbox::Textbox(SDL_Color text_color, SDL_Renderer* renderer)
 
 void Textbox::show_new_dialogue(std::string new_dialogue, std::string speaker)
 {
-	this->current_speaker = speaker;
-	this->text_name_box.text = this->current_speaker;
-
-	this->text_name_box.position.x = this->namebox.position.x + ((this->namebox.position.w - this->text_name_box.get_width_text()) / 2);
-
-	this->text.is_finished = false;
-	this->text.index_dialogue = 0;
-	this->text.text = "";
-	this->text.text_dialogue = "";
-	this->text.text = new_dialogue;
-
-	if(!this->current_speaker.empty())
+	if(this->text.is_finished)
 	{
-		this->text.text.insert(0, "\"");
-		this->text.text.append("\"");
+		this->current_speaker = speaker;
+		this->text_name_box.text = this->current_speaker;
+
+		this->text_name_box.position.x = this->namebox.position.x + ((this->namebox.position.w - this->text_name_box.get_width_text()) / 2);
+
+		this->text.is_finished = false;
+		this->text.index_dialogue = 0;
+		this->text.text = "";
+		this->text.text_dialogue = "";
+		this->text.text = new_dialogue;
+
+		if(!this->current_speaker.empty())
+		{
+			this->text.text.insert(0, "\"");
+			this->text.text.append("\"");
+		}
 	}
 }
 
