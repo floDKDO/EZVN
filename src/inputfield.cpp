@@ -177,3 +177,8 @@ void Inputfield::set_character_limit(unsigned int character_limit)
 {
 	this->character_limit = character_limit;
 }
+
+std::vector<SDL_Rect> Inputfield::get_bounds() const
+{
+	return {this->normal.position};
+}

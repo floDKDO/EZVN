@@ -84,12 +84,15 @@ void Game::create_settings_menu()
 	Ui* slider = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 600, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_function, this, std::placeholders::_1));
 	Ui* togglegroup = new ToggleGroup(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
 
+	Ui* toggle = new Toggle("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
+
 	std::vector<Ui*> ui;
 	ui.reserve(10);
 
 	ui.push_back(textbutton_return);
 	ui.push_back(slider);
 	ui.push_back(togglegroup);
+	//ui.push_back(toggle);
 
 	this->settings_menu = new Menu(ui, textbutton_return);
 }

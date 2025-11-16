@@ -74,14 +74,22 @@ void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mo
 
 void Menu::assign_ui_on_moving()
 {
+	std::vector<Ui*> navigation_list;
+
 	for(Ui* ui : this->ui)
+	{
+		std::vector<Ui*> nodes = ui->get_navigation_nodes();
+		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
+	}
+
+	for(Ui* ui : navigation_list)
 	{
 		Ui* current_best_up = nullptr;
 		Ui* current_best_down = nullptr;
 		Ui* current_best_left = nullptr;
 		Ui* current_best_right = nullptr;
 
-		for(Ui* candidate : this->ui)
+		for(Ui* candidate : navigation_list)
 		{
 			if(candidate == ui) { continue; }
 
@@ -120,16 +128,25 @@ Menu::~Menu()
 	}
 }
 
+#include <iostream>
 void Menu::handle_events(const SDL_Event& e)
 {
 	for(Ui* ui : this->ui)
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
-			if(ui->is_mouse_on_ui())
+			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI) //TODO : ui serait le ToggleGroup (UiContainer) => dynamic_cast dans ce cas là
 			{
-				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) 
+				if(dynamic_cast<ToggleGroup*>(ui) != nullptr)
 				{
+					//TODO : ui serait le toggle dont l'indice a été retourné par is_mouse_on_ui())
+					ToggleGroup* togglegroup = dynamic_cast<ToggleGroup*>(ui);
+					ui = togglegroup->toggles[ui->is_mouse_on_ui()];
+				}
+
+				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) //TODO : ne marche pas pour les UI qui ont plusieurs SDL_Rect
+				{
+					std::cout << "ICI\n";
 					previous_selected->state = State::NORMAL; 
 					if(dynamic_cast<Slider*>(previous_selected) != nullptr)
 					{

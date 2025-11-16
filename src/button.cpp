@@ -23,3 +23,8 @@ void Button::update(Uint64 time_step)
 {
 	(void)time_step;
 }
+
+std::vector<SDL_Rect> Button::get_bounds() const
+{
+	return {this->normal.position};
+}

@@ -10,6 +10,7 @@ class Button : public Ui
 
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64 time_step) override;
+		std::vector<SDL_Rect> get_bounds() const override;
 
 	protected:
 

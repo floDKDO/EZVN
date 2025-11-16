@@ -219,7 +219,7 @@ void Ui::handle_events(const SDL_Event& e)
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if(e.button.button == SDL_BUTTON_LEFT && this->is_mouse_on_ui()) 
+			if(e.button.button == SDL_BUTTON_LEFT && this->is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI) 
 			{
 				this->on_pointer_down();
 			}
@@ -234,7 +234,7 @@ void Ui::handle_events(const SDL_Event& e)
 
 		case SDL_MOUSEMOTION:
 		{
-			if(this->is_mouse_on_ui())
+			if(this->is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI)
 			{
 				this->on_pointer_enter();
 			}
@@ -267,13 +267,29 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 	*logical_mouse_y = int(temp_logical_mouse_y);
 }
 
-bool Ui::is_mouse_on_ui() const 
+int Ui::is_mouse_on_ui() const 
 {
 	int logical_mouse_x, logical_mouse_y;
 	this->get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 
-	return (this->position.y + this->position.h > logical_mouse_y
-		 && this->position.y < logical_mouse_y
-		 && this->position.x + this->position.w > logical_mouse_x
-		 && this->position.x < logical_mouse_x);
+	std::vector<SDL_Rect> rects = this->get_bounds();
+
+	for(int i = 0; i < rects.size(); ++i)
+	{
+		SDL_Rect& rect = rects[i];
+
+		if(rect.y + rect.h > logical_mouse_y
+		&& rect.y < logical_mouse_y
+		&& rect.x + rect.w > logical_mouse_x
+		&& rect.x < logical_mouse_x)
+		{
+			return i;
+		}
+	}
+	return MOUSE_NOT_ON_ANY_UI;
+}
+
+std::vector<Ui*> Ui::get_navigation_nodes()
+{
+	return {this};
 }

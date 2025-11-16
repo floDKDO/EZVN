@@ -4,6 +4,7 @@
 
 #include <SDL2/SDL.h>
 #include <functional>
+#include <vector>
 
 enum class State
 {
@@ -41,9 +42,12 @@ class Ui
 		virtual void update(Uint64 time_step) = 0;
 
 		void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
-		bool is_mouse_on_ui() const;
+		int is_mouse_on_ui() const;
+		static const int MOUSE_NOT_ON_ANY_UI = -1;
 
-		SDL_Rect position;
+		virtual std::vector<Ui*> get_navigation_nodes();
+		virtual std::vector<SDL_Rect> get_bounds() const = 0;
+		SDL_Rect position; //TODO : n'est logiquement plus utile
 
 		Ui* select_on_up;
 		Ui* select_on_down;

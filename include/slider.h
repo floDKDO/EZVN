@@ -28,6 +28,7 @@ class Slider : public Ui
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64 time_step) override;
 		void handle_events(const SDL_Event& e) override;
+		std::vector<SDL_Rect> get_bounds() const override;
 
 		unsigned int min_value;
 		unsigned int max_value;

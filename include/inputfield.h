@@ -22,6 +22,7 @@ class Inputfield : public Ui
 		void handle_events(const SDL_Event& e) override;
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64 time_step) override;
+		std::vector<SDL_Rect> get_bounds() const override;
 
 		void on_typing(const SDL_Event& e);
 		void set_character_limit(unsigned int character_limit);

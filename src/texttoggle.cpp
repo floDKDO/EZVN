@@ -37,3 +37,8 @@ void TextToggle::update(Uint64 time_step)
 			this->text.change_color(this->color_selected);
 	}
 }
+
+std::vector<SDL_Rect> TextToggle::get_bounds() const
+{
+	return {this->text.position};
+}

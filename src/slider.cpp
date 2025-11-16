@@ -74,7 +74,7 @@ void Slider::on_pointer_down()
 		this->is_dragged = true; //TODO
 		diff = logical_x - handle.position.x; //TODO
 	}
-	else if(is_mouse_on_ui())*/ //TODO : if inutile car déjà testé dans handle_events() de la classe Ui
+	else if(is_mouse_on_ui() != this->MOUSE_NOT_ON_ANY_UI)*/ //TODO : if inutile car déjà testé dans handle_events() de la classe Ui
 	//{
 		if(logical_mouse_x - (handle.position.w / 2) < bar.position.x)
 		{
@@ -212,4 +212,9 @@ void Slider::handle_events(const SDL_Event& e)
 			this->on_pointer_down();
 		}
 	}
+}
+
+std::vector<SDL_Rect> Slider::get_bounds() const //TODO : possiblement un problème car une collision sur l'handle est également une collision sur la barre
+{
+	return {this->bar.position, this->handle.position}; //bar=0, handle=1 (index returned by mouse_on_ui())
 }
