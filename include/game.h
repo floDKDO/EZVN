@@ -6,9 +6,13 @@
 #include "textbox.h"
 #include "inputfield.h"
 #include "togglegroup.h"
-#include "SDL/window.h"
-#include "SDL/renderer.h"
-#include "SDL/gamecontroller.h"
+#include "RAII_SDL2/window.h"
+#include "RAII_SDL2/renderer.h"
+#include "RAII_SDL2/gamecontroller.h"
+#include "RAII_SDL2/sdl.h"
+#include "RAII_SDL2/sdlmixer.h"
+#include "RAII_SDL2/sdlimg.h"
+#include "RAII_SDL2/sdlttf.h"
 
 #include <stack>
 
@@ -53,6 +57,11 @@ class Game
 	protected:
 
 	private:
+		sdl::SDL sdl;
+		sdl::SDLImage sdl_img;
+		sdl::SDLMixer sdl_mixer;
+		sdl::SDLTTF sdl_ttf;
+
 		sdl::Renderer renderer;
 		sdl::GameController game_controller;
 		std::stack<GameState*> states;

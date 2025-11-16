@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SDL/texture.h"
-#include "SDL/animation.h"
+#include "RAII_SDL2/texture.h"
+#include "RAII_SDL2/animation.h"
 
 #include <memory>
 

@@ -1,4 +1,4 @@
-#include "SDL/gamecontroller.h"
+#include "RAII_SDL2/gamecontroller.h"
 
 namespace sdl
 {

@@ -1,4 +1,4 @@
-#include "SDL/renderer.h"
+#include "RAII_SDL2/renderer.h"
 
 namespace sdl
 {
@@ -6,6 +6,7 @@ namespace sdl
 Renderer::Renderer(SDL_Window* window, int index, Uint32 flags) //SDL_CreateRenderer()
 {
 	this->renderer = SDL_CreateRenderer(window, index, flags);
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 }
 
 Renderer::~Renderer() //SDL_DestroyRenderer

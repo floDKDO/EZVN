@@ -1,8 +1,8 @@
 #pragma once
 
-#include "SDL/surface.h"
-#include "SDL/texture.h"
-#include "SDL/font.h"
+#include "RAII_SDL2/surface.h"
+#include "RAII_SDL2/texture.h"
+#include "RAII_SDL2/font.h"
 
 #include <memory>
 

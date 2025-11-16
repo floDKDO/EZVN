@@ -3,24 +3,13 @@
 #include <iostream>
 
 Game::Game()
-	: main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr), 
+	: sdl(SDL_INIT_EVERYTHING), sdl_img(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer(MIX_INIT_OGG | MIX_INIT_MP3),
+	main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr), 
 	window("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer(this->window.Get(), -1, SDL_RENDERER_PRESENTVSYNC), game_controller()
 {
-	SDL_Init(SDL_INIT_EVERYTHING);
-	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
-	Mix_Init(MIX_INIT_OGG | MIX_INIT_MP3);
-	Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_CHANNELS, 2048);
-	TTF_Init();
-
-	SDL_StartTextInput();
-
-	SDL_GameControllerEventState(SDL_ENABLE);
-
 	this->renderer.set_logical_size(WINDOW_WIDTH, WINDOW_HEIGHT);
 	this->renderer.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
-
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
 	this->textbox = new Textbox({255, 255, 255, 255}, this->renderer.Get());
 	this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring.";
@@ -53,13 +42,6 @@ Game::~Game()
 	}
 
 	delete this->textbox;
-
-	SDL_StopTextInput();
-	TTF_Quit();
-	Mix_CloseAudio();
-	Mix_Quit();
-	IMG_Quit();
-	SDL_Quit();
 }
 
 void Game::create_main_menu()
@@ -82,7 +64,7 @@ void Game::create_settings_menu()
 {
 	Ui* textbutton_return = new TextButton("Return", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1));
 	Ui* slider = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 600, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_function, this, std::placeholders::_1));
-	Ui* togglegroup = new ToggleGroup(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
+	//Ui* togglegroup = new ToggleGroup(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
 
 	Ui* toggle = new Toggle("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
 
@@ -91,8 +73,8 @@ void Game::create_settings_menu()
 
 	ui.push_back(textbutton_return);
 	ui.push_back(slider);
-	ui.push_back(togglegroup);
-	//ui.push_back(toggle);
+	//ui.push_back(togglegroup);
+	ui.push_back(toggle);
 
 	this->settings_menu = new Menu(ui, textbutton_return);
 }

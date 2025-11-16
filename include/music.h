@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDL/music.h"
+#include "RAII_SDL2/music.h"
 
 class Music
 {

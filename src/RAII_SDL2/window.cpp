@@ -1,4 +1,4 @@
-#include "SDL/window.h"
+#include "RAII_SDL2/window.h"
 
 namespace sdl
 {

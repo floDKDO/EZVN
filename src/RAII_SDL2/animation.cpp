@@ -1,4 +1,4 @@
-#include "SDL/animation.h"
+#include "RAII_SDL2/animation.h"
 
 namespace sdl
 {
