@@ -45,5 +45,8 @@ class Slider : public Ui
 		Image bar;
 		Image handle;
 		Text text;
+
+		static const unsigned int INDEX_RECT_HANDLE = 0;
+		static const unsigned int INDEX_RECT_BAR = 1;
 };
 

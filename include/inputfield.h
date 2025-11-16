@@ -45,5 +45,7 @@ class Inputfield : public Ui
 		
 		unsigned int index_caret;
 		int offset_caret; 
+
+		static const unsigned int INDEX_RECT_INPUTFIELD = 0;
 };
 

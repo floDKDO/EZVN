@@ -3,7 +3,7 @@
 #include <iostream>
 
 Slider::Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
-	: bar(path_bar, x, y, renderer), handle(path_handle, x, y - 5, renderer) /*TODO : pas x y pour l'handle, dépend de la valeur d'initialisation*/, min_value(min_value), max_value(max_value), current_value(0), is_dragged(false), is_selected(false), diff(0),
+	: bar(path_bar, x, y, renderer), handle(path_handle, x, y - 5, renderer), min_value(min_value), max_value(max_value), current_value(max_value/2), is_dragged(false), is_selected(false), diff(0),
 	text(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar.position.h*3, renderer) //TODO : pas de couleur fixée...
 {
 	this->callback_function = callback_function;
@@ -11,6 +11,8 @@ Slider::Slider(const std::string path_bar, const std::string path_handle, unsign
 	//this->handle_position = this->handle.position; //TODO : problème utiliser l'un ou l'autre mais pas les deux en même temps
 	this->pointer_on_ui_when_pointer_up = false;
 	this->renderer = renderer;
+
+	this->handle.position.x += (float(current_value - min_value) / float(max_value - min_value)) * (this->bar.position.w - this->handle.position.w);
 }
 
 //TODO : position dans Image, Text et Ui... => pk pas retirer la position de Ui vu qu'on copie celle de l'Image/Text dans celle de Ui ?
@@ -216,5 +218,5 @@ void Slider::handle_events(const SDL_Event& e)
 
 std::vector<SDL_Rect> Slider::get_bounds() const //TODO : possiblement un problème car une collision sur l'handle est également une collision sur la barre
 {
-	return {this->bar.position, this->handle.position}; //bar=0, handle=1 (index returned by mouse_on_ui())
+	return {this->handle.position, this->bar.position}; //handle=0, bar=1 (index returned by mouse_on_ui())
 }

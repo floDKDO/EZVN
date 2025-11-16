@@ -180,8 +180,10 @@ void Ui::on_enter_released()
 	}
 }
 
+#include <iostream>
 void Ui::on_input_released(const SDL_Event& e)
 {
+	std::cout << "DANS UI\n";
 	if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP || e.key.keysym.sym == SDLK_UP)
 	{
 		this->on_up_released();
@@ -196,10 +198,12 @@ void Ui::on_input_released(const SDL_Event& e)
 	}
 	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || e.key.keysym.sym == SDLK_RIGHT)
 	{
+		std::cout << "DANS UI RIGHT\n";
 		this->on_right_released();
 	}
 	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
 	{
+		std::cout << "DANS UI ENTER\n";
 		this->on_enter_released();
 	}
 }

@@ -18,5 +18,7 @@ class Button : public Ui
 		Image normal;
 		Image selected;
 		Image clicked;
+
+		static const unsigned int INDEX_RECT_BUTTON = 0;
 };
 

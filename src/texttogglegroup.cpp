@@ -1,4 +1,4 @@
-#include "togglegroup.h"
+#include "texttogglegroup.h"
 
 #include <iostream>
 
@@ -6,8 +6,8 @@
 //TODO : pourquoi pas renommer cette classe en UIContainer qui contient un vector de Ui*
 
 //TODO : vector de callback functions
-ToggleGroup::ToggleGroup(unsigned int number, std::string text, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
-	: number(number), text(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - 100, renderer), only_one_has_to_be_checked(true) //TODO : paramètre du constructeur
+TextToggleGroup::TextToggleGroup(unsigned int number, std::string top_text, std::vector<std::string>texts, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
+	: number(number), top_text(top_text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - 100, renderer), only_one_has_to_be_checked(true) //TODO : paramètre du constructeur
 {
 	//this->callback_function = callback_function; //TODO : inutile ??
 	//this->position = this->normal.position;
@@ -24,20 +24,20 @@ ToggleGroup::ToggleGroup(unsigned int number, std::string text, const std::strin
 		if(i == 0)
 			is_checked = true;
 		else is_checked = false;
-		Toggle* toggle_i = new Toggle(path_normal, path_selected, path_clicked, path_checked, x, y + 200 * i, is_checked, renderer, callback_functions[i]);
+		TextToggle* toggle_i = new TextToggle(texts[i], color_unchecked, color_selected, color_checked, x, y + 100 * i, is_checked, renderer, callback_functions[i]);
 		this->toggles.push_back(toggle_i); //temp
 		//this->position = this->toggles[i]->position;
 	}
 }
 
-void ToggleGroup::on_pointer_up()
+void TextToggleGroup::on_pointer_up()
 {
 	std::cout << "Appel : " << toggles.size() << std::endl;
 
 	int index = -1;
 	for(int i = 0; i < toggles.size(); ++i)
 	{
-		Toggle* t = toggles[i];
+		TextToggle* t = toggles[i];
 		std::cout << "STATE : " << i << " -> " << int(t->state) << std::endl;
 		if(t->state == State::CLICKED)
 		{
@@ -65,7 +65,7 @@ void ToggleGroup::on_pointer_up()
 	{
 		for(int i = 0; i < toggles.size(); ++i)
 		{
-			Toggle* t = toggles[i];
+			TextToggle* t = toggles[i];
 			if(i != index)
 			{
 				t->is_checked = false;
@@ -74,14 +74,14 @@ void ToggleGroup::on_pointer_up()
 	}
 }
 
-void ToggleGroup::on_enter_released() //TODO : pas ouf car répétition avec Ui
+void TextToggleGroup::on_enter_released() //TODO : pas ouf car répétition avec Ui
 {
 	std::cout << "Appel : " << toggles.size() << std::endl;
 
 	int index = -1;
 	for(int i = 0; i < toggles.size(); ++i)
 	{
-		Toggle* t = toggles[i];
+		TextToggle* t = toggles[i];
 		std::cout << "STATE : " << i << " -> " << int(t->state) << std::endl;
 		if(t->state == State::CLICKED)
 		{
@@ -111,7 +111,7 @@ void ToggleGroup::on_enter_released() //TODO : pas ouf car répétition avec Ui
 	{
 		for(int i = 0; i < toggles.size(); ++i)
 		{
-			Toggle* t = toggles[i];
+			TextToggle* t = toggles[i];
 			if(t->state == State::NORMAL)
 			{
 				if(i != index)
@@ -123,10 +123,12 @@ void ToggleGroup::on_enter_released() //TODO : pas ouf car répétition avec Ui
 	}
 }
 
-void ToggleGroup::on_input_released(const SDL_Event& e)
+void TextToggleGroup::on_input_released(const SDL_Event& e)
 {
-	for(Toggle* t : toggles)
+	int i = 0;
+	for(TextToggle* t : toggles)
 	{
+		i += 1;
 		if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP || e.key.keysym.sym == SDLK_UP)
 		{
 			t->on_up_released();
@@ -143,35 +145,38 @@ void ToggleGroup::on_input_released(const SDL_Event& e)
 		{
 			t->on_right_released();
 		}
-		else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
+		else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN) //TODO important : appelé même si le texttoggle n'est pas sélectionné
 		{
+			std::cout << "DANS LE SWITCH RELEASED\n";
 			this->on_enter_released();
 		}
 	}
+
+	std::cout << i << std::endl;
 }
 
 
-void ToggleGroup::draw(SDL_Renderer* renderer)
+void TextToggleGroup::draw(SDL_Renderer* renderer)
 {
-	for(Toggle* t : toggles)
+	for(TextToggle* t : toggles)
 	{
 		t->draw(renderer);
 	}
-	this->text.draw(renderer);
+	this->top_text.draw(renderer);
 }
 
-void ToggleGroup::update(Uint64 time_step)
+void TextToggleGroup::update(Uint64 time_step)
 {
-	for(Toggle* t : toggles)
+	for(TextToggle* t : toggles)
 	{
 		t->update(time_step);
 	}
-	this->text.update(time_step);
+	this->top_text.update(time_step);
 }
 
-void ToggleGroup::handle_events(const SDL_Event& e) 
+void TextToggleGroup::handle_events(const SDL_Event& e)
 {
-	for(Toggle* t : toggles)
+	for(TextToggle* t : toggles)
 	{
 		switch(e.type)
 		{
@@ -218,17 +223,17 @@ void ToggleGroup::handle_events(const SDL_Event& e)
 	}
 }
 
-std::vector<SDL_Rect> ToggleGroup::get_bounds() const
+std::vector<SDL_Rect> TextToggleGroup::get_bounds() const
 {
 	std::vector<SDL_Rect> rects;
-	for(Toggle* t : toggles)
+	for(TextToggle* t : toggles)
 	{
 		rects.push_back(t->position);
 	}
 	return rects;
 }
 
-std::vector<Ui*> ToggleGroup::get_navigation_nodes()
+std::vector<Ui*> TextToggleGroup::get_navigation_nodes()
 {
 	std::vector<Ui*> vector;
 	for(Ui* ui : toggles)

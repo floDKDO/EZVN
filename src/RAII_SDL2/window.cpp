@@ -23,4 +23,14 @@ void Window::set_title(const std::string title)
 	SDL_SetWindowTitle(this->window, title.c_str());
 }
 
+void Window::set_full_screen()
+{
+	SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN);
+}
+
+void Window::set_windowed()
+{
+	SDL_SetWindowFullscreen(this->window, 0);
+}
+
 }

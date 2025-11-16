@@ -1,5 +1,7 @@
 #include "texttoggle.h"
 
+#include <iostream>
+
 TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
 	: text(text, color_unchecked, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
 	  color_unchecked(color_unchecked), color_selected(color_selected), color_checked(color_checked),
@@ -13,8 +15,26 @@ TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Co
 
 void TextToggle::on_pointer_up()
 {
-	Ui::on_pointer_up();
-	this->is_checked = !this->is_checked;
+	if(this->state == State::CLICKED)
+	{
+		this->state = State::SELECTED;
+		callback_function(this);
+		this->click_sound.play_sound();
+		this->is_checked = !this->is_checked;
+	}
+}
+
+void TextToggle::on_enter_released() //TODO : pas ouf car répétition avec Ui
+{
+	if(this->state == State::CLICKED)
+	{
+		std::cout << "DANS ON ENTER RELEASED\n";
+		this->state = State::SELECTED;
+		callback_function(this);
+		this->click_sound.play_sound();
+		this->lock = true;
+		this->is_checked = !this->is_checked;
+	}
 }
 
 void TextToggle::draw(SDL_Renderer* renderer)

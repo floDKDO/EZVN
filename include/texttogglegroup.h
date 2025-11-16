@@ -1,13 +1,13 @@
 #pragma once
 
-#include "toggle.h"
+#include "texttoggle.h"
 #include "text.h"
 #include <vector>
 
-class ToggleGroup : public Ui
+class TextToggleGroup : public Ui
 {
 	public:
-		ToggleGroup(unsigned int number, std::string text, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
+		TextToggleGroup(unsigned int number, std::string top_text, std::vector<std::string>texts, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
 
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		void on_enter_released() override;
@@ -18,7 +18,7 @@ class ToggleGroup : public Ui
 		std::vector<SDL_Rect> get_bounds() const override;
 		std::vector<Ui*> get_navigation_nodes() override;
 
-		std::vector<Toggle*> toggles;
+		std::vector<TextToggle*> toggles;
 
 		bool only_one_has_to_be_checked; //TODO
 
@@ -26,7 +26,6 @@ class ToggleGroup : public Ui
 
 	private:
 		unsigned int number;
-		Text text;
-		
+		Text top_text;
 };
 

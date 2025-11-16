@@ -18,6 +18,8 @@ class sdl::Window
 
 		SDL_Window* Get() const;
 		void set_title(const std::string title);
+		void set_full_screen();
+		void set_windowed();
 
 	protected:
 

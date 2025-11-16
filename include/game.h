@@ -5,7 +5,8 @@
 #include "textbutton.h"
 #include "textbox.h"
 #include "inputfield.h"
-#include "togglegroup.h"
+#include "texttogglegroup.h"
+#include "music.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/gamecontroller.h"
@@ -32,9 +33,11 @@ class Game
 		void quit_function(Ui* ui);
 
 		void previous_menu_function(Ui* ui);
-		void slider_function(Ui* ui);
+		void slider_sound_function(Ui* ui);
+		void slider_music_function(Ui* ui);
 
-		void togglegroup_function(Ui* ui);
+		void texttoggle_full_screen_function(Ui* ui);
+		void texttoggle_windowed_function(Ui* ui);
 
 		void push_state(GameState* state);
 		void pop_state(); //TODO : doit retourner un GameState* ??

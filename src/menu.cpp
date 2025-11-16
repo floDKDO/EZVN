@@ -128,7 +128,6 @@ Menu::~Menu()
 	}
 }
 
-#include <iostream>
 void Menu::handle_events(const SDL_Event& e)
 {
 	for(Ui* ui : this->ui)
@@ -139,18 +138,25 @@ void Menu::handle_events(const SDL_Event& e)
 			{
 				if(dynamic_cast<ToggleGroup*>(ui) != nullptr)
 				{
-					//TODO : ui serait le toggle dont l'indice a été retourné par is_mouse_on_ui())
+					//ui serait le toggle dont l'indice a été retourné par is_mouse_on_ui())
 					ToggleGroup* togglegroup = dynamic_cast<ToggleGroup*>(ui);
 					ui = togglegroup->toggles[ui->is_mouse_on_ui()];
 				}
 
-				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) //TODO : ne marche pas pour les UI qui ont plusieurs SDL_Rect
+				if(dynamic_cast<TextToggleGroup*>(ui) != nullptr)
 				{
-					std::cout << "ICI\n";
+					//ui serait le toggle dont l'indice a été retourné par is_mouse_on_ui())
+					TextToggleGroup* texttogglegroup = dynamic_cast<TextToggleGroup*>(ui);
+					ui = texttogglegroup->toggles[ui->is_mouse_on_ui()];
+				}
+
+				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) 
+				{
 					previous_selected->state = State::NORMAL; 
 					if(dynamic_cast<Slider*>(previous_selected) != nullptr)
 					{
 						dynamic_cast<Slider*>(previous_selected)->is_selected = false;
+						dynamic_cast<Slider*>(previous_selected)->is_dragged = false;
 					}
 				}
 				this->previous_selected = this->current_selected;

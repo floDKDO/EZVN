@@ -63,18 +63,17 @@ void Game::create_main_menu()
 void Game::create_settings_menu()
 {
 	Ui* textbutton_return = new TextButton("Return", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1));
-	Ui* slider = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 600, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_function, this, std::placeholders::_1));
-	//Ui* togglegroup = new ToggleGroup(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
-
-	Ui* toggle = new Toggle("img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 100, 100, false, renderer.Get(), std::bind(&Game::togglegroup_function, this, std::placeholders::_1));
+	Ui* slider_sound = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_sound_function, this, std::placeholders::_1));
+	Ui* slider_music = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer.Get(), std::bind(&Game::slider_music_function, this, std::placeholders::_1));
+	Ui* togglegroup = new TextToggleGroup(2, "Display", {"Windowed", "Fullscreen"}, {200, 200, 200, 255}, {255, 255, 255, 255}, {255, 0, 0, 255}, 50, 100, false, renderer.Get(), {std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
 
 	std::vector<Ui*> ui;
 	ui.reserve(10);
 
 	ui.push_back(textbutton_return);
-	ui.push_back(slider);
-	//ui.push_back(togglegroup);
-	ui.push_back(toggle);
+	ui.push_back(slider_sound);
+	ui.push_back(slider_music);
+	ui.push_back(togglegroup);
 
 	this->settings_menu = new Menu(ui, textbutton_return);
 }
@@ -107,15 +106,41 @@ void Game::previous_menu_function(Ui* ui)
 	this->pop_state();
 }
 
-void Game::slider_function(Ui* ui)
+void Game::slider_sound_function(Ui* ui)
 {
 	Slider* slider = dynamic_cast<Slider*>(ui);
 	std::cout << "Changed value (" << slider->current_value << ") of slider!" << std::endl;
+	Sound::global_sound_volume = slider->current_value;
 }
 
-void Game::togglegroup_function(Ui* ui)
+void Game::slider_music_function(Ui* ui)
 {
+	Slider* slider = dynamic_cast<Slider*>(ui);
+	std::cout << "Changed value (" << slider->current_value << ") of slider!" << std::endl;
+	Music::global_music_volume = slider->current_value;
+}
 
+void Game::texttoggle_full_screen_function(Ui* ui)
+{
+	//TODO
+	std::cout << "FULL SCREEN\n";
+	TextToggle* texttoggle_full_screen = dynamic_cast<TextToggle*>(ui);
+	if(!texttoggle_full_screen->is_checked)
+	{
+		this->window.set_full_screen();
+	}
+
+}
+
+void Game::texttoggle_windowed_function(Ui* ui)
+{
+	//TODO
+	std::cout << "WINDOWED SCREEN\n";
+	TextToggle* texttoggle_windowed = dynamic_cast<TextToggle*>(ui);
+	if(!texttoggle_windowed->is_checked)
+	{
+		this->window.set_windowed();
+	}
 }
 
 void Game::push_state(GameState* state)

@@ -20,5 +20,7 @@ class TextButton : public Ui
 		SDL_Color color_normal;
 		SDL_Color color_selected;
 		SDL_Color color_clicked;
+
+		static const unsigned int INDEX_RECT_TEXTBUTTON = 0;
 };
 

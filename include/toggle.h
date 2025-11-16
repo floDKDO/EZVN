@@ -16,6 +16,8 @@ class Toggle : public Ui
 		void update(Uint64 time_step) override;
 		std::vector<SDL_Rect> get_bounds() const override;
 
+		bool is_checked;
+
 	protected:
 
 	private:
@@ -23,6 +25,7 @@ class Toggle : public Ui
 		Image selected;
 		Image clicked;
 		Image checked; //TODO : renommer ??*/
-		bool is_checked;
+
+		static const unsigned int INDEX_RECT_TOGGLE = 0;
 };
 

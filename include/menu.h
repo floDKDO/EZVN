@@ -4,6 +4,7 @@
 #include "button.h"
 #include "slider.h"
 #include "togglegroup.h"
+#include "texttogglegroup.h"
 
 #include <vector>
 

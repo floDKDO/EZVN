@@ -13,6 +13,8 @@ class Sound
 		void stop_sound(const int fadeout_length = 0); 
 		void change_volume(const int volume);
 
+		static int global_sound_volume;
+
 	protected:
 
 	private:
@@ -20,6 +22,7 @@ class Sound
 		bool loop;
 		std::string path;
 		sdl::Chunk sound;
+		int local_sound_volume; //TODO
 
 		static int unused_channel;
 };
