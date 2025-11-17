@@ -5,28 +5,23 @@
 //TODO : bien buggué...
 //TODO : pourquoi pas renommer cette classe en UIContainer qui contient un vector de Ui*
 
-//TODO : vector de callback functions
-ToggleGroup::ToggleGroup(unsigned int number, std::string text, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
+ToggleGroup::ToggleGroup(size_t number, std::string text, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
 	: number(number), text(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - 100, renderer), only_one_has_to_be_checked(true) //TODO : paramètre du constructeur
 {
+	SDL_assert(callback_functions.size() == number);
+
 	//this->callback_function = callback_function; //TODO : inutile ??
-	//this->position = this->normal.position;
 	this->pointer_on_ui_when_pointer_up = true;
 	this->renderer = renderer;
-
-	//TODO : test pour s'assurer que callback_function a la même taille que number 
-
-	if(number != callback_functions.size())
-		std::cout << "PPPROROROR\n";
 
 	for(unsigned int i = 0; i < number; ++i)
 	{
 		if(i == 0)
 			is_checked = true;
 		else is_checked = false;
+
 		Toggle* toggle_i = new Toggle(path_normal, path_selected, path_clicked, path_checked, x, y + 200 * i, is_checked, renderer, callback_functions[i]);
-		this->toggles.push_back(toggle_i); //temp
-		//this->position = this->toggles[i]->position;
+		this->toggles.push_back(toggle_i); 
 	}
 }
 
@@ -218,16 +213,6 @@ void ToggleGroup::handle_events(const SDL_Event& e)
 	}
 }
 
-std::vector<SDL_Rect> ToggleGroup::get_bounds() const
-{
-	std::vector<SDL_Rect> rects;
-	for(Toggle* t : toggles)
-	{
-		rects.push_back(t->position);
-	}
-	return rects;
-}
-
 std::vector<Ui*> ToggleGroup::get_navigation_nodes()
 {
 	std::vector<Ui*> vector;
@@ -236,4 +221,9 @@ std::vector<Ui*> ToggleGroup::get_navigation_nodes()
 		vector.push_back(ui);
 	}
 	return vector;
+}
+
+SDL_Rect ToggleGroup::get_rect() const //TODO : INUTILE !!
+{
+	return {0, 0, 0, 0};
 }

@@ -32,6 +32,7 @@ class Menu : public GameState
 
 		Ui* previous_selected;
 		Ui* current_selected;
+
 		std::vector<Ui*> ui;
 
 	protected:

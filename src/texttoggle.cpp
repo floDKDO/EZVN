@@ -8,33 +8,18 @@ TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Co
 	  is_checked(is_checked)
 {
 	this->callback_function = callback_function;
-	this->position = this->text.position;
 	this->pointer_on_ui_when_pointer_up = true;
 	this->renderer = renderer;
 }
 
-void TextToggle::on_pointer_up()
+void TextToggle::on_pointer_up_hook_end()
 {
-	if(this->state == State::CLICKED)
-	{
-		this->state = State::SELECTED;
-		callback_function(this);
-		this->click_sound.play_sound();
-		this->is_checked = !this->is_checked;
-	}
+	this->is_checked = !this->is_checked;
 }
 
-void TextToggle::on_enter_released() //TODO : pas ouf car répétition avec Ui
+void TextToggle::on_enter_released_hook_end()
 {
-	if(this->state == State::CLICKED)
-	{
-		std::cout << "DANS ON ENTER RELEASED\n";
-		this->state = State::SELECTED;
-		callback_function(this);
-		this->click_sound.play_sound();
-		this->lock = true;
-		this->is_checked = !this->is_checked;
-	}
+	this->is_checked = !this->is_checked;
 }
 
 void TextToggle::draw(SDL_Renderer* renderer)
@@ -58,7 +43,7 @@ void TextToggle::update(Uint64 time_step)
 	}
 }
 
-std::vector<SDL_Rect> TextToggle::get_bounds() const
+SDL_Rect TextToggle::get_rect() const
 {
-	return {this->text.position};
+	return this->text.position;
 }

@@ -1,5 +1,7 @@
 #include "menu.h"
 
+#include <iostream>
+
 Menu::Menu(std::vector<Ui*> ui, Ui* ui_selected)
 	: ui(ui), previous_selected(nullptr), current_selected(ui_selected)
 {
@@ -24,10 +26,10 @@ bool Menu::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, con
 
 bool Menu::is_candidate_closer(const Ui* const ui, const Ui* const candidate, const Ui* const current_best, const Axis mode)
 {
-	const int diff_best_x = std::abs(ui->position.x - current_best->position.x);
-	const int diff_candidate_x = std::abs(ui->position.x - candidate->position.x);
-	const int diff_best_y = std::abs(ui->position.y - current_best->position.y);
-	const int diff_candidate_y = std::abs(ui->position.y - candidate->position.y);
+	const int diff_best_x = std::abs(ui->get_rect().x - current_best->get_rect().x);
+	const int diff_candidate_x = std::abs(ui->get_rect().x - candidate->get_rect().x);
+	const int diff_best_y = std::abs(ui->get_rect().y - current_best->get_rect().y);
+	const int diff_candidate_y = std::abs(ui->get_rect().y - candidate->get_rect().y);
 
 	if(mode == Axis::X_AXIS)
 	{
@@ -51,8 +53,8 @@ void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mo
 	}
 	else
 	{
-		const bool ui_facing_current_best = is_ui1_facing_ui2(ui->position, current_best->position, mode);
-		const bool ui_facing_candidate = is_ui1_facing_ui2(ui->position, candidate->position, mode);
+		const bool ui_facing_current_best = is_ui1_facing_ui2(ui->get_rect(), current_best->get_rect(), mode);
+		const bool ui_facing_candidate = is_ui1_facing_ui2(ui->get_rect(), candidate->get_rect(), mode);
 		const bool ui_facing_both = ui_facing_current_best && ui_facing_candidate;
 		const bool ui_facing_neither = !ui_facing_current_best && !ui_facing_candidate;
 
@@ -75,7 +77,6 @@ void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mo
 void Menu::assign_ui_on_moving()
 {
 	std::vector<Ui*> navigation_list;
-
 	for(Ui* ui : this->ui)
 	{
 		std::vector<Ui*> nodes = ui->get_navigation_nodes();
@@ -93,8 +94,8 @@ void Menu::assign_ui_on_moving()
 		{
 			if(candidate == ui) { continue; }
 
-			const SDL_Rect candidate_pos = candidate->position;
-			const SDL_Rect ui_pos = ui->position;
+			const SDL_Rect candidate_pos = candidate->get_rect();
+			const SDL_Rect ui_pos = ui->get_rect();
 
 			if(candidate_pos.y + candidate_pos.h <= ui_pos.y)
 			{
@@ -134,18 +135,18 @@ void Menu::handle_events(const SDL_Event& e)
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
-			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI) //TODO : ui serait le ToggleGroup (UiContainer) => dynamic_cast dans ce cas là
+			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI) 
 			{
 				if(dynamic_cast<ToggleGroup*>(ui) != nullptr)
 				{
-					//ui serait le toggle dont l'indice a été retourné par is_mouse_on_ui())
+					//ui est le toggle dont l'indice a été retourné par is_mouse_on_ui()
 					ToggleGroup* togglegroup = dynamic_cast<ToggleGroup*>(ui);
 					ui = togglegroup->toggles[ui->is_mouse_on_ui()];
 				}
 
 				if(dynamic_cast<TextToggleGroup*>(ui) != nullptr)
 				{
-					//ui serait le toggle dont l'indice a été retourné par is_mouse_on_ui())
+					//ui est le toggle dont l'indice a été retourné par is_mouse_on_ui()
 					TextToggleGroup* texttogglegroup = dynamic_cast<TextToggleGroup*>(ui);
 					ui = texttogglegroup->toggles[ui->is_mouse_on_ui()];
 				}

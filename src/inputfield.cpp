@@ -11,16 +11,14 @@ Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, uns
 	  is_editing(false), is_writing(false), index_caret(0), offset_caret(0)
 {
 	this->callback_function = callback_function;
-	this->position = this->normal.position;
-	SDL_SetTextInputRect(&(this->position));
+	SDL_SetTextInputRect(&(this->normal.position));
 
 	this->pointer_on_ui_when_pointer_up = true;
 	this->renderer = renderer;
 }
 
-void Inputfield::on_pointer_up()
+void Inputfield::on_pointer_up_hook_end()
 {
-	Ui::on_pointer_up();
 	this->is_editing = !this->is_editing;
 }
 
@@ -58,14 +56,9 @@ void Inputfield::on_right_pressed()
 	}
 }
 
-void Inputfield::on_enter_pressed()
+void Inputfield::on_enter_pressed_hook_end()
 {
-	if(this->lock && this->state == State::SELECTED)
-	{
-		this->state = State::CLICKED;
-		this->lock = false;
-		this->is_editing = !this->is_editing;
-	}
+	this->is_editing = !this->is_editing;
 }
 
 void Inputfield::on_backspace_pressed()
@@ -93,10 +86,8 @@ void Inputfield::on_delete_pressed()
 	}
 }
 
-void Inputfield::on_input_pressed(const SDL_Event& e)
+void Inputfield::on_input_pressed_hook_end(const SDL_Event& e)
 {
-	Ui::on_input_pressed(e);
-
 	if(this->is_editing)
 	{
 		this->is_writing = true;
@@ -112,16 +103,13 @@ void Inputfield::on_input_pressed(const SDL_Event& e)
 	}
 }
 
-void Inputfield::on_input_released(const SDL_Event& e)
+void Inputfield::on_input_released_hook_end(const SDL_Event& e)
 {
 	this->is_writing = false;
-	Ui::on_input_released(e);
 }
 
-void Inputfield::handle_events(const SDL_Event& e)
+void Inputfield::handle_events_hook_end(const SDL_Event& e)
 {
-	Ui::handle_events(e);
-
 	if(e.type == SDL_TEXTINPUT)
 	{
 		this->on_typing(e);
@@ -139,9 +127,9 @@ void Inputfield::draw(SDL_Renderer* renderer)
 		{
 			text_placeholder.draw(renderer);
 		}
-		this->text_caret.position.x = this->position.x; 
+		this->text_caret.position.x = this->get_rect().x;
 	}
-	else this->text_caret.position.x = this->position.x + this->text.position.w + this->offset_caret;
+	else this->text_caret.position.x = this->get_rect().x + this->text.position.w + this->offset_caret;
 
 	if(this->is_editing)
 	{
@@ -178,7 +166,7 @@ void Inputfield::set_character_limit(unsigned int character_limit)
 	this->character_limit = character_limit;
 }
 
-std::vector<SDL_Rect> Inputfield::get_bounds() const
+SDL_Rect Inputfield::get_rect() const 
 {
-	return {this->normal.position};
+	return this->normal.position;
 }

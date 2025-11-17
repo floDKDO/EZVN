@@ -15,20 +15,20 @@ class Slider : public Ui
 		void handle_movement();
 
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
-		void on_pointer_down() override;
-		void on_pointer_enter() override;
-		void on_pointer_exit() override;
+		void on_pointer_down_hook_end() override;
+		void on_pointer_enter_hook_end() override;
+		void on_pointer_exit_hook_end() override;
 
 		void on_up_pressed() override;
 		void on_down_pressed() override;
 		void on_left_pressed() override;
 		void on_right_pressed() override;
-		void on_enter_pressed() override;
+		void on_enter_pressed_hook_end() override;
 
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64 time_step) override;
-		void handle_events(const SDL_Event& e) override;
-		std::vector<SDL_Rect> get_bounds() const override;
+		void handle_events_hook_end(const SDL_Event& e) override;
+		SDL_Rect get_rect() const override;
 
 		unsigned int min_value;
 		unsigned int max_value;
@@ -46,7 +46,7 @@ class Slider : public Ui
 		Image handle;
 		Text text;
 
-		static const unsigned int INDEX_RECT_HANDLE = 0;
-		static const unsigned int INDEX_RECT_BAR = 1;
+		static const unsigned int INDEX_RECT_BAR = 0;
+		//static const unsigned int INDEX_RECT_HANDLE = 1; //n'est normalement pas utile
 };
 

@@ -4,7 +4,6 @@ Button::Button(const std::string path_normal, const std::string path_selected, c
 	: normal(path_normal, x, y, renderer), selected(path_selected, x, y, renderer), clicked(path_clicked, x, y, renderer)
 {
 	this->callback_function = callback_function;
-	this->position = this->normal.position;
 	this->pointer_on_ui_when_pointer_up = true;
 	this->renderer = renderer;
 }
@@ -24,7 +23,7 @@ void Button::update(Uint64 time_step)
 	(void)time_step;
 }
 
-std::vector<SDL_Rect> Button::get_bounds() const
+SDL_Rect Button::get_rect() const
 {
-	return {this->normal.position};
+	return this->normal.position;
 }

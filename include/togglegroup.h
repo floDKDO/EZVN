@@ -7,7 +7,7 @@
 class ToggleGroup : public Ui
 {
 	public:
-		ToggleGroup(unsigned int number, std::string text, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
+		ToggleGroup(size_t number, std::string text, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
 
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		void on_enter_released() override;
@@ -15,7 +15,7 @@ class ToggleGroup : public Ui
 		void draw(SDL_Renderer* renderer) override;
 		void update(Uint64 time_step) override;
 		void handle_events(const SDL_Event& e) override;
-		std::vector<SDL_Rect> get_bounds() const override;
+		SDL_Rect get_rect() const override;
 		std::vector<Ui*> get_navigation_nodes() override;
 
 		std::vector<Toggle*> toggles;

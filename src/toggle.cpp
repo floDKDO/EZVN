@@ -5,32 +5,18 @@ Toggle::Toggle(const std::string path_normal, const std::string path_selected, c
 	  checked(path_checked, x, y, renderer), is_checked(is_checked)
 {
 	this->callback_function = callback_function;
-	this->position = this->normal.position;
 	this->pointer_on_ui_when_pointer_up = true;
 	this->renderer = renderer;
 }
 
-void Toggle::on_pointer_up() //TODO : pas ouf car répétition avec Ui
+void Toggle::on_pointer_up_hook_end()
 {
-	if(this->state == State::CLICKED)
-	{
-		this->state = State::SELECTED;
-		callback_function(this);
-		this->click_sound.play_sound();
-		this->is_checked = !this->is_checked;
-	}
+	this->is_checked = !this->is_checked;
 }
 
-void Toggle::on_enter_released() //TODO : pas ouf car répétition avec Ui
+void Toggle::on_enter_released_hook_end()
 {
-	if(this->state == State::CLICKED)
-	{
-		this->state = State::SELECTED;
-		callback_function(this);
-		this->click_sound.play_sound();
-		this->lock = true;
-		this->is_checked = !this->is_checked;
-	}
+	this->is_checked = !this->is_checked;
 }
 
 void Toggle::draw(SDL_Renderer* renderer)
@@ -51,7 +37,7 @@ void Toggle::update(Uint64 time_step)
 	(void)time_step;
 }
 
-std::vector<SDL_Rect> Toggle::get_bounds() const
+SDL_Rect Toggle::get_rect() const
 {
-	return {this->normal.position};
+	return this->normal.position;
 }

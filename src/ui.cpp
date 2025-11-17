@@ -1,5 +1,7 @@
 #include "ui.h"
 
+#include <iostream>
+
 bool Ui::lock = true;
 
 Ui::Ui()
@@ -7,7 +9,6 @@ Ui::Ui()
 	state(State::NORMAL), 
 	select_sound("sounds/base_select.ogg"), click_sound("sounds/base_click.ogg"), 
 	is_selected_sound_played(false),
-	position{0, 0, 0, 0},
 	callback_function(nullptr),
 	pointer_on_ui_when_pointer_up(true),
 	last_time(0)
@@ -40,18 +41,21 @@ void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
 			this->state = State::SELECTED;
 			callback_function(this);
 			this->click_sound.play_sound();
+			this->on_pointer_up_hook_end();
 		}
 	}
 	else //the callback function is called even if the pointer is not on the UI when the pointer is released/up
 	{
 		callback_function(this);
 		this->click_sound.play_sound();
+		this->on_pointer_up_hook_end();
 	}
 }
 
 void Ui::on_pointer_down() 
 {
 	this->state = State::CLICKED;
+	this->on_pointer_down_hook_end();
 }
 
 void Ui::on_pointer_enter() 
@@ -64,6 +68,7 @@ void Ui::on_pointer_enter()
 			this->select_sound.play_sound();
 			this->is_selected_sound_played = true;
 		}
+		this->on_pointer_enter_hook_end();
 	}
 }
 
@@ -74,6 +79,7 @@ void Ui::on_pointer_exit()
 		this->state = State::SELECTED; 
 	}
 	this->is_selected_sound_played = false;
+	this->on_pointer_exit_hook_end(); //TODO : dans le if ??
 }
 
 void Ui::on_up_pressed()
@@ -82,6 +88,7 @@ void Ui::on_up_pressed()
 	{
 		this->select_new(this->select_on_up);
 		this->lock = false;
+		this->on_up_pressed_hook_end();
 	}
 }
 
@@ -91,6 +98,7 @@ void Ui::on_down_pressed()
 	{
 		this->select_new(this->select_on_down);
 		this->lock = false;
+		this->on_down_pressed_hook_end();
 	}
 }
 
@@ -100,6 +108,7 @@ void Ui::on_left_pressed()
 	{
 		this->select_new(this->select_on_left);
 		this->lock = false;
+		this->on_left_pressed_hook_end();
 	}
 }
 
@@ -109,6 +118,7 @@ void Ui::on_right_pressed()
 	{
 		this->select_new(this->select_on_right);
 		this->lock = false;
+		this->on_right_pressed_hook_end();
 	}
 }
 
@@ -116,8 +126,10 @@ void Ui::on_enter_pressed()
 {
 	if(this->lock && this->state == State::SELECTED) //TODO : remettre les if des fonctions on_***_pressed dans on_input_pressed ??
 	{
+		std::cout << "ENTER PRESSED\n";
 		this->state = State::CLICKED;
 		this->lock = false;
+		this->on_enter_pressed_hook_end();
 	}
 }
 
@@ -143,47 +155,64 @@ void Ui::on_input_pressed(const SDL_Event& e)
 	{
 		this->on_enter_pressed();
 	}
+	this->on_input_pressed_hook_end(e);
 }
 
 void Ui::on_up_released()
 {
-	this->lock = true;
-	this->is_selected_sound_played = false;
+	if(!this->lock && this->state == State::SELECTED)
+	{
+		this->lock = true;
+		this->is_selected_sound_played = false;
+		this->on_up_released_hook_end();
+	}
 }
 
 void Ui::on_down_released()
 {
-	this->lock = true;
-	this->is_selected_sound_played = false;
+	if(!this->lock && this->state == State::SELECTED)
+	{
+		this->lock = true;
+		this->is_selected_sound_played = false;
+		this->on_down_released_hook_end();
+	}
 }
 
 void Ui::on_left_released()
 {
-	this->lock = true;
-	this->is_selected_sound_played = false;
+	if(!this->lock && this->state == State::SELECTED)
+	{
+		this->lock = true;
+		this->is_selected_sound_played = false;
+		this->on_left_released_hook_end();
+	}
 }
 
 void Ui::on_right_released()
 {
-	this->lock = true;
-	this->is_selected_sound_played = false;
+	if(!this->lock && this->state == State::SELECTED)
+	{
+		this->lock = true;
+		this->is_selected_sound_played = false;
+		this->on_right_released_hook_end();
+	}
 }
 
 void Ui::on_enter_released()
 {
 	if(this->state == State::CLICKED)
 	{
+		std::cout << "ENTER released\n";
 		this->state = State::SELECTED;
 		callback_function(this);
 		this->click_sound.play_sound();
 		this->lock = true;
+		this->on_enter_released_hook_end();
 	}
 }
 
-#include <iostream>
 void Ui::on_input_released(const SDL_Event& e)
 {
-	std::cout << "DANS UI\n";
 	if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP || e.key.keysym.sym == SDLK_UP)
 	{
 		this->on_up_released();
@@ -198,14 +227,13 @@ void Ui::on_input_released(const SDL_Event& e)
 	}
 	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || e.key.keysym.sym == SDLK_RIGHT)
 	{
-		std::cout << "DANS UI RIGHT\n";
 		this->on_right_released();
 	}
 	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
 	{
-		std::cout << "DANS UI ENTER\n";
 		this->on_enter_released();
 	}
+	this->on_input_released_hook_end(e);
 }
 
 void Ui::handle_events(const SDL_Event& e)
@@ -252,9 +280,9 @@ void Ui::handle_events(const SDL_Event& e)
 		default:
 			break;
 	}
+	this->handle_events_hook_end(e);
 }
 
-#include <iostream>
 void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
 {
 	int real_mouse_x = 0, real_mouse_y = 0;
@@ -271,16 +299,16 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 	*logical_mouse_y = int(temp_logical_mouse_y);
 }
 
-int Ui::is_mouse_on_ui() const 
+int Ui::is_mouse_on_ui() 
 {
 	int logical_mouse_x, logical_mouse_y;
 	this->get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 
-	std::vector<SDL_Rect> rects = this->get_bounds();
+	std::vector<Ui*> all_ui = this->get_navigation_nodes();
 
-	for(int i = 0; i < rects.size(); ++i)
+	for(int i = 0; i < all_ui.size(); ++i)
 	{
-		SDL_Rect& rect = rects[i];
+		const SDL_Rect& rect = all_ui[i]->get_rect();
 
 		if(rect.y + rect.h > logical_mouse_y
 		&& rect.y < logical_mouse_y

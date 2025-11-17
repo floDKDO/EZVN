@@ -7,8 +7,6 @@ Slider::Slider(const std::string path_bar, const std::string path_handle, unsign
 	text(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar.position.h*3, renderer) //TODO : pas de couleur fixée...
 {
 	this->callback_function = callback_function;
-	this->position = this->bar.position;
-	//this->handle_position = this->handle.position; //TODO : problème utiliser l'un ou l'autre mais pas les deux en même temps
 	this->pointer_on_ui_when_pointer_up = false;
 	this->renderer = renderer;
 
@@ -63,47 +61,34 @@ void Slider::on_pointer_up()
 	}
 }
 
-void Slider::on_pointer_down()
+void Slider::on_pointer_down_hook_end()
 {
-	Ui::on_pointer_down();
-
 	int logical_mouse_x, logical_mouse_y;
 	this->get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 
-	/*if(is_mouse_on_handle(logical_x, logical_y)) //TODO : if potentionellement inutile
+	if(logical_mouse_x - (handle.position.w / 2) < bar.position.x)
 	{
-		std::cout << "ON HANDLE\n";
-		this->is_dragged = true; //TODO
-		diff = logical_x - handle.position.x; //TODO
+		handle.position.x = bar.position.x - (handle.position.w / 2);
 	}
-	else if(is_mouse_on_ui() != this->MOUSE_NOT_ON_ANY_UI)*/ //TODO : if inutile car déjà testé dans handle_events() de la classe Ui
-	//{
-		if(logical_mouse_x - (handle.position.w / 2) < bar.position.x)
-		{
-			handle.position.x = bar.position.x - (handle.position.w / 2);
-		}
-		else if(logical_mouse_x - (handle.position.w / 2) > bar.position.x + bar.position.w - (handle.position.w / 2))
-		{
-			handle.position.x = bar.position.x + bar.position.w - (handle.position.w / 2);
-		}
-		else
-		{
-			handle.position.x = logical_mouse_x - (handle.position.w / 2);
-		}
-		diff = logical_mouse_x - handle.position.x;
-		this->is_dragged = true;
-	//}
+	else if(logical_mouse_x - (handle.position.w / 2) > bar.position.x + bar.position.w - (handle.position.w / 2))
+	{
+		handle.position.x = bar.position.x + bar.position.w - (handle.position.w / 2);
+	}
+	else
+	{
+		handle.position.x = logical_mouse_x - (handle.position.w / 2);
+	}
+	diff = logical_mouse_x - handle.position.x;
+	this->is_dragged = true;
 }
 
-void Slider::on_pointer_enter()
+void Slider::on_pointer_enter_hook_end()
 {
-	Ui::on_pointer_enter();
 	this->handle_movement();
 }
 
-void Slider::on_pointer_exit()
+void Slider::on_pointer_exit_hook_end()
 {
-	Ui::on_pointer_exit();
 	this->handle_movement();
 }
 
@@ -130,7 +115,7 @@ void Slider::on_left_pressed()
 		if(this->lock && this->state == State::SELECTED)
 		{
 			this->lock = false;
-			handle.position.x -= 20;
+			handle.position.x -= this->bar.position.w / 10;
 			if(handle.position.x + (handle.position.w / 2) < bar.position.x)
 			{
 				handle.position.x = bar.position.x - (handle.position.w / 2);
@@ -150,7 +135,7 @@ void Slider::on_right_pressed()
 		if(this->lock && this->state == State::SELECTED)
 		{
 			this->lock = false;
-			handle.position.x += 20;
+			handle.position.x += this->bar.position.w / 10;
 			if(handle.position.x + (handle.position.w / 2) > bar.position.x + bar.position.w)
 			{
 				handle.position.x = bar.position.x + bar.position.w - (handle.position.w / 2);
@@ -163,14 +148,9 @@ void Slider::on_right_pressed()
 	}
 }
 
-void Slider::on_enter_pressed()
+void Slider::on_enter_pressed_hook_end()
 {
-	if(this->lock && this->state == State::SELECTED)
-	{
-		Ui::on_pointer_down();
-		this->lock = false;
-		this->is_selected = !this->is_selected;
-	}
+	this->is_selected = !this->is_selected;
 }
 
 void Slider::draw(SDL_Renderer* renderer)
@@ -200,11 +180,9 @@ void Slider::update(Uint64 time_step)
 	}
 }
 
-void Slider::handle_events(const SDL_Event& e)
+void Slider::handle_events_hook_end(const SDL_Event& e)
 {
-	Ui::handle_events(e);
-
-	//Code to be able to move the handle by clicking on it even if it go beyond the bar of the slider
+	//Code that allow to move the handle by clicking on it even if it go beyond the bar of the slider
 	int logical_mouse_x, logical_mouse_y;
 	this->get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 	if(e.type == SDL_MOUSEBUTTONDOWN)
@@ -216,7 +194,7 @@ void Slider::handle_events(const SDL_Event& e)
 	}
 }
 
-std::vector<SDL_Rect> Slider::get_bounds() const //TODO : possiblement un problème car une collision sur l'handle est également une collision sur la barre
+SDL_Rect Slider::get_rect() const
 {
-	return {this->handle.position, this->bar.position}; //handle=0, bar=1 (index returned by mouse_on_ui())
+	return this->bar.position; //this->handle.position n'est normalement pas utile
 }
