@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+//TODO : ne pas utiliser new mais des smart pointers
+
 Game::Game()
 	: sdl(SDL_INIT_EVERYTHING), sdl_img(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer(MIX_INIT_OGG | MIX_INIT_MP3),
 	main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr), 
@@ -65,7 +67,7 @@ void Game::create_settings_menu()
 	Ui* textbutton_return = new TextButton("Return", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1));
 	Ui* slider_sound = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_sound_function, this, std::placeholders::_1));
 	Ui* slider_music = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer.Get(), std::bind(&Game::slider_music_function, this, std::placeholders::_1));
-	Ui* togglegroup = new TextToggleGroup(2, "Display", {"Windowed", "Fullscreen"}, {200, 200, 200, 255}, {255, 255, 255, 255}, {255, 0, 0, 255}, 50, 100, false, renderer.Get(), {std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
+	Ui* togglegroup = new TextToggleGroup(2, "Display", {"Windowed", "Fullscreen"}, {200, 200, 200, 255}, {255, 255, 255, 255}, {255, 0, 0, 255}, 50, 100, true, renderer.Get(), {std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
 
 	std::vector<Ui*> ui;
 	ui.reserve(10);
@@ -178,10 +180,10 @@ void Game::handle_events()
 				else if(e.window.event == SDL_WINDOWEVENT_RESIZED)
 				{
 					//TODO
-					std::cout << "RESIZED! " << e.window.data1 << " et " << e.window.data2 << std::endl;
+					/*std::cout << "RESIZED! " << e.window.data1 << " et " << e.window.data2 << std::endl;
 					SDL_GetWindowSize(this->window.Get(), &w, &h);
 					std::cout << "W : " << w << " et H : " << h << std::endl;
-					/*SDL_RenderSetLogicalSize(this->renderer.Get(), e.window.data1, e.window.data2);
+					SDL_RenderSetLogicalSize(this->renderer.Get(), e.window.data1, e.window.data2);
 					SDL_RenderGetLogicalSize(this->renderer.Get(), &w, &h);
 					std::cout << "W : " << w << " et H : " << h << std::endl;*/
 				}

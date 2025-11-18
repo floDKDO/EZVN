@@ -9,6 +9,7 @@ class ToggleGroup : public Ui
 	public:
 		ToggleGroup(size_t number, std::string text, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
 
+		void uncheck_all_others(unsigned int index_to_not_uncheck);
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		void on_enter_released() override;
 		void on_input_released(const SDL_Event& e) override;
@@ -25,7 +26,7 @@ class ToggleGroup : public Ui
 	protected:
 
 	private:
-		unsigned int number;
+		size_t number;
 		Text text;
 		
 };

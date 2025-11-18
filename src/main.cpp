@@ -22,16 +22,23 @@ void nchk_SDL(const void* return_value, const char* error_string)
 	}
 }
 
+//TODO : stocker un sdl::Renderer* en membre des classes à la place de SDL_Renderer* ??
+
 // TODO : gérer les erreurs des fonctions SDL. 
 // Idée : ne pas crash systématiquement en cas d'erreur (ex avec Ren'Py qui affiche une image noire si l'image qu'on veut afficher n'est pas trouvée)
 // => avoir une image par défaut pour chaque classe d'images (Button, Inputfield, Character...) => détectable par le dossier qui contient l'image (gui pour Button etc., characters pour Character...)
 // De plus, toutes les erreurs n'ont pas le même impact (ex : une erreur pour SDL_RenderClear() n'est pas grave)
 // Il faudrait utiliser SDL_Log à la place de fprintf(stderr, ...), et éventuellement SDL_ShowSimpleMessageBox
 // Préalable : ne pas afficher toutes les erreurs pour le mode Release
+// Exceptions pour les erreurs "graves" => SDL_CreateWindow(), SDL_CreateRenderer() ??
 
 //TODO : corriger le problème du time_step et modifier la valeur de last_time dans le update() de toutes les classes
 
-//TODO : time_step <=> end_current_frame ??
+//TODO : time_step <=> begin_current_frame ou end_current_frame ??
+
+//TODO : lambdas à la place des std::bind ??
+
+//TODO : possibilité de juste mettre une couleur un peu plus clair pour représenter un Ui dans l'état SELECETD
 
 int main(int argc, char* argv[])
 {

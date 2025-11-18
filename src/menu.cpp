@@ -148,7 +148,7 @@ void Menu::handle_events(const SDL_Event& e)
 				{
 					//ui est le toggle dont l'indice a été retourné par is_mouse_on_ui()
 					TextToggleGroup* texttogglegroup = dynamic_cast<TextToggleGroup*>(ui);
-					ui = texttogglegroup->toggles[ui->is_mouse_on_ui()];
+					ui = texttogglegroup->toggles[ui->is_mouse_on_ui()].get();
 				}
 
 				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) 

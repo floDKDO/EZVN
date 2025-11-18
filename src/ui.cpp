@@ -229,7 +229,7 @@ void Ui::on_input_released(const SDL_Event& e)
 	{
 		this->on_right_released();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
+	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN) //TODO important : appelé même si le texttoggle n'est pas sélectionné
 	{
 		this->on_enter_released();
 	}

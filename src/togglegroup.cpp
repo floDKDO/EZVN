@@ -10,8 +10,6 @@ ToggleGroup::ToggleGroup(size_t number, std::string text, const std::string path
 {
 	SDL_assert(callback_functions.size() == number);
 
-	//this->callback_function = callback_function; //TODO : inutile ??
-	this->pointer_on_ui_when_pointer_up = true;
 	this->renderer = renderer;
 
 	for(unsigned int i = 0; i < number; ++i)
@@ -25,46 +23,45 @@ ToggleGroup::ToggleGroup(size_t number, std::string text, const std::string path
 	}
 }
 
-void ToggleGroup::on_pointer_up()
+void ToggleGroup::uncheck_all_others(unsigned int index_to_not_uncheck)
 {
-	std::cout << "Appel : " << toggles.size() << std::endl;
-
-	int index = -1;
 	for(int i = 0; i < toggles.size(); ++i)
 	{
 		Toggle* t = toggles[i];
-		std::cout << "STATE : " << i << " -> " << int(t->state) << std::endl;
+		if(i != index_to_not_uncheck)
+		{
+			t->is_checked = false;
+		}
+	}
+}
+
+void ToggleGroup::on_pointer_up()
+{
+	for(int i = 0; i < toggles.size(); ++i)
+	{
+		Toggle* t = toggles[i];
+
 		if(t->state == State::CLICKED)
 		{
-			std::cout << "DEDANS\n";
 			t->state = State::SELECTED;
 			t->callback_function(t);
 			t->click_sound.play_sound();
+
+			//TODO
 			if(only_one_has_to_be_checked)
 			{
 				if(!t->is_checked)
+				{
 					t->is_checked = true;
-
-				index = i;
+				}
+				this->uncheck_all_others(i);
+				break;
 			}
 			else
 			{
-				t->is_checked = !t->is_checked;
+				t->on_pointer_up_hook_end();
 			}
-		}
-	}
-
-	std::cout << "INDEX : " << index << std::endl;
-
-	if(only_one_has_to_be_checked)
-	{
-		for(int i = 0; i < toggles.size(); ++i)
-		{
-			Toggle* t = toggles[i];
-			if(i != index)
-			{
-				t->is_checked = false;
-			}
+			////////////////////////////////////////////////
 		}
 	}
 }
@@ -102,7 +99,7 @@ void ToggleGroup::on_enter_released() //TODO : pas ouf car répétition avec Ui
 	std::cout << "INDEX : " << index << std::endl;
 
 
-	if(only_one_has_to_be_checked)
+	if(index != -1 && only_one_has_to_be_checked)
 	{
 		for(int i = 0; i < toggles.size(); ++i)
 		{

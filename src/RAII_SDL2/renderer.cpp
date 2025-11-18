@@ -19,6 +19,16 @@ SDL_Renderer* Renderer::Get() const
 	return this->renderer;
 }
 
+void Renderer::copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect)
+{
+	SDL_RenderCopy(this->renderer, texture, srcrect, dstrect);
+}
+
+void Renderer::copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip)
+{
+	SDL_RenderCopyEx(this->renderer, texture, srcrect, dstrect, angle, center, flip);
+}
+
 void Renderer::clear()
 {
 	SDL_RenderClear(this->renderer);

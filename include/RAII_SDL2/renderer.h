@@ -17,6 +17,8 @@ class sdl::Renderer
 
 		SDL_Renderer* Get() const;
 
+		void copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect);
+		void copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip);
 		void clear();
 		void present();
 		void set_logical_size(int w, int h);

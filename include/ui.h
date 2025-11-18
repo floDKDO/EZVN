@@ -20,41 +20,58 @@ class Ui
 
 		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
 		virtual void on_pointer_up_hook_end(){}
+
 		virtual void on_pointer_down();
 		virtual void on_pointer_down_hook_end() {}
+
 		virtual void on_pointer_enter();
 		virtual void on_pointer_enter_hook_end() {}
+
 		virtual void on_pointer_exit();
 		virtual void on_pointer_exit_hook_end() {}
 
+
 		virtual void on_up_pressed();
 		virtual void on_up_pressed_hook_end() {}
+
 		virtual void on_down_pressed();
 		virtual void on_down_pressed_hook_end() {}
+
 		virtual void on_left_pressed();
 		virtual void on_left_pressed_hook_end() {}
+
 		virtual void on_right_pressed();
 		virtual void on_right_pressed_hook_end() {}
+
 		virtual void on_enter_pressed();
 		virtual void on_enter_pressed_hook_end() {}
+
 		virtual void on_input_pressed(const SDL_Event& e);
 		virtual void on_input_pressed_hook_end(const SDL_Event& e) {}
 
+
 		virtual void on_up_released();
 		virtual void on_up_released_hook_end() {}
+
 		virtual void on_down_released();
 		virtual void on_down_released_hook_end() {}
+
 		virtual void on_left_released();
 		virtual void on_left_released_hook_end() {}
+
 		virtual void on_right_released();
 		virtual void on_right_released_hook_end() {}
+
 		virtual void on_enter_released();
 		virtual void on_enter_released_hook_end() {}
+
 		virtual void on_input_released(const SDL_Event& e);
 		virtual void on_input_released_hook_end(const SDL_Event& e) {}
 
+
 		virtual void handle_events(const SDL_Event& e);
 		virtual void handle_events_hook_end(const SDL_Event& e) {}
+
 		virtual void draw(SDL_Renderer* renderer) = 0;
 		virtual void update(Uint64 time_step) = 0;
 
@@ -63,7 +80,7 @@ class Ui
 		static const int MOUSE_NOT_ON_ANY_UI = -1;
 
 		virtual std::vector<Ui*> get_navigation_nodes();
-		virtual SDL_Rect get_rect() const = 0; //not for ToggleGroup or TextToggleGroup
+		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
 
 		Ui* select_on_up;
 		Ui* select_on_down;
