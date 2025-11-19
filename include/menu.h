@@ -3,7 +3,7 @@
 #include "gamestate.h"
 #include "button.h"
 #include "slider.h"
-#include "togglegroup.h"
+#include "checkboxgroup.h"
 #include "texttogglegroup.h"
 
 #include <vector>

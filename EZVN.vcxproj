@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClCompile Include="src\button.cpp" />
     <ClCompile Include="src\character.cpp" />
+    <ClCompile Include="src\checkable.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gamestate.cpp" />
     <ClCompile Include="src\image.cpp" />
@@ -167,14 +168,16 @@
     <ClCompile Include="src\textbutton.cpp" />
     <ClCompile Include="src\texttoggle.cpp" />
     <ClCompile Include="src\texttogglegroup.cpp" />
-    <ClCompile Include="src\toggle.cpp" />
-    <ClCompile Include="src\togglegroup.cpp" />
+    <ClCompile Include="src\checkbox.cpp" />
+    <ClCompile Include="src\checkboxgroup.cpp" />
+    <ClCompile Include="src\checkablegroup.cpp" />
     <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\button.h" />
     <ClInclude Include="include\character.h" />
+    <ClInclude Include="include\checkable.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gamestate.h" />
     <ClInclude Include="include\image.h" />
@@ -202,8 +205,9 @@
     <ClInclude Include="include\textbutton.h" />
     <ClInclude Include="include\texttoggle.h" />
     <ClInclude Include="include\texttogglegroup.h" />
-    <ClInclude Include="include\toggle.h" />
-    <ClInclude Include="include\togglegroup.h" />
+    <ClInclude Include="include\checkbox.h" />
+    <ClInclude Include="include\checkboxgroup.h" />
+    <ClInclude Include="include\checkablegroup.h" />
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\ui.h" />
   </ItemGroup>

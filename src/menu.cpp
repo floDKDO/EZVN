@@ -137,18 +137,11 @@ void Menu::handle_events(const SDL_Event& e)
 		{
 			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI) 
 			{
-				if(dynamic_cast<ToggleGroup*>(ui) != nullptr)
+				if(dynamic_cast<CheckableGroup*>(ui) != nullptr)
 				{
 					//ui est le toggle dont l'indice a été retourné par is_mouse_on_ui()
-					ToggleGroup* togglegroup = dynamic_cast<ToggleGroup*>(ui);
-					ui = togglegroup->toggles[ui->is_mouse_on_ui()];
-				}
-
-				if(dynamic_cast<TextToggleGroup*>(ui) != nullptr)
-				{
-					//ui est le toggle dont l'indice a été retourné par is_mouse_on_ui()
-					TextToggleGroup* texttogglegroup = dynamic_cast<TextToggleGroup*>(ui);
-					ui = texttogglegroup->toggles[ui->is_mouse_on_ui()].get();
+					CheckableGroup* checkablegroup = dynamic_cast<CheckableGroup*>(ui);
+					ui = checkablegroup->toggles[ui->is_mouse_on_ui()].get();
 				}
 
 				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL) 

@@ -1,10 +1,15 @@
 #include "RAII_SDL2/texture.h"
+#include <iostream>
 
 namespace sdl
 {
 
 Texture::Texture(SDL_Renderer* renderer, SDL_Surface* surface) //SDL_CreateTextureFromSurface()
 {
+	if(renderer == nullptr)
+	{
+		std::cout << "RENDERER null...\n";
+	}
 	this->texture = SDL_CreateTextureFromSurface(renderer, surface);
 }
 

@@ -16,10 +16,10 @@ enum class State
 class Ui
 {
 	public:
-		virtual ~Ui();
+		virtual ~Ui(); //TODO : mettre = default et retirer l'implémentation ??
 
 		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
-		virtual void on_pointer_up_hook_end(){}
+		virtual void on_pointer_up_hook_end() {}
 
 		virtual void on_pointer_down();
 		virtual void on_pointer_down_hook_end() {}

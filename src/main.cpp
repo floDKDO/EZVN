@@ -4,6 +4,8 @@
 #include <chrono>
 #include <thread>
 
+#include "checkable.h"
+
 void chk_SDL(const int return_value, const char* error_string)
 {
 	if(return_value < 0)

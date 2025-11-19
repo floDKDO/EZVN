@@ -30,7 +30,7 @@
     <ClCompile Include="src\button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\toggle.cpp">
+    <ClCompile Include="src\checkbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\inputfield.cpp">
@@ -111,10 +111,16 @@
     <ClCompile Include="src\RAII_SDL2\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\togglegroup.cpp">
+    <ClCompile Include="src\checkboxgroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\texttogglegroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\checkablegroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\checkable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,7 +137,7 @@
     <ClInclude Include="include\button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\toggle.h">
+    <ClInclude Include="include\checkbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\inputfield.h">
@@ -212,10 +218,16 @@
     <ClInclude Include="include\RAII_SDL2\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\togglegroup.h">
+    <ClInclude Include="include\checkboxgroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\texttogglegroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\checkablegroup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\checkable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
