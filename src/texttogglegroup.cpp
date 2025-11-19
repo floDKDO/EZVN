@@ -1,19 +1,14 @@
 #include "texttogglegroup.h"
+#include "texttoggle.h"
 
 #include <iostream>
 
-//TODO : pourquoi pas renommer cette classe en UIContainer qui contient un vector de Ui*
-
 TextToggleGroup::TextToggleGroup(size_t number_of_toggles, std::string top_text, std::vector<std::string> texts, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool only_one_has_to_be_checked, SDL_Renderer* renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
-	: CheckableGroup(number_of_toggles, only_one_has_to_be_checked, top_text, renderer)
+	: CheckableGroup(number_of_toggles, only_one_has_to_be_checked, top_text, x, y - 100, renderer)
 {
 	std::cout << "Constructeur de la classe TextToggleGroup\n";
 
 	SDL_assert(texts.size() == number_of_toggles && callback_functions.size() == number_of_toggles);
-
-	this->renderer = renderer;
-	this->top_text.position.x = x; //TODO : dans le constructeur de CheckableGroup ??
-	this->top_text.position.y = y - 100;
 	
 	bool is_checked = false;
 	for(unsigned int i = 0; i < number_of_toggles; ++i)

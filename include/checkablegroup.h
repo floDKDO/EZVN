@@ -25,7 +25,7 @@ class CheckableGroup : public Ui
 		Text top_text; //TODO
 
 	protected:
-		CheckableGroup(size_t number_of_toggles, bool only_one_has_to_be_checked, std::string top_text, SDL_Renderer* renderer);
+		CheckableGroup(size_t number_of_toggles, bool only_one_has_to_be_checked, std::string top_text, int x, int y, SDL_Renderer* renderer);
 
 	private:
 };

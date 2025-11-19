@@ -1,9 +1,6 @@
 #pragma once
 
 #include "checkablegroup.h"
-#include "texttoggle.h"
-#include "text.h"
-#include <vector>
 
 class TextToggleGroup : public CheckableGroup
 {

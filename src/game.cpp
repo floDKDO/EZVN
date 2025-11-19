@@ -1,4 +1,5 @@
 #include "game.h"
+#include "checkbox.h"
 
 #include <iostream>
 
@@ -48,37 +49,29 @@ Game::~Game()
 
 void Game::create_main_menu()
 {
-	Ui* textbutton_play = new TextButton("Play", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 600, 200, renderer.Get(), std::bind(&Game::play_function, this, std::placeholders::_1));
-	Ui* textbutton_settings = new TextButton("Settings", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 600, 350, renderer.Get(), std::bind(&Game::settings_function, this, std::placeholders::_1));
-	Ui* textbutton_quit = new TextButton("Quit", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 600, 500, renderer.Get(), std::bind(&Game::quit_function, this, std::placeholders::_1));
-
-	std::vector<Ui*> ui;
+	std::vector<std::unique_ptr<Ui>> ui;
 	ui.reserve(10);
 
-	ui.push_back(textbutton_play);
-	ui.push_back(textbutton_settings);
-	ui.push_back(textbutton_quit);
+	ui.push_back(std::make_unique<TextButton>(std::string("Play"), SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer.Get(), std::bind(&Game::play_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer.Get(), std::bind(&Game::settings_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer.Get(), std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
-	this->main_menu = new Menu(ui, textbutton_play);
+	this->main_menu = new Menu(std::move(ui), ui[0].get());
 }
 
 void Game::create_settings_menu()
 {
-	Ui* textbutton_return = new TextButton("Return", {255, 255, 255, 255}, {255, 0, 0, 255}, {255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1));
-	Ui* slider_sound = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_sound_function, this, std::placeholders::_1));
-	Ui* slider_music = new Slider("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer.Get(), std::bind(&Game::slider_music_function, this, std::placeholders::_1));
-	//Ui* togglegroup = new TextToggleGroup(2, "Display", {"Windowed", "Fullscreen"}, {200, 200, 200, 255}, {255, 255, 255, 255}, {255, 0, 0, 255}, 50, 100, true, renderer.Get(), {std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
-	Ui* togglegroup = new CheckboxGroup(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 50, 100, true, renderer.Get(), {std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
+	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string>{"Windowed", "Fullscreen"}, SDL_Color{200, 200, 200, 255}, SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, 50, 100, true, renderer.Get(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
 
-	std::vector<Ui*> ui;
+	std::vector<std::unique_ptr<Ui>> ui;
 	ui.reserve(10);
 
-	ui.push_back(textbutton_return);
-	ui.push_back(slider_sound);
-	ui.push_back(slider_music);
-	ui.push_back(togglegroup);
+	ui.push_back(std::make_unique<TextButton>("Return", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer.Get(), std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<CheckboxGroup>(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 50, 100, true, renderer.Get(), std::vector<std::function<void(Ui * ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 
-	this->settings_menu = new Menu(ui, textbutton_return);
+	this->settings_menu = new Menu(std::move(ui), ui[0].get());
 }
 
 void Game::play_function(Ui* ui)

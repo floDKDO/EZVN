@@ -126,7 +126,6 @@ void Ui::on_enter_pressed()
 {
 	if(this->lock && this->state == State::SELECTED) //TODO : remettre les if des fonctions on_***_pressed dans on_input_pressed ??
 	{
-		std::cout << "ENTER PRESSED\n";
 		this->state = State::CLICKED;
 		this->lock = false;
 		this->on_enter_pressed_hook_end();
@@ -135,23 +134,23 @@ void Ui::on_enter_pressed()
 
 void Ui::on_input_pressed(const SDL_Event& e)
 {
-	if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP || e.key.keysym.sym == SDLK_UP)
+	if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP))
 	{
 		this->on_up_pressed();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN || e.key.keysym.sym == SDLK_DOWN)
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN))
 	{
 		this->on_down_pressed();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT || e.key.keysym.sym == SDLK_LEFT)
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT))
 	{
 		this->on_left_pressed();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || e.key.keysym.sym == SDLK_RIGHT)
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT))
 	{
 		this->on_right_pressed();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN)
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_A) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN))
 	{
 		this->on_enter_pressed();
 	}
@@ -202,7 +201,6 @@ void Ui::on_enter_released()
 {
 	if(this->state == State::CLICKED)
 	{
-		std::cout << "ENTER released\n";
 		this->state = State::SELECTED;
 		callback_function(this);
 		this->click_sound.play_sound();
@@ -213,23 +211,23 @@ void Ui::on_enter_released()
 
 void Ui::on_input_released(const SDL_Event& e)
 {
-	if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP || e.key.keysym.sym == SDLK_UP)
+	if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP))
 	{
 		this->on_up_released();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN || e.key.keysym.sym == SDLK_DOWN)
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN))
 	{
 		this->on_down_released();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT || e.key.keysym.sym == SDLK_LEFT)
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT))
 	{
 		this->on_left_released();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT || e.key.keysym.sym == SDLK_RIGHT)
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT))
 	{
 		this->on_right_released();
 	}
-	else if(e.cbutton.button == SDL_CONTROLLER_BUTTON_A || e.key.keysym.sym == SDLK_RETURN) //TODO important : appelé même si le texttoggle n'est pas sélectionné
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_A) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN)) 
 	{
 		this->on_enter_released();
 	}

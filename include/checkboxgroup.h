@@ -1,7 +1,6 @@
 #pragma once
 
 #include "checkablegroup.h"
-#include "checkbox.h"
 
 class CheckboxGroup : public CheckableGroup
 {

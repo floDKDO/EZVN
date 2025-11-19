@@ -21,7 +21,7 @@ class Checkable : public Ui
 		CheckableGroup* checkable_group = nullptr;
 
 	protected:
-		Checkable(){}
+		Checkable(bool is_checked);
 
 	private:
 

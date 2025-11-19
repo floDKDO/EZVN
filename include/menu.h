@@ -7,14 +7,12 @@
 #include "texttogglegroup.h"
 
 #include <vector>
+#include <memory>
 
 class Menu : public GameState
 {
 	public:
-		Menu(std::vector<Ui*> ui, Ui* ui_selected);
-		~Menu();
-		Menu(const Menu& m) = delete;
-		Menu& operator=(const Menu& m) = delete;
+		Menu(std::vector<std::unique_ptr<Ui>> ui, Ui* ui_selected);
 
 		enum class Axis
 		{
@@ -33,7 +31,7 @@ class Menu : public GameState
 		Ui* previous_selected;
 		Ui* current_selected;
 
-		std::vector<Ui*> ui;
+		std::vector<std::unique_ptr<Ui>> ui;
 
 	protected:
 

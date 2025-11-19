@@ -15,6 +15,7 @@
 #include "RAII_SDL2/sdlimg.h"
 #include "RAII_SDL2/sdlttf.h"
 
+#include <memory>
 #include <stack>
 
 class Game

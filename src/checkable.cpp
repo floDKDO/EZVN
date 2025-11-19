@@ -1,6 +1,12 @@
 #include "checkable.h"
 #include "checkablegroup.h"
 
+Checkable::Checkable(bool is_checked)
+	: is_checked(is_checked), previous_checked(is_checked)
+{
+
+}
+
 void Checkable::set_checked()
 {
 	this->previous_checked = this->is_checked;

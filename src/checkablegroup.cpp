@@ -1,14 +1,13 @@
 #include "checkablegroup.h"
-
 #include "checkboxgroup.h"
 
 #include <iostream>
 
-//TODO : pourquoi pas renommer cette classe en UIContainer qui contient un vector de Ui*
 
-CheckableGroup::CheckableGroup(size_t number_of_toggles, bool only_one_has_to_be_checked, std::string top_text, SDL_Renderer* renderer)
-	: number_of_toggles(number_of_toggles), only_one_has_to_be_checked(only_one_has_to_be_checked), top_text(top_text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, 0, 0, renderer)
+CheckableGroup::CheckableGroup(size_t number_of_toggles, bool only_one_has_to_be_checked, std::string top_text, int x, int y, SDL_Renderer* renderer)
+	: number_of_toggles(number_of_toggles), only_one_has_to_be_checked(only_one_has_to_be_checked), top_text(top_text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y, renderer)
 {
+	this->renderer = renderer;
 	std::cout << "Constructeur de la classe de base CheckableGroup\n";
 }
 
