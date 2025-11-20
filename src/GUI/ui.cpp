@@ -1,22 +1,18 @@
-#include "ui.h"
+#include "GUI/ui.h"
 
 #include <iostream>
 
 bool Ui::lock = true;
 
-Ui::Ui()
-	:select_on_up(nullptr), select_on_down(nullptr), select_on_left(nullptr), select_on_right(nullptr), 
+Ui::Ui(sdl::Renderer& renderer)
+	:renderer(renderer),
+	select_on_up(nullptr), select_on_down(nullptr), select_on_left(nullptr), select_on_right(nullptr), 
 	state(State::NORMAL), 
 	select_sound("sounds/base_select.ogg"), click_sound("sounds/base_click.ogg"), 
 	is_selected_sound_played(false),
 	callback_function(nullptr),
 	pointer_on_ui_when_pointer_up(true),
 	last_time(0)
-{
-
-}
-
-Ui::~Ui()
 {
 
 }
@@ -286,13 +282,8 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 	int real_mouse_x = 0, real_mouse_y = 0;
 	SDL_GetMouseState(&real_mouse_x, &real_mouse_y);
 
-	if(this->renderer == nullptr)
-	{
-		std::cout << "RENDERER NULL!\n";
-	}
-
 	float temp_logical_mouse_x = 0, temp_logical_mouse_y = 0;
-	SDL_RenderWindowToLogical(this->renderer, real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
+	SDL_RenderWindowToLogical(this->renderer.Get(), real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
 	*logical_mouse_x = int(temp_logical_mouse_x);
 	*logical_mouse_y = int(temp_logical_mouse_y);
 }

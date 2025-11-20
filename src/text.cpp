@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, SDL_Renderer* renderer, Uint32 wrap_length)
+Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length)
 	:text(text), color(color), font_size(font_size), font_style(0), renderer(renderer), wrap_length(wrap_length), text_dialogue(""), index_dialogue(0), previous_text(""), previous_font_style(0), font_path(font_path), is_finished(false), text_speed(15), last_time(0)
 {
 	this->font = std::make_unique<sdl::Font>(font_path, this->font_size); 
@@ -27,23 +27,23 @@ void Text::create_surface_texture()
 {
 	if(this->text.empty() || (this->is_dialogue && this->text_dialogue.empty()))
 	{
-		this->surface = std::make_unique<sdl::Surface>(this->font->Get(), " ", this->color, wrap_length);
+		this->surface = std::make_unique<sdl::Surface>(*this->font, " ", this->color, wrap_length);
 	}
 	else
 	{
 		if(this->is_dialogue)
 		{
-			this->surface = std::make_unique<sdl::Surface>(this->font->Get(), this->text_dialogue, this->color, wrap_length);
+			this->surface = std::make_unique<sdl::Surface>(*(this->font), this->text_dialogue, this->color, wrap_length);
 		}
 		else
 		{
-			this->surface = std::make_unique<sdl::Surface>(this->font->Get(), this->text, this->color, wrap_length);
+			this->surface = std::make_unique<sdl::Surface>(*(this->font), this->text, this->color, wrap_length);
 		}
 	}
 	this->position.w = this->surface->Get()->w;
 	this->position.h = this->surface->Get()->h;
 
-	this->texture = std::make_unique<sdl::Texture>(renderer, this->surface->Get());
+	this->texture = std::make_unique<sdl::Texture>(this->renderer, *(this->surface));
 	this->texture->set_blend_mode(SDL_BLENDMODE_BLEND);
 }
 
@@ -125,9 +125,9 @@ int Text::get_width_text() //TODO : combiner les deux fonctions en une seule ??
 	return w;
 }
 
-void Text::draw(SDL_Renderer* renderer)
+void Text::draw(sdl::Renderer& renderer)
 {
-	SDL_RenderCopy(renderer, this->texture->Get(), nullptr, &position);
+	SDL_RenderCopy(renderer.Get(), this->texture->Get(), nullptr, &position);
 }
 
 //TODO : écrire le code spécifique aux dialogues dans la classe TextBox ??

@@ -1,11 +1,15 @@
 #include "RAII_SDL2/renderer.h"
+#include "RAII_SDL2/texture.h"
+
+#include <iostream>
 
 namespace sdl
 {
 
-Renderer::Renderer(SDL_Window* window, int index, Uint32 flags) //SDL_CreateRenderer()
+Renderer::Renderer(Window& window, int index, Uint32 flags) //SDL_CreateRenderer()
 {
-	this->renderer = SDL_CreateRenderer(window, index, flags);
+	std::cout << "Constructeur du renderer appelé\n";
+	this->renderer = SDL_CreateRenderer(window.Get(), index, flags);
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 }
 
@@ -19,14 +23,14 @@ SDL_Renderer* Renderer::Get() const
 	return this->renderer;
 }
 
-void Renderer::copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect)
+void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect)
 {
-	SDL_RenderCopy(this->renderer, texture, srcrect, dstrect);
+	SDL_RenderCopy(this->renderer, texture.Get(), srcrect, dstrect);
 }
 
-void Renderer::copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip)
+void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip)
 {
-	SDL_RenderCopyEx(this->renderer, texture, srcrect, dstrect, angle, center, flip);
+	SDL_RenderCopyEx(this->renderer, texture.Get(), srcrect, dstrect, angle, center, flip);
 }
 
 void Renderer::clear()

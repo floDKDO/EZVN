@@ -4,8 +4,6 @@
 #include <chrono>
 #include <thread>
 
-#include "checkable.h"
-
 void chk_SDL(const int return_value, const char* error_string)
 {
 	if(return_value < 0)
@@ -24,6 +22,8 @@ void nchk_SDL(const void* return_value, const char* error_string)
 	}
 }
 
+//TODO : utiliser les types encapsulés dans RAII_SDL2 ??
+
 //TODO : stocker un sdl::Renderer* en membre des classes à la place de SDL_Renderer* ??
 
 // TODO : gérer les erreurs des fonctions SDL. 
@@ -40,7 +40,19 @@ void nchk_SDL(const void* return_value, const char* error_string)
 
 //TODO : lambdas à la place des std::bind ??
 
-//TODO : possibilité de juste mettre une couleur un peu plus clair pour représenter un Ui dans l'état SELECETD
+//TODO : possibilité de juste mettre une couleur un peu plus clair pour représenter un Ui dans l'état SELECTED
+
+//TODO : ordre des membres dans les classes par rapport aux constructeurs
+
+//TODO : ordre des membres dans les classes selon l'ordre voulu des appels des destructeurs
+
+//TODO : saut de ligne dans la liste d'initialisation des membres dans les constructeurs
+
+//TODO : retirer les includes inutiles
+
+//TODO : ne créer qu'une seule font ??
+
+//TODO : mettre en private les méthodes qui doivent l'être
 
 int main(int argc, char* argv[])
 {

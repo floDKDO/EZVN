@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Image::Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder)
+Image::Image(const std::string path, const int x, const int y, sdl::Renderer& renderer, const int zorder)
 	: zorder(zorder), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path), last_time(0)
 {
 	if(this->path.find("img/characters/") != std::string::npos)
@@ -28,7 +28,7 @@ Image::Image(const std::string path, const int x, const int y, SDL_Renderer* ren
 		{
 			this->is_gif = true;
 			this->gif = std::make_unique<sdl::Animation>(path);
-			this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
+			this->texture = std::make_unique<sdl::Texture>(renderer, *gif->Get()->frames[this->frame_index]);
 		}
 		else
 		{
@@ -111,9 +111,9 @@ void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 	this->texture->set_color_mod(this->r, this->g, this->b);
 }
 
-void Image::draw(SDL_Renderer* renderer)
+void Image::draw(sdl::Renderer& renderer)
 {
-	SDL_RenderCopyEx(renderer, this->texture->Get(), nullptr, &(this->position), this->angle, nullptr, this->flip);
+	SDL_RenderCopyEx(renderer.Get(), this->texture->Get(), nullptr, &(this->position), this->angle, nullptr, this->flip);
 	if(is_gif)
 	{
 		if(this->frame_index < this->gif->Get()->count - 1)

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "gamestate.h"
-#include "button.h"
-#include "slider.h"
-#include "checkboxgroup.h"
-#include "texttogglegroup.h"
+#include "GUI/button.h"
+#include "GUI/slider.h"
+#include "GUI/checkboxgroup.h"
+#include "GUI/texttogglegroup.h"
 
 #include <vector>
 #include <memory>
@@ -25,13 +25,14 @@ class Menu : public GameState
 		void assign_ui_on_moving();
 		bool is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode);
 		void handle_events(const SDL_Event& e);
-		void draw(SDL_Renderer* renderer);
+		void draw(sdl::Renderer& renderer);
 		void update(Uint64 time_step);
 
 		Ui* previous_selected;
 		Ui* current_selected;
 
 		std::vector<std::unique_ptr<Ui>> ui;
+		std::vector<Ui*> navigation_list;
 
 	protected:
 

@@ -1,24 +1,21 @@
 #include "RAII_SDL2/texture.h"
+#include "RAII_SDL2/renderer.h"
 #include <iostream>
 
 namespace sdl
 {
 
-Texture::Texture(SDL_Renderer* renderer, SDL_Surface* surface) //SDL_CreateTextureFromSurface()
+Texture::Texture(sdl::Renderer& renderer, sdl::Surface& surface) //SDL_CreateTextureFromSurface()
 {
-	if(renderer == nullptr)
-	{
-		std::cout << "RENDERER null...\n";
-	}
-	this->texture = SDL_CreateTextureFromSurface(renderer, surface);
+	this->texture = SDL_CreateTextureFromSurface(renderer.Get(), surface.Get());
 }
 
-Texture::Texture(SDL_Renderer* renderer, const std::string file) //IMG_LoadTexture()
+Texture::Texture(sdl::Renderer& renderer, const std::string file) //IMG_LoadTexture()
 {
-	this->texture = IMG_LoadTexture(renderer, file.c_str());
+	this->texture = IMG_LoadTexture(renderer.Get(), file.c_str());
 	if(this->texture == nullptr) //TODO: gérer le cas pour les backgrounds
 	{
-		this->texture = IMG_LoadTexture(renderer, "img/characters/image_not_found.png");
+		this->texture = IMG_LoadTexture(renderer.Get(), "img/characters/image_not_found.png");
 	}
 }
 

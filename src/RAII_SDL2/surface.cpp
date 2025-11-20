@@ -3,9 +3,9 @@
 namespace sdl
 {
 
-Surface::Surface(TTF_Font* font, const std::string text, SDL_Color fg, Uint32 wrapLength)
+Surface::Surface(sdl::Font& font, const std::string text, SDL_Color fg, Uint32 wrapLength)
 {
-	this->surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), fg, wrapLength);
+	this->surface = TTF_RenderUTF8_Blended_Wrapped(font.Get(), text.c_str(), fg, wrapLength);
 }
 
 Surface::~Surface() //SDL_FreeSurface

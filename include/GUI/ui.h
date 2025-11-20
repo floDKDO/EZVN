@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sound.h"
+#include "RAII_SDL2/renderer.h"
 
 #include <SDL2/SDL.h>
 #include <functional>
@@ -16,7 +17,7 @@ enum class State
 class Ui
 {
 	public:
-		virtual ~Ui(); //TODO : mettre = default et retirer l'implémentation ??
+		virtual ~Ui() = default;
 
 		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)
 		virtual void on_pointer_up_hook_end() {}
@@ -72,7 +73,7 @@ class Ui
 		virtual void handle_events(const SDL_Event& e);
 		virtual void handle_events_hook_end(const SDL_Event& e) {}
 
-		virtual void draw(SDL_Renderer* renderer) = 0;
+		virtual void draw(sdl::Renderer& renderer) = 0;
 		virtual void update(Uint64 time_step) = 0;
 
 		void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
@@ -94,14 +95,14 @@ class Ui
 		static bool lock; 
 
 	protected:
-		Ui(); 
+		Ui(sdl::Renderer& renderer);
 
 		//TODO : stocker en "variables globales" select_sound, click_sound et une police par défaut ?
 		Sound select_sound;
 		Sound click_sound;
 		bool is_selected_sound_played;
 		bool pointer_on_ui_when_pointer_up; 
-		SDL_Renderer* renderer; //do not own it !!
+		sdl::Renderer& renderer; //do not own it !!
 
 		std::function<void(Ui* ui)> callback_function;
 

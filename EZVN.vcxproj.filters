@@ -27,28 +27,28 @@
     <ClCompile Include="src\music.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\button.cpp">
+    <ClCompile Include="src\GUI\button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\checkbox.cpp">
+    <ClCompile Include="src\GUI\checkbox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\inputfield.cpp">
+    <ClCompile Include="src\GUI\inputfield.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ui.cpp">
+    <ClCompile Include="src\GUI\ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\textbutton.cpp">
+    <ClCompile Include="src\GUI\textbutton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\texttoggle.cpp">
+    <ClCompile Include="src\GUI\texttoggle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game.cpp">
@@ -57,7 +57,7 @@
     <ClCompile Include="src\gamestate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\slider.cpp">
+    <ClCompile Include="src\GUI\slider.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\textbox.cpp">
@@ -111,16 +111,16 @@
     <ClCompile Include="src\RAII_SDL2\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\checkboxgroup.cpp">
+    <ClCompile Include="src\GUI\checkboxgroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\texttogglegroup.cpp">
+    <ClCompile Include="src\GUI\texttogglegroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\checkablegroup.cpp">
+    <ClCompile Include="src\GUI\checkablegroup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\checkable.cpp">
+    <ClCompile Include="src\GUI\checkable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,28 +134,28 @@
     <ClInclude Include="include\music.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\button.h">
+    <ClInclude Include="include\GUI\button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\checkbox.h">
+    <ClInclude Include="include\GUI\checkbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\inputfield.h">
+    <ClInclude Include="include\GUI\inputfield.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ui.h">
+    <ClInclude Include="include\GUI\ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\textbutton.h">
+    <ClInclude Include="include\GUI\textbutton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\texttoggle.h">
+    <ClInclude Include="include\GUI\texttoggle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\game.h">
@@ -164,7 +164,7 @@
     <ClInclude Include="include\gamestate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\slider.h">
+    <ClInclude Include="include\GUI\slider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\textbox.h">
@@ -218,16 +218,16 @@
     <ClInclude Include="include\RAII_SDL2\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\checkboxgroup.h">
+    <ClInclude Include="include\GUI\checkboxgroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\texttogglegroup.h">
+    <ClInclude Include="include\GUI\texttogglegroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\checkablegroup.h">
+    <ClInclude Include="include\GUI\checkablegroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\checkable.h">
+    <ClInclude Include="include\GUI\checkable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,13 +2,14 @@
 
 #include "RAII_SDL2/texture.h"
 #include "RAII_SDL2/animation.h"
+#include "RAII_SDL2/renderer.h"
 
 #include <memory>
 
 class Image
 {
 	public:
-		Image(const std::string path, const int x, const int y, SDL_Renderer* renderer, const int zorder=0);
+		Image(const std::string path, const int x, const int y, sdl::Renderer& renderer, const int zorder=0);
 
 		enum class ImageType
 		{
@@ -19,7 +20,7 @@ class Image
 			TEXTBOX, 
 			TEXTBUTTON, //TODO : utile ?
 			TEXTTOGGLE, //TODO : utile ?
-			TOGGLE,
+			CHECKBOX,
 			GUI,
 			CHARACTER,
 			BACKGROUND
@@ -41,7 +42,7 @@ class Image
 		void afternoon_filter();
 		void own_filter(const Uint8 r, const Uint8 g, const Uint8 b);
 
-		void draw(SDL_Renderer* renderer);
+		void draw(sdl::Renderer& renderer);
 
 		int zorder;
 		SDL_Rect position;
@@ -66,5 +67,5 @@ class Image
 		std::unique_ptr<sdl::Animation> gif;
 
 		std::unique_ptr<sdl::Texture> texture; 
-		SDL_Renderer* renderer; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
+		sdl::Renderer& renderer; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
 };

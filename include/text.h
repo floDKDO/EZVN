@@ -3,13 +3,15 @@
 #include "RAII_SDL2/surface.h"
 #include "RAII_SDL2/texture.h"
 #include "RAII_SDL2/font.h"
+#include "RAII_SDL2/renderer.h"
+
 
 #include <memory>
 
 class Text
 {
 	public:
-		Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, SDL_Renderer* renderer, Uint32 wrap_length=0);
+		Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length=0);
 
 		void show();
 		void hide();
@@ -27,7 +29,7 @@ class Text
 
 		int get_width_one_char(char c);
 		int get_width_text();
-		void draw(SDL_Renderer* renderer);
+		void draw(sdl::Renderer& renderer);
 		void update(Uint64 time_step);
 
 		std::string text;
@@ -35,7 +37,7 @@ class Text
 		int font_size;
 		int font_style;
 		SDL_Rect position;
-		SDL_Renderer* renderer; //solution temporaire
+		sdl::Renderer& renderer; //solution temporaire
 		Uint32 wrap_length;
 
 		bool is_dialogue;

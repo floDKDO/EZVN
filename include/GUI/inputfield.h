@@ -1,13 +1,13 @@
 #pragma once
 
-#include "ui.h"
+#include "GUI/ui.h"
 #include "text.h"
 #include "image.h"
 
 class Inputfield : public Ui
 {
 	public:
-		Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function);
+		Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void on_pointer_up_hook_end() override;
 
@@ -19,7 +19,7 @@ class Inputfield : public Ui
 		void on_input_pressed_hook_end(const SDL_Event& e) override;
 		void on_input_released_hook_end(const SDL_Event& e) override;
 		void handle_events_hook_end(const SDL_Event& e) override;
-		void draw(SDL_Renderer* renderer) override;
+		void draw(sdl::Renderer& renderer) override;
 		void update(Uint64 time_step) override;
 		SDL_Rect get_rect() const override;
 

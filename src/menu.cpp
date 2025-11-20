@@ -5,6 +5,12 @@
 Menu::Menu(std::vector<std::unique_ptr<Ui>> ui, Ui* ui_selected)
 	: ui(std::move(ui)), previous_selected(nullptr), current_selected(ui_selected)
 {
+	for(std::unique_ptr<Ui> const& ui : this->ui)
+	{
+		std::vector<Ui*> nodes = ui->get_navigation_nodes();
+		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
+	}
+
 	assign_ui_on_moving();
 	ui_selected->state = State::SELECTED;
 }
@@ -76,12 +82,12 @@ void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mo
 
 void Menu::assign_ui_on_moving()
 {
-	std::vector<Ui*> navigation_list;
+	/*std::vector<Ui*> navigation_list;
 	for(std::unique_ptr<Ui> const& ui : this->ui)
 	{
 		std::vector<Ui*> nodes = ui->get_navigation_nodes();
 		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
-	}
+	}*/
 
 	for(Ui* ui : navigation_list)
 	{
@@ -158,12 +164,12 @@ void Menu::handle_events(const SDL_Event& e)
 
 void Menu::handle_events(const SDL_Event& e)
 {
-	std::vector<Ui*> navigation_list;
+	/*std::vector<Ui*> navigation_list;
 	for(std::unique_ptr<Ui> const& ui : this->ui)
 	{
 		std::vector<Ui*> nodes = ui->get_navigation_nodes();
 		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
-	}
+	}*/
 
 	for(Ui* ui : navigation_list)
 	{
@@ -188,7 +194,7 @@ void Menu::handle_events(const SDL_Event& e)
 	}
 }
 
-void Menu::draw(SDL_Renderer* renderer)
+void Menu::draw(sdl::Renderer& renderer)
 {
 	for(std::unique_ptr<Ui> const& ui : this->ui)
 	{

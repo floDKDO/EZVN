@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui.h"
+#include "GUI/ui.h"
 
 class Checkable : public Ui
 {
@@ -8,7 +8,8 @@ class Checkable : public Ui
 
 	public:
 		virtual ~Checkable() = default;
-		virtual void set_checked();
+		virtual void reverse_checked();
+		virtual void change_checked(bool is_checked);
 
 		virtual void on_pointer_up();
 		virtual void on_pointer_up_hook_end();
@@ -21,7 +22,7 @@ class Checkable : public Ui
 		CheckableGroup* checkable_group = nullptr;
 
 	protected:
-		Checkable(bool is_checked);
+		Checkable(bool is_checked, sdl::Renderer& renderer);
 
 	private:
 

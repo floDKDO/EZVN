@@ -1,5 +1,7 @@
 #include "RAII_SDL2/font.h"
 
+#include <iostream>
+
 namespace sdl
 {
 

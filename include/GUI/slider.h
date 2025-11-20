@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui.h"
+#include "GUI/ui.h"
 #include "image.h"
 #include "text.h"
 
@@ -9,7 +9,7 @@
 class Slider : public Ui
 {
 	public:
-		Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function);
+		Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		bool is_mouse_on_handle(int mouse_x, int mouse_y);
 		void handle_movement();
@@ -25,7 +25,7 @@ class Slider : public Ui
 		void on_right_pressed() override;
 		void on_enter_pressed_hook_end() override;
 
-		void draw(SDL_Renderer* renderer) override;
+		void draw(sdl::Renderer& renderer) override;
 		void update(Uint64 time_step) override;
 		void handle_events_hook_end(const SDL_Event& e) override;
 		SDL_Rect get_rect() const override;

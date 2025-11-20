@@ -1,50 +1,26 @@
 #include "game.h"
-#include "checkbox.h"
 
 #include <iostream>
 
-//TODO : ne pas utiliser new mais des smart pointers
+//TODO : regarder les .get()
+//TODO : garder les vectors de C-pointeurs ??
 
 Game::Game()
-	: sdl(SDL_INIT_EVERYTHING), sdl_img(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer(MIX_INIT_OGG | MIX_INIT_MP3),
-	main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr), 
+	: sdl(SDL_INIT_EVERYTHING), sdl_img(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf(),
 	window("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
-	renderer(this->window.Get(), -1, SDL_RENDERER_PRESENTVSYNC), game_controller()
+	renderer(this->window, -1, SDL_RENDERER_PRESENTVSYNC),
+	game_controller(),
+	main_menu(nullptr), settings_menu(nullptr), load_menu(nullptr), save_menu(nullptr)
 {
 	this->renderer.set_logical_size(WINDOW_WIDTH, WINDOW_HEIGHT);
 	this->renderer.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
 
-	this->textbox = new Textbox({255, 255, 255, 255}, this->renderer.Get());
+	this->textbox = std::make_unique<Textbox>(SDL_Color{255, 255, 255, 255}, this->renderer);
 	this->textbox->text.text = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
 	this->create_main_menu();
 	this->create_settings_menu();
-	this->push_state(this->main_menu);
-}
-
-Game::~Game()
-{
-	if(this->main_menu)
-	{
-		delete this->main_menu;
-	}
-
-	if(this->settings_menu)
-	{
-		delete this->settings_menu;
-	}
-
-	if(this->load_menu)
-	{
-		delete this->load_menu;
-	}
-	
-	if(this->save_menu)
-	{
-		delete this->save_menu;
-	}
-
-	delete this->textbox;
+	this->push_state(this->main_menu.get());
 }
 
 void Game::create_main_menu()
@@ -52,11 +28,11 @@ void Game::create_main_menu()
 	std::vector<std::unique_ptr<Ui>> ui;
 	ui.reserve(10);
 
-	ui.push_back(std::make_unique<TextButton>(std::string("Play"), SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer.Get(), std::bind(&Game::play_function, this, std::placeholders::_1)));
-	ui.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer.Get(), std::bind(&Game::settings_function, this, std::placeholders::_1)));
-	ui.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer.Get(), std::bind(&Game::quit_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<TextButton>(std::string("Play"), SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer, std::bind(&Game::play_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer, std::bind(&Game::settings_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
-	this->main_menu = new Menu(std::move(ui), ui[0].get());
+	this->main_menu = std::make_unique<Menu>(std::move(ui), ui[0].get());
 }
 
 void Game::create_settings_menu()
@@ -66,12 +42,12 @@ void Game::create_settings_menu()
 	std::vector<std::unique_ptr<Ui>> ui;
 	ui.reserve(10);
 
-	ui.push_back(std::make_unique<TextButton>("Return", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 200, 500, renderer.Get(), std::bind(&Game::previous_menu_function, this, std::placeholders::_1)));
-	ui.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer.Get(), std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
-	ui.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer.Get(), std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
-	ui.push_back(std::make_unique<CheckboxGroup>(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 50, 100, true, renderer.Get(), std::vector<std::function<void(Ui * ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
+	ui.push_back(std::make_unique<TextButton>("Return", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 200, 500, renderer, std::bind(&Game::previous_menu_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer, std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer, std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
+	ui.push_back(std::make_unique<CheckboxGroup>(2, "Display", "img/gui/button_normal.png", "img/gui/button_selected.png", "img/gui/button_clicked.png", "img/gui/checked.png", 50, 100, true, renderer, std::vector<std::function<void(Ui * ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 
-	this->settings_menu = new Menu(std::move(ui), ui[0].get());
+	this->settings_menu = std::make_unique<Menu>(std::move(ui), ui[0].get());
 }
 
 void Game::play_function(Ui* ui)
@@ -85,7 +61,7 @@ void Game::settings_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Settings!" << std::endl;
-	this->push_state(this->settings_menu);
+	this->push_state(this->settings_menu.get());
 }
 
 void Game::quit_function(Ui* ui)
@@ -100,6 +76,7 @@ void Game::previous_menu_function(Ui* ui)
 	(void)ui;
 	std::cout << "Clicked go back to previous menu!" << std::endl;
 	this->pop_state();
+	std::cout << "[0] -> is_checked: " << std::boolalpha << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[0]->is_checked << ", previous_checked: " << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[0]->previous_checked << "[1] -> is_checked: " << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[1]->is_checked << ", previous_checked: " << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[1]->previous_checked << std::endl;
 }
 
 void Game::slider_sound_function(Ui* ui)
@@ -126,8 +103,8 @@ void Game::texttoggle_full_screen_function(Ui* ui)
 		this->window.set_full_screen();
 	}*/
 
-	Checkbox* toggle_full_screen = dynamic_cast<Checkbox*>(ui);
-	if(!toggle_full_screen->is_checked)
+	Checkbox* checkbox_full_screen = dynamic_cast<Checkbox*>(ui);
+	if(!checkbox_full_screen->is_checked)
 	{
 		this->window.set_full_screen();
 	}
@@ -144,8 +121,8 @@ void Game::texttoggle_windowed_function(Ui* ui)
 		this->window.set_windowed();
 	}*/
 
-	Checkbox* toggle_windowed = dynamic_cast<Checkbox*>(ui);
-	if(!toggle_windowed->is_checked)
+	Checkbox* checkbox_windowed = dynamic_cast<Checkbox*>(ui);
+	if(!checkbox_windowed->is_checked)
 	{
 		this->window.set_windowed();
 	}
@@ -171,9 +148,6 @@ GameState* Game::get_state()
 void Game::handle_events()
 {
 	SDL_Event e;
-
-	int w, h; //TODO : temp
-
 	while(SDL_PollEvent(&e))
 	{
 		switch(e.type)
@@ -182,16 +156,6 @@ void Game::handle_events()
 				if(e.window.event == SDL_WINDOWEVENT_CLOSE)
 				{
 					game_running = false;
-				}
-				else if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-				{
-					//TODO
-					/*std::cout << "RESIZED! " << e.window.data1 << " et " << e.window.data2 << std::endl;
-					SDL_GetWindowSize(this->window.Get(), &w, &h);
-					std::cout << "W : " << w << " et H : " << h << std::endl;
-					SDL_RenderSetLogicalSize(this->renderer.Get(), e.window.data1, e.window.data2);
-					SDL_RenderGetLogicalSize(this->renderer.Get(), &w, &h);
-					std::cout << "W : " << w << " et H : " << h << std::endl;*/
 				}
 				break;
 
@@ -232,8 +196,8 @@ void Game::handle_events()
 void Game::draw()
 {
 	this->renderer.clear();
-	this->get_state()->draw(renderer.Get());
-	this->textbox->draw(renderer.Get());
+	this->get_state()->draw(renderer);
+	this->textbox->draw(renderer);
 	this->renderer.present();
 }
 

@@ -1,14 +1,14 @@
-#include "slider.h"
+#include "GUI/slider.h"
 
 #include <iostream>
 
-Slider::Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
-	: bar(path_bar, x, y, renderer), handle(path_handle, x, y - 5, renderer), min_value(min_value), max_value(max_value), current_value(max_value/2), is_dragged(false), is_selected(false), diff(0),
+Slider::Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+	: Ui(renderer), bar(path_bar, x, y, renderer), handle(path_handle, x, y - 5, renderer), min_value(min_value), max_value(max_value), current_value(max_value/2), is_dragged(false), is_selected(false), diff(0),
 	text(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar.position.h*3, renderer) //TODO : pas de couleur fixée...
 {
 	this->callback_function = callback_function;
 	this->pointer_on_ui_when_pointer_up = false;
-	this->renderer = renderer;
+	//this->renderer = renderer;
 
 	this->handle.position.x += (float(current_value - min_value) / float(max_value - min_value)) * (this->bar.position.w - this->handle.position.w);
 }
@@ -18,7 +18,7 @@ Slider::Slider(const std::string path_bar, const std::string path_handle, unsign
 bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y)
 {
 	float logical_x, logical_y;
-	SDL_RenderWindowToLogical(this->renderer, mouse_x, mouse_y, &logical_x, &logical_y);
+	SDL_RenderWindowToLogical(this->renderer.Get(), mouse_x, mouse_y, &logical_x, &logical_y);
 
 	return (this->handle.position.y + this->handle.position.h > logical_y
 		 && this->handle.position.y < logical_y
@@ -153,7 +153,7 @@ void Slider::on_enter_pressed_hook_end()
 	this->is_selected = !this->is_selected;
 }
 
-void Slider::draw(SDL_Renderer* renderer)
+void Slider::draw(sdl::Renderer& renderer)
 {
 	this->bar.draw(renderer);
 	this->handle.draw(renderer);

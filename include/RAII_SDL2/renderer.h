@@ -2,6 +2,10 @@
 
 #include <SDL2/SDL.h>
 
+#include "RAII_SDL2/window.h"
+
+class Texture;
+
 namespace sdl
 {
 	 class Renderer;
@@ -10,15 +14,15 @@ namespace sdl
 class sdl::Renderer
 {
 	public:
-		Renderer(SDL_Window* window, int index, Uint32 flags); //SDL_CreateRenderer()
+		Renderer(Window& window, int index, Uint32 flags); //SDL_CreateRenderer()
 		Renderer(const Renderer& renderer) = delete;
 		Renderer& operator=(const Renderer& renderer) = delete;
 		~Renderer(); //SDL_DestroyRenderer
 
 		SDL_Renderer* Get() const;
 
-		void copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect);
-		void copy(SDL_Texture* texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip);
+		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect);
+		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip);
 		void clear();
 		void present();
 		void set_logical_size(int w, int h);

@@ -1,18 +1,18 @@
-#include "texttoggle.h"
-#include "texttogglegroup.h"
+#include "GUI/texttoggle.h"
+#include "GUI/texttogglegroup.h"
 
 #include <iostream>
 
-TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, SDL_Renderer* renderer, std::function<void(Ui* ui)> callback_function)
-	: Checkable(is_checked), text(text, color_unchecked, "fonts/Aller_Rg.ttf", 50, x, y, renderer),
+TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+	: Checkable(is_checked, renderer), text(text, color_unchecked, "fonts/Aller_Rg.ttf", 50, x, y, renderer),
 	  color_unchecked(color_unchecked), color_selected(color_selected), color_checked(color_checked)
 {
 	this->callback_function = callback_function;
 	this->pointer_on_ui_when_pointer_up = true;
-	this->renderer = renderer;
+	//this->renderer = renderer;
 }
 
-void TextToggle::draw(SDL_Renderer* renderer)
+void TextToggle::draw(sdl::Renderer& renderer)
 {
 	this->text.draw(renderer);
 }
