@@ -20,6 +20,6 @@ class Font
 	protected:
 
 	private:
-	TTF_Font* font;
+	TTF_Font* font_;
 };
 }

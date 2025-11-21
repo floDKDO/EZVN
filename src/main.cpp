@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 	Uint64 end_current_frame = 0;
 	unsigned int frame_count = 0;
 
-	while(game.game_running)
+	while(game.game_running_)
 	{
 		begin_current_frame = SDL_GetTicks64();
 		frame_count += 1;
@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 		if(SDL_GetTicks64() - second >= 1000)
 		{
 			std::string window_title = "EZVN, FPS: " + std::to_string(frame_count);
-			game.window.set_title(window_title);
+			game.window_.set_title(window_title);
 			second = SDL_GetTicks64();
 			frame_count = 0;
 		}

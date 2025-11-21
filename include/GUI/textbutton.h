@@ -15,12 +15,12 @@ class TextButton : public Ui
 	protected:
 
 	private:
-		Text text;
+		Text text_;
 
-		SDL_Color color_normal;
-		SDL_Color color_selected;
-		SDL_Color color_clicked;
+		SDL_Color color_normal_;
+		SDL_Color color_selected_;
+		SDL_Color color_clicked_;
 
-		static const unsigned int INDEX_RECT_TEXTBUTTON = 0;
+		static const unsigned int INDEX_RECT_TEXTBUTTON_ = 0;
 };
 

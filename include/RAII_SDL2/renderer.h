@@ -29,6 +29,6 @@ class Renderer
 	protected:
 
 	private:
-	SDL_Renderer* renderer;
+	SDL_Renderer* renderer_;
 };
 }

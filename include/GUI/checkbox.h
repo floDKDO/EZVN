@@ -19,10 +19,10 @@ class Checkbox : public Checkable
 	protected:
 
 	private:
-		Image normal;
-		Image selected;
-		Image clicked;
-		Image checked; //TODO : renommer ??*/
+		Image normal_;
+		Image selected_;
+		Image clicked_;
+		Image checked_; //TODO : renommer ??*/
 
 		static const unsigned int INDEX_RECT_CHECKBOX = 0;
 };

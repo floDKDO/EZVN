@@ -15,9 +15,9 @@ class Button : public Ui
 	protected:
 
 	private:
-		Image normal;
-		Image selected;
-		Image clicked;
+		Image normal_;
+		Image selected_;
+		Image clicked_;
 
 		static const unsigned int INDEX_RECT_BUTTON = 0;
 };

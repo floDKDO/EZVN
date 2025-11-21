@@ -24,6 +24,6 @@ class Chunk
 	protected:
 
 	private:
-	Mix_Chunk* chunk;
+	Mix_Chunk* chunk_;
 };
 }

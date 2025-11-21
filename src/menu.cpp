@@ -2,17 +2,17 @@
 
 #include <iostream>
 
-Menu::Menu(std::vector<std::unique_ptr<Ui>> ui, Ui* ui_selected)
-	: ui(std::move(ui)), previous_selected(nullptr), current_selected(ui_selected)
+Menu::Menu(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected)
+	: ui_elements_(std::move(ui_elements)), previous_selected_(nullptr), current_selected_(ui_selected)
 {
-	for(std::unique_ptr<Ui> const& ui : this->ui)
+	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
-		std::vector<Ui*> nodes = ui->get_navigation_nodes();
-		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
+		std::vector<Ui*> nodes = ui_element->get_navigation_nodes();
+		navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
 	}
 
 	assign_ui_on_moving();
-	ui_selected->state = State::SELECTED;
+	ui_selected->state_ = State::SELECTED;
 }
 
 bool Menu::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode)
@@ -83,20 +83,20 @@ void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mo
 void Menu::assign_ui_on_moving()
 {
 	/*std::vector<Ui*> navigation_list;
-	for(std::unique_ptr<Ui> const& ui : this->ui)
+	for(std::unique_ptr<Ui> const& ui : ui_)
 	{
 		std::vector<Ui*> nodes = ui->get_navigation_nodes();
 		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
 	}*/
 
-	for(Ui* ui : navigation_list)
+	for(Ui* ui : navigation_list_)
 	{
 		Ui* current_best_up = nullptr;
 		Ui* current_best_down = nullptr;
 		Ui* current_best_left = nullptr;
 		Ui* current_best_right = nullptr;
 
-		for(Ui* candidate : navigation_list)
+		for(Ui* candidate : navigation_list_)
 		{
 			if(candidate == ui) { continue; }
 
@@ -120,10 +120,10 @@ void Menu::assign_ui_on_moving()
 				get_ui_facing(ui, candidate, current_best_right, Axis::Y_AXIS);
 			}
 		}
-		ui->select_on_up = current_best_up;
-		ui->select_on_down = current_best_down;
-		ui->select_on_left = current_best_left;
-		ui->select_on_right = current_best_right;
+		ui->select_on_up_ = current_best_up;
+		ui->select_on_down_ = current_best_down;
+		ui->select_on_left_ = current_best_left;
+		ui->select_on_right_ = current_best_right;
 	}
 }
 
@@ -131,7 +131,7 @@ void Menu::assign_ui_on_moving()
 /*
 void Menu::handle_events(const SDL_Event& e)
 {
-	for(std::unique_ptr<Ui>& ui : this->ui)
+	for(std::unique_ptr<Ui>& ui : ui_)
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
@@ -144,7 +144,7 @@ void Menu::handle_events(const SDL_Event& e)
 					//ui = std::make_unique<CheckableGroup>(checkablegroup->toggles[ui->is_mouse_on_ui()]);
 				}
 
-				if(this->previous_selected != nullptr && ui.get() != this->previous_selected && this->previous_selected->state != State::NORMAL) 
+				if(previous_selected != nullptr && ui.get() != previous_selected && previous_selected->state != State::NORMAL) 
 				{
 					previous_selected->state = State::NORMAL; 
 					if(dynamic_cast<Slider*>(previous_selected) != nullptr)
@@ -153,8 +153,8 @@ void Menu::handle_events(const SDL_Event& e)
 						dynamic_cast<Slider*>(previous_selected)->is_dragged = false;
 					}
 				}
-				this->previous_selected = this->current_selected;
-				this->current_selected = ui.get();
+				previous_selected = current_selected;
+				current_selected = ui.get();
 			}
 		}
 		ui->handle_events(e);
@@ -165,29 +165,29 @@ void Menu::handle_events(const SDL_Event& e)
 void Menu::handle_events(const SDL_Event& e)
 {
 	/*std::vector<Ui*> navigation_list;
-	for(std::unique_ptr<Ui> const& ui : this->ui)
+	for(std::unique_ptr<Ui> const& ui : ui_)
 	{
 		std::vector<Ui*> nodes = ui->get_navigation_nodes();
 		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
 	}*/
 
-	for(Ui* ui : navigation_list)
+	for(Ui* ui : navigation_list_)
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
 			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI)
 			{
-				if(this->previous_selected != nullptr && ui != this->previous_selected && this->previous_selected->state != State::NORMAL)
+				if(previous_selected_ != nullptr && ui != previous_selected_ && previous_selected_->state_ != State::NORMAL)
 				{
-					previous_selected->state = State::NORMAL;
-					if(dynamic_cast<Slider*>(previous_selected) != nullptr)
+					previous_selected_->state_ = State::NORMAL;
+					if(dynamic_cast<Slider*>(previous_selected_) != nullptr)
 					{
-						dynamic_cast<Slider*>(previous_selected)->is_selected = false;
-						dynamic_cast<Slider*>(previous_selected)->is_dragged = false;
+						dynamic_cast<Slider*>(previous_selected_)->is_selected_ = false;
+						dynamic_cast<Slider*>(previous_selected_)->is_dragged_ = false;
 					}
 				}
-				this->previous_selected = this->current_selected;
-				this->current_selected = ui;
+				previous_selected_ = current_selected_;
+				current_selected_ = ui;
 			}
 		}
 		ui->handle_events(e);
@@ -196,21 +196,21 @@ void Menu::handle_events(const SDL_Event& e)
 
 void Menu::draw(sdl::Renderer& renderer)
 {
-	for(std::unique_ptr<Ui> const& ui : this->ui)
+	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
-		ui->draw(renderer);
+		ui_element->draw(renderer);
 	}
 }
 
 void Menu::update(Uint64 time_step)
 {
-	for(std::unique_ptr<Ui> const& ui : this->ui)
+	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
-		ui->update(time_step);
-		if(ui->state == State::SELECTED)
+		ui_element->update(time_step);
+		if(ui_element->state_ == State::SELECTED)
 		{
-			this->previous_selected = this->current_selected;
-			this->current_selected = ui.get();
+			previous_selected_ = current_selected_;
+			current_selected_ = ui_element.get();
 		}
 	}
 }

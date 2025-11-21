@@ -32,37 +32,37 @@ class Text
 		void draw(sdl::Renderer& renderer);
 		void update(Uint64 time_step);
 
-		std::string text;
-		SDL_Color color;
-		int font_size;
-		int font_style;
-		SDL_Rect position;
-		sdl::Renderer& renderer; //solution temporaire
-		Uint32 wrap_length;
+		std::string text_;
+		SDL_Color color_;
+		int font_size_;
+		int font_style_;
+		SDL_Rect position_;
+		sdl::Renderer& renderer_; //solution temporaire
+		Uint32 wrap_length_;
 
-		bool is_dialogue;
-		std::string text_dialogue;
-		int index_dialogue;
+		bool is_dialogue_;
+		std::string text_dialogue_;
+		int index_dialogue_;
 
 		//TODO : faire un réglage "opaque" comme Text Speed dans Options de Ren'Py ??
-		int text_speed; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
+		int text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
 
-		bool is_finished;
+		bool is_finished_;
 
-		std::string previous_text;
-		int previous_font_style;
+		std::string previous_text_;
+		int previous_font_style_;
 
-		std::string font_path;
+		std::string font_path_;
 
-		Uint64 last_time; //TODO : trouver un meilleur nom
+		Uint64 last_time_; //TODO : trouver un meilleur nom
 
 	protected:
 
 	private:
 		void create_surface_texture();
 
-		std::unique_ptr<sdl::Surface> surface;
-		std::unique_ptr<sdl::Texture> texture;
-		std::unique_ptr<sdl::Font> font;
+		std::unique_ptr<sdl::Surface> surface_;
+		std::unique_ptr<sdl::Texture> texture_;
+		std::unique_ptr<sdl::Font> font_;
 };
 

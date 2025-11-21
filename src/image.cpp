@@ -4,123 +4,123 @@
 #include <iostream>
 
 Image::Image(const std::string path, const int x, const int y, sdl::Renderer& renderer, const int zorder)
-	: zorder(zorder), alpha(255), angle(0), flip(SDL_FLIP_NONE), r(255), g(255), b(255), frame_index(0), renderer(renderer), path(path), last_time(0)
+	: zorder_(zorder), alpha_(255), angle_(0), flip_(SDL_FLIP_NONE), r_(255), g_(255), b_(255), frame_index_(0), renderer_(renderer), path_(path), last_time_(0)
 {
-	if(this->path.find("img/characters/") != std::string::npos)
+	if(path_.find("img/characters/") != std::string::npos)
 	{
-		this->image_type = ImageType::CHARACTER;
+		image_type_ = ImageType::CHARACTER;
 	}
-	else if(this->path.find("img/gui/") != std::string::npos)
+	else if(path_.find("img/gui/") != std::string::npos)
 	{
-		this->image_type = ImageType::GUI;
+		image_type_ = ImageType::GUI;
 	}
-	else if(this->path.find("img/backgrounds/") != std::string::npos) 
+	else if(path_.find("img/backgrounds/") != std::string::npos) 
 	{
-		this->image_type = ImageType::BACKGROUND;
+		image_type_ = ImageType::BACKGROUND;
 	}
-	else this->image_type = ImageType::NONE;
+	else image_type_ = ImageType::NONE;
 
-	if(this->image_type == ImageType::CHARACTER || this->image_type == ImageType::NONE)
+	if(image_type_ == ImageType::CHARACTER || image_type_ == ImageType::NONE)
 	{
 		sdl::RWops rwops(path, "rb"); 
 
 		if(rwops.Get() != nullptr && IMG_isGIF(rwops.Get())) 
 		{
-			this->is_gif = true;
-			this->gif = std::make_unique<sdl::Animation>(path);
-			this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
+			is_gif_ = true;
+			gif_ = std::make_unique<sdl::Animation>(path);
+			texture_ = std::make_unique<sdl::Texture>(renderer, gif_->Get()->frames[frame_index_]);
 		}
 		else
 		{
-			this->is_gif = false;
-			this->texture = std::make_unique<sdl::Texture>(renderer, path);
+			is_gif_ = false;
+			texture_ = std::make_unique<sdl::Texture>(renderer, path);
 		}
 	}
 	else
 	{
-		this->is_gif = false;
-		this->texture = std::make_unique<sdl::Texture>(renderer, path);
+		is_gif_ = false;
+		texture_ = std::make_unique<sdl::Texture>(renderer, path);
 	}
 
-	this->texture->set_blend_mode(SDL_BLENDMODE_BLEND);
+	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 
 	int w, h;
-	this->texture->query(nullptr, nullptr, &w, &h);
+	texture_->query(nullptr, nullptr, &w, &h);
 
-	this->position = {x, y, w, h};
+	position_ = {x, y, w, h};
 }
 
 void Image::show()
 {
-	this->alpha = 255;
-	this->texture->set_alpha_mod(this->alpha);
+	alpha_ = 255;
+	texture_->set_alpha_mod(alpha_);
 }
 
 void Image::hide()
 {
-	this->alpha = 0;
-	this->texture->set_alpha_mod(this->alpha);
+	alpha_ = 0;
+	texture_->set_alpha_mod(alpha_);
 }
 
 void Image::flip_vertically()
 {
-	this->flip = SDL_FLIP_VERTICAL;
+	flip_ = SDL_FLIP_VERTICAL;
 }
 
 void Image::flip_horizontally()
 {
-	this->flip = SDL_FLIP_HORIZONTAL;
+	flip_ = SDL_FLIP_HORIZONTAL;
 }
 
 void Image::flip_normal()
 {
-	this->flip = SDL_FLIP_NONE;
+	flip_ = SDL_FLIP_NONE;
 }
 
 void Image::resize(const int w, const int h)
 {
-	this->position = {position.x, position.y, w, h};
+	position_ = {position_.x, position_.y, w, h};
 }
 
 void Image::set_position(const int x, const int y)
 {
-	this->position = {x, y, position.w, position.h};
+	position_ = {x, y, position_.w, position_.h};
 }
 
 void Image::night_filter()
 {
-	this->r = 127;
-	this->g = 127;
-	this->b = 165;
-	this->texture->set_color_mod(this->r, this->g, this->b);
+	r_ = 127;
+	g_ = 127;
+	b_ = 165;
+	texture_->set_color_mod(r_, g_, b_);
 }
 
 void Image::afternoon_filter()
 {
-	this->r = 210;
-	this->g = 150;
-	this->b = 130;
-	this->texture->set_color_mod(this->r, this->g, this->b);
+	r_ = 210;
+	g_ = 150;
+	b_ = 130;
+	texture_->set_color_mod(r_, g_, b_);
 }
 
 void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 {
-	this->r = r;
-	this->g = g;
-	this->b = b;
-	this->texture->set_color_mod(this->r, this->g, this->b);
+	r_ = r;
+	g_ = g;
+	b_ = b;
+	texture_->set_color_mod(r_, g_, b_);
 }
 
 void Image::draw(sdl::Renderer& renderer)
 {
-	SDL_RenderCopyEx(renderer.Get(), this->texture->Get(), nullptr, &(this->position), this->angle, nullptr, this->flip);
-	if(is_gif)
+	SDL_RenderCopyEx(renderer.Get(), texture_->Get(), nullptr, &(position_), angle_, nullptr, flip_);
+	if(is_gif_)
 	{
-		if(this->frame_index < this->gif->Get()->count - 1)
+		if(frame_index_ < gif_->Get()->count - 1)
 		{
-			this->frame_index += 1;
+			frame_index_ += 1;
 		}
-		else this->frame_index = 0;
-		this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
+		else frame_index_ = 0;
+		texture_ = std::make_unique<sdl::Texture>(renderer, gif_->Get()->frames[frame_index_]);
 	}
 }

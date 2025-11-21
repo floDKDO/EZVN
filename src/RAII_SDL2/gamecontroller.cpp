@@ -5,17 +5,17 @@ namespace sdl
 
 GameController::GameController() //SDL_GameControllerOpen
 {
-	this->game_controller = SDL_GameControllerOpen(0);
+	game_controller_ = SDL_GameControllerOpen(0);
 }
 
 GameController::~GameController() //SDL_GameControllerClose
 {
-	SDL_GameControllerClose(this->game_controller);
+	SDL_GameControllerClose(game_controller_);
 }
 
 SDL_GameController* GameController::Get() const
 {
-	return this->game_controller;
+	return game_controller_;
 }
 
 }

@@ -3,34 +3,34 @@
 #include <iostream>
 
 Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), text("", color_normal, "fonts/Aller_Rg.ttf", 50, x+7, y, renderer),
-	  normal(path, x, y, renderer), color_normal(color_normal), 
-	  character_limit(character_limit),
-	  text_caret("|", color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
-	  text_placeholder("...", color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
-	  is_editing(false), is_writing(false), index_caret(0), offset_caret(0)
+	: Ui(renderer), text_("", color_normal, "fonts/Aller_Rg.ttf", 50, x+7, y, renderer),
+	  normal_(path, x, y, renderer), color_normal_(color_normal), 
+	  character_limit_(character_limit),
+	  text_caret_("|", color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
+	  text_placeholder_("...", color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
+	  is_editing_(false), is_writing_(false), index_caret_(0), offset_caret_(0)
 {
-	this->callback_function = callback_function;
-	SDL_SetTextInputRect(&(this->normal.position));
+	callback_function_ = callback_function;
+	SDL_SetTextInputRect(&(normal_.position_));
 
-	this->pointer_on_ui_when_pointer_up = true;
-	//this->renderer = renderer;
+	pointer_on_ui_when_pointer_up_ = true;
+	//renderer_ = renderer;
 }
 
 void Inputfield::on_pointer_up_hook_end()
 {
-	this->is_editing = !this->is_editing;
+	is_editing_ = !is_editing_;
 }
 
 void Inputfield::on_left_pressed()
 {
-	if(this->is_editing)
+	if(is_editing_)
 	{
-		if(this->index_caret > 0)
+		if(index_caret_ > 0)
 		{
-			int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret - 1]);
-			this->offset_caret += -current_char_width;
-			this->index_caret -= 1;
+			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_ - 1]);
+			offset_caret_ += -current_char_width;
+			index_caret_ -= 1;
 		}
 	}
 	else
@@ -41,13 +41,13 @@ void Inputfield::on_left_pressed()
 
 void Inputfield::on_right_pressed()
 {
-	if(this->is_editing)
+	if(is_editing_)
 	{
-		if(this->index_caret < this->character_limit && this->index_caret < this->text.text.length())
+		if(index_caret_ < character_limit_ && index_caret_ < text_.text_.length())
 		{
-			int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret]);
-			this->offset_caret += current_char_width;
-			this->index_caret += 1;
+			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
+			offset_caret_ += current_char_width;
+			index_caret_ += 1;
 		}
 	}
 	else
@@ -58,115 +58,116 @@ void Inputfield::on_right_pressed()
 
 void Inputfield::on_enter_pressed_hook_end()
 {
-	this->is_editing = !this->is_editing;
+	is_editing_ = !is_editing_;
 }
 
 void Inputfield::on_backspace_pressed()
 {
-	if(this->is_editing && !text.text.empty())
+	if(is_editing_ && !text_.text_.empty())
 	{
-		if(this->index_caret > 0)
+		if(index_caret_ > 0)
 		{
-			this->text.text.erase(this->index_caret - 1, 1);
-			this->index_caret -= 1;
+			text_.text_.erase(index_caret_ - 1, 1);
+			index_caret_ -= 1;
 		}
 	}
 }
 
 void Inputfield::on_delete_pressed()
 {
-	if(this->is_editing && !text.text.empty())
+	if(is_editing_ && !text_.text_.empty())
 	{
-		if(this->index_caret < this->text.text.length())
+		if(index_caret_ < text_.text_.length())
 		{
-			int current_char_width = this->text.get_width_one_char(this->text.text[this->index_caret]);
-			this->offset_caret += current_char_width;
-			this->text.text.erase(this->index_caret, 1);
+			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
+			offset_caret_ += current_char_width;
+			text_.text_.erase(index_caret_, 1);
 		}
 	}
 }
 
 void Inputfield::on_input_pressed_hook_end(const SDL_Event& e)
 {
-	if(this->is_editing)
+	if(is_editing_)
 	{
-		this->is_writing = true;
+		is_writing_ = true;
 	}
 
 	if(e.key.keysym.sym == SDLK_BACKSPACE)
 	{
-		this->on_backspace_pressed();
+		on_backspace_pressed();
 	}
 	else if(e.key.keysym.sym == SDLK_DELETE)
 	{
-		this->on_delete_pressed();
+		on_delete_pressed();
 	}
 }
 
 void Inputfield::on_input_released_hook_end(const SDL_Event& e)
 {
-	this->is_writing = false;
+	(void)e;
+	is_writing_ = false;
 }
 
 void Inputfield::handle_events_hook_end(const SDL_Event& e)
 {
 	if(e.type == SDL_TEXTINPUT)
 	{
-		this->on_typing(e);
+		on_typing(e);
 	}
 }
 
 void Inputfield::draw(sdl::Renderer& renderer)
 {
-	normal.draw(renderer);
-	text.draw(renderer);
+	normal_.draw(renderer);
+	text_.draw(renderer);
 
-	if(text.text.empty()) 
+	if(text_.text_.empty()) 
 	{
-		if(!this->is_editing)
+		if(!is_editing_)
 		{
-			text_placeholder.draw(renderer);
+			text_placeholder_.draw(renderer);
 		}
-		this->text_caret.position.x = this->get_rect().x;
+		text_caret_.position_.x = get_rect().x;
 	}
-	else this->text_caret.position.x = this->get_rect().x + this->text.position.w + this->offset_caret;
+	else text_caret_.position_.x = get_rect().x + text_.position_.w + offset_caret_;
 
-	if(this->is_editing)
+	if(is_editing_)
 	{
-		this->text_caret.draw(renderer);
+		text_caret_.draw(renderer);
 	}
 }
 
 void Inputfield::update(Uint64 time_step)
 {
-	this->text.update(time_step);
+	text_.update(time_step);
 
-	if(time_step - this->last_time > 500)
+	if(time_step - last_time_ > 500)
 	{
-		this->text_caret.show();
+		text_caret_.show();
 	}
-	if(time_step - this->last_time > 1000 && !this->is_writing) //do not hide the caret when writing/deleting
+	if(time_step - last_time_ > 1000 && !is_writing_) //do not hide the caret when writing/deleting
 	{
-		this->text_caret.hide();
-		last_time = SDL_GetTicks64();
+		text_caret_.hide();
+		last_time_ = SDL_GetTicks64();
 	}
 }
 
 void Inputfield::on_typing(const SDL_Event& e)
 {
-	if(this->is_editing && this->text.text.length() < this->character_limit)
+	if(is_editing_ && text_.text_.length() < character_limit_)
 	{
-		this->text.text.insert(this->text.text.begin() + this->index_caret, e.text.text[0]);
-		this->index_caret += 1;
+		text_.text_.insert(text_.text_.begin() + index_caret_, e.text.text[0]);
+		index_caret_ += 1;
 	}
 }
 
 void Inputfield::set_character_limit(unsigned int character_limit)
 {
-	this->character_limit = character_limit;
+	character_limit_ = character_limit;
 }
 
 SDL_Rect Inputfield::get_rect() const 
 {
-	return this->normal.position;
+	return normal_.position_;
 }

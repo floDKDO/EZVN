@@ -17,9 +17,9 @@ class Checkable : public Ui
 		virtual void on_enter_released();
 		virtual void on_enter_released_hook_end();
 
-		bool is_checked;
-		bool previous_checked;
-		CheckableGroup* checkable_group = nullptr;
+		bool is_checked_;
+		bool previous_checked_;
+		CheckableGroup* checkable_group_ = nullptr;
 
 	protected:
 		Checkable(bool is_checked, sdl::Renderer& renderer);

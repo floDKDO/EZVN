@@ -1,15 +1,15 @@
 #include "sound.h"
 
-int Sound::unused_channel = 0;
-int Sound::global_sound_volume = MIX_MAX_VOLUME / 2;
+int Sound::unused_channel_ = 0;
+int Sound::global_sound_volume_ = MIX_MAX_VOLUME / 2;
 
 Sound::Sound(const std::string path)
-	: channel(this->unused_channel), loop(false), path(path), sound(path), local_sound_volume(global_sound_volume)
+	: channel_(unused_channel_), loop_(false), path_(path), sound_(path), local_sound_volume_(global_sound_volume_)
 {
-	this->unused_channel += 1;
-	if(this->unused_channel == MIX_CHANNELS)
+	unused_channel_ += 1;
+	if(unused_channel_ == MIX_CHANNELS)
 	{
-		this->unused_channel = 0;
+		unused_channel_ = 0;
 	}
 }
 
@@ -19,42 +19,42 @@ void Sound::play_sound(const bool loop, const int fadein_length)
 	if(loop)
 	{
 		loops = -1;
-		this->loop = true;
+		loop_ = true;
 	}
 	else
 	{
 		loops = 0;
-		this->loop = false;
+		loop_ = false;
 	}
-	/*if(this->local_sound_volume != global_sound_volume) //Priority for the local sound volume
+	/*if(local_sound_volume != global_sound_volume) //Priority for the local sound volume
 	{
-		this->change_volume(local_sound_volume);
+		change_volume(local_sound_volume);
 	}
 	else*/
 	{
-		this->change_volume(global_sound_volume);
+		change_volume(global_sound_volume_);
 	}
-	this->sound.fade_in(this->channel, loops, fadein_length);
+	sound_.fade_in(channel_, loops, fadein_length);
 }
 
 void Sound::pause_sound()
 {
-	this->sound.pause(this->channel);
+	sound_.pause(channel_);
 }
 
 void Sound::resume_sound()
 {
-	this->sound.resume(this->channel);
+	sound_.resume(channel_);
 }
 
 void Sound::stop_sound(const int fadeout_length) 
 {
-	this->sound.fade_out(this->channel, fadeout_length);
+	sound_.fade_out(channel_, fadeout_length);
 }
 
 void Sound::change_volume(const int volume) //[0; MIX_MAX_VOLUME(=128)]
 {
 	//0 = 0%, 128 = 100%
-	this->local_sound_volume = volume;
-	this->sound.volume(volume * MIX_MAX_VOLUME / 100);
+	local_sound_volume_ = volume;
+	sound_.volume(volume * MIX_MAX_VOLUME / 100);
 }

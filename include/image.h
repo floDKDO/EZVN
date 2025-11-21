@@ -44,28 +44,28 @@ class Image
 
 		void draw(sdl::Renderer& renderer);
 
-		int zorder;
-		SDL_Rect position;
+		int zorder_;
+		SDL_Rect position_;
 
-		Uint64 last_time; //TODO : trouver un meilleur nom
+		Uint64 last_time_; //TODO : trouver un meilleur nom
 
 	protected:
 		
 
 	private:
-		std::string path;
-		ImageType image_type;
+		std::string path_;
+		ImageType image_type_;
 		
-		Uint8 alpha;
-		double angle;
+		Uint8 alpha_;
+		double angle_;
 		
-		SDL_RendererFlip flip;
-		Uint8 r, g, b;
+		SDL_RendererFlip flip_;
+		Uint8 r_, g_, b_;
 
-		int frame_index;
-		bool is_gif;
-		std::unique_ptr<sdl::Animation> gif;
+		int frame_index_;
+		bool is_gif_;
+		std::unique_ptr<sdl::Animation> gif_;
 
-		std::unique_ptr<sdl::Texture> texture; 
-		sdl::Renderer& renderer; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
+		std::unique_ptr<sdl::Texture> texture_; 
+		sdl::Renderer& renderer_; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
 };

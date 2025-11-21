@@ -2,129 +2,129 @@
 
 #include <iostream>
 
-bool Ui::lock = true;
+bool Ui::lock_ = true;
 
 Ui::Ui(sdl::Renderer& renderer)
-	:renderer(renderer),
-	select_on_up(nullptr), select_on_down(nullptr), select_on_left(nullptr), select_on_right(nullptr), 
-	state(State::NORMAL), 
-	select_sound("sounds/base_select.ogg"), click_sound("sounds/base_click.ogg"), 
-	is_selected_sound_played(false),
-	callback_function(nullptr),
-	pointer_on_ui_when_pointer_up(true),
-	last_time(0)
+	:renderer_(renderer),
+	select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 
+	state_(State::NORMAL), 
+	select_sound_("sounds/base_select.ogg"), click_sound_("sounds/base_click.ogg"), 
+	is_selected_sound_played_(false),
+	callback_function_(nullptr),
+	pointer_on_ui_when_pointer_up_(true),
+	last_time_(0)
 {
 
 }
 
 void Ui::select_new(Ui* ui)
 {
-	this->state = State::NORMAL;
-	ui->state = State::SELECTED;
-	if(!this->is_selected_sound_played)
+	state_ = State::NORMAL;
+	ui->state_ = State::SELECTED;
+	if(!is_selected_sound_played_)
 	{
-		this->select_sound.play_sound();
-		this->is_selected_sound_played = true;
+		select_sound_.play_sound();
+		is_selected_sound_played_ = true;
 	}
 }
 
 void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
 {
-	if(this->pointer_on_ui_when_pointer_up)
+	if(pointer_on_ui_when_pointer_up_)
 	{
-		if(this->state == State::CLICKED)
+		if(state_ == State::CLICKED)
 		{
-			this->state = State::SELECTED;
-			callback_function(this);
-			this->click_sound.play_sound();
-			this->on_pointer_up_hook_end();
+			state_ = State::SELECTED;
+			callback_function_(this);
+			click_sound_.play_sound();
+			on_pointer_up_hook_end();
 		}
 	}
 	else //the callback function is called even if the pointer is not on the UI when the pointer is released/up
 	{
-		callback_function(this);
-		this->click_sound.play_sound();
-		this->on_pointer_up_hook_end();
+		callback_function_(this);
+		click_sound_.play_sound();
+		on_pointer_up_hook_end();
 	}
 }
 
 void Ui::on_pointer_down() 
 {
-	this->state = State::CLICKED;
-	this->on_pointer_down_hook_end();
+	state_ = State::CLICKED;
+	on_pointer_down_hook_end();
 }
 
 void Ui::on_pointer_enter() 
 {
-	if(this->state == State::NORMAL) 
+	if(state_ == State::NORMAL) 
 	{
-		this->state = State::SELECTED;
-		if(!this->is_selected_sound_played)
+		state_ = State::SELECTED;
+		if(!is_selected_sound_played_)
 		{
-			this->select_sound.play_sound();
-			this->is_selected_sound_played = true;
+			select_sound_.play_sound();
+			is_selected_sound_played_ = true;
 		}
-		this->on_pointer_enter_hook_end();
+		on_pointer_enter_hook_end();
 	}
 }
 
 void Ui::on_pointer_exit() 
 {
-	if(this->state == State::CLICKED)
+	if(state_ == State::CLICKED)
 	{
-		this->state = State::SELECTED; 
+		state_ = State::SELECTED; 
 	}
-	this->is_selected_sound_played = false;
-	this->on_pointer_exit_hook_end(); //TODO : dans le if ??
+	is_selected_sound_played_ = false;
+	on_pointer_exit_hook_end(); //TODO : dans le if ??
 }
 
 void Ui::on_up_pressed()
 {
-	if(this->lock && this->state == State::SELECTED && this->select_on_up != nullptr)
+	if(lock_ && state_ == State::SELECTED && select_on_up_ != nullptr)
 	{
-		this->select_new(this->select_on_up);
-		this->lock = false;
-		this->on_up_pressed_hook_end();
+		select_new(select_on_up_);
+		lock_ = false;
+		on_up_pressed_hook_end();
 	}
 }
 
 void Ui::on_down_pressed()
 {
-	if(this->lock && this->state == State::SELECTED && this->select_on_down != nullptr)
+	if(lock_ && state_ == State::SELECTED && select_on_down_ != nullptr)
 	{
-		this->select_new(this->select_on_down);
-		this->lock = false;
-		this->on_down_pressed_hook_end();
+		select_new(select_on_down_);
+		lock_ = false;
+		on_down_pressed_hook_end();
 	}
 }
 
 void Ui::on_left_pressed()
 {
-	if(this->lock && this->state == State::SELECTED && this->select_on_left != nullptr)
+	if(lock_ && state_ == State::SELECTED && select_on_left_ != nullptr)
 	{
-		this->select_new(this->select_on_left);
-		this->lock = false;
-		this->on_left_pressed_hook_end();
+		select_new(select_on_left_);
+		lock_ = false;
+		on_left_pressed_hook_end();
 	}
 }
 
 void Ui::on_right_pressed()
 {
-	if(this->lock && this->state == State::SELECTED && this->select_on_right != nullptr)
+	if(lock_ && state_ == State::SELECTED && select_on_right_ != nullptr)
 	{
-		this->select_new(this->select_on_right);
-		this->lock = false;
-		this->on_right_pressed_hook_end();
+		select_new(select_on_right_);
+		lock_ = false;
+		on_right_pressed_hook_end();
 	}
 }
 
 void Ui::on_enter_pressed()
 {
-	if(this->lock && this->state == State::SELECTED) //TODO : remettre les if des fonctions on_***_pressed dans on_input_pressed ??
+	if(lock_ && state_ == State::SELECTED) //TODO : remettre les if des fonctions on_***_pressed dans on_input_pressed ??
 	{
-		this->state = State::CLICKED;
-		this->lock = false;
-		this->on_enter_pressed_hook_end();
+		state_ = State::CLICKED;
+		lock_ = false;
+		on_enter_pressed_hook_end();
 	}
 }
 
@@ -132,76 +132,76 @@ void Ui::on_input_pressed(const SDL_Event& e)
 {
 	if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP))
 	{
-		this->on_up_pressed();
+		on_up_pressed();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN))
 	{
-		this->on_down_pressed();
+		on_down_pressed();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT))
 	{
-		this->on_left_pressed();
+		on_left_pressed();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT))
 	{
-		this->on_right_pressed();
+		on_right_pressed();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_A) || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN))
 	{
-		this->on_enter_pressed();
+		on_enter_pressed();
 	}
-	this->on_input_pressed_hook_end(e);
+	on_input_pressed_hook_end(e);
 }
 
 void Ui::on_up_released()
 {
-	if(!this->lock && this->state == State::SELECTED)
+	if(!lock_ && state_ == State::SELECTED)
 	{
-		this->lock = true;
-		this->is_selected_sound_played = false;
-		this->on_up_released_hook_end();
+		lock_ = true;
+		is_selected_sound_played_ = false;
+		on_up_released_hook_end();
 	}
 }
 
 void Ui::on_down_released()
 {
-	if(!this->lock && this->state == State::SELECTED)
+	if(!lock_ && state_ == State::SELECTED)
 	{
-		this->lock = true;
-		this->is_selected_sound_played = false;
-		this->on_down_released_hook_end();
+		lock_ = true;
+		is_selected_sound_played_ = false;
+		on_down_released_hook_end();
 	}
 }
 
 void Ui::on_left_released()
 {
-	if(!this->lock && this->state == State::SELECTED)
+	if(!lock_ && state_ == State::SELECTED)
 	{
-		this->lock = true;
-		this->is_selected_sound_played = false;
-		this->on_left_released_hook_end();
+		lock_ = true;
+		is_selected_sound_played_ = false;
+		on_left_released_hook_end();
 	}
 }
 
 void Ui::on_right_released()
 {
-	if(!this->lock && this->state == State::SELECTED)
+	if(!lock_ && state_ == State::SELECTED)
 	{
-		this->lock = true;
-		this->is_selected_sound_played = false;
-		this->on_right_released_hook_end();
+		lock_ = true;
+		is_selected_sound_played_ = false;
+		on_right_released_hook_end();
 	}
 }
 
 void Ui::on_enter_released()
 {
-	if(this->state == State::CLICKED)
+	if(state_ == State::CLICKED)
 	{
-		this->state = State::SELECTED;
-		callback_function(this);
-		this->click_sound.play_sound();
-		this->lock = true;
-		this->on_enter_released_hook_end();
+		state_ = State::SELECTED;
+		callback_function_(this);
+		click_sound_.play_sound();
+		lock_ = true;
+		on_enter_released_hook_end();
 	}
 }
 
@@ -209,25 +209,25 @@ void Ui::on_input_released(const SDL_Event& e)
 {
 	if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP))
 	{
-		this->on_up_released();
+		on_up_released();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN))
 	{
-		this->on_down_released();
+		on_down_released();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT))
 	{
-		this->on_left_released();
+		on_left_released();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT))
 	{
-		this->on_right_released();
+		on_right_released();
 	}
 	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_A) || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN)) 
 	{
-		this->on_enter_released();
+		on_enter_released();
 	}
-	this->on_input_released_hook_end(e);
+	on_input_released_hook_end(e);
 }
 
 void Ui::handle_events(const SDL_Event& e)
@@ -236,37 +236,37 @@ void Ui::handle_events(const SDL_Event& e)
 	{
 		case SDL_CONTROLLERBUTTONDOWN:
 		case SDL_KEYDOWN:
-			this->on_input_pressed(e);
+			on_input_pressed(e);
 			break;
 
 		case SDL_CONTROLLERBUTTONUP:
 		case SDL_KEYUP:
-			this->on_input_released(e);
+			on_input_released(e);
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if(e.button.button == SDL_BUTTON_LEFT && this->is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI) 
+			if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI) 
 			{
-				this->on_pointer_down();
+				on_pointer_down();
 			}
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			if(e.button.button == SDL_BUTTON_LEFT && (this->state == State::SELECTED || this->state == State::CLICKED)) //cas "this->state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
+			if(e.button.button == SDL_BUTTON_LEFT && (state_ == State::SELECTED || state_ == State::CLICKED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
 			{
-				this->on_pointer_up();
+				on_pointer_up();
 			}
 			break;
 
 		case SDL_MOUSEMOTION:
 		{
-			if(this->is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI)
+			if(is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI)
 			{
-				this->on_pointer_enter();
+				on_pointer_enter();
 			}
 			else
 			{
-				this->on_pointer_exit();
+				on_pointer_exit();
 			}
 		}
 		break;
@@ -274,7 +274,7 @@ void Ui::handle_events(const SDL_Event& e)
 		default:
 			break;
 	}
-	this->handle_events_hook_end(e);
+	handle_events_hook_end(e);
 }
 
 void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
@@ -283,7 +283,7 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 	SDL_GetMouseState(&real_mouse_x, &real_mouse_y);
 
 	float temp_logical_mouse_x = 0, temp_logical_mouse_y = 0;
-	SDL_RenderWindowToLogical(this->renderer.Get(), real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
+	SDL_RenderWindowToLogical(renderer_.Get(), real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
 	*logical_mouse_x = int(temp_logical_mouse_x);
 	*logical_mouse_y = int(temp_logical_mouse_y);
 }
@@ -291,9 +291,9 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 int Ui::is_mouse_on_ui() 
 {
 	int logical_mouse_x, logical_mouse_y;
-	this->get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
+	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 
-	std::vector<Ui*> all_ui = this->get_navigation_nodes();
+	std::vector<Ui*> all_ui = get_navigation_nodes();
 
 	for(int i = 0; i < all_ui.size(); ++i)
 	{

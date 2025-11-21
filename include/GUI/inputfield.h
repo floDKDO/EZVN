@@ -26,25 +26,25 @@ class Inputfield : public Ui
 		void on_typing(const SDL_Event& e);
 		void set_character_limit(unsigned int character_limit);
 
-		Text text;
+		Text text_;
 
 	protected:
 
 	private:
-		Image normal;
-		SDL_Color color_normal;
+		Image normal_;
+		SDL_Color color_normal_;
 
-		unsigned int character_limit;
+		unsigned int character_limit_;
 
-		Text text_caret;
-		Text text_placeholder;
+		Text text_caret_;
+		Text text_placeholder_;
 
-		bool is_editing;
-		bool is_writing;
+		bool is_editing_;
+		bool is_writing_;
 		
-		unsigned int index_caret;
-		int offset_caret; 
+		unsigned int index_caret_;
+		int offset_caret_; 
 
-		static const unsigned int INDEX_RECT_INPUTFIELD = 0;
+		static const unsigned int INDEX_RECT_INPUTFIELD_ = 0;
 };
 

@@ -1,9 +1,9 @@
 #include "music.h"
 
-int Music::global_music_volume = MIX_MAX_VOLUME / 2;
+int Music::global_music_volume_ = MIX_MAX_VOLUME / 2;
 
 Music::Music(const std::string path)
-	: loop(false), path(path), music(path)
+	: loop_(false), path_(path), music_(path), local_music_volume_(global_music_volume_)
 {
 
 }
@@ -14,47 +14,47 @@ void Music::play_music(const bool loop, const int fadein_length)
 	if(loop)
 	{
 		loops = -1;
-		this->loop = true;
+		loop_ = true;
 	}
 	else
 	{
 		loops = 0;
-		this->loop = false;
+		loop_ = false;
 	}
-	/*if(this->local_music_volume != global_music_volume) //Priority for the local music volume
+	/*if(local_music_volume != global_music_volume) //Priority for the local music volume
 	{
-		this->change_volume(local_music_volume);
+		change_volume(local_music_volume);
 	}
 	else*/
 	{
-		this->change_volume(global_music_volume);
+		change_volume(global_music_volume_);
 	}
-	this->music.fade_in(loops, fadein_length * 1000);
+	music_.fade_in(loops, fadein_length * 1000);
 }
 
 void Music::pause_music() 
 {
-	this->music.pause();
+	music_.pause();
 }
 
 void Music::resume_music() 
 {
-	this->music.resume();
+	music_.resume();
 }
 
 void Music::stop_music(const int fadeout_length) 
 {
-	this->music.fade_out(fadeout_length * 1000);
+	music_.fade_out(fadeout_length * 1000);
 }
 
 void Music::change_volume(const int volume) //[0; MIX_MAX_VOLUME(=128)]
 {
 	//0 = 0%, 128 = 100%
-	this->local_music_volume = volume;
-	this->music.volume(volume * MIX_MAX_VOLUME / 100);
+	local_music_volume_ = volume;
+	music_.volume(volume * MIX_MAX_VOLUME / 100);
 }
 
 void Music::set_position(const double position) 
 {
-	this->music.set_position(position);
+	music_.set_position(position);
 }

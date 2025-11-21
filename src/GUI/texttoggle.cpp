@@ -4,36 +4,36 @@
 #include <iostream>
 
 TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Checkable(is_checked, renderer), text(text, color_unchecked, "fonts/Aller_Rg.ttf", 50, x, y, renderer),
-	  color_unchecked(color_unchecked), color_selected(color_selected), color_checked(color_checked)
+	: Checkable(is_checked, renderer), text_(text, color_unchecked, "fonts/Aller_Rg.ttf", 50, x, y, renderer),
+	  color_unchecked_(color_unchecked), color_selected_(color_selected), color_checked_(color_checked)
 {
-	this->callback_function = callback_function;
-	this->pointer_on_ui_when_pointer_up = true;
-	//this->renderer = renderer;
+	callback_function_ = callback_function;
+	pointer_on_ui_when_pointer_up_ = true;
+	//renderer_ = renderer;
 }
 
 void TextToggle::draw(sdl::Renderer& renderer)
 {
-	this->text.draw(renderer);
+	text_.draw(renderer);
 }
 
 void TextToggle::update(Uint64 time_step)
 {
 	(void)time_step;
-	if(this->is_checked)
+	if(is_checked_)
 	{
-		this->text.change_color(this->color_checked);
+		text_.change_color(color_checked_);
 	}
 	else
 	{
-		if(this->state == State::NORMAL)
-			this->text.change_color(this->color_unchecked);
-		else if(this->state == State::SELECTED || this->state == State::CLICKED)
-			this->text.change_color(this->color_selected);
+		if(state_ == State::NORMAL)
+			text_.change_color(color_unchecked_);
+		else if(state_ == State::SELECTED || state_ == State::CLICKED)
+			text_.change_color(color_selected_);
 	}
 }
 
 SDL_Rect TextToggle::get_rect() const
 {
-	return this->text.position;
+	return text_.position_;
 }

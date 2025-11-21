@@ -19,6 +19,6 @@ class RWops
 	protected:
 
 	private:
-	SDL_RWops* rwops;
+	SDL_RWops* rwops_;
 };
 }

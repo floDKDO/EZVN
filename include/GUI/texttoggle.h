@@ -20,14 +20,14 @@ class TextToggle : public Checkable
 	protected:
 
 	private:
-		Text text;
+		Text text_;
 
-		SDL_Color color_unchecked;
-		SDL_Color color_selected;
-		SDL_Color color_checked;
+		SDL_Color color_unchecked_;
+		SDL_Color color_selected_;
+		SDL_Color color_checked_;
 
-		static const unsigned int INDEX_RECT_TEXTTOGGLE = 0;
+		static const unsigned int INDEX_RECT_TEXTTOGGLE_ = 0;
 
-		TextToggleGroup* texttoggle_group = nullptr;
+		TextToggleGroup* texttoggle_group_ = nullptr;
 };
 

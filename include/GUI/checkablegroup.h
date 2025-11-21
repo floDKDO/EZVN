@@ -19,12 +19,12 @@ class CheckableGroup : public Ui
 		void handle_events(const SDL_Event& e) override;
 		std::vector<Ui*> get_navigation_nodes() override;
 
-		int y_spacing_text;
-		std::vector<std::unique_ptr<Checkable>> checkables;
-		size_t number_of_checkables;
-		bool only_one_has_to_be_checked;
-		Text top_text; 
-		int y_spacing_between_checkable;
+		int y_spacing_text_;
+		std::vector<std::unique_ptr<Checkable>> checkables_;
+		size_t number_of_checkables_;
+		bool only_one_has_to_be_checked_;
+		Text top_text_; 
+		int y_spacing_between_checkable_;
 		
 
 	protected:

@@ -19,7 +19,7 @@ CheckboxGroup::CheckboxGroup(size_t number_of_checkboxes, std::string top_text, 
 		{
 			is_checked = false;
 		}
-		this->checkables.push_back(std::make_unique<Checkbox>(path_normal, path_selected, path_clicked, path_checked, x, y + this->y_spacing_between_checkable * i, is_checked, renderer, callback_functions[i]));
-		this->checkables[i]->checkable_group = this;
+		checkables_.push_back(std::make_unique<Checkbox>(path_normal, path_selected, path_clicked, path_checked, x, y + y_spacing_between_checkable_ * i, is_checked, renderer, callback_functions[i]));
+		checkables_[i]->checkable_group_ = this;
 	}
 }

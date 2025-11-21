@@ -22,7 +22,7 @@ class Surface
 	protected:
 
 	private:
-		SDL_Surface* surface;
+		SDL_Surface* surface_;
 };
 
 }

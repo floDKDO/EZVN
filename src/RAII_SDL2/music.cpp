@@ -5,22 +5,22 @@ namespace sdl
 
 Music::Music(const std::string file) //Mix_LoadMUS
 {
-	this->music = Mix_LoadMUS(file.c_str());
+	music_ = Mix_LoadMUS(file.c_str());
 }
 
 Music::~Music() //Mix_FreeMusic
 {
-	Mix_FreeMusic(this->music);
+	Mix_FreeMusic(music_);
 }
 
 Mix_Music* Music::Get() const
 {
-	return this->music;
+	return music_;
 }
 
 void Music::fade_in(int loops, int ms)
 {
-	Mix_FadeInMusic(this->music, loops, ms);
+	Mix_FadeInMusic(music_, loops, ms);
 }
 
 void Music::fade_out(int ms)

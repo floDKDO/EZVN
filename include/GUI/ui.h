@@ -48,7 +48,7 @@ class Ui
 		virtual void on_enter_pressed_hook_end() {}
 
 		virtual void on_input_pressed(const SDL_Event& e);
-		virtual void on_input_pressed_hook_end(const SDL_Event& e) {}
+		virtual void on_input_pressed_hook_end(const SDL_Event& e) { (void)e; }
 
 
 		virtual void on_up_released();
@@ -67,11 +67,11 @@ class Ui
 		virtual void on_enter_released_hook_end() {}
 
 		virtual void on_input_released(const SDL_Event& e);
-		virtual void on_input_released_hook_end(const SDL_Event& e) {}
+		virtual void on_input_released_hook_end(const SDL_Event& e) { (void)e; }
 
 
 		virtual void handle_events(const SDL_Event& e);
-		virtual void handle_events_hook_end(const SDL_Event& e) {}
+		virtual void handle_events_hook_end(const SDL_Event& e) { (void)e; }
 
 		virtual void draw(sdl::Renderer& renderer) = 0;
 		virtual void update(Uint64 time_step) = 0;
@@ -83,28 +83,28 @@ class Ui
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
 
-		Ui* select_on_up;
-		Ui* select_on_down;
-		Ui* select_on_left;
-		Ui* select_on_right;
+		Ui* select_on_up_;
+		Ui* select_on_down_;
+		Ui* select_on_left_;
+		Ui* select_on_right_;
 
-		State state;
+		State state_;
 
-		Uint64 last_time; //TODO : trouver un meilleur nom
+		Uint64 last_time_; //TODO : trouver un meilleur nom
 
-		static bool lock; 
+		static bool lock_; 
 
 	protected:
 		Ui(sdl::Renderer& renderer);
 
 		//TODO : stocker en "variables globales" select_sound, click_sound et une police par défaut ?
-		Sound select_sound;
-		Sound click_sound;
-		bool is_selected_sound_played;
-		bool pointer_on_ui_when_pointer_up; 
-		sdl::Renderer& renderer; //do not own it !!
+		Sound select_sound_;
+		Sound click_sound_;
+		bool is_selected_sound_played_;
+		bool pointer_on_ui_when_pointer_up_; 
+		sdl::Renderer& renderer_; //do not own it !!
 
-		std::function<void(Ui* ui)> callback_function;
+		std::function<void(Ui* ui)> callback_function_;
 
 
 	private:

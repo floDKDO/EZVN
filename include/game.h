@@ -47,31 +47,31 @@ class Game
 		void texttoggle_full_screen_function(Ui* ui);
 		void texttoggle_windowed_function(Ui* ui);
 
-		sdl::SDL sdl;
-		sdl::SDLImage sdl_img;
-		sdl::SDLMixer sdl_mixer;
-		sdl::SDLTTF sdl_ttf;
+		sdl::SDL sdl_;
+		sdl::SDLImage sdl_img_;
+		sdl::SDLMixer sdl_mixer_;
+		sdl::SDLTTF sdl_ttf_;
 
 	public:
-		sdl::Window window;
+		sdl::Window window_;
 
 	private:	
-		sdl::Renderer renderer;
-		sdl::GameController game_controller;
+		sdl::Renderer renderer_;
+		sdl::GameController game_controller_;
 
-		std::unique_ptr<Menu> main_menu;
-		std::unique_ptr<Menu> settings_menu;
-		std::unique_ptr<Menu> load_menu;
-		std::unique_ptr<Menu> save_menu;
+		std::unique_ptr<Menu> main_menu_;
+		std::unique_ptr<Menu> settings_menu_;
+		std::unique_ptr<Menu> load_menu_;
+		std::unique_ptr<Menu> save_menu_;
 
 	public:
-		bool game_running;
-		std::unique_ptr<Textbox> textbox;
+		bool game_running_;
+		std::unique_ptr<Textbox> textbox_;
 
 	private:
-		std::stack<GameState*> states;
+		std::stack<GameState*> states_;
 
-		static const int WINDOW_WIDTH = 1280; 
-		static const int WINDOW_HEIGHT = 720;
+		static const int WINDOW_WIDTH_ = 1280; 
+		static const int WINDOW_HEIGHT_ = 720;
 };
 

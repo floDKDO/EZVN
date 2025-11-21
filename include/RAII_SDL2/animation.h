@@ -19,6 +19,6 @@ class Animation
 	protected:
 
 	private:
-	IMG_Animation* animation;
+	IMG_Animation* animation_;
 };
 }

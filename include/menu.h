@@ -12,7 +12,7 @@
 class Menu : public GameState
 {
 	public:
-		Menu(std::vector<std::unique_ptr<Ui>> ui, Ui* ui_selected);
+		Menu(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected);
 
 		enum class Axis
 		{
@@ -28,11 +28,11 @@ class Menu : public GameState
 		void draw(sdl::Renderer& renderer);
 		void update(Uint64 time_step);
 
-		Ui* previous_selected;
-		Ui* current_selected;
+		Ui* previous_selected_;
+		Ui* current_selected_;
 
-		std::vector<std::unique_ptr<Ui>> ui;
-		std::vector<Ui*> navigation_list;
+		std::vector<std::unique_ptr<Ui>> ui_elements_;
+		std::vector<Ui*> navigation_list_;
 
 	protected:
 

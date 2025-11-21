@@ -32,6 +32,6 @@ class Texture
 	protected:
 
 	private:
-	SDL_Texture* texture;
+	SDL_Texture* texture_;
 };
 }

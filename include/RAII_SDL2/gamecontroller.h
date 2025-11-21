@@ -18,6 +18,6 @@ class GameController
 	protected:
 
 	private:
-	SDL_GameController* game_controller;
+	SDL_GameController* game_controller_;
 };
 }

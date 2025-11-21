@@ -13,17 +13,17 @@ class Sound
 		void stop_sound(const int fadeout_length = 0); 
 		void change_volume(const int volume);
 
-		static int global_sound_volume;
+		static int global_sound_volume_;
 
 	protected:
 
 	private:
-		int channel;
-		bool loop;
-		std::string path;
-		sdl::Chunk sound;
-		int local_sound_volume; //TODO
+		int channel_;
+		bool loop_;
+		std::string path_;
+		sdl::Chunk sound_;
+		int local_sound_volume_; //TODO
 
-		static int unused_channel;
+		static int unused_channel_;
 };
 

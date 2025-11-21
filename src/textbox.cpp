@@ -3,74 +3,74 @@
 #include <iostream>
 
 Textbox::Textbox(SDL_Color text_color, sdl::Renderer& renderer)
-	: namebox("img/gui/namebox.png", 500, 511, renderer), 
-	textbox("img/gui/textbox.png", 450, 550, renderer), 
-	text("", text_color, "fonts/Aller_Rg.ttf", 20, 480, 580, renderer, 770), 
-	text_name_box("", text_color, "fonts/Aller_Rg.ttf", 30, 520, 513, renderer), //TODO : centrer le texte dans la Namebox
-	triangle("img/gui/triangle_textbox.png", 480, 650, renderer),
-	current_speaker("") 
+	: namebox_("img/gui/namebox.png", 500, 511, renderer), 
+	textbox_("img/gui/textbox.png", 450, 550, renderer), 
+	text_("", text_color, "fonts/Aller_Rg.ttf", 20, 480, 580, renderer, 770), 
+	text_name_box_("", text_color, "fonts/Aller_Rg.ttf", 30, 520, 513, renderer), //TODO : centrer le texte dans la Namebox
+	triangle_("img/gui/triangle_textbox.png", 480, 650, renderer),
+	current_speaker_("") 
 {
 
 }
 
 void Textbox::show_new_dialogue(std::string new_dialogue, std::string speaker)
 {
-	if(this->text.is_finished)
+	if(text_.is_finished_)
 	{
-		this->current_speaker = speaker;
-		this->text_name_box.text = this->current_speaker;
+		current_speaker_ = speaker;
+		text_name_box_.text_ = current_speaker_;
 
-		this->text_name_box.position.x = this->namebox.position.x + ((this->namebox.position.w - this->text_name_box.get_width_text()) / 2);
+		text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
 
-		this->text.is_finished = false;
-		this->text.index_dialogue = 0;
-		this->text.text = "";
-		this->text.text_dialogue = "";
-		this->text.text = new_dialogue;
+		text_.is_finished_ = false;
+		text_.index_dialogue_ = 0;
+		text_.text_ = "";
+		text_.text_dialogue_ = "";
+		text_.text_ = new_dialogue;
 
-		if(!this->current_speaker.empty())
+		if(!current_speaker_.empty())
 		{
-			this->text.text.insert(0, "\"");
-			this->text.text.append("\"");
+			text_.text_.insert(0, "\"");
+			text_.text_.append("\"");
 		}
 	}
 }
 
 void Textbox::draw(sdl::Renderer& renderer)
 {
-	if(!this->current_speaker.empty())
+	if(!current_speaker_.empty())
 	{
-		this->namebox.draw(renderer);
-		if(!this->text_name_box.text.empty()) //TODO : cas à vérifier (pas utile car redondant ??)
+		namebox_.draw(renderer);
+		if(!text_name_box_.text_.empty()) //TODO : cas à vérifier (pas utile car redondant ??)
 		{
-			this->text_name_box.draw(renderer);
+			text_name_box_.draw(renderer);
 		}
 	}
-	this->textbox.draw(renderer);
-	this->text.draw(renderer);
-	if(this->text.is_finished)
+	textbox_.draw(renderer);
+	text_.draw(renderer);
+	if(text_.is_finished_)
 	{
-		this->triangle.draw(renderer);
+		triangle_.draw(renderer);
 	}
 }
 
 void Textbox::update(Uint64 time_step) 
 {
-	this->text.update(time_step);
-	if(!this->text_name_box.text.empty())
+	text_.update(time_step);
+	if(!text_name_box_.text_.empty())
 	{
-		this->text_name_box.update(time_step);
+		text_name_box_.update(time_step);
 	}
-	if(this->text.is_finished)
+	if(text_.is_finished_)
 	{
-		if(time_step - this->triangle.last_time > 500)
+		if(time_step - triangle_.last_time_ > 500)
 		{
-			this->triangle.show();
+			triangle_.show();
 		}
-		if(time_step - this->triangle.last_time > 1000) 
+		if(time_step - triangle_.last_time_ > 1000) 
 		{
-			this->triangle.hide();
-			this->triangle.last_time = SDL_GetTicks64();
+			triangle_.hide();
+			triangle_.last_time_ = SDL_GetTicks64();
 		}
 	}
 }

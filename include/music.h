@@ -14,15 +14,15 @@ class Music
 		void change_volume(const int volume); //unité = pourcentage
 		void set_position(const double position); //unité = seconde
 
-		static int global_music_volume;
+		static int global_music_volume_;
 
 	protected:
 
 	private:
-		bool loop;
-		std::string path;
-		sdl::Music music;
-		int local_music_volume; //TODO
+		bool loop_;
+		std::string path_;
+		sdl::Music music_;
+		int local_music_volume_; //TODO
 };
 
  

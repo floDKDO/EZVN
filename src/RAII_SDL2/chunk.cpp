@@ -5,22 +5,22 @@ namespace sdl
 
 Chunk::Chunk(const std::string file) //Mix_LoadWAV
 {
-	this->chunk = Mix_LoadWAV(file.c_str());
+	chunk_ = Mix_LoadWAV(file.c_str());
 }
 
 Chunk::~Chunk() //Mix_FreeChunk
 {
-	Mix_FreeChunk(this->chunk);
+	Mix_FreeChunk(chunk_);
 }
 
 Mix_Chunk* Chunk::Get() const
 {
-	return this->chunk;
+	return chunk_;
 }
 
 void Chunk::fade_in(int channel, int loops, int ms)
 {
-	Mix_FadeInChannel(channel, this->chunk, loops, ms);
+	Mix_FadeInChannel(channel, chunk_, loops, ms);
 }
 
 void Chunk::fade_out(int which, int ms)
@@ -40,7 +40,7 @@ void Chunk::resume(int channel)
 
 void Chunk::volume(int volume)
 {
-	Mix_VolumeChunk(this->chunk, volume);
+	Mix_VolumeChunk(chunk_, volume);
 }
 
 }

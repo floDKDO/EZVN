@@ -22,7 +22,7 @@ class Window
 	protected:
 
 	private:
-	SDL_Window* window;
+	SDL_Window* window_;
 };
 }
 

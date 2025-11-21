@@ -25,6 +25,6 @@ class Music
 	protected:
 
 	private:
-	Mix_Music* music;
+	Mix_Music* music_;
 };
 }
