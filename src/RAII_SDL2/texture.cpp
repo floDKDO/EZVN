@@ -5,12 +5,17 @@
 namespace sdl
 {
 
-Texture::Texture(sdl::Renderer& renderer, sdl::Surface& surface) //SDL_CreateTextureFromSurface()
+Texture::Texture(Renderer& renderer, Surface& surface) //SDL_CreateTextureFromSurface()
 {
 	this->texture = SDL_CreateTextureFromSurface(renderer.Get(), surface.Get());
 }
 
-Texture::Texture(sdl::Renderer& renderer, const std::string file) //IMG_LoadTexture()
+Texture::Texture(Renderer& renderer, SDL_Surface* surface) //SDL_CreateTextureFromSurface() with surface a frame from a IMG_Animation*
+{
+	this->texture = SDL_CreateTextureFromSurface(renderer.Get(), surface);
+}
+
+Texture::Texture(Renderer& renderer, const std::string file) //IMG_LoadTexture()
 {
 	this->texture = IMG_LoadTexture(renderer.Get(), file.c_str());
 	if(this->texture == nullptr) //TODO: gérer le cas pour les backgrounds

@@ -4,20 +4,18 @@
 
 namespace sdl
 {
-	class SDLImage;
-}
 
-class sdl::SDLImage
+class SDLImage
 {
 	public:
-		SDLImage(int flags);
-		SDLImage(const SDLImage& sdl) = delete;
-		SDLImage& operator=(const SDLImage& sdl) = delete;
-		~SDLImage();
+	SDLImage(int flags);
+	SDLImage(const SDLImage& sdl) = delete;
+	SDLImage& operator=(const SDLImage& sdl) = delete;
+	~SDLImage();
 
 	protected:
 
 	private:
 
 };
-
+}

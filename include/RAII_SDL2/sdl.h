@@ -4,20 +4,18 @@
 
 namespace sdl
 {
-	class SDL;
-}
 
-class sdl::SDL
+class SDL
 {
 	public:
-		SDL(Uint32 flags);
-		SDL(const SDL& sdl) = delete;
-		SDL& operator=(const SDL& sdl) = delete;
-		~SDL();
+	SDL(Uint32 flags);
+	SDL(const SDL& sdl) = delete;
+	SDL& operator=(const SDL& sdl) = delete;
+	~SDL();
 
 	protected:
 
 	private:
 
 };
-
+}

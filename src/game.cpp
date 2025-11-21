@@ -76,7 +76,6 @@ void Game::previous_menu_function(Ui* ui)
 	(void)ui;
 	std::cout << "Clicked go back to previous menu!" << std::endl;
 	this->pop_state();
-	std::cout << "[0] -> is_checked: " << std::boolalpha << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[0]->is_checked << ", previous_checked: " << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[0]->previous_checked << "[1] -> is_checked: " << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[1]->is_checked << ", previous_checked: " << dynamic_cast<CheckboxGroup*>(this->settings_menu->ui[3].get())->checkables[1]->previous_checked << std::endl;
 }
 
 void Game::slider_sound_function(Ui* ui)

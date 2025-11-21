@@ -5,22 +5,20 @@
 
 namespace sdl
 {
-	class RWops;
-}
 
-class sdl::RWops
+class RWops
 {
 	public:
-		RWops(const std::string file, const std::string mode); //SDL_RWFromFile
-		RWops(const RWops& rwops) = delete;
-		RWops& operator=(const RWops& rwops) = delete;
-		~RWops(); //SDL_RWclose
+	RWops(const std::string file, const std::string mode); //SDL_RWFromFile
+	RWops(const RWops& rwops) = delete;
+	RWops& operator=(const RWops& rwops) = delete;
+	~RWops(); //SDL_RWclose
 
-		SDL_RWops* Get() const;
+	SDL_RWops* Get() const;
 
 	protected:
 
 	private:
-		SDL_RWops* rwops;
+	SDL_RWops* rwops;
 };
-
+}

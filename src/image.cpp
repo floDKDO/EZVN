@@ -28,7 +28,7 @@ Image::Image(const std::string path, const int x, const int y, sdl::Renderer& re
 		{
 			this->is_gif = true;
 			this->gif = std::make_unique<sdl::Animation>(path);
-			this->texture = std::make_unique<sdl::Texture>(renderer, *gif->Get()->frames[this->frame_index]);
+			this->texture = std::make_unique<sdl::Texture>(renderer, gif->Get()->frames[this->frame_index]);
 		}
 		else
 		{

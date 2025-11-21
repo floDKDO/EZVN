@@ -4,20 +4,18 @@
 
 namespace sdl
 {
-	class SDLMixer;
-}
 
-class sdl::SDLMixer
+class SDLMixer
 {
 	public:
-		SDLMixer(int flags);
-		SDLMixer(const SDLMixer& sdl) = delete;
-		SDLMixer& operator=(const SDLMixer& sdl) = delete;
-		~SDLMixer();
+	SDLMixer(int flags);
+	SDLMixer(const SDLMixer& sdl) = delete;
+	SDLMixer& operator=(const SDLMixer& sdl) = delete;
+	~SDLMixer();
 
 	protected:
 
 	private:
 
 };
-
+}

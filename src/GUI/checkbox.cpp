@@ -28,7 +28,6 @@ void Checkbox::draw(sdl::Renderer& renderer)
 void Checkbox::update(Uint64 time_step)
 {
 	(void)time_step;
-	std::cout << "Coché " << this->get_rect().y << " ? -> " << std::boolalpha << this->is_checked << std::endl;
 }
 
 SDL_Rect Checkbox::get_rect() const

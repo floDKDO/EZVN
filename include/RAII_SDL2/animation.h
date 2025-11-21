@@ -5,22 +5,20 @@
 
 namespace sdl
 {
-	class Animation;
-}
 
-class sdl::Animation
+class Animation
 {
 	public:
-		explicit Animation(const std::string file); //IMG_LoadAnimation
-		Animation(const Animation& animation) = delete;
-		Animation& operator=(const Animation& animation) = delete; 
-		~Animation(); //IMG_FreeAnimation
+	explicit Animation(const std::string file); //IMG_LoadAnimation
+	Animation(const Animation& animation) = delete;
+	Animation& operator=(const Animation& animation) = delete;
+	~Animation(); //IMG_FreeAnimation
 
-		IMG_Animation* Get() const;
+	IMG_Animation* Get() const;
 
 	protected:
 
 	private:
-		IMG_Animation* animation;
+	IMG_Animation* animation;
 };
-
+}

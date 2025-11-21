@@ -8,7 +8,6 @@ namespace sdl
 
 Renderer::Renderer(Window& window, int index, Uint32 flags) //SDL_CreateRenderer()
 {
-	std::cout << "Constructeur du renderer appelé\n";
 	this->renderer = SDL_CreateRenderer(window.Get(), index, flags);
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 }
