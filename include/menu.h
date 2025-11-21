@@ -2,9 +2,6 @@
 
 #include "gamestate.h"
 #include "GUI/button.h"
-#include "GUI/slider.h"
-#include "GUI/checkboxgroup.h"
-#include "GUI/texttogglegroup.h"
 
 #include <vector>
 #include <memory>

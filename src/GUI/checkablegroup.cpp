@@ -1,14 +1,12 @@
 #include "GUI/checkablegroup.h"
-#include "GUI/checkboxgroup.h"
 
 #include <iostream>
 
-
 CheckableGroup::CheckableGroup(size_t number_of_checkables, bool only_one_has_to_be_checked, std::string top_text, int x, int y, sdl::Renderer& renderer)
-	: Ui(renderer), y_spacing_text_(-100), number_of_checkables_(number_of_checkables), only_one_has_to_be_checked_(only_one_has_to_be_checked), top_text_(top_text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y + y_spacing_text_, renderer),
-	y_spacing_between_checkable_(200)
+	: Ui(renderer), y_spacing_text_(-100), number_of_checkables_(number_of_checkables), only_one_has_to_be_checked_(only_one_has_to_be_checked), 
+	top_text_(top_text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y + y_spacing_text_, renderer), y_spacing_between_checkable_(200)
 {
-	//renderer_ = renderer;
+
 }
 
 void CheckableGroup::uncheck_all_others(Checkable* checkable_to_not_uncheck)

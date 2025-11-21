@@ -5,7 +5,6 @@ Button::Button(const std::string path_normal, const std::string path_selected, c
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
-	//renderer_ = renderer;
 }
 
 void Button::draw(sdl::Renderer& renderer) 

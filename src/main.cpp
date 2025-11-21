@@ -22,10 +22,6 @@ void nchk_SDL(const void* return_value, const char* error_string)
 	}
 }
 
-//TODO : utiliser les types encapsulés dans RAII_SDL2 ??
-
-//TODO : stocker un sdl::Renderer* en membre des classes à la place de SDL_Renderer* ??
-
 // TODO : gérer les erreurs des fonctions SDL. 
 // Idée : ne pas crash systématiquement en cas d'erreur (ex avec Ren'Py qui affiche une image noire si l'image qu'on veut afficher n'est pas trouvée)
 // => avoir une image par défaut pour chaque classe d'images (Button, Inputfield, Character...) => détectable par le dossier qui contient l'image (gui pour Button etc., characters pour Character...)
@@ -40,7 +36,7 @@ void nchk_SDL(const void* return_value, const char* error_string)
 
 //TODO : lambdas à la place des std::bind ??
 
-//TODO : possibilité de juste mettre une couleur un peu plus clair pour représenter un Ui dans l'état SELECTED
+//TODO : possibilité de juste mettre une couleur un peu plus claire pour représenter un Ui dans l'état SELECTED
 
 //TODO : ordre des membres dans les classes par rapport aux constructeurs
 
@@ -53,6 +49,7 @@ void nchk_SDL(const void* return_value, const char* error_string)
 //TODO : ne créer qu'une seule font ??
 
 //TODO : mettre en private les méthodes qui doivent l'être
+
 
 int main(int argc, char* argv[])
 {

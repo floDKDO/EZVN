@@ -1,5 +1,4 @@
 #include "GUI/texttoggle.h"
-#include "GUI/texttogglegroup.h"
 
 #include <iostream>
 
@@ -9,7 +8,6 @@ TextToggle::TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Co
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
-	//renderer_ = renderer;
 }
 
 void TextToggle::draw(sdl::Renderer& renderer)
@@ -27,9 +25,13 @@ void TextToggle::update(Uint64 time_step)
 	else
 	{
 		if(state_ == State::NORMAL)
+		{
 			text_.change_color(color_unchecked_);
+		}
 		else if(state_ == State::SELECTED || state_ == State::CLICKED)
+		{
 			text_.change_color(color_selected_);
+		}
 	}
 }
 

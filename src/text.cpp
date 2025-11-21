@@ -3,12 +3,11 @@
 #include <iostream>
 
 Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length)
-	:text_(text), color_(color), font_size_(font_size), font_style_(0), renderer_(renderer), wrap_length_(wrap_length), text_dialogue_(""), index_dialogue_(0), previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), text_speed_(15), last_time_(0)
+	:text_(text), color_(color), font_size_(font_size), font_style_(0), renderer_(renderer), wrap_length_(wrap_length), text_dialogue_(""), index_dialogue_(0), 
+	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), text_speed_(15), last_time_(0), font_(font_path_, font_size_)
 {
-	font_ = std::make_unique<sdl::Font>(font_path, font_size_); 
-
 	int w, h;
-	font_->size_UTF8(text_, &w, &h);
+	font_.size_UTF8(text_, &w, &h);
 	position_ = {x, y, w, h};
 
 	if(wrap_length_ != 0)
@@ -27,23 +26,23 @@ void Text::create_surface_texture()
 {
 	if(text_.empty() || (is_dialogue_ && text_dialogue_.empty()))
 	{
-		surface_ = std::make_unique<sdl::Surface>(*font_, " ", color_, wrap_length_);
+		surface_ = std::make_unique<sdl::Surface>(font_, " ", color_, wrap_length_);
 	}
 	else
 	{
 		if(is_dialogue_)
 		{
-			surface_ = std::make_unique<sdl::Surface>(*(font_), text_dialogue_, color_, wrap_length_);
+			surface_ = std::make_unique<sdl::Surface>(font_, text_dialogue_, color_, wrap_length_);
 		}
 		else
 		{
-			surface_ = std::make_unique<sdl::Surface>(*(font_), text_, color_, wrap_length_);
+			surface_ = std::make_unique<sdl::Surface>(font_, text_, color_, wrap_length_);
 		}
 	}
 	position_.w = surface_->Get()->w;
 	position_.h = surface_->Get()->h;
 
-	texture_ = std::make_unique<sdl::Texture>(renderer_, *(surface_));
+	texture_ = std::make_unique<sdl::Texture>(renderer_, *surface_);
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 }
 
@@ -114,14 +113,14 @@ int Text::get_width_one_char(char c)
 {
 	std::string s(1, c);
 	int w;
-	font_->size_UTF8(s, &w, nullptr);
+	font_.size_UTF8(s, &w, nullptr);
 	return w;
 }
 
 int Text::get_width_text() //TODO : combiner les deux fonctions en une seule ??
 {
 	int w;
-	font_->size_UTF8(text_, &w, nullptr);
+	font_.size_UTF8(text_, &w, nullptr);
 	return w;
 }
 
@@ -151,7 +150,7 @@ void Text::update(Uint64 time_step)
 
 	if(previous_font_style_ != font_style_)
 	{
-		TTF_SetFontStyle(font_->Get(), font_style_);
+		font_.set_style(font_style_);
 		create_surface_texture();
 		previous_font_style_ = font_style_;
 	}

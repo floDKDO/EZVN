@@ -1,8 +1,12 @@
 #include "game.h"
+#include "music.h"
+#include "GUI/slider.h"
+#include "GUI/textbutton.h"
+#include "GUI/checkbox.h"
+#include "GUI/checkboxgroup.h"
 
 #include <iostream>
 
-//TODO : regarder les .get()
 //TODO : garder les vectors de C-pointeurs ??
 
 Game::Game()
@@ -10,13 +14,13 @@ Game::Game()
 	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH_, WINDOW_HEIGHT_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
-	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr)
+	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr),
+	textbox_({255, 255, 255, 255}, renderer_)
 {
 	renderer_.set_logical_size(WINDOW_WIDTH_, WINDOW_HEIGHT_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
 
-	textbox_ = std::make_unique<Textbox>(SDL_Color{255, 255, 255, 255}, renderer_);
-	textbox_->text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
+	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
 	create_main_menu();
 	create_settings_menu();
@@ -167,7 +171,7 @@ void Game::handle_events()
 
 					case SDLK_SPACE:
 						//Prochain dialogue
-						textbox_->show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
+						textbox_.show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
 						break;
 
 					default:
@@ -196,13 +200,13 @@ void Game::draw()
 {
 	renderer_.clear();
 	get_state()->draw(renderer_);
-	textbox_->draw(renderer_);
+	textbox_.draw(renderer_);
 	renderer_.present();
 }
 
 void Game::update(Uint64 time_step)
 {
 	get_state()->update(time_step);
-	textbox_->update(time_step);
+	textbox_.update(time_step);
 }
 

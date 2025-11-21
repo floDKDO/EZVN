@@ -8,10 +8,10 @@ namespace sdl
 class SDLImage
 {
 	public:
-	SDLImage(int flags);
-	SDLImage(const SDLImage& sdl) = delete;
-	SDLImage& operator=(const SDLImage& sdl) = delete;
-	~SDLImage();
+		SDLImage(int flags);
+		SDLImage(const SDLImage& sdl) = delete;
+		SDLImage& operator=(const SDLImage& sdl) = delete;
+		~SDLImage();
 
 	protected:
 

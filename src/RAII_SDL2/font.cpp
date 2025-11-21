@@ -25,4 +25,9 @@ void Font::size_UTF8(const std::string text, int* w, int* h)
 	TTF_SizeUTF8(font_, text.c_str(), w, h);
 }
 
+void Font::set_style(int style)
+{
+	TTF_SetFontStyle(this->Get(), style);
+}
+
 }

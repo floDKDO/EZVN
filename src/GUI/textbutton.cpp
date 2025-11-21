@@ -8,7 +8,6 @@ TextButton::TextButton(const std::string text, const SDL_Color color_normal, con
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
-	//renderer_ = renderer;
 }
 
 void TextButton::draw(sdl::Renderer& renderer)

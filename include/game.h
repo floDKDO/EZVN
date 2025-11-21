@@ -2,12 +2,7 @@
 
 #include "gamestate.h"
 #include "menu.h"
-#include "GUI/textbutton.h"
 #include "textbox.h"
-#include "GUI/inputfield.h"
-#include "GUI/texttogglegroup.h"
-#include "GUI/checkbox.h"
-#include "music.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/gamecontroller.h"
@@ -16,7 +11,6 @@
 #include "RAII_SDL2/sdlimg.h"
 #include "RAII_SDL2/sdlttf.h"
 
-#include <memory>
 #include <stack>
 
 class Game
@@ -66,7 +60,7 @@ class Game
 
 	public:
 		bool game_running_;
-		std::unique_ptr<Textbox> textbox_;
+		Textbox textbox_;
 
 	private:
 		std::stack<GameState*> states_;

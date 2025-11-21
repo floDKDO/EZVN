@@ -2,10 +2,10 @@
 
 #include "GUI/ui.h"
 
+class CheckableGroup;
+
 class Checkable : public Ui
 {
-	friend class CheckableGroup;
-
 	public:
 		virtual ~Checkable() = default;
 		virtual void reverse_checked();

@@ -9,21 +9,21 @@ namespace sdl
 class Chunk
 {
 	public:
-	explicit Chunk(const std::string file); //Mix_LoadWAV
-	Chunk(const Chunk& chunk) = delete;
-	Chunk& operator=(const Chunk& chunk) = delete;
-	~Chunk(); //Mix_FreeChunk
+		explicit Chunk(const std::string file); //Mix_LoadWAV
+		Chunk(const Chunk& chunk) = delete;
+		Chunk& operator=(const Chunk& chunk) = delete;
+		~Chunk(); //Mix_FreeChunk
 
-	Mix_Chunk* Get() const;
-	void fade_in(int channel, int loops, int ms);
-	void fade_out(int which, int ms);
-	void pause(int channel);
-	void resume(int channel);
-	void volume(int volume);
+		Mix_Chunk* Get() const;
+		void fade_in(int channel, int loops, int ms);
+		void fade_out(int which, int ms);
+		void pause(int channel);
+		void resume(int channel);
+		void volume(int volume);
 
 	protected:
 
 	private:
-	Mix_Chunk* chunk_;
+		Mix_Chunk* chunk_;
 };
 }

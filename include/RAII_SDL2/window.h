@@ -9,20 +9,20 @@ namespace sdl
 class Window
 {
 	public:
-	Window(const std::string title, int x, int y, int w, int h, Uint32 flags); //SDL_CreateWindow
-	Window(const Window& window) = delete;
-	Window& operator=(const Window& window) = delete;
-	~Window(); //SDL_DestroyWindow
+		Window(const std::string title, int x, int y, int w, int h, Uint32 flags); //SDL_CreateWindow
+		Window(const Window& window) = delete;
+		Window& operator=(const Window& window) = delete;
+		~Window(); //SDL_DestroyWindow
 
-	SDL_Window* Get() const;
-	void set_title(const std::string title);
-	void set_full_screen();
-	void set_windowed();
+		SDL_Window* Get() const;
+		void set_title(const std::string title);
+		void set_full_screen();
+		void set_windowed();
 
 	protected:
 
 	private:
-	SDL_Window* window_;
+		SDL_Window* window_;
 };
 }
 

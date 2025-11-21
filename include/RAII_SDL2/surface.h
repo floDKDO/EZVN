@@ -1,10 +1,8 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <string>
-
 #include "RAII_SDL2/font.h"
+
+#include <SDL2/SDL.h>
 
 namespace sdl
 {

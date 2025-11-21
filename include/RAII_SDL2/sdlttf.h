@@ -8,10 +8,10 @@ namespace sdl
 class SDLTTF
 {
 	public:
-	SDLTTF();
-	SDLTTF(const SDLTTF& sdl) = delete;
-	SDLTTF& operator=(const SDLTTF& sdl) = delete;
-	~SDLTTF();
+		SDLTTF();
+		SDLTTF(const SDLTTF& sdl) = delete;
+		SDLTTF& operator=(const SDLTTF& sdl) = delete;
+		~SDLTTF();
 
 	protected:
 

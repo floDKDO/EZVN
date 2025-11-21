@@ -3,6 +3,7 @@
 #include "GUI/ui.h"
 #include "GUI/checkable.h"
 #include "text.h"
+
 #include <memory>
 
 class CheckableGroup : public Ui

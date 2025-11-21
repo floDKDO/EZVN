@@ -1,5 +1,4 @@
 #include "GUI/checkbox.h"
-#include "GUI/checkboxgroup.h"
 
 #include <iostream>
 
@@ -9,7 +8,6 @@ Checkbox::Checkbox(const std::string path_normal, const std::string path_selecte
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
-	//renderer_ = renderer;
 }
 
 void Checkbox::draw(sdl::Renderer& renderer)

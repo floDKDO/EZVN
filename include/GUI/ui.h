@@ -3,7 +3,6 @@
 #include "sound.h"
 #include "RAII_SDL2/renderer.h"
 
-#include <SDL2/SDL.h>
 #include <functional>
 #include <vector>
 

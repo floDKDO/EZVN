@@ -5,7 +5,6 @@
 #include "RAII_SDL2/font.h"
 #include "RAII_SDL2/renderer.h"
 
-
 #include <memory>
 
 class Text
@@ -63,6 +62,6 @@ class Text
 
 		std::unique_ptr<sdl::Surface> surface_;
 		std::unique_ptr<sdl::Texture> texture_;
-		std::unique_ptr<sdl::Font> font_;
+		sdl::Font font_;
 };
 

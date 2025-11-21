@@ -1,5 +1,7 @@
 #include "RAII_SDL2/texture.h"
 #include "RAII_SDL2/renderer.h"
+
+#include <SDL2/SDL_image.h>
 #include <iostream>
 
 namespace sdl

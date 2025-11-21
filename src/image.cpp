@@ -24,21 +24,21 @@ Image::Image(const std::string path, const int x, const int y, sdl::Renderer& re
 	{
 		sdl::RWops rwops(path, "rb"); 
 
-		if(rwops.Get() != nullptr && IMG_isGIF(rwops.Get())) 
+		if(rwops.Get() != nullptr && (IMG_isGIF(rwops.Get()) || IMG_isWEBP(rwops.Get())))
 		{
-			is_gif_ = true;
-			gif_ = std::make_unique<sdl::Animation>(path);
-			texture_ = std::make_unique<sdl::Texture>(renderer, gif_->Get()->frames[frame_index_]);
+			is_animated_ = true;
+			animated_image_ = std::make_unique<sdl::Animation>(path);
+			texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->Get()->frames[frame_index_]);
 		}
 		else
 		{
-			is_gif_ = false;
+			is_animated_ = false;
 			texture_ = std::make_unique<sdl::Texture>(renderer, path);
 		}
 	}
 	else
 	{
-		is_gif_ = false;
+		is_animated_ = false;
 		texture_ = std::make_unique<sdl::Texture>(renderer, path);
 	}
 
@@ -114,13 +114,13 @@ void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 void Image::draw(sdl::Renderer& renderer)
 {
 	SDL_RenderCopyEx(renderer.Get(), texture_->Get(), nullptr, &(position_), angle_, nullptr, flip_);
-	if(is_gif_)
+	if(is_animated_)
 	{
-		if(frame_index_ < gif_->Get()->count - 1)
+		if(frame_index_ < animated_image_->Get()->count - 1)
 		{
 			frame_index_ += 1;
 		}
 		else frame_index_ = 0;
-		texture_ = std::make_unique<sdl::Texture>(renderer, gif_->Get()->frames[frame_index_]);
+		texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->Get()->frames[frame_index_]);
 	}
 }

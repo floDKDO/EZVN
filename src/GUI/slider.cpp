@@ -3,13 +3,11 @@
 #include <iostream>
 
 Slider::Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), bar_(path_bar, x, y, renderer), handle_(path_handle, x, y - 5, renderer), min_value_(min_value), max_value_(max_value), current_value_(max_value/2), is_dragged_(false), is_selected_(false), diff_(0),
-	text_(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar_.position_.h*3, renderer) //TODO : pas de couleur fixée...
+	: Ui(renderer), bar_(path_bar, x, y, renderer), handle_(path_handle, x, y - 5, renderer), min_value_(min_value), max_value_(max_value), current_value_(max_value/2), 
+	is_dragged_(false), is_selected_(false), diff_(0), text_(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar_.position_.h*3, renderer) //TODO : pas de couleur fixée...
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
-	//renderer = renderer;
-
 	handle_.position_.x += (float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (bar_.position_.w - handle_.position_.w);
 }
 

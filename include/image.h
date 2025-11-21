@@ -63,8 +63,8 @@ class Image
 		Uint8 r_, g_, b_;
 
 		int frame_index_;
-		bool is_gif_;
-		std::unique_ptr<sdl::Animation> gif_;
+		bool is_animated_;
+		std::unique_ptr<sdl::Animation> animated_image_;
 
 		std::unique_ptr<sdl::Texture> texture_; 
 		sdl::Renderer& renderer_; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
