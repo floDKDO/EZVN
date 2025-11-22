@@ -37,6 +37,7 @@ class Game
 		void previous_menu_function(Ui* ui);
 		void slider_sound_function(Ui* ui);
 		void slider_music_function(Ui* ui);
+		void slider_text_function(Ui* ui);
 
 		void texttoggle_full_screen_function(Ui* ui);
 		void texttoggle_windowed_function(Ui* ui);

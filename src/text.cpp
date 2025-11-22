@@ -2,9 +2,11 @@
 
 #include <iostream>
 
+int Text::global_text_speed_ = 15;
+
 Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length)
 	:text_(text), color_(color), font_size_(font_size), font_style_(0), renderer_(renderer), wrap_length_(wrap_length), text_dialogue_(""), index_dialogue_(0), 
-	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), text_speed_(15), last_time_(0), 
+	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), /*local_text_speed_(global_text_speed_),*/ last_time_(0), 
 	font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(1)
 {
 	int w, h;
@@ -146,7 +148,7 @@ void Text::update(Uint64 time_step)
 {
 	if(is_dialogue_) 
 	{
-		if(time_step - last_time_ > text_speed_ && index_dialogue_ < text_.length()) 
+		if(time_step - last_time_ > global_text_speed_ && index_dialogue_ < text_.length()) 
 		{
 			text_dialogue_.push_back(text_[index_dialogue_]);
 			index_dialogue_ += 1;

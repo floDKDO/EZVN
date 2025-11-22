@@ -43,8 +43,9 @@ class Text
 		std::string text_dialogue_;
 		int index_dialogue_;
 
-		//TODO : faire un réglage "opaque" comme Text Speed dans Options de Ren'Py ??
-		int text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
+		static int global_text_speed_;
+
+		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
 
 		bool is_finished_;
 

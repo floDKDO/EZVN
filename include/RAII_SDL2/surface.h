@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 //TODO : écrire tous les paramètres en snake_case
+//TODO : renommer les méthodes Get() en autre chose pour ne pas confondre avec get() des unique_ptr
 
 namespace sdl
 {

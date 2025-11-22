@@ -4,24 +4,6 @@
 #include <chrono>
 #include <thread>
 
-void chk_SDL(const int return_value, const char* error_string)
-{
-	if(return_value < 0)
-	{
-		std::cerr << error_string << std::endl;
-		exit(EXIT_FAILURE);
-	}
-}
-
-void nchk_SDL(const void* return_value, const char* error_string)
-{
-	if(return_value == nullptr)
-	{
-		std::cerr << error_string << std::endl;
-		exit(EXIT_FAILURE);
-	}
-}
-
 // TODO : gérer les erreurs des fonctions SDL. 
 // Idée : ne pas crash systématiquement en cas d'erreur (ex avec Ren'Py qui affiche une image noire si l'image qu'on veut afficher n'est pas trouvée)
 // => avoir une image par défaut pour chaque classe d'images (Button, Inputfield, Character...) => détectable par le dossier qui contient l'image (gui pour Button etc., characters pour Character...)
