@@ -46,11 +46,6 @@ void nchk_SDL(const void* return_value, const char* error_string)
 
 //TODO : mettre en private les méthodes qui doivent l'être
 
-//TODO : voir pour le bug où deux Ui peuvent être sélectionnés en même temps => se déclenche en cas de défilements rapides avec la souris sur les Checkable d'un CheckableGroup, ne se déclenche pas sur les autres Ui
-//Raison : d'baord exécution update (boucle en entier) du CheckableGroup avant que le handle_events puisse appliquer la protection
-
-//TODO : bu si sélection d'un Checkable d'un CheckableGroup avec le clavier puis qu'on en sélectionne un autre avec la souris => les deux seront SELECTED
-
 
 int main(int argc, char* argv[])
 {
@@ -85,8 +80,6 @@ int main(int argc, char* argv[])
 			frame_count = 0;
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_TIME - (end_current_frame - begin_current_frame)));
-		 
-		//std::cout << "(MAIN)Valeur de time_step : " << time_step << std::endl;
 		time_step = SDL_GetTicks64();
 	}
 	return 0;

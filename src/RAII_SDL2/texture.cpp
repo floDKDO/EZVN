@@ -9,12 +9,18 @@ namespace sdl
 
 Texture::Texture(Renderer& renderer, Surface& surface) //SDL_CreateTextureFromSurface()
 {
-	texture_ = SDL_CreateTextureFromSurface(renderer.Get(), surface.Get());
+	if((texture_ = SDL_CreateTextureFromSurface(renderer.Get(), surface.Get())) == nullptr)
+	{
+		SDL_Log("(SDL_CreateTextureFromSurface) %s\n", SDL_GetError());
+	}
 }
 
 Texture::Texture(Renderer& renderer, SDL_Surface* surface) //SDL_CreateTextureFromSurface() with surface a frame from a IMG_Animation*
 {
-	texture_ = SDL_CreateTextureFromSurface(renderer.Get(), surface);
+	if((texture_ = SDL_CreateTextureFromSurface(renderer.Get(), surface)) == nullptr)
+	{
+		SDL_Log("(SDL_CreateTextureFromSurface) %s\n", SDL_GetError());
+	}
 }
 
 Texture::Texture(Renderer& renderer, const std::string file) //IMG_LoadTexture()
@@ -22,7 +28,10 @@ Texture::Texture(Renderer& renderer, const std::string file) //IMG_LoadTexture()
 	texture_ = IMG_LoadTexture(renderer.Get(), file.c_str());
 	if(texture_ == nullptr) //TODO: gérer le cas pour les backgrounds
 	{
-		texture_ = IMG_LoadTexture(renderer.Get(), "img/characters/image_not_found.png");
+		if((texture_ = IMG_LoadTexture(renderer.Get(), "img/characters/image_not_found.png")) == nullptr)
+		{
+			SDL_Log("(IMG_LoadTexture) %s\n", IMG_GetError());
+		}
 	}
 }
 
@@ -38,22 +47,34 @@ SDL_Texture* Texture::Get() const
 
 void Texture::set_alpha_mod(Uint8 alpha)
 {
-	SDL_SetTextureAlphaMod(texture_, alpha);
+	if(SDL_SetTextureAlphaMod(texture_, alpha) < 0)
+	{
+		SDL_Log("(SDL_SetTextureAlphaMod) %s\n", SDL_GetError());
+	}
 }
 
 void Texture::set_color_mod(Uint8 r, Uint8 g, Uint8 b)
 {
-	SDL_SetTextureColorMod(texture_, r, g, b);
+	if(SDL_SetTextureColorMod(texture_, r, g, b) < 0)
+	{
+		SDL_Log("(SDL_SetTextureColorMod) %s\n", SDL_GetError());
+	}
 }
 
 void Texture::set_blend_mode(SDL_BlendMode blendMode)
 {
-	SDL_SetTextureBlendMode(texture_, blendMode);
+	if(SDL_SetTextureBlendMode(texture_, blendMode) < 0)
+	{
+		SDL_Log("(SDL_SetTextureBlendMod) %s\n", SDL_GetError());
+	}
 }
 
 void Texture::query(Uint32* format, int* access, int* w, int* h)
 {
-	SDL_QueryTexture(texture_, format, access, w, h);
+	if(SDL_QueryTexture(texture_, format, access, w, h) < 0)
+	{
+		SDL_Log("(SDL_QueryTexture) %s\n", SDL_GetError());
+	}
 }
 
 }

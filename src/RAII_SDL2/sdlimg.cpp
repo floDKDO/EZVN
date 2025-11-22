@@ -5,7 +5,10 @@ namespace sdl
 
 SDLImage::SDLImage(int flags)
 {
-	IMG_Init(flags);
+	if(IMG_Init(flags) == 0)
+	{
+		SDL_Log("(IMG_Init) %s\n", IMG_GetError());
+	}
 }
 
 SDLImage::~SDLImage()

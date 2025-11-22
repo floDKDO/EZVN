@@ -1,11 +1,16 @@
 #include "RAII_SDL2/chunk.h"
 
+#include <SDL2/SDL.h>
+
 namespace sdl
 {
 
 Chunk::Chunk(const std::string file) //Mix_LoadWAV
 {
-	chunk_ = Mix_LoadWAV(file.c_str());
+	if((chunk_ = Mix_LoadWAV(file.c_str())) == nullptr)
+	{
+		SDL_Log("(Mix_LoadWAV) %s\n", Mix_GetError());
+	}
 }
 
 Chunk::~Chunk() //Mix_FreeChunk

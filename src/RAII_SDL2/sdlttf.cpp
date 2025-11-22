@@ -5,7 +5,10 @@ namespace sdl
 
 SDLTTF::SDLTTF()
 {
-	TTF_Init();
+	if(TTF_Init() == -1)
+	{
+		SDL_Log("(TTF_Init) %s\n", TTF_GetError());
+	}
 }
 
 SDLTTF::~SDLTTF()

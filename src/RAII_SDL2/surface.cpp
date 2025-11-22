@@ -5,7 +5,10 @@ namespace sdl
 
 Surface::Surface(Font& font, const std::string text, SDL_Color fg, Uint32 wrapLength)
 {
-	surface_ = TTF_RenderUTF8_Blended_Wrapped(font.Get(), text.c_str(), fg, wrapLength);
+	if((surface_ = TTF_RenderUTF8_Blended_Wrapped(font.Get(), text.c_str(), fg, wrapLength)) == nullptr)
+	{
+		SDL_Log("(TTF_RenderUTF8_Blended_Wrapped) %s\n", TTF_GetError());
+	}
 }
 
 Surface::~Surface() //SDL_FreeSurface

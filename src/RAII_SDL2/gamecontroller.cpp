@@ -5,7 +5,10 @@ namespace sdl
 
 GameController::GameController() //SDL_GameControllerOpen
 {
-	game_controller_ = SDL_GameControllerOpen(0);
+	if((game_controller_ = SDL_GameControllerOpen(0)) == nullptr)
+	{
+		SDL_Log("(SDL_GameControllerOpen) %s\n", SDL_GetError());
+	}
 }
 
 GameController::~GameController() //SDL_GameControllerClose

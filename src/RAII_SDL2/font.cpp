@@ -7,7 +7,10 @@ namespace sdl
 
 Font::Font(const std::string file, int ptsize) //TTF_OpenFont
 {
-	font_ = TTF_OpenFont(file.c_str(), ptsize);
+	if((font_ = TTF_OpenFont(file.c_str(), ptsize)) == nullptr)
+	{
+		SDL_Log("(TTF_OpenFont) %s\n", TTF_GetError());
+	}
 }
 
 Font::~Font() //TTF_CloseFont
@@ -22,7 +25,10 @@ TTF_Font* Font::Get() const
 
 void Font::size_UTF8(const std::string text, int* w, int* h)
 {
-	TTF_SizeUTF8(font_, text.c_str(), w, h);
+	if(TTF_SizeUTF8(font_, text.c_str(), w, h) == -1)
+	{
+		SDL_Log("(TTF_SizeUTF8) %s\n", TTF_GetError());
+	}
 }
 
 void Font::set_style(int style)

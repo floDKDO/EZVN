@@ -7,7 +7,10 @@ namespace sdl
 
 SDL::SDL(Uint32 flags)
 {
-	SDL_Init(flags);
+	if(SDL_Init(flags) < 0)
+	{
+		SDL_Log("(SDL_Init) %s\n", SDL_GetError());
+	}
 	SDL_StartTextInput();
 	SDL_GameControllerEventState(SDL_ENABLE);
 }
