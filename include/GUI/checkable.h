@@ -11,10 +11,7 @@ class Checkable : public Ui
 		virtual void reverse_checked();
 		virtual void change_checked(bool is_checked);
 
-		virtual void on_pointer_up();
 		virtual void on_pointer_up_hook_end();
-
-		virtual void on_enter_released();
 		virtual void on_enter_released_hook_end();
 
 		bool is_checked_;

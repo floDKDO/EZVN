@@ -51,7 +51,20 @@ void CheckableGroup::update(Uint64 time_step)
 	for(std::unique_ptr<Checkable> const& c : checkables_)
 	{
 		c->update(time_step);
+		if(c->state_ == State::SELECTED)
+		{
+			if(selected_checkable_ == nullptr || selected_checkable_ == c.get())
+			{
+				selected_checkable_ = c.get();
+			}
+			else
+			{
+				selected_checkable_->state_ = State::NORMAL;
+			}
+		}
 	}
+	selected_checkable_ = nullptr;
+
 	top_text_.update(time_step);
 }
 

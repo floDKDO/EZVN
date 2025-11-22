@@ -13,6 +13,7 @@ class Slider : public Ui
 
 		bool is_mouse_on_handle(int mouse_x, int mouse_y);
 		void handle_movement();
+		void unselect();
 
 		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		void on_pointer_down_hook_end() override;

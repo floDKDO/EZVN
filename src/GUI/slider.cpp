@@ -49,12 +49,17 @@ void Slider::handle_movement()
 	}
 }
 
+void Slider::unselect()
+{
+	is_dragged_ = false;
+	is_selected_ = false;
+}
+
 void Slider::on_pointer_up()
 {
 	if(is_dragged_)
 	{
-		is_dragged_ = false;
-		is_selected_ = false;
+		unselect();
 		Ui::on_pointer_up();
 	}
 }

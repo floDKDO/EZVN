@@ -42,13 +42,14 @@ void nchk_SDL(const void* return_value, const char* error_string)
 
 //TODO : ordre des membres dans les classes selon l'ordre voulu des appels des destructeurs
 
-//TODO : saut de ligne dans la liste d'initialisation des membres dans les constructeurs
-
-//TODO : retirer les includes inutiles
-
 //TODO : ne créer qu'une seule font ??
 
 //TODO : mettre en private les méthodes qui doivent l'être
+
+//TODO : voir pour le bug où deux Ui peuvent être sélectionnés en même temps => se déclenche en cas de défilements rapides avec la souris sur les Checkable d'un CheckableGroup, ne se déclenche pas sur les autres Ui
+//Raison : d'baord exécution update (boucle en entier) du CheckableGroup avant que le handle_events puisse appliquer la protection
+
+//TODO : bu si sélection d'un Checkable d'un CheckableGroup avec le clavier puis qu'on en sélectionne un autre avec la souris => les deux seront SELECTED
 
 
 int main(int argc, char* argv[])

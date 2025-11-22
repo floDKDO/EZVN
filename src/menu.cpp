@@ -1,5 +1,6 @@
 #include "menu.h"
 #include "GUI/slider.h"
+#include "GUI/checkboxgroup.h"
 
 #include <iostream>
 
@@ -83,13 +84,6 @@ void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mo
 
 void Menu::assign_ui_on_moving()
 {
-	/*std::vector<Ui*> navigation_list;
-	for(std::unique_ptr<Ui> const& ui : ui_)
-	{
-		std::vector<Ui*> nodes = ui->get_navigation_nodes();
-		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
-	}*/
-
 	for(Ui* ui : navigation_list_)
 	{
 		Ui* current_best_up = nullptr;
@@ -128,50 +122,8 @@ void Menu::assign_ui_on_moving()
 	}
 }
 
-//TODO : cette implémentation est à jeter ??
-/*
 void Menu::handle_events(const SDL_Event& e)
 {
-	for(std::unique_ptr<Ui>& ui : ui_)
-	{
-		if(e.type == SDL_MOUSEMOTION)
-		{
-			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI) 
-			{
-				if(dynamic_cast<CheckableGroup*>(ui.get()) != nullptr)
-				{
-					//ui est le toggle dont l'indice a été retourné par is_mouse_on_ui()
-					CheckableGroup* checkablegroup = dynamic_cast<CheckableGroup*>(ui.get()); //TODO
-					//ui = std::make_unique<CheckableGroup>(checkablegroup->toggles[ui->is_mouse_on_ui()]);
-				}
-
-				if(previous_selected != nullptr && ui.get() != previous_selected && previous_selected->state != State::NORMAL) 
-				{
-					previous_selected->state = State::NORMAL; 
-					if(dynamic_cast<Slider*>(previous_selected) != nullptr)
-					{
-						dynamic_cast<Slider*>(previous_selected)->is_selected = false;
-						dynamic_cast<Slider*>(previous_selected)->is_dragged = false;
-					}
-				}
-				previous_selected = current_selected;
-				current_selected = ui.get();
-			}
-		}
-		ui->handle_events(e);
-	}
-}
-*/
-
-void Menu::handle_events(const SDL_Event& e)
-{
-	/*std::vector<Ui*> navigation_list;
-	for(std::unique_ptr<Ui> const& ui : ui_)
-	{
-		std::vector<Ui*> nodes = ui->get_navigation_nodes();
-		navigation_list.insert(navigation_list.end(), nodes.begin(), nodes.end());
-	}*/
-
 	for(Ui* ui : navigation_list_)
 	{
 		if(e.type == SDL_MOUSEMOTION)
@@ -183,8 +135,7 @@ void Menu::handle_events(const SDL_Event& e)
 					previous_selected_->state_ = State::NORMAL;
 					if(dynamic_cast<Slider*>(previous_selected_) != nullptr)
 					{
-						dynamic_cast<Slider*>(previous_selected_)->is_selected_ = false;
-						dynamic_cast<Slider*>(previous_selected_)->is_dragged_ = false;
+						dynamic_cast<Slider*>(previous_selected_)->unselect();
 					}
 				}
 				previous_selected_ = current_selected_;

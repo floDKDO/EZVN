@@ -6,6 +6,8 @@
 
 #include <memory>
 
+//TODO : utiliser la même syntaxe que le std::array pour indiquer le nombre de checkables à la place de l'indiquer dans le constructeur => utiliser une template
+
 class CheckableGroup : public Ui
 {
 	public:
@@ -23,11 +25,11 @@ class CheckableGroup : public Ui
 		int y_spacing_text_;
 		std::vector<std::unique_ptr<Checkable>> checkables_;
 		size_t number_of_checkables_;
+		Checkable* selected_checkable_; //TODO!!
 		bool only_one_has_to_be_checked_;
 		Text top_text_; 
 		int y_spacing_between_checkable_;
 		
-
 	protected:
 		CheckableGroup(size_t number_of_checkables, bool only_one_has_to_be_checked, std::string top_text, int x, int y, sdl::Renderer& renderer);
 

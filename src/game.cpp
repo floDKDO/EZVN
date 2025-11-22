@@ -32,11 +32,11 @@ void Game::create_main_menu()
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
 
-	ui_elements.push_back(std::make_unique<TextButton>(std::string("Play"), SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Play", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
-	main_menu_ = std::make_unique<Menu>(std::move(ui_elements), ui_elements[0].get());
+	main_menu_ = std::make_unique<Menu>(std::move(ui_elements), ui_elements[1].get());
 }
 
 void Game::create_settings_menu()
@@ -200,13 +200,13 @@ void Game::draw()
 {
 	renderer_.clear();
 	get_state()->draw(renderer_);
-	textbox_.draw(renderer_);
+	//textbox_.draw(renderer_);
 	renderer_.present();
 }
 
 void Game::update(Uint64 time_step)
 {
 	get_state()->update(time_step);
-	textbox_.update(time_step);
+	//textbox_.update(time_step);
 }
 
