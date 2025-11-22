@@ -4,6 +4,8 @@
 
 #include <SDL2/SDL.h>
 
+//TODO : écrire tous les paramètres en snake_case
+
 namespace sdl
 {
 
@@ -16,6 +18,8 @@ class Surface
 		~Surface(); //SDL_FreeSurface
 
 		SDL_Surface* Get() const;
+		void set_blend_mode(SDL_BlendMode blendMode);
+		void blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect);
 
 	protected:
 

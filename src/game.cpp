@@ -185,13 +185,13 @@ void Game::draw()
 {
 	renderer_.clear();
 	get_state()->draw(renderer_);
-	//textbox_.draw(renderer_);
+	textbox_.draw(renderer_);
 	renderer_.present();
 }
 
 void Game::update(Uint64 time_step)
 {
 	get_state()->update(time_step);
-	//textbox_.update(time_step);
+	textbox_.update(time_step);
 }
 

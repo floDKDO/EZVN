@@ -33,7 +33,12 @@ void Font::size_UTF8(const std::string text, int* w, int* h)
 
 void Font::set_style(int style)
 {
-	TTF_SetFontStyle(this->Get(), style);
+	TTF_SetFontStyle(font_, style);
+}
+
+void Font::set_outline(int outline)
+{
+	TTF_SetFontOutline(font_, outline);
 }
 
 }

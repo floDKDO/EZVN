@@ -21,4 +21,20 @@ SDL_Surface* Surface::Get() const
 	return surface_;
 }
 
+void Surface::set_blend_mode(SDL_BlendMode blendMode)
+{
+	if(SDL_SetSurfaceBlendMode(surface_, blendMode) < 0)
+	{
+		SDL_Log("(SDL_SetSurfaceBlendMode) %s\n", SDL_GetError());
+	}
+}
+
+void Surface::blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect)
+{
+	if(SDL_BlitSurface(surface_, srcrect, dst.Get(), dstrect) < 0)
+	{
+		SDL_Log("(SDL_BlitSurface) %s\n", SDL_GetError());
+	}
+}
+
 }

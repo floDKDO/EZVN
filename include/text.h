@@ -61,7 +61,10 @@ class Text
 		void create_surface_texture();
 
 		std::unique_ptr<sdl::Surface> surface_;
+		std::unique_ptr<sdl::Surface> surface_outline_;
 		std::unique_ptr<sdl::Texture> texture_;
 		sdl::Font font_;
+		sdl::Font font_outline_;
+		int outline_size_;
 };
 

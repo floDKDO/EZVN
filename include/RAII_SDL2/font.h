@@ -17,6 +17,7 @@ class Font
 		TTF_Font* Get() const;
 		void size_UTF8(const std::string text, int* w, int* h);
 		void set_style(int style);
+		void set_outline(int outline);
 
 	protected:
 
