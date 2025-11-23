@@ -19,7 +19,7 @@ Game::Game()
 	renderer_.set_logical_size(WINDOW_WIDTH_, WINDOW_HEIGHT_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
 
-	in_game_ = std::make_unique<InGame>(renderer_);
+	in_game_ = std::make_unique<InGameState>(renderer_);
 	create_main_menu();
 	create_settings_menu();
 	push_state(main_menu_.get());
@@ -34,7 +34,7 @@ void Game::create_main_menu()
 	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
-	main_menu_ = std::make_unique<Menu>(std::move(ui_elements), ui_elements[0].get());
+	main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), renderer_);
 }
 
 void Game::create_settings_menu()
@@ -50,7 +50,7 @@ void Game::create_settings_menu()
 	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 30, 0, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, SDL_Color{200, 200, 200, 255}, SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 
-	settings_menu_ = std::make_unique<Menu>(std::move(ui_elements), ui_elements[0].get());
+	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), renderer_);
 }
 
 void Game::play_function(Ui* ui)
@@ -163,9 +163,6 @@ void Game::handle_events()
 					default:
 						break;
 				}
-				break;
-
-			case SDL_KEYUP:
 				break;
 
 			default:

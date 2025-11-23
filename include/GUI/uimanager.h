@@ -1,15 +1,14 @@
 #pragma once
 
-#include "gamestate.h"
-#include "GUI/button.h"
+#include "GUI/ui.h"
 
 #include <vector>
 #include <memory>
 
-class Menu : public GameState
+class UiManager
 {
 	public:
-		Menu(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected);
+		UiManager(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected);
 
 		enum class Axis
 		{

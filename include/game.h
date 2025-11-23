@@ -1,8 +1,8 @@
 #pragma once
 
 #include "gamestate.h"
-#include "menu.h"
-#include "ingame.h"
+#include "menustate.h"
+#include "ingamestate.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/gamecontroller.h"
@@ -54,12 +54,12 @@ class Game
 		sdl::Renderer renderer_;
 		sdl::GameController game_controller_;
 
-		std::unique_ptr<Menu> main_menu_;
-		std::unique_ptr<Menu> settings_menu_;
-		std::unique_ptr<Menu> load_menu_;
-		std::unique_ptr<Menu> save_menu_;
+		std::unique_ptr<MenuState> main_menu_;
+		std::unique_ptr<MenuState> settings_menu_;
+		std::unique_ptr<MenuState> load_menu_;
+		std::unique_ptr<MenuState> save_menu_;
 
-		std::unique_ptr<InGame> in_game_;
+		std::unique_ptr<InGameState> in_game_;
 
 	public:
 		bool game_running_;

@@ -1,10 +1,9 @@
-#include "menu.h"
+#include "GUI/uimanager.h"
 #include "GUI/slider.h"
-#include "GUI/checkboxgroup.h"
 
 #include <iostream>
 
-Menu::Menu(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected)
+UiManager::UiManager(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected)
 	: ui_elements_(std::move(ui_elements)), previous_selected_(nullptr), current_selected_(ui_selected)
 {
 	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
@@ -14,10 +13,10 @@ Menu::Menu(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected)
 	}
 
 	assign_ui_on_moving();
-	ui_selected->state_ = State::SELECTED;
+	ui_selected->state_ = State::SELECTED; //TODO : retirer le paramètre et sélectionner le premier UI de ui_elements ??
 }
 
-bool Menu::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode)
+bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode)
 {
 	if(mode == Axis::X_AXIS)
 	{
@@ -32,7 +31,7 @@ bool Menu::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, con
 	return false; 
 }
 
-bool Menu::is_candidate_closer(const Ui* const ui, const Ui* const candidate, const Ui* const current_best, const Axis mode)
+bool UiManager::is_candidate_closer(const Ui* const ui, const Ui* const candidate, const Ui* const current_best, const Axis mode)
 {
 	const int diff_best_x = std::abs(ui->get_rect().x - current_best->get_rect().x);
 	const int diff_candidate_x = std::abs(ui->get_rect().x - candidate->get_rect().x);
@@ -53,7 +52,7 @@ bool Menu::is_candidate_closer(const Ui* const ui, const Ui* const candidate, co
 //ui = ui to which we assign a "select_on"
 //candidate = the current ui in the inner for loop
 //current_best = the "select_on_*" we try to assign to ui (up, down, left or right)
-void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mode)
+void UiManager::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mode)
 {
 	if(current_best == nullptr)
 	{
@@ -82,7 +81,7 @@ void Menu::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mo
 	}
 }
 
-void Menu::assign_ui_on_moving()
+void UiManager::assign_ui_on_moving()
 {
 	for(Ui* ui : navigation_list_)
 	{
@@ -122,7 +121,7 @@ void Menu::assign_ui_on_moving()
 	}
 }
 
-void Menu::handle_events(const SDL_Event& e)
+void UiManager::handle_events(const SDL_Event& e)
 {
 	for(Ui* ui : navigation_list_)
 	{
@@ -146,7 +145,7 @@ void Menu::handle_events(const SDL_Event& e)
 	}
 }
 
-void Menu::draw(sdl::Renderer& renderer)
+void UiManager::draw(sdl::Renderer& renderer)
 {
 	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
@@ -154,7 +153,7 @@ void Menu::draw(sdl::Renderer& renderer)
 	}
 }
 
-void Menu::update(Uint64 time_step)
+void UiManager::update(Uint64 time_step)
 {
 	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{

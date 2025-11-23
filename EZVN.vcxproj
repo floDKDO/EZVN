@@ -144,9 +144,10 @@
     <ClCompile Include="src\gamestate.cpp" />
     <ClCompile Include="src\image.cpp" />
     <ClCompile Include="src\GUI\inputfield.cpp" />
-    <ClCompile Include="src\ingame.cpp" />
+    <ClCompile Include="src\ingamestate.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\menu.cpp" />
+    <ClCompile Include="src\GUI\uimanager.cpp" />
+    <ClCompile Include="src\menustate.cpp" />
     <ClCompile Include="src\music.cpp" />
     <ClCompile Include="src\RAII_SDL2\animation.cpp" />
     <ClCompile Include="src\RAII_SDL2\chunk.cpp" />
@@ -183,8 +184,9 @@
     <ClInclude Include="include\gamestate.h" />
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\GUI\inputfield.h" />
-    <ClInclude Include="include\ingame.h" />
-    <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\ingamestate.h" />
+    <ClInclude Include="include\GUI\uimanager.h" />
+    <ClInclude Include="include\menustate.h" />
     <ClInclude Include="include\music.h" />
     <ClInclude Include="include\RAII_SDL2\animation.h" />
     <ClInclude Include="include\RAII_SDL2\chunk.h" />

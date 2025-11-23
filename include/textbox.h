@@ -9,6 +9,8 @@ class Textbox
 		Textbox(SDL_Color text_color, sdl::Renderer& renderer);
 
 		void show_new_dialogue(std::string new_dialogue, std::string speaker="");
+
+		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 		void update(Uint64 time_step);
 

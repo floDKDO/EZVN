@@ -39,7 +39,7 @@
     <ClCompile Include="src\GUI\ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\menu.cpp">
+    <ClCompile Include="src\GUI\uimanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\textbutton.cpp">
@@ -123,7 +123,10 @@
     <ClCompile Include="src\GUI\checkable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ingame.cpp">
+    <ClCompile Include="src\ingamestate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\menustate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,7 +152,7 @@
     <ClInclude Include="include\GUI\ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\menu.h">
+    <ClInclude Include="include\GUI\uimanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\textbutton.h">
@@ -233,7 +236,10 @@
     <ClInclude Include="include\GUI\checkable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ingame.h">
+    <ClInclude Include="include\ingamestate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\menustate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
