@@ -11,7 +11,7 @@ Character::Character(std::string name, std::string character_path, std::string t
 void Character::set_transform(Transform t)
 {
 	//t.t11(character_.position_.x, character_.position_.y);
-	character_.resize(character_.position_.w * 0.8, character_.position_.h * 0.8);
+	character_.resize(character_.position_.w * 0.8, character_.position_.h * 0.8); //pour f11 => 0.85, -20 pixels en y 
 	character_.set_position(640, character_.position_.y);
 }
 

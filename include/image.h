@@ -33,8 +33,11 @@ class Image
 		void flip_horizontally();
 		void flip_normal();
 
+		int get_xcenter() const;
+		void zoom(const float zoom);
 		void resize(const int w, const int h);
 		void set_position(const int x, const int y);
+		void set_center();
 
 		//TODO : void set_character_position(Transform t);
 

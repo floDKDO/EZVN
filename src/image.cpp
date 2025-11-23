@@ -77,6 +77,23 @@ void Image::flip_normal()
 	flip_ = SDL_FLIP_NONE;
 }
 
+int Image::get_xcenter() const
+{
+	return position_.w / 2;
+}
+
+void Image::zoom(const float zoom)
+{
+	float position_w = float(position_.w);
+	float position_h = float(position_.h);
+
+	position_w *= zoom;
+	position_h *= zoom;
+
+	position_.w = int(position_w);
+	position_.h = int(position_h);
+}
+
 void Image::resize(const int w, const int h)
 {
 	position_ = {position_.x, position_.y, w, h};
@@ -85,6 +102,11 @@ void Image::resize(const int w, const int h)
 void Image::set_position(const int x, const int y)
 {
 	position_ = {x, y, position_.w, position_.h};
+}
+
+void Image::set_center()
+{
+	position_ = {1280/2 - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
 }
 
 void Image::night_filter()

@@ -4,7 +4,7 @@
 #include <iostream>
 
 InGameState::InGameState(sdl::Renderer& renderer)
-	: renderer_(renderer), textbox_({255, 255, 255, 255}, renderer), background_("img/backgrounds/class.png", 0, 0, renderer)
+	: renderer_(renderer), textbox_({255, 255, 255, 255}, renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
 {
 	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
@@ -32,8 +32,17 @@ InGameState::InGameState(sdl::Renderer& renderer)
 
 	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", "img/gui/textbox.png", renderer));
 
-	characters_[0]->character_.resize(characters_[0]->character_.position_.w * 0.8, characters_[0]->character_.position_.h * 0.8);
-	characters_[0]->character_.set_position(250, characters_[0]->character_.position_.y - 30);
+	//TODO : comment "annuler" une transformation (= revenir à l'état avant la transformation) ?
+
+	//t11
+	characters_[0]->character_.zoom(0.8f);
+	characters_[0]->character_.set_center();
+	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 30);
+
+	//f11
+	/*characters_[0]->character_.zoom(0.85f);
+	characters_[0]->character_.set_center();
+	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 75);*/
 }
 
 void InGameState::temp_function(Ui* ui)
@@ -43,15 +52,26 @@ void InGameState::temp_function(Ui* ui)
 
 void InGameState::handle_events(const SDL_Event& e)
 {
-	menu_->handle_events(e);
-	for(Ui* ui : menu_->navigation_list_)
+	if(!hide_ui_textbox_)
 	{
-		if(ui->is_mouse_on_ui() != Ui::MOUSE_NOT_ON_ANY_UI) //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
+		menu_->handle_events(e);
+		for(Ui* ui : menu_->navigation_list_)
 		{
-			return;
+			if(ui->is_mouse_on_ui() != Ui::MOUSE_NOT_ON_ANY_UI) //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
+			{
+				return;
+			}
+		}
+		textbox_.handle_events(e);
+	}
+
+	if(e.type == SDL_MOUSEBUTTONDOWN)
+	{
+		if(e.button.button == SDL_BUTTON_RIGHT)
+		{
+			hide_ui_textbox_ = !hide_ui_textbox_;
 		}
 	}
-	textbox_.handle_events(e);
 }
 
 void InGameState::draw(sdl::Renderer& renderer)
@@ -61,12 +81,19 @@ void InGameState::draw(sdl::Renderer& renderer)
 	{
 		c->draw(renderer);
 	}
-	textbox_.draw(renderer);
-	menu_->draw(renderer);
+
+	if(!hide_ui_textbox_)
+	{
+		textbox_.draw(renderer);
+		menu_->draw(renderer);
+	}
 }
 
 void InGameState::update(Uint64 time_step)
 {
-	textbox_.update(time_step);
-	menu_->update(time_step);
+	if(!hide_ui_textbox_)
+	{
+		textbox_.update(time_step);
+		menu_->update(time_step);
+	}
 }

@@ -25,6 +25,8 @@ class InGameState : public GameState
 		std::vector<std::unique_ptr<Character>> characters_;
 		Image background_;
 
+		bool hide_ui_textbox_;
+
 		sdl::Renderer& renderer_;
 };
 
