@@ -12,11 +12,11 @@ class TextButton : public Ui
 		void update(Uint64 time_step) override;
 		SDL_Rect get_rect() const override;
 
+		Text text_;
+
 	protected:
 
 	private:
-		Text text_;
-
 		SDL_Color color_normal_;
 		SDL_Color color_selected_;
 		SDL_Color color_clicked_;

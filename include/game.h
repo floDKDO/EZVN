@@ -2,7 +2,7 @@
 
 #include "gamestate.h"
 #include "menu.h"
-#include "textbox.h"
+#include "ingame.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/gamecontroller.h"
@@ -59,9 +59,10 @@ class Game
 		std::unique_ptr<Menu> load_menu_;
 		std::unique_ptr<Menu> save_menu_;
 
+		std::unique_ptr<InGame> in_game_;
+
 	public:
 		bool game_running_;
-		Textbox textbox_;
 
 	private:
 		std::stack<GameState*> states_;

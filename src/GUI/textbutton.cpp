@@ -3,7 +3,7 @@
 #include <iostream>
 
 TextButton::TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), text_(text, color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer),
+	: Ui(renderer), text_(text, color_normal, "fonts/Aller_Rg.ttf", 10, x, y, renderer), //TODO : taille de la police doit être un paramètre
 	  color_normal_(color_normal), color_selected_(color_selected), color_clicked_(color_clicked)
 {
 	callback_function_ = callback_function;

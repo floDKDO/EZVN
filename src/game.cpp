@@ -14,14 +14,12 @@ Game::Game()
 	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH_, WINDOW_HEIGHT_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
-	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr),
-	textbox_({255, 255, 255, 255}, renderer_)
+	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr)
 {
 	renderer_.set_logical_size(WINDOW_WIDTH_, WINDOW_HEIGHT_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
 
-	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
-
+	in_game_ = std::make_unique<InGame>(renderer_);
 	create_main_menu();
 	create_settings_menu();
 	push_state(main_menu_.get());
@@ -59,7 +57,7 @@ void Game::play_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Play!" << std::endl;
-	//push_state(); //TODO : créer un état IN_GAME
+	push_state(in_game_.get());
 }
 
 void Game::settings_function(Ui* ui)
@@ -162,20 +160,8 @@ void Game::handle_events()
 						game_running_ = false;
 						break;
 
-					case SDLK_SPACE:
-						//Prochain dialogue
-						textbox_.show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
-						break;
-
 					default:
 						break;
-				}
-				break;
-
-			case SDL_MOUSEBUTTONDOWN:
-				if(e.button.button == SDL_BUTTON_LEFT)
-				{
-					//TODO : si sur la textbox OU sur rien du tout, alors passer au dialogue suivant
 				}
 				break;
 
@@ -193,13 +179,11 @@ void Game::draw()
 {
 	renderer_.clear();
 	get_state()->draw(renderer_);
-	//textbox_.draw(renderer_);
 	renderer_.present();
 }
 
 void Game::update(Uint64 time_step)
 {
 	get_state()->update(time_step);
-	//textbox_.update(time_step);
 }
 
