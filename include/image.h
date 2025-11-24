@@ -8,6 +8,8 @@
 
 class Image
 {
+	friend class Transform;
+
 	public:
 		Image(const std::string path, const int x, const int y, sdl::Renderer& renderer, const int zorder=0);
 
@@ -28,6 +30,8 @@ class Image
 
 		void show();
 		void hide();
+
+		void rotate(const double angle);
 
 		void flip_vertically();
 		void flip_horizontally();
@@ -50,6 +54,7 @@ class Image
 
 		int zorder_;
 		SDL_Rect position_;
+		SDL_Rect initial_rect_;
 
 		Uint64 last_time_; //TODO : trouver un meilleur nom
 

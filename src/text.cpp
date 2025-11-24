@@ -137,6 +137,21 @@ int Text::get_width_text() //TODO : combiner les deux fonctions en une seule ??
 	return w;
 }
 
+int Text::get_height_one_char(char c)
+{
+	std::string s(1, c);
+	int h;
+	font_.size_UTF8(s, nullptr, &h);
+	return h;
+}
+
+int Text::get_height_text()
+{
+	int h;
+	font_.size_UTF8(text_, nullptr, &h);
+	return h;
+}
+
 void Text::draw(sdl::Renderer& renderer)
 {
 	SDL_RenderCopy(renderer.Get(), texture_->Get(), nullptr, &position_);

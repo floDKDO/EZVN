@@ -48,20 +48,26 @@ Image::Image(const std::string path, const int x, const int y, sdl::Renderer& re
 	texture_->query(nullptr, nullptr, &w, &h);
 
 	position_ = {x, y, w, h};
+	initial_rect_ = position_;
 }
 
 void Image::show()
 {
-	std::cout << "SHOW ***********************************************************\n";
+	//std::cout << "SHOW ***********************************************************\n";
 	alpha_ = 255;
 	texture_->set_alpha_mod(alpha_);
 }
 
 void Image::hide()
 {
-	std::cout << "HIDE ***********************************************************\n";
+	//std::cout << "HIDE ***********************************************************\n";
 	alpha_ = 0;
 	texture_->set_alpha_mod(alpha_);
+}
+
+void Image::rotate(const double angle)
+{
+	angle_ = angle;
 }
 
 void Image::flip_vertically()

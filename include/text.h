@@ -28,6 +28,9 @@ class Text
 
 		int get_width_one_char(char c);
 		int get_width_text();
+		int get_height_one_char(char c); //TODO : utiliser ces deux fonctions
+		int get_height_text();
+
 		void draw(sdl::Renderer& renderer);
 		void update(Uint64 time_step);
 

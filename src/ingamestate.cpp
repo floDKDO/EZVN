@@ -48,8 +48,8 @@ InGameState::InGameState(sdl::Renderer& renderer)
 
 	//f11
 	//characters_[0]->character_.zoom(0.84f);
-	characters_[0]->character_.set_center();
-	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 65);
+	//characters_[0]->character_.set_center();
+	//characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 65);
 }
 
 void InGameState::temp_function(Ui* ui)
@@ -121,6 +121,5 @@ void InGameState::update(Uint64 time_step)
 		menu_->update(time_step);
 	}
 
-	Transform t11;
-	characters_[0]->set_transform(t11);
+	characters_[0]->set_transform();
 }
