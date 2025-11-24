@@ -52,65 +52,124 @@ Image::Image(const std::string path, const int x, const int y, sdl::Renderer& re
 
 void Image::show()
 {
+	std::cout << "SHOW ***********************************************************\n";
 	alpha_ = 255;
 	texture_->set_alpha_mod(alpha_);
 }
 
 void Image::hide()
 {
+	std::cout << "HIDE ***********************************************************\n";
 	alpha_ = 0;
 	texture_->set_alpha_mod(alpha_);
 }
 
 void Image::flip_vertically()
 {
+	std::cout << "FLIP V ***********************************************************\n";
 	flip_ = SDL_FLIP_VERTICAL;
 }
 
 void Image::flip_horizontally()
 {
+	std::cout << "FLIP H ***********************************************************\n";
 	flip_ = SDL_FLIP_HORIZONTAL;
 }
 
 void Image::flip_normal()
 {
+	std::cout << "FLIP N ***********************************************************\n";
 	flip_ = SDL_FLIP_NONE;
 }
 
 int Image::get_xcenter() const
 {
+	std::cout << "GET XCENTER ***********************************************************\n";
 	return position_.w / 2;
 }
 
-void Image::zoom(const float zoom)
+void Image::zoom(const float zoom, Uint64 time)
 {
+	std::cout << "ZOOM ***********************************************************\n";
+
 	float position_w = float(position_.w);
 	float position_h = float(position_.h);
 
-	position_w *= zoom;
-	position_h *= zoom;
+	static float zoome = 1.0f;
+	static bool animation_finished = false;
 
-	position_.w = int(position_w);
-	position_.h = int(position_h);
+	if(!animation_finished && zoom != 1.0f) //TODO : si time == 0
+	{
+		position_w *= zoome;
+		position_h *= zoome;
+
+		position_.w = int(position_w);
+		position_.h = int(position_h);
+
+		zoome += (zoom - 1.0f) / (60.0f / (1000.0f / float(time))); //1.0f = zoom sans modif, 60.0f = FPS, 1000.0f = 1000 ms
+
+		std::cout << "ZOOME: " << zoome << ", Zoom: " << zoom << std::endl;
+
+		if((zoom < 1.0f && zoome <= zoom) || (zoom > 1.0f && zoome >= zoom)) 
+		{
+			//animation terminée
+			animation_finished = true;
+		}
+	}
 }
 
 void Image::resize(const int w, const int h)
 {
+	std::cout << "RESIZE ***********************************************************\n";
 	position_ = {position_.x, position_.y, w, h};
 }
 
-void Image::set_position(const int x, const int y)
+void Image::set_position(const int x, const int y, Uint64 time)
 {
+	std::cout << "SET POS ***********************************************************\n";
 	position_ = {x, y, position_.w, position_.h};
 }
 
-void Image::set_center()
+void Image::set_position_xcenter(const int x, const int y)
 {
-	position_ = {1280/2 - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
+	std::cout << "SET POS XCENTER ***********************************************************\n";
+	position_ = {x - std::abs(get_xcenter()), y, position_.w, position_.h};
+}
+
+void Image::set_center(Uint64 time)
+{
+	std::cout << "SET CENTER ***********************************************************\n";
+
+	static bool animation_finishede = false;
+
+	double delta_x = std::abs(position_.x - (1280 / 2 - std::abs(get_xcenter())));
+	static double delta_x_frame = 0.0;
+
+	int init_position_x = position_.x;
+	double timee = double(time);
+
+	//std::cout << "TIME : " << timee << std::endl;
+
+	//std::cout << "éINIT : " << position_.x << " et " << position_.x + int(delta_x) << std::endl;
+
+	if(!animation_finishede && time != 0)
+	{
+		delta_x_frame += delta_x / (60.0 / (1000.0 / timee));
+		position_.x += delta_x_frame;
+		//std::cout << "POSITION_X : " << position_.x << std::endl;
+		//std::cout << "POSITION_Xe : " << delta_x_frame << std::endl;
+
+		if(position_.x >= init_position_x + int(delta_x)) //TODO
+		{ 
+
+			animation_finishede = true;
+		}
+	}
 }
 
 void Image::night_filter()
 {
+	std::cout << "N FILTER ***********************************************************\n";
 	r_ = 127;
 	g_ = 127;
 	b_ = 165;
@@ -119,6 +178,7 @@ void Image::night_filter()
 
 void Image::afternoon_filter()
 {
+	std::cout << "A FILTER ***********************************************************\n";
 	r_ = 210;
 	g_ = 150;
 	b_ = 130;
@@ -127,6 +187,7 @@ void Image::afternoon_filter()
 
 void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 {
+	std::cout << "O FILTER ***********************************************************\n";
 	r_ = r;
 	g_ = g;
 	b_ = b;

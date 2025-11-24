@@ -1,6 +1,7 @@
 #include "game.h"
 #include "music.h"
 #include "GUI/slider.h"
+#include "GUI/button.h"
 #include "GUI/textbutton.h"
 #include "GUI/texttoggle.h"
 #include "GUI/texttogglegroup.h"
@@ -33,6 +34,8 @@ void Game::create_main_menu()
 	ui_elements.push_back(std::make_unique<TextButton>("Play", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
+
+	ui_elements.push_back(std::make_unique<Button>("LALA", "img/gui/choice_idle_background.png", "img/gui/choice_hover_background.png", "img/gui/choice_hover_background.png", 100, 600, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
 	main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), renderer_);
 }

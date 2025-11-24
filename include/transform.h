@@ -1,5 +1,7 @@
 #pragma once
 
+#include "character.h"
+
 class Transform
 {
 	/* TODO : 
@@ -12,9 +14,7 @@ class Transform
 	public:
 		Transform();
 
-		void t11(int& x, int& y);
-
-		//Prend des paramètres qui seront modifiés par la fonction => références
-		//Ex : t11(int& x, int& y);
+		void reset(Character& character);
+		void t11(Character& character, Uint64 time_step);
 };
 

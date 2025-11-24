@@ -1,7 +1,9 @@
 #pragma once
 
 #include "image.h"
-#include "transform.h"
+
+
+class Transform;
 
 class Character
 {
@@ -17,6 +19,8 @@ class Character
 		//TODO : position (t11 etc. avec focus automatique) => Transform t
 		Image character_; //TODO : juste pour tester => truc similaire à MPT par la suite
 		Image textbox_; //TODO : valeur par défaut au cas-où on ne souhaite pas avoir une textbox propre à chaque perso
+
+		SDL_Rect initial_rect_;
 
 		bool is_speaking_;
 

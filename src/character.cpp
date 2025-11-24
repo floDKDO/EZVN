@@ -1,8 +1,9 @@
 #include "character.h"
+#include "transform.h"
 
 Character::Character(std::string name, std::string character_path, std::string textbox_path, sdl::Renderer& renderer)
 	: character_(character_path, 0, 0, renderer), textbox_(textbox_path, 0, 0, renderer) //TODO : pas besoin de textbox ?? //la position sera initialisée après
-	, name_(name), is_speaking_(false)
+	, name_(name), is_speaking_(false), initial_rect_(character_.position_)
 {
 
 }
@@ -10,9 +11,7 @@ Character::Character(std::string name, std::string character_path, std::string t
 
 void Character::set_transform(Transform t)
 {
-	//t.t11(character_.position_.x, character_.position_.y);
-	character_.resize(character_.position_.w * 0.8, character_.position_.h * 0.8); //pour f11 => 0.85, -20 pixels en y 
-	character_.set_position(640, character_.position_.y);
+	t.t11(*this, 0);
 }
 
 

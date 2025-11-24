@@ -1,5 +1,6 @@
 #include "ingamestate.h"
 #include "GUI/textbutton.h"
+#include "transform.h"
 
 #include <iostream>
 
@@ -32,21 +33,28 @@ InGameState::InGameState(sdl::Renderer& renderer)
 
 	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", "img/gui/textbox.png", renderer));
 
-	//TODO : comment "annuler" une transformation (= revenir à l'état avant la transformation) ?
-
-	//t11
-	characters_[0]->character_.zoom(0.8f);
+	//t11, t32, t42
+	/*characters_[0]->character_.zoom(0.8f);
 	characters_[0]->character_.set_center();
-	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 30);
+	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 26);*/
+
+	//t41
+	//characters_[0]->character_.zoom(0.8f);
+	//characters_[0]->character_.set_position_xcenter(200, characters_[0]->character_.position_.y - 26);
+
+	//t33
+	//characters_[0]->character_.zoom(0.8f);
+	//characters_[0]->character_.set_position_xcenter(1040, characters_[0]->character_.position_.y - 26);
 
 	//f11
-	/*characters_[0]->character_.zoom(0.85f);
+	//characters_[0]->character_.zoom(0.84f);
 	characters_[0]->character_.set_center();
-	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 75);*/
+	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 65);
 }
 
 void InGameState::temp_function(Ui* ui)
 {
+	(void)ui;
 	std::cout << "Pressed!\n";
 }
 
@@ -70,13 +78,29 @@ void InGameState::handle_events(const SDL_Event& e)
 		if(e.button.button == SDL_BUTTON_RIGHT)
 		{
 			hide_ui_textbox_ = !hide_ui_textbox_;
+
+			//TODO : temporaire
+			if(hide_ui_textbox_)
+			{
+				//f11
+				/*characters_[0]->character_.position_ = characters_[0]->initial_rect_;
+				characters_[0]->character_.zoom(0.85f);
+				characters_[0]->character_.set_center();
+				characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 75);*/
+			}
+			else
+			{
+				//t11
+				/*Transform t11;
+				characters_[0]->set_transform(t11);*/
+			}
 		}
 	}
 }
 
 void InGameState::draw(sdl::Renderer& renderer)
 {
-	background_.draw(renderer);
+	//background_.draw(renderer);
 	for(std::unique_ptr<Character> const& c : characters_)
 	{
 		c->draw(renderer);
@@ -96,4 +120,7 @@ void InGameState::update(Uint64 time_step)
 		textbox_.update(time_step);
 		menu_->update(time_step);
 	}
+
+	Transform t11;
+	characters_[0]->set_transform(t11);
 }
