@@ -75,13 +75,15 @@ void Transform::zoom(Image& image, const float zoom, Uint64 time)
 	float position_w = float(image.position_.w);
 	float position_h = float(image.position_.h);
 
-	if(time == 0)
+	if(time == 0 && !transform_finished_)
 	{
 		position_w *= zoom;
 		position_h *= zoom;
 
 		image.position_.w = int(position_w);
 		image.position_.h = int(position_h);
+
+		transform_finished_ = true;
 
 		return;
 	}
@@ -109,32 +111,29 @@ void Transform::zoom(Image& image, const float zoom, Uint64 time)
 
 void Transform::set_center(Image& image, Uint64 time)
 {
+	if(time == 0 && transform_finished_)
+	{
+		image.position_ = {1280 / 2 - std::abs(get_xcenter(image)), image.position_.y, image.position_.w, image.position_.h};
+		transform_finished_ = true;
+		return;
+	}
+
 	static float delta_x = (1280.0f / 2.0f - std::abs(get_xcenter(image))) - image.position_.x; //1280 = SCREEN_WIDTH
 	static int init_position_x = image.position_.x;
 	static float delta_x_frame = 0.0f;
-
-	float position_x = float(image.position_.x);
-
-	//std::cout << "POSITION_X : " << position_x << std::endl;
-	//std::cout << "DELTA_X : " << delta_x << std::endl;
+	static float position_x = float(image.position_.x);
 
 	if(!transform_finished_ && time != 0)
 	{
 		reset(image);
 
-		//TODO : ne marche pas si init_position_x est négatif
-		delta_x_frame += delta_x / (60.0f / (1000.0f / float(time))); //TODO : = ne marche que si init_position_x > 1280/2
-		position_x = /* += */ delta_x_frame; //TODO : += ne marche que si init_position_x > 1280/2
+		delta_x_frame = delta_x / (60.0f / (1000.0f / float(time))); 
+		position_x = position_x + delta_x_frame; 
 
 		image.position_.x = int(position_x);
 
-		//std::cout << "POSITION_X : " << image.position_.x << std::endl;
-		//std::cout << "DELTA X FRAME : " << delta_x_frame << std::endl;
-
-		//std::cout << init_position_x << " et " << image.position_.x  << " et " << init_position_x + delta_x << std::endl;
-
 		if((init_position_x < 1280/2 && image.position_.x >= init_position_x + delta_x)
-		|| (init_position_x > 1280/2 && image.position_.x <= init_position_x + delta_x)) //TODO
+		|| (init_position_x > 1280/2 && image.position_.x <= init_position_x + delta_x)) 
 		{
 			transform_finished_ = true;
 		}
@@ -182,8 +181,9 @@ void Transform::t11(Image& image, Uint64 time_step)
 	//Compteur partagé pour les deux lignes
 	//static Uint64 timeout = SDL_GetTicks64() + 10000; //ms
 	
-	//zoom(image, 0.5f, 3000); //dézoom de moitié sur 3 secondes
-	set_center(image, 5000); //déplacement vers le center sur 5 secondes
+	//TODO : transfrorm_finished_ va bloquer les autres Transforms
+	//zoom(image, 0.5f, 0); //dézoom de moitié sur 3 secondes
+	set_center(image, 5000); //déplacement vers le centre sur 5 secondes
 
 	/*if(SDL_GetTicks64() > timeout)
 	{
