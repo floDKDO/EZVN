@@ -28,6 +28,10 @@
 
 //TODO : mettre en private les méthodes qui doivent l'être
 
+//TODO : vérifier qui j'ai bien mis le suffixe "f" pour les float
+
+//TODO : vérifier que j'ai bien mis un _ à tous les membres de classes
+
 
 int main(int argc, char* argv[])
 {

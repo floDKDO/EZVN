@@ -144,33 +144,7 @@ void Image::set_position_xcenter(const int x, const int y)
 
 void Image::set_center(Uint64 time)
 {
-	std::cout << "SET CENTER ***********************************************************\n";
-
-	static bool animation_finishede = false;
-
-	double delta_x = std::abs(position_.x - (1280 / 2 - std::abs(get_xcenter())));
-	static double delta_x_frame = 0.0;
-
-	int init_position_x = position_.x;
-	double timee = double(time);
-
-	//std::cout << "TIME : " << timee << std::endl;
-
-	//std::cout << "éINIT : " << position_.x << " et " << position_.x + int(delta_x) << std::endl;
-
-	if(!animation_finishede && time != 0)
-	{
-		delta_x_frame += delta_x / (60.0 / (1000.0 / timee));
-		position_.x += delta_x_frame;
-		//std::cout << "POSITION_X : " << position_.x << std::endl;
-		//std::cout << "POSITION_Xe : " << delta_x_frame << std::endl;
-
-		if(position_.x >= init_position_x + int(delta_x)) //TODO
-		{ 
-
-			animation_finishede = true;
-		}
-	}
+	position_ = {1280 / 2 - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
 }
 
 void Image::night_filter()

@@ -35,9 +35,16 @@ void Game::create_main_menu()
 	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
-	ui_elements.push_back(std::make_unique<Button>("LALA", "img/gui/choice_idle_background.png", "img/gui/choice_hover_background.png", "img/gui/choice_hover_background.png", 100, 600, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
+	//ui_elements.push_back(std::make_unique<Button>("LALA", "img/gui/choice_idle_background.png", "img/gui/choice_hover_background.png", "img/gui/choice_hover_background.png", 100, 600, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
-	main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), renderer_);
+	std::vector<std::unique_ptr<Ui>> ui_elements_popup;
+	ui_elements_popup.reserve(10);
+
+	ui_elements_popup.push_back(std::make_unique<TextButton>("Yes", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 300, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
+	ui_elements_popup.push_back(std::make_unique<TextButton>("No", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
+
+	//main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), renderer_);
+	main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), "Are you sure you would like to close the game?", std::move(ui_elements_popup), ui_elements_popup[1].get(), renderer_);
 }
 
 void Game::create_settings_menu()
@@ -74,7 +81,8 @@ void Game::quit_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Quit!" << std::endl;
-	game_running_ = false;
+	main_menu_->is_popup_confirmation_visible_ = true;
+	//game_running_ = false;
 }
 
 void Game::previous_menu_function(Ui* ui)
