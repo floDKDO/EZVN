@@ -1,42 +1,41 @@
 #pragma once
 
-#include "image.h"
+#include "transformstep.h"
+
+#include <vector>
+#include <functional>
+#include <unordered_map>
+
+enum class TransformName
+{
+	t11,
+	f11
+};
 
 class Transform
 {
-	/* TODO : 
-	* on peut modifier : 
-	* zoom
-	* position x y
-	* timer pour chaque modif
-	* on show/replace/hide
-	*/
+	//TODO : on show/replace/hide
 	public:
 		Transform();
 
-		void show(Image& image, Uint64 time = 0);
-		void hide(Image& image, Uint64 time = 0);
+		//TODO : renommer
+		struct Transform_X
+		{
+			Transform_X(/*TransformName transform_name,*/ int number_of_transform_steps)
+				: current_step_number_(0), transform_finished_(false), number_of_transform_steps_(number_of_transform_steps), transform_steps_(number_of_transform_steps)
+			{}
 
-		void rotate(Image& image, const double angle, Uint64 time = 0);
+			int current_step_number_;
+			bool transform_finished_;
+			int number_of_transform_steps_;
+			std::vector<TransformStep> transform_steps_;
+		};
 
-		void flip_vertically(Image& image);
-		void flip_horizontally(Image& image);
-		void flip_normal(Image& image);
+		std::unordered_map<TransformName, Transform_X> transforms_;
 
-		int get_xcenter(Image& image) const;
-		void zoom(Image& image, const float zoom, Uint64 time = 0);
-		void resize(Image& image, const int w, const int h, Uint64 time = 0);
-		void set_position(Image& image, const int x, const int y, Uint64 time = 0);
-		void set_position_xcenter(Image& image, const int x, const int y, Uint64 time = 0);
-		void set_center(Image& image, Uint64 time = 0);
+		void t11(Image& image);
+		void f11(Image& image);
 
-		void night_filter(Image& image, Uint64 time = 0);
-		void afternoon_filter(Image& image, Uint64 time = 0);
-		void own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time = 0);
-
-		void reset(Image& image);
-		void t11(Image& image, Uint64 time_step);
-
-		bool transform_finished_;
+		void show_transform(TransformName transform_name, Image& image);
 };
 

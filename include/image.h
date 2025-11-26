@@ -8,7 +8,7 @@
 
 class Image
 {
-	friend class Transform;
+	friend class TransformStep;
 
 	public:
 		Image(const std::string path, const int x, const int y, sdl::Renderer& renderer, const int zorder=0);

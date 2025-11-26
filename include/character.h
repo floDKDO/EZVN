@@ -7,7 +7,7 @@ class Character
 	public:
 		Character(std::string name, std::string character_path, std::string textbox_path, sdl::Renderer& renderer);
 
-		void set_transform();
+		void set_transform(TransformName transform_name);
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 		void update(Uint64 time_step);

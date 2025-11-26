@@ -7,7 +7,7 @@
 InGameState::InGameState(sdl::Renderer& renderer)
 	: renderer_(renderer), textbox_({255, 255, 255, 255}, renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
 {
-	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
+	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj";
 
 	//TODO : beaucoup trop de trucs hardcodés
 
@@ -78,22 +78,6 @@ void InGameState::handle_events(const SDL_Event& e)
 		if(e.button.button == SDL_BUTTON_RIGHT)
 		{
 			hide_ui_textbox_ = !hide_ui_textbox_;
-
-			//TODO : temporaire
-			if(hide_ui_textbox_)
-			{
-				//f11
-				/*characters_[0]->character_.position_ = characters_[0]->initial_rect_;
-				characters_[0]->character_.zoom(0.85f);
-				characters_[0]->character_.set_center();
-				characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 75);*/
-			}
-			else
-			{
-				//t11
-				/*Transform t11;
-				characters_[0]->set_transform(t11);*/
-			}
 		}
 	}
 }
@@ -119,7 +103,7 @@ void InGameState::update(Uint64 time_step)
 	{
 		textbox_.update(time_step);
 		menu_->update(time_step);
+		characters_[0]->set_transform(TransformName::t11);
 	}
-
-	characters_[0]->set_transform();
+	else characters_[0]->set_transform(TransformName::f11);
 }

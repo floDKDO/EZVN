@@ -32,6 +32,8 @@
 
 //TODO : vérifier que j'ai bien mis un _ à tous les membres de classes
 
+//TODO : utiliser les bons types (ex : unsigned int)
+
 
 int main(int argc, char* argv[])
 {

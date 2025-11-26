@@ -176,6 +176,7 @@
     <ClCompile Include="src\GUI\checkablegroup.cpp" />
     <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\GUI\ui.cpp" />
+    <ClCompile Include="src\transformstep.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GUI\button.h" />
@@ -216,6 +217,7 @@
     <ClInclude Include="include\GUI\checkablegroup.h" />
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\GUI\ui.h" />
+    <ClInclude Include="include\transformstep.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
