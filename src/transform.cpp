@@ -17,7 +17,7 @@ void Transform::t11(Image& image)
 	{
 		case 0:
 			transform_t11.transform_steps_[0].rotate(image, 90.0, 3000);
-			transform_t11.transform_steps_[1].set_position(image, 50, -20, 3000);
+			transform_t11.transform_steps_[1].set_position(image, 200, -20, 3000);
 			if(transform_t11.transform_steps_[0].transform_step_finished_ && transform_t11.transform_steps_[1].transform_step_finished_)
 			{
 				transform_t11.current_step_number_ = 1;

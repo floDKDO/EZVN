@@ -7,8 +7,9 @@
 class TransformStep
 {
 
-	//TODO : écrire public, protected et private dans les struct
-//TODO : constructeur par copie/move dans les struct ?
+	//TODO : écrire public, protected et private dans les struct => mettre les membres qui étaient const en private
+	//TODO : constructeur par copie/move dans les struct ?
+	//TODO : écrire les struct en dessous de la classe ?
 
 	struct PositionStep //set_position(), set_position_xcenter(), set_position_ycenter(), set_position_xycenter(), set_center() => n'utilise pas y !
 	{
@@ -30,8 +31,8 @@ class TransformStep
 				delta_x_frame_(0.0f), delta_y_frame_(0.0f)
 			{}
 
-			const int initial_position_x_;
-			const int initial_position_y_;
+			int initial_position_x_;
+			int initial_position_y_;
 
 			float f_position_x_;
 			float f_position_y_;
@@ -54,8 +55,7 @@ class TransformStep
 			f_size_w_(float(initial_size_w)), f_size_h_(float(initial_size_h)),
 			delta_w_(f_size_w_* zoom - initial_size_w), delta_h_(f_size_h_* zoom - initial_size_h),
 			delta_w_frame_(0.0f), delta_h_frame_(0.0f)
-		{
-		}
+		{}
 
 		//for resize()
 		SizeStep(const int initial_size_w, const int initial_size_h, const int w, const int h)
@@ -63,11 +63,10 @@ class TransformStep
 			f_size_w_(float(initial_size_w)), f_size_h_(float(initial_size_h)),
 			delta_w_(w - initial_size_w), delta_h_(h - initial_size_h),
 			delta_w_frame_(0.0f), delta_h_frame_(0.0f)
-		{
-		}
+		{}
 
-		const int initial_size_w_;
-		const int initial_size_h_;
+		int initial_size_w_;
+		int initial_size_h_;
 
 		float f_size_w_;
 		float f_size_h_;
@@ -86,7 +85,7 @@ class TransformStep
 		{
 		}
 
-		const double initial_angle_;
+		double initial_angle_;
 
 		double delta_angle_;
 		double delta_angle_frame_;
@@ -100,7 +99,7 @@ class TransformStep
 		{
 		}
 
-		const int initial_alpha_;
+		int initial_alpha_;
 
 		float f_alpha_;
 
@@ -118,9 +117,9 @@ class TransformStep
 		{
 		}
 
-		const int initial_r_;
-		const int initial_g_;
-		const int initial_b_;
+		int initial_r_;
+		int initial_g_;
+		int initial_b_;
 
 		float f_r_;
 		float f_g_;
@@ -134,19 +133,6 @@ class TransformStep
 		float delta_g_frame_;
 		float delta_b_frame_;
 	};
-
-	//TODO : utiliser std::variant à la place
-	//TODO : renommer
-	union UnionStep
-	{
-		PositionStep position_step;
-		SizeStep size_step;
-		RotateStep rotate_step;
-		AlphaStep alpha_step;
-		FilterStep filter_step;
-	};
-
-
 
 	public:
 		TransformStep();
@@ -182,7 +168,7 @@ class TransformStep
 
 		void reset(Image& image);
 
-		UnionStep current_step_; //TODO : renommer
+		std::variant <std::monostate, PositionStep, SizeStep, RotateStep, AlphaStep, FilterStep> current_step_; //TODO : renommer
 
 		bool is_init_;
 		bool transform_step_finished_;

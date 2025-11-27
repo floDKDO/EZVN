@@ -34,6 +34,8 @@
 
 //TODO : utiliser les bons types (ex : unsigned int)
 
+//TODO : écrire les accolades des constructeurs vides comme ça : {}
+
 
 int main(int argc, char* argv[])
 {

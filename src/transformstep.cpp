@@ -3,7 +3,6 @@
 #include <iostream>
 
 //TODO : beaucoup trop de répétitions dans les méthodes de cette classe
-//TODO : les cast en int()
 
 TransformStep::TransformStep()
 	: transform_step_finished_(false), is_init_(false)
@@ -23,12 +22,15 @@ void TransformStep::show(Image& image, Uint64 time)
 
 	if(!is_init_)
 	{
-		AlphaStep alpha_step(image.alpha_, 255);
+		current_step_ = AlphaStep(image.alpha_, 255);
+		is_init_ = true;
 	}
 
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		AlphaStep& alpha_step = std::get<AlphaStep>(current_step_);
 
 		alpha_step.delta_alpha_frame_ = alpha_step.delta_alpha_ / (60.0f / (1000.0f / float(time)));
 		alpha_step.f_alpha_ += alpha_step.delta_alpha_frame_;
@@ -45,8 +47,6 @@ void TransformStep::show(Image& image, Uint64 time)
 
 void TransformStep::hide(Image& image, Uint64 time)
 {
-	AlphaStep alpha_step(image.alpha_, 0);
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.alpha_ = 0;
@@ -55,9 +55,17 @@ void TransformStep::hide(Image& image, Uint64 time)
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = AlphaStep(image.alpha_, 0);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		AlphaStep& alpha_step = std::get<AlphaStep>(current_step_);
 
 		alpha_step.delta_alpha_frame_ = alpha_step.delta_alpha_ / (60.0f / (1000.0f / float(time)));
 		alpha_step.f_alpha_ += alpha_step.delta_alpha_frame_;
@@ -75,8 +83,6 @@ void TransformStep::hide(Image& image, Uint64 time)
 //TODO : utiliser double à la place de float
 void TransformStep::rotate(Image& image, const double angle, Uint64 time)
 {
-	RotateStep rotate_step(image.angle_, angle);
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.angle_ = angle;
@@ -84,9 +90,17 @@ void TransformStep::rotate(Image& image, const double angle, Uint64 time)
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = RotateStep(image.angle_, angle);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		RotateStep& rotate_step = std::get<RotateStep>(current_step_);
 
 		rotate_step.delta_angle_frame_ = rotate_step.delta_angle_ / (60.0f / (1000.0f / float(time)));
 		image.angle_ += rotate_step.delta_angle_frame_;
@@ -135,8 +149,6 @@ void TransformStep::set_position_common(Image& image, const int x, const int y, 
 
 void TransformStep::set_position(Image& image, const int x, const int y, Uint64 time)
 {
-	PositionStep position_step(image.position_.x, image.position_.y, x, y);
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.position_ = {x, y, image.position_.w, image.position_.h};
@@ -144,9 +156,17 @@ void TransformStep::set_position(Image& image, const int x, const int y, Uint64 
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = PositionStep(image.position_.x, image.position_.y, x, y);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		PositionStep& position_step = std::get<PositionStep>(current_step_);
 
 		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
 		position_step.f_position_x_ += position_step.delta_x_frame_;
@@ -167,8 +187,6 @@ void TransformStep::set_position(Image& image, const int x, const int y, Uint64 
 
 void TransformStep::set_position_xcenter(Image& image, const int x, const int y, Uint64 time)
 {
-	PositionStep position_step(image.position_.x, image.position_.y, x - std::abs(get_xcenter(image)), y);
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.position_ = {x - std::abs(get_xcenter(image)), y, image.position_.w, image.position_.h};
@@ -176,9 +194,17 @@ void TransformStep::set_position_xcenter(Image& image, const int x, const int y,
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = PositionStep(image.position_.x, image.position_.y, x - std::abs(get_xcenter(image)), y);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		PositionStep& position_step = std::get<PositionStep>(current_step_);
 
 		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
 		position_step.f_position_x_ += position_step.delta_x_frame_;
@@ -201,8 +227,6 @@ void TransformStep::set_position_xcenter(Image& image, const int x, const int y,
 
 void TransformStep::set_position_ycenter(Image& image, const int x, const int y, Uint64 time)
 {
-	PositionStep position_step(image.position_.x, image.position_.y, x, y - std::abs(get_ycenter(image)));
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.position_ = {x, y - std::abs(get_ycenter(image)), image.position_.w, image.position_.h};
@@ -210,9 +234,17 @@ void TransformStep::set_position_ycenter(Image& image, const int x, const int y,
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = PositionStep(image.position_.x, image.position_.y, x, y - std::abs(get_ycenter(image)));
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		PositionStep& position_step = std::get<PositionStep>(current_step_);
 
 		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
 		position_step.f_position_x_ += position_step.delta_x_frame_;
@@ -233,8 +265,6 @@ void TransformStep::set_position_ycenter(Image& image, const int x, const int y,
 
 void TransformStep::set_position_xycenter(Image& image, const int x, const int y, Uint64 time)
 {
-	PositionStep position_step(image.position_.x, image.position_.y, x - std::abs(get_xcenter(image)), y - std::abs(get_ycenter(image)));
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.position_ = {x - std::abs(get_xcenter(image)), y - std::abs(get_ycenter(image)), image.position_.w, image.position_.h};
@@ -242,9 +272,17 @@ void TransformStep::set_position_xycenter(Image& image, const int x, const int y
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = PositionStep(image.position_.x, image.position_.y, x - std::abs(get_xcenter(image)), y - std::abs(get_ycenter(image)));
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		PositionStep& position_step = std::get<PositionStep>(current_step_);
 
 		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
 		position_step.f_position_x_ += position_step.delta_x_frame_;
@@ -265,24 +303,33 @@ void TransformStep::set_position_xycenter(Image& image, const int x, const int y
 
 void TransformStep::zoom(Image& image, const float zoom, Uint64 time)
 {
-	SizeStep size_step(image.position_.w, image.position_.h, zoom); //TODO : copie...
-
 	if(time == 0 && !transform_step_finished_)
 	{
-		size_step.f_size_w_ *= zoom;
-		size_step.f_size_h_ *= zoom;
+		float f_size_w = float(image.position_.w);
+		float f_size_h = float(image.position_.h);
 
-		image.position_.w = int(size_step.f_size_w_);
-		image.position_.h = int(size_step.f_size_h_);
+		f_size_w *= zoom;
+		f_size_h *= zoom;
+
+		image.position_.w = int(f_size_w);
+		image.position_.h = int(f_size_h);
 
 		transform_step_finished_ = true;
 
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = SizeStep(image.position_.w, image.position_.h, zoom);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && zoom != 1.0f)
 	{
 		//reset(image); //TODO
+
+		SizeStep& size_step = std::get<SizeStep>(current_step_);
 
 		size_step.delta_w_frame_ = size_step.delta_w_ / (60.0f / (1000.0f / float(time)));
 		size_step.f_size_w_ += size_step.delta_w_frame_;
@@ -303,8 +350,6 @@ void TransformStep::zoom(Image& image, const float zoom, Uint64 time)
 
 void TransformStep::resize(Image& image, const int w, const int h, Uint64 time)
 {
-	SizeStep size_step(image.position_.w, image.position_.h, w, h); //TODO : copie...
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.position_ = {image.position_.x, image.position_.y, w, h};
@@ -312,9 +357,17 @@ void TransformStep::resize(Image& image, const int w, const int h, Uint64 time)
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = SizeStep(image.position_.w, image.position_.h, w, h);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		SizeStep& size_step = std::get<SizeStep>(current_step_);
 
 		size_step.delta_w_frame_ = size_step.delta_w_ / (60.0f / (1000.0f / float(time)));
 		size_step.f_size_w_ += size_step.delta_w_frame_;
@@ -335,8 +388,6 @@ void TransformStep::resize(Image& image, const int w, const int h, Uint64 time)
 
 void TransformStep::set_center(Image& image, Uint64 time)
 {
-	PositionStep position_step(image.position_.x, image.position_.y, 1280 / 2 - std::abs(get_xcenter(image)), 720 / 2 - std::abs(get_ycenter(image)));
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.position_ = {1280 / 2 - std::abs(get_xcenter(image)), 720 / 2 - std::abs(get_ycenter(image)), image.position_.w, image.position_.h};
@@ -344,9 +395,17 @@ void TransformStep::set_center(Image& image, Uint64 time)
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = PositionStep(image.position_.x, image.position_.y, 1280 / 2 - std::abs(get_xcenter(image)), 720 / 2 - std::abs(get_ycenter(image)));
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		PositionStep& position_step = std::get<PositionStep>(current_step_);
 
 		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
 		position_step.f_position_x_ += position_step.delta_x_frame_;
@@ -369,8 +428,6 @@ void TransformStep::set_center(Image& image, Uint64 time)
 
 void TransformStep::night_filter(Image& image, Uint64 time)
 {
-	FilterStep filter_step(image.r_, image.g_, image.b_, 127, 127, 165);
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.r_ = 127;
@@ -381,9 +438,17 @@ void TransformStep::night_filter(Image& image, Uint64 time)
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = FilterStep(image.r_, image.g_, image.b_, 127, 127, 165);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		FilterStep& filter_step = std::get<FilterStep>(current_step_);
 
 		filter_step.delta_r_frame_ = filter_step.delta_r_ / (60.0f / (1000.0f / float(time)));
 		filter_step.f_r_ += filter_step.delta_r_frame_;
@@ -411,8 +476,6 @@ void TransformStep::night_filter(Image& image, Uint64 time)
 
 void TransformStep::afternoon_filter(Image& image, Uint64 time)
 {
-	FilterStep filter_step(image.r_, image.g_, image.b_, 210, 150, 130);
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.r_ = 210;
@@ -423,9 +486,17 @@ void TransformStep::afternoon_filter(Image& image, Uint64 time)
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = FilterStep(image.r_, image.g_, image.b_, 210, 150, 130);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		FilterStep& filter_step = std::get<FilterStep>(current_step_);
 
 		filter_step.delta_r_frame_ = filter_step.delta_r_ / (60.0f / (1000.0f / float(time)));
 		filter_step.f_r_ += filter_step.delta_r_frame_;
@@ -453,8 +524,6 @@ void TransformStep::afternoon_filter(Image& image, Uint64 time)
 
 void TransformStep::own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time)
 {
-	FilterStep filter_step(image.r_, image.g_, image.b_, r, g, b);
-
 	if(time == 0 && !transform_step_finished_)
 	{
 		image.r_ = r;
@@ -465,9 +534,17 @@ void TransformStep::own_filter(Image& image, const Uint8 r, const Uint8 g, const
 		return;
 	}
 
+	if(!is_init_)
+	{
+		current_step_ = FilterStep(image.r_, image.g_, image.b_, r, g, b);
+		is_init_ = true;
+	}
+
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);
+
+		FilterStep& filter_step = std::get<FilterStep>(current_step_);
 
 		filter_step.delta_r_frame_ = filter_step.delta_r_ / (60.0f / (1000.0f / float(time)));
 		filter_step.f_r_ += filter_step.delta_r_frame_;
