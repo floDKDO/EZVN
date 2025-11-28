@@ -15,7 +15,7 @@ Textbox::Textbox(SDL_Color text_color, sdl::Renderer& renderer)
 	text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
 	text_name_box_.position_.y = 530;
 	text_.position_.x = textbox_.position_.x + 30; //TODO : utiliser get_height_text()
-	text_.position_.y = textbox_.position_.y + 30;
+	text_.position_.y = textbox_.position_.y + 25;
 	text_.wrap_length_ = textbox_.position_.w - 40;
 	triangle_.position_.x = textbox_.position_.x + textbox_.position_.w - 30;
 	triangle_.position_.y = textbox_.position_.y + 115;

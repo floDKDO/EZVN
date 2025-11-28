@@ -32,24 +32,6 @@ InGameState::InGameState(sdl::Renderer& renderer)
 	menu_ = std::make_unique<UiManager>(std::move(ui_elements), ui_elements[0].get());
 
 	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", "img/gui/textbox.png", renderer));
-
-	//t11, t32, t42
-	/*characters_[0]->character_.zoom(0.8f);
-	characters_[0]->character_.set_center();
-	characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 26);*/
-
-	//t41
-	//characters_[0]->character_.zoom(0.8f);
-	//characters_[0]->character_.set_position_xcenter(200, characters_[0]->character_.position_.y - 26);
-
-	//t33
-	//characters_[0]->character_.zoom(0.8f);
-	//characters_[0]->character_.set_position_xcenter(1040, characters_[0]->character_.position_.y - 26);
-
-	//f11
-	//characters_[0]->character_.zoom(0.84f);
-	//characters_[0]->character_.set_center();
-	//characters_[0]->character_.set_position(characters_[0]->character_.position_.x, characters_[0]->character_.position_.y - 65);
 }
 
 void InGameState::temp_function(Ui* ui)
@@ -84,7 +66,7 @@ void InGameState::handle_events(const SDL_Event& e)
 
 void InGameState::draw(sdl::Renderer& renderer)
 {
-	//background_.draw(renderer);
+	background_.draw(renderer);
 	for(std::unique_ptr<Character> const& c : characters_)
 	{
 		c->draw(renderer);
@@ -103,7 +85,6 @@ void InGameState::update(Uint64 time_step)
 	{
 		textbox_.update(time_step);
 		menu_->update(time_step);
-		characters_[0]->set_transform(TransformName::f11);
+		characters_[0]->set_transform(TransformName::f33);
 	}
-	//else characters_[0]->set_transform(TransformName::f11);
 }
