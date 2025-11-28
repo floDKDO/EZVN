@@ -3,6 +3,7 @@
 #include <iostream>
 
 //TODO : bug si plusieurs transformation d'une même step modifient les mêmes coordonnées (ex : zoom et set_position) ??
+//TODO si zoom et set_position à la même step => fonctionne si zoom avant set_position mais pas si zoom est après set_position !!
 
 TransformStep::TransformStep()
 	: transform_step_finished_(false), is_init_(false)
@@ -46,7 +47,7 @@ void TransformStep::no_modif_common(bool condition)
 }
 
 template<typename F>
-void TransformStep::instant_modif_common(F instant_modif_fonc)
+void TransformStep::instant_modif_common(F instant_modif_fonc, Uint64 time)
 {
 	if(time == 0 && !transform_step_finished_)
 	{
@@ -88,7 +89,8 @@ void TransformStep::alpha_common(Uint8 alpha, Image& image, Uint64 time)
 	{
 		image.alpha_ = alpha;
 		image.texture_->set_alpha_mod(image.alpha_);
-	});
+	}
+	, time);
 
 	each_frame_modif_common([&](){ return AlphaStep(image.alpha_, alpha); },
 	[&](AlphaStep& alpha_step) -> bool
@@ -126,7 +128,8 @@ void TransformStep::rotate(Image& image, const double angle, Uint64 time)
 	instant_modif_common([&]()
 	{
 		image.angle_ = angle;
-	});
+	}
+	, time);
 
 	each_frame_modif_common([&](){ return RotateStep(image.angle_, angle); },
 	[&](RotateStep& rotate_step) -> bool
@@ -146,7 +149,8 @@ void TransformStep::set_position_common(Image& image, const int x, const int y, 
 	instant_modif_common([&]()
 	{
 		image.position_ = {x, y, image.position_.w, image.position_.h};
-	});
+	}
+	, time);
 
 	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y, x, y); },
 	[&](PositionStep& position_step) -> bool
@@ -175,19 +179,29 @@ void TransformStep::set_position(Image& image, const int x, const int y, Uint64 
 	set_position_common(image, x, y, time);
 }
 
-void TransformStep::set_position_xcenter(Image& image, const int x, const int y, Uint64 time)
+void TransformStep::set_position_xcenter(Image& image, const int x, Uint64 time)
 {
-	set_position_common(image, x - std::abs(get_xcenter(image)), y, time);
+	set_position_common(image, x - std::abs(get_xcenter(image)), image.position_.y, time);
 }
 
-void TransformStep::set_position_ycenter(Image& image, const int x, const int y, Uint64 time)
+void TransformStep::set_position_ycenter(Image& image, const int y, Uint64 time)
 {
-	set_position_common(image, x, y - std::abs(get_ycenter(image)), time);
+	set_position_common(image, image.position_.x, y - std::abs(get_ycenter(image)), time);
 }
 
 void TransformStep::set_position_xycenter(Image& image, const int x, const int y, Uint64 time)
 {
 	set_position_common(image, x - std::abs(get_xcenter(image)), y - std::abs(get_ycenter(image)), time); 
+}
+
+void TransformStep::set_position_xoffset(Image& image, const int x, Uint64 time)
+{
+	set_position_common(image, image.position_.x + x, image.position_.y, time);
+}
+
+void TransformStep::set_position_yoffset(Image& image, const int y, Uint64 time)
+{
+	set_position_common(image, image.position_.x, image.position_.y + y, time);
 }
 
 void TransformStep::zoom(Image& image, const float zoom, Uint64 time)
@@ -204,7 +218,8 @@ void TransformStep::zoom(Image& image, const float zoom, Uint64 time)
 
 		image.position_.w = int(f_size_w);
 		image.position_.h = int(f_size_h);
-	});
+	}
+	, time);
 
 	each_frame_modif_common([&](){ return SizeStep(image.position_.w, image.position_.h, zoom); },
 	[&](SizeStep& size_step) -> bool
@@ -231,7 +246,8 @@ void TransformStep::resize(Image& image, const int w, const int h, Uint64 time)
 	instant_modif_common([&]()
 	{
 		image.position_ = {image.position_.x, image.position_.y, w, h};
-	});
+	}
+	, time);
 
 	each_frame_modif_common([&](){ return SizeStep(image.position_.w, image.position_.h, w, h); },
 	[&](SizeStep& size_step) -> bool
@@ -258,7 +274,8 @@ void TransformStep::set_center(Image& image, Uint64 time)
 	instant_modif_common([&]()
 	{
 		image.position_ = {1280 / 2 - std::abs(get_xcenter(image)), 720 / 2 - std::abs(get_ycenter(image)), image.position_.w, image.position_.h};
-	});
+	}
+	, time);
 
 	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y, 1280 / 2 - std::abs(get_xcenter(image)), 720 / 2 - std::abs(get_ycenter(image))); },
 	[&](PositionStep& position_step) -> bool
@@ -292,7 +309,8 @@ void TransformStep::filter_common(Image& image, const Uint8 r, const Uint8 g, co
 		image.g_ = g;
 		image.b_ = b;
 		image.texture_->set_color_mod(image.r_, image.g_, image.b_);
-	});
+	}
+	, time);
 
 	each_frame_modif_common([&](){ return FilterStep(image.r_, image.g_, image.b_, r, g, b); },
 	[&](FilterStep& filter_step) -> bool

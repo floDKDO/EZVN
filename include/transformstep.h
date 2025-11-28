@@ -7,7 +7,6 @@
 
 class TransformStep
 {
-
 	//TODO : écrire public, protected et private dans les struct => mettre les membres qui étaient const en private
 	//TODO : constructeur par copie/move dans les struct ?
 	//TODO : écrire les struct en dessous de la classe ?
@@ -149,7 +148,7 @@ class TransformStep
 		void no_modif_common(bool condition);
 
 		template<typename F>
-		void instant_modif_common(F instant_modif_fonc);
+		void instant_modif_common(F instant_modif_fonc, Uint64 time);
 
 		template<typename Factory, typename F>
 		void each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Uint64 time = 0);
@@ -167,9 +166,14 @@ class TransformStep
 
 		void set_position_common(Image& image, const int x, const int y, Uint64 time = 0); //TODO
 		void set_position(Image& image, const int x, const int y, Uint64 time = 0);
-		void set_position_xcenter(Image& image, const int x, const int y, Uint64 time = 0);
-		void set_position_ycenter(Image& image, const int x, const int y, Uint64 time = 0);
+		void set_position_xcenter(Image& image, const int x, Uint64 time = 0);
+		void set_position_ycenter(Image& image, const int y, Uint64 time = 0);
 	    void set_position_xycenter(Image& image, const int x, const int y, Uint64 time = 0);
+
+		//TODO : xoffset et yoffset
+		void set_position_xoffset(Image& image, const int x, Uint64 time = 0);
+		void set_position_yoffset(Image& image, const int y, Uint64 time = 0);
+
 		void set_center(Image& image, Uint64 time = 0);
 
 		void filter_common(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time = 0); //TODO

@@ -103,7 +103,7 @@ void InGameState::update(Uint64 time_step)
 	{
 		textbox_.update(time_step);
 		menu_->update(time_step);
-		characters_[0]->set_transform(TransformName::t11);
+		characters_[0]->set_transform(TransformName::f11);
 	}
-	else characters_[0]->set_transform(TransformName::f11);
+	//else characters_[0]->set_transform(TransformName::f11);
 }

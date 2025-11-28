@@ -14,7 +14,7 @@ enum class TransformName
 
 class Transform
 {
-	//TODO : on show/replace/hide
+	//TODO : on show/replace/hide => https://www.renpy.org/doc/html/transforms.html#external-atl-events
 	public:
 		Transform();
 
