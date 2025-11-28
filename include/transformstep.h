@@ -2,6 +2,7 @@
 
 #include "image.h"
 
+#include <iostream>
 #include <variant>
 
 class TransformStep
@@ -50,7 +51,7 @@ class TransformStep
 	struct SizeStep //resize(), zoom()
 	{
 		//for zoom()
-		SizeStep(const int initial_size_w, const int initial_size_h, const int zoom)
+		SizeStep(const int initial_size_w, const int initial_size_h, const float zoom)
 			: initial_size_w_(initial_size_w), initial_size_h_(initial_size_h),
 			f_size_w_(float(initial_size_w)), f_size_h_(float(initial_size_h)),
 			delta_w_(f_size_w_* zoom - initial_size_w), delta_h_(f_size_h_* zoom - initial_size_h),
@@ -91,12 +92,13 @@ class TransformStep
 		double delta_angle_frame_;
 	};
 
-	struct AlphaStep //show(), hide()
+	struct AlphaStep //show(), hide(), set_alpha()
 	{
 		AlphaStep(const int initial_alpha, const int alpha)
 			: initial_alpha_(initial_alpha), f_alpha_(float(initial_alpha)),
 			delta_alpha_(alpha - initial_alpha), delta_alpha_frame_(0.0f)
 		{
+			std::cout << "CONSTRUCTEUR DE ALPHASTEP\n";
 		}
 
 		int initial_alpha_;
@@ -137,18 +139,27 @@ class TransformStep
 	public:
 		TransformStep();
 
-		void alpha_common(Image& image, Uint64 time = 0); //TODO
-		void show(Image& image, Uint64 time = 0);
-		void hide(Image& image, Uint64 time = 0);
-
-		void rotate(Image& image, const double angle, Uint64 time = 0);
-
 		void flip_vertically(Image& image);
 		void flip_horizontally(Image& image);
 		void flip_normal(Image& image);
 
 		int get_xcenter(Image& image) const;
 		int get_ycenter(Image& image) const;
+
+		void no_modif_common(bool condition);
+
+		template<typename F>
+		void instant_modif_common(F instant_modif_fonc);
+
+		template<typename Factory, typename F>
+		void each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Uint64 time = 0);
+
+		void alpha_common(Uint8 alpha, Image& image, Uint64 time = 0); //TODO
+		void show(Image& image, Uint64 time = 0);
+		void hide(Image& image, Uint64 time = 0);
+		void set_alpha(Image& image, Uint8 alpha, Uint64 time = 0);
+
+		void rotate(Image& image, const double angle, Uint64 time = 0);
 
 		//void size_common //TODO
 		void zoom(Image& image, const float zoom, Uint64 time = 0);
@@ -161,14 +172,14 @@ class TransformStep
 	    void set_position_xycenter(Image& image, const int x, const int y, Uint64 time = 0);
 		void set_center(Image& image, Uint64 time = 0);
 
-		//void filter_common //TODO
+		void filter_common(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time = 0); //TODO
 		void night_filter(Image& image, Uint64 time = 0);
 		void afternoon_filter(Image& image, Uint64 time = 0);
 		void own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time = 0);
 
 		void reset(Image& image);
 
-		std::variant <std::monostate, PositionStep, SizeStep, RotateStep, AlphaStep, FilterStep> current_step_; //TODO : renommer
+		std::variant<std::monostate, PositionStep, SizeStep, RotateStep, AlphaStep, FilterStep> current_step_; //TODO : renommer
 
 		bool is_init_;
 		bool transform_step_finished_;

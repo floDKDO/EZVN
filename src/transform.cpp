@@ -5,7 +5,7 @@
 
 Transform::Transform()
 {
-	transforms_.insert({TransformName::t11, Transform_X(/*TransformName::t11,*/ 3)});
+	transforms_.insert({TransformName::t11, Transform_X(/*TransformName::t11,*/ /*3*/2)});
 	transforms_.insert({TransformName::f11, Transform_X(/*TransformName::f11,*/ 3)});
 }
 
@@ -16,22 +16,28 @@ void Transform::t11(Image& image)
 	switch(transform_t11.current_step_number_)
 	{
 		case 0:
-			transform_t11.transform_steps_[0].rotate(image, 90.0, 3000);
-			transform_t11.transform_steps_[1].set_position(image, 200, -20, 3000);
+			transform_t11.transform_steps_[0].zoom(image, 1.1f, 3000);
+			transform_t11.transform_steps_[1].set_center(image, 3000);
 			if(transform_t11.transform_steps_[0].transform_step_finished_ && transform_t11.transform_steps_[1].transform_step_finished_)
 			{
+				std::cout << "END STEP1************************************************************\n";
 				transform_t11.current_step_number_ = 1;
+				transform_t11.transform_finished_ = true;
 			}
 			break;
 
-		case 1:
-			transform_t11.transform_steps_[2].night_filter(image, 2000);
+		/*case 1:
+			//transform_t11.transform_steps_[2].afternoon_filter(image, 2000);
+
+			std::cout << "STEP2************************************************************\n";
+
+			transform_t11.transform_steps_[2].set_position_xcenter(image, 100, 300, 3000);
 			if(transform_t11.transform_steps_[2].transform_step_finished_)
 			{
 				transform_t11.current_step_number_ = 2;
 				transform_t11.transform_finished_ = true;
 			}
-			break;
+			break;*/
 
 		default:
 			break;
