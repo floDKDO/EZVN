@@ -3,6 +3,7 @@
 #include "transform.h"
 
 #include <iostream>
+#include <algorithm>
 
 InGameState::InGameState(sdl::Renderer& renderer)
 	: renderer_(renderer), textbox_({255, 255, 255, 255}, renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
@@ -31,10 +32,12 @@ InGameState::InGameState(sdl::Renderer& renderer)
 
 	menu_ = std::make_unique<UiManager>(std::move(ui_elements), ui_elements[0].get());
 
-	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", "img/gui/textbox.png", renderer));
-	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", "img/gui/textbox.png", renderer));
-	characters_.push_back(std::make_unique<Character>("Natsuki", "img/characters/natsuki.png", "img/gui/textbox.png", renderer));
-	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", "img/gui/textbox.png", renderer));
+	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", "img/gui/textbox.png", renderer, 1));
+	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", "img/gui/textbox.png", renderer, 4));
+	characters_.push_back(std::make_unique<Character>("Natsuki", "img/characters/natsuki.png", "img/gui/textbox.png", renderer, 3));
+	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", "img/gui/textbox.png", renderer, 2));
+
+	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->zorder_ < b->zorder_; });
 }
 
 void InGameState::temp_function(Ui* ui)
@@ -88,6 +91,8 @@ void InGameState::update(Uint64 time_step)
 	{
 		textbox_.update(time_step);
 		menu_->update(time_step);
+
+		//TODO : std::unordered_map pour remplacer les indices par le nom du personnage
 		characters_[0]->set_transform(TransformName::t41);
 		characters_[1]->set_transform(TransformName::t42);
 		characters_[2]->set_transform(TransformName::t43);

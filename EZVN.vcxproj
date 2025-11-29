@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="src\GUI\button.cpp" />
     <ClCompile Include="src\character.cpp" />
+    <ClCompile Include="src\GUI\buttongroup.cpp" />
     <ClCompile Include="src\GUI\checkable.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\gamestate.cpp" />
@@ -182,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="include\GUI\button.h" />
     <ClInclude Include="include\character.h" />
+    <ClInclude Include="include\GUI\buttongroup.h" />
     <ClInclude Include="include\GUI\checkable.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\gamestate.h" />

@@ -36,6 +36,8 @@
 
 //TODO : écrire les accolades des constructeurs vides comme ça : {}
 
+//TODO : vérifier que je n'ai pas oublier explicit pour les constructeurs à un paramètre
+
 
 int main(int argc, char* argv[])
 {

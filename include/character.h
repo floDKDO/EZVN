@@ -5,7 +5,7 @@
 class Character
 {
 	public:
-		Character(std::string name, std::string character_path, std::string textbox_path, sdl::Renderer& renderer);
+		Character(std::string name, std::string character_path, std::string textbox_path, sdl::Renderer& renderer, int zorder=0);
 
 		void set_transform(TransformName transform_name);
 		void handle_events(const SDL_Event& e);
@@ -13,8 +13,8 @@ class Character
 		void update(Uint64 time_step);
 
 		std::string name_;
-		//TODO : position (t11 etc. avec focus automatique) => Transform t
 
+		//TODO : focus automatique
 		Transform t_;
 
 		Image character_; //TODO : juste pour tester => truc similaire à MPT par la suite
@@ -23,6 +23,8 @@ class Character
 		SDL_Rect initial_rect_;
 
 		bool is_speaking_;
+
+		int zorder_; //TODO : redondant avec le zorder de character_
 
 	protected:
 
