@@ -1,10 +1,11 @@
 #include "game.h"
 #include "music.h"
 #include "GUI/slider.h"
-#include "GUI/buttongroup.h"
 #include "GUI/textbutton.h"
 #include "GUI/texttoggle.h"
 #include "GUI/texttogglegroup.h"
+
+#include <iostream>
 
 //TODO : garder les vectors de C-pointeurs ??
 
@@ -34,11 +35,10 @@ void Game::create_main_menu()
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
 
+	//ici, std::placeholders::_1 est nécessaire car l'appel à la fonction de callback (ce qui est retourné par std::bind) est de la forme : f(this) => on spécifie l'argument lors de l'appel au callable et pas directement sa valeur dans std::bind
 	ui_elements.push_back(std::make_unique<TextButton>("Play", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
-
-	ui_elements.push_back(std::make_unique<ButtonGroup<4>>(std::vector<std::string>{ "Sayori", "Yuri", "Natsuki", "Monika" }, "img/gui/choice_idle_background.png", "img/gui/choice_hover_background.png", "img/gui/choice_hover_background.png", 100, 200, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
 	std::vector<std::unique_ptr<Ui>> ui_elements_popup;
 	ui_elements_popup.reserve(10);

@@ -10,12 +10,14 @@ template<size_t N>
 class ButtonGroup : public Ui
 {
 	public:
-		ButtonGroup(const std::vector<std::string> texts, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		ButtonGroup(const std::vector<std::string> texts, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, sdl::Renderer& renderer);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update(Uint64 time_step) override;
 		void handle_events(const SDL_Event& e) override;
 		std::vector<Ui*> get_navigation_nodes() override;
+
+		void buttongroup_function(Ui* ui);
 
 		std::vector<std::unique_ptr<Button>> buttons_;
 		Button* selected_button_;
@@ -28,14 +30,14 @@ class ButtonGroup : public Ui
 
 //TODO : le paramètre x est inutile
 template<size_t N>
-ButtonGroup<N>::ButtonGroup(const std::vector<std::string> texts, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+ButtonGroup<N>::ButtonGroup(const std::vector<std::string> texts, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, sdl::Renderer& renderer)
 	: Ui(renderer), selected_button_(nullptr)
 {
-	SDL_assert(texts.size() == N /*&& callback_functions.size() == N*/);
+	SDL_assert(texts.size() == N);
 
 	for(unsigned int i = 0; i < N; ++i)
 	{
-		buttons_.push_back(std::make_unique<Button>(texts[i], path_normal, path_selected, path_clicked, x, y + i * 60, renderer, callback_function));
+		buttons_.push_back(std::make_unique<Button>(texts[i], path_normal, path_selected, path_clicked, x + 320, y + i * 60, renderer, std::bind(&ButtonGroup::buttongroup_function, this, std::placeholders::_1))); //TODO : hardcodé
 	}
 }
 
@@ -87,4 +89,11 @@ std::vector<Ui*> ButtonGroup<N>::get_navigation_nodes()
 		vector.push_back(b.get());
 	}
 	return vector;
+}
+
+template<size_t N>
+void ButtonGroup<N>::buttongroup_function(Ui* ui)
+{
+	Button* button = dynamic_cast<Button*>(ui);
+	std::cout << button->text_.text_ << std::endl;
 }
