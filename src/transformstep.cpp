@@ -36,7 +36,6 @@ int TransformStep::get_ycenter(Image& image) const
 	return image.position_.h / 2;
 }
 
-
 void TransformStep::no_modif_common(bool condition)
 {
 	if(condition)

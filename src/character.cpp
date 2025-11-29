@@ -10,7 +10,6 @@ Character::Character(std::string name, std::string character_path, std::string t
 
 }
 
-
 void Character::set_transform(TransformName transform_name)
 {
 	t_.show_transform(transform_name, character_);

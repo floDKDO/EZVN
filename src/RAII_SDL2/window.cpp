@@ -26,6 +26,11 @@ void Window::set_title(const std::string title)
 	SDL_SetWindowTitle(window_, title.c_str());
 }
 
+void Window::set_icon(sdl::Surface& icon)
+{
+	SDL_SetWindowIcon(window_, icon.Get());
+}
+
 void Window::set_full_screen()
 {
 	if(SDL_SetWindowFullscreen(window_, SDL_WINDOW_FULLSCREEN) < 0)

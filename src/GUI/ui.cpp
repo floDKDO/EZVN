@@ -4,6 +4,8 @@
 
 bool Ui::lock_ = true;
 
+//TODO : parfois un bug avec la touche Entrée au lancement du programme
+
 Ui::Ui(sdl::Renderer& renderer)
 	:renderer_(renderer),
 	select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 

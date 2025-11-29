@@ -15,10 +15,15 @@ Game::Game()
 	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH_, WINDOW_HEIGHT_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
+	window_icon_("img/gui/window_icon.png"),
 	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr)
 {
+	window_.set_icon(window_icon_);
+
 	renderer_.set_logical_size(WINDOW_WIDTH_, WINDOW_HEIGHT_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
+
+	game_name_ = "EZVN";
 
 	in_game_ = std::make_unique<InGameState>(renderer_);
 	create_main_menu();
@@ -195,3 +200,7 @@ void Game::update(Uint64 time_step)
 	get_state()->update(time_step);
 }
 
+void Game::update_fps_count(const std::string fps)
+{
+	window_.set_title(game_name_ + fps);
+}

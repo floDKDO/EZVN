@@ -1,5 +1,7 @@
 #pragma once
 
+#include "RAII_SDL2/surface.h"
+
 #include <SDL2/SDL.h>
 #include <string>
 
@@ -16,6 +18,7 @@ class Window
 
 		SDL_Window* Get() const;
 		void set_title(const std::string title);
+		void set_icon(sdl::Surface& icon);
 		void set_full_screen();
 		void set_windowed();
 

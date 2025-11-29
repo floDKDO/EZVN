@@ -7,7 +7,7 @@
 InGameState::InGameState(sdl::Renderer& renderer)
 	: renderer_(renderer), textbox_({255, 255, 255, 255}, renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
 {
-	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj";
+	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
 	//TODO : beaucoup trop de trucs hardcodés
 
@@ -32,6 +32,9 @@ InGameState::InGameState(sdl::Renderer& renderer)
 	menu_ = std::make_unique<UiManager>(std::move(ui_elements), ui_elements[0].get());
 
 	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", "img/gui/textbox.png", renderer));
+	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", "img/gui/textbox.png", renderer));
+	characters_.push_back(std::make_unique<Character>("Natsuki", "img/characters/natsuki.png", "img/gui/textbox.png", renderer));
+	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", "img/gui/textbox.png", renderer));
 }
 
 void InGameState::temp_function(Ui* ui)
@@ -85,6 +88,9 @@ void InGameState::update(Uint64 time_step)
 	{
 		textbox_.update(time_step);
 		menu_->update(time_step);
-		characters_[0]->set_transform(TransformName::f33);
+		characters_[0]->set_transform(TransformName::t41);
+		characters_[1]->set_transform(TransformName::t42);
+		characters_[2]->set_transform(TransformName::t43);
+		characters_[3]->set_transform(TransformName::t44);
 	}
 }
