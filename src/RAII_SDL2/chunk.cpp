@@ -18,7 +18,7 @@ Chunk::~Chunk() //Mix_FreeChunk
 	Mix_FreeChunk(chunk_);
 }
 
-Mix_Chunk* Chunk::Get() const
+Mix_Chunk* Chunk::fetch() const
 {
 	return chunk_;
 }

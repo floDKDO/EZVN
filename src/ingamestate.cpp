@@ -30,14 +30,14 @@ InGameState::InGameState(sdl::Renderer& renderer)
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[4].get())->text_.get_width_text();
 	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, x_textbutton + 40, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1)));
 
-	menu_ = std::make_unique<UiManager>(std::move(ui_elements), ui_elements[0].get());
+	menu_ = std::make_unique<UiManager>(std::move(ui_elements));
 
-	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", "img/gui/textbox.png", renderer, 1));
-	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", "img/gui/textbox.png", renderer, 4));
-	characters_.push_back(std::make_unique<Character>("Natsuki", "img/characters/natsuki.png", "img/gui/textbox.png", renderer, 3));
-	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", "img/gui/textbox.png", renderer, 2));
+	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", renderer, 1));
+	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", renderer, 4));
+	characters_.push_back(std::make_unique<Character>("Natsuki", "img/characters/natsuki.png", renderer, 3));
+	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", renderer, 2));
 
-	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->zorder_ < b->zorder_; });
+	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
 }
 
 void InGameState::temp_function(Ui* ui)
@@ -53,7 +53,7 @@ void InGameState::handle_events(const SDL_Event& e)
 		menu_->handle_events(e);
 		for(Ui* ui : menu_->navigation_list_)
 		{
-			if(ui->is_mouse_on_ui() != Ui::MOUSE_NOT_ON_ANY_UI) //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
+			if(ui->is_mouse_on_ui() != Ui::MOUSE_NOT_ON_ANY_UI_) //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
 			{
 				return;
 			}
@@ -85,17 +85,31 @@ void InGameState::draw(sdl::Renderer& renderer)
 	}
 }
 
-void InGameState::update(Uint64 time_step)
+void InGameState::update()
 {
 	if(!hide_ui_textbox_)
 	{
-		textbox_.update(time_step);
-		menu_->update(time_step);
+		textbox_.update();
+		menu_->update();
 
-		//TODO : std::unordered_map pour remplacer les indices par le nom du personnage
-		characters_[0]->set_transform(TransformName::t41);
-		characters_[1]->set_transform(TransformName::t42);
-		characters_[2]->set_transform(TransformName::t43);
-		characters_[3]->set_transform(TransformName::t44);
+		for(std::unique_ptr<Character> const& c : characters_)
+		{
+			if(c->name_ == "Sayori")
+			{
+				c->set_transform(TransformName::t41);
+			}
+			else if(c->name_ == "Monika")
+			{
+				c->set_transform(TransformName::t42);
+			}
+			else if(c->name_ == "Natsuki")
+			{
+				c->set_transform(TransformName::t43);
+			}
+			else if(c->name_ == "Yuri")
+			{
+				c->set_transform(TransformName::t44);
+			}
+		}
 	}
 }

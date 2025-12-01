@@ -137,15 +137,16 @@ void Inputfield::draw(sdl::Renderer& renderer)
 	}
 }
 
-void Inputfield::update(Uint64 time_step)
+void Inputfield::update()
 {
-	text_.update(time_step);
+	text_.update();
 
-	if(time_step - last_time_ > 500)
+	Uint64 now = SDL_GetTicks64();
+	if(now - last_time_ > 500)
 	{
 		text_caret_.show();
 	}
-	if(time_step - last_time_ > 1000 && !is_writing_) //do not hide the caret when writing/deleting
+	if(now - last_time_ > 1000 && !is_writing_) //do not hide the caret when writing/deleting
 	{
 		text_caret_.hide();
 		last_time_ = SDL_GetTicks64();

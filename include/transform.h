@@ -42,10 +42,9 @@ class Transform
 	public:
 		Transform();
 
-		//TODO : renommer
-		struct Transform_X
+		struct TransformAllSteps
 		{
-			Transform_X(/*TransformName transform_name,*/ int number_of_transform_steps)
+			TransformAllSteps(/*TransformName transform_name,*/ int number_of_transform_steps)
 				: current_step_number_(0), transform_finished_(false), number_of_transform_steps_(number_of_transform_steps), transform_steps_(number_of_transform_steps)
 			{}
 
@@ -55,9 +54,9 @@ class Transform
 			std::vector<TransformStep> transform_steps_;
 		};
 
-		std::unordered_map<TransformName, Transform_X> transforms_;
+		std::unordered_map<TransformName, TransformAllSteps> transforms_;
 
-		void tcommon(int xpos, Image& image, Transform::Transform_X& transform_t);
+		void tcommon(int xpos, Image& image, Transform::TransformAllSteps& transform_t);
 		void t11(Image& image);
 		void t21(Image& image);
 		void t22(Image& image);
@@ -69,7 +68,7 @@ class Transform
 		void t43(Image& image);
 		void t44(Image& image);
 
-		void focus_common(int xpos, Image& image, Transform::Transform_X& transform_f);
+		void focus_common(int xpos, Image& image, Transform::TransformAllSteps& transform_f);
 		void f11(Image& image);
 		void f21(Image& image);
 		void f22(Image& image);

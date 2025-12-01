@@ -14,7 +14,7 @@ class Chunk
 		Chunk& operator=(const Chunk& chunk) = delete;
 		~Chunk(); //Mix_FreeChunk
 
-		Mix_Chunk* Get() const;
+		Mix_Chunk* fetch() const;
 		void fade_in(int channel, int loops, int ms);
 		void fade_out(int which, int ms);
 		void pause(int channel);

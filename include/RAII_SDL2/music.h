@@ -14,7 +14,7 @@ class Music
 		Music& operator=(const Music& music) = delete;
 		~Music(); //Mix_FreeMusic
 
-		Mix_Music* Get() const;
+		Mix_Music* fetch() const;
 		void fade_in(int loops, int ms);
 		void fade_out(int ms);
 		void pause();

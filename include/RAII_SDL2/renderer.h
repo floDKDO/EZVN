@@ -15,14 +15,14 @@ class Renderer
 		Renderer& operator=(const Renderer& renderer) = delete;
 		~Renderer(); //SDL_DestroyRenderer
 
-		SDL_Renderer* Get() const;
+		SDL_Renderer* fetch() const;
 
 		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect);
 		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip);
 		void clear();
 		void present();
 		void set_logical_size(int w, int h);
-		void set_draw_blend_mode(SDL_BlendMode blendMode);
+		void set_draw_blend_mode(SDL_BlendMode blend_mode);
 
 	protected:
 

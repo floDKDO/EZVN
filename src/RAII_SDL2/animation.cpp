@@ -16,7 +16,7 @@ Animation::~Animation() //IMG_FreeAnimation
 	IMG_FreeAnimation(animation_);
 }
 
-IMG_Animation* Animation::Get() const
+IMG_Animation* Animation::fetch() const
 {
 	return animation_;
 }

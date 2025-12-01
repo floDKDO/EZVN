@@ -15,9 +15,8 @@ void TextButton::draw(sdl::Renderer& renderer)
 	text_.draw(renderer);
 }
 
-void TextButton::update(Uint64 time_step)
+void TextButton::update()
 {
-	(void)time_step;
 	if(state_ == State::NORMAL)
 		text_.change_color(color_normal_);
 	else if(state_ == State::SELECTED)

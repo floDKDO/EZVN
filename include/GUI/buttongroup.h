@@ -13,7 +13,7 @@ class ButtonGroup : public Ui
 		ButtonGroup(const std::vector<std::string> texts, const std::string path_normal, const std::string path_selected, const std::string path_clicked, const int x, const int y, sdl::Renderer& renderer);
 
 		void draw(sdl::Renderer& renderer) override;
-		void update(Uint64 time_step) override;
+		void update() override;
 		void handle_events(const SDL_Event& e) override;
 		std::vector<Ui*> get_navigation_nodes() override;
 
@@ -51,11 +51,11 @@ void ButtonGroup<N>::draw(sdl::Renderer& renderer)
 }
 
 template<size_t N>
-void ButtonGroup<N>::update(Uint64 time_step)
+void ButtonGroup<N>::update()
 {
 	for(std::unique_ptr<Button> const& b : buttons_)
 	{
-		b->update(time_step);
+		b->update();
 		if(b->state_ == State::SELECTED)
 		{
 			if(selected_button_ == nullptr || selected_button_ == b.get())

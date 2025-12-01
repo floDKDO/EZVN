@@ -5,9 +5,9 @@
 namespace sdl
 {
 
-Surface::Surface(Font& font, const std::string text, SDL_Color fg, Uint32 wrapLength)
+Surface::Surface(Font& font, const std::string text, SDL_Color fg, Uint32 wrap_length)
 {
-	if((surface_ = TTF_RenderUTF8_Blended_Wrapped(font.Get(), text.c_str(), fg, wrapLength)) == nullptr)
+	if((surface_ = TTF_RenderUTF8_Blended_Wrapped(font.fetch(), text.c_str(), fg, wrap_length)) == nullptr)
 	{
 		SDL_Log("(TTF_RenderUTF8_Blended_Wrapped) %s\n", TTF_GetError());
 	}
@@ -26,14 +26,14 @@ Surface::~Surface() //SDL_FreeSurface
 	SDL_FreeSurface(surface_);
 }
 
-SDL_Surface* Surface::Get() const
+SDL_Surface* Surface::fetch() const
 {
 	return surface_;
 }
 
-void Surface::set_blend_mode(SDL_BlendMode blendMode)
+void Surface::set_blend_mode(SDL_BlendMode blend_mode)
 {
-	if(SDL_SetSurfaceBlendMode(surface_, blendMode) < 0)
+	if(SDL_SetSurfaceBlendMode(surface_, blend_mode) < 0)
 	{
 		SDL_Log("(SDL_SetSurfaceBlendMode) %s\n", SDL_GetError());
 	}
@@ -41,7 +41,7 @@ void Surface::set_blend_mode(SDL_BlendMode blendMode)
 
 void Surface::blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect)
 {
-	if(SDL_BlitSurface(surface_, srcrect, dst.Get(), dstrect) < 0)
+	if(SDL_BlitSurface(surface_, srcrect, dst.fetch(), dstrect) < 0)
 	{
 		SDL_Log("(SDL_BlitSurface) %s\n", SDL_GetError());
 	}

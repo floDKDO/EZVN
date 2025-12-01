@@ -9,7 +9,7 @@ class TextToggle : public Checkable
 		TextToggle(const std::string text, SDL_Color color_unchecked, SDL_Color color_selected, SDL_Color color_checked, const int x, const int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
-		void update(Uint64 time_step) override;
+		void update() override;
 		SDL_Rect get_rect() const override;
 
 	protected:

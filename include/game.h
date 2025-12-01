@@ -19,12 +19,12 @@ class Game
 		Game();
 
 		void push_state(GameState* state);
-		void pop_state(); //TODO : doit retourner un GameState* ??
+		void pop_state(); 
 		GameState* get_state();
 
 		void handle_events();
 		void draw();
-		void update(Uint64 time_step);
+		void update();
 
 		void update_fps_count(const std::string fps);
 

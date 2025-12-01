@@ -16,7 +16,7 @@ Window::~Window() //SDL_DestroyWindow
 	SDL_DestroyWindow(window_);
 }
 
-SDL_Window* Window::Get() const
+SDL_Window* Window::fetch() const
 {
 	return window_;
 }
@@ -28,7 +28,7 @@ void Window::set_title(const std::string title)
 
 void Window::set_icon(sdl::Surface& icon)
 {
-	SDL_SetWindowIcon(window_, icon.Get());
+	SDL_SetWindowIcon(window_, icon.fetch());
 }
 
 void Window::set_full_screen()

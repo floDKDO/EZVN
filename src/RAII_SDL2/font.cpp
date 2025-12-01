@@ -18,7 +18,7 @@ Font::~Font() //TTF_CloseFont
 	TTF_CloseFont(font_);
 }
 
-TTF_Font* Font::Get() const
+TTF_Font* Font::fetch() const
 {
 	return font_;
 }

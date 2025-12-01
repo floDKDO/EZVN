@@ -17,10 +17,10 @@ class Texture
 		Texture& operator=(const Texture& texture) = delete;
 		~Texture(); //SDL_DestroyTexture
 
-		SDL_Texture* Get() const;
+		SDL_Texture* fetch() const;
 		void set_alpha_mod(Uint8 alpha);
 		void set_color_mod(Uint8 r, Uint8 g, Uint8 b);
-		void set_blend_mode(SDL_BlendMode blendMode);
+		void set_blend_mode(SDL_BlendMode blend_mode);
 		void query(Uint32* format, int* access, int* w, int* h);
 
 	protected:

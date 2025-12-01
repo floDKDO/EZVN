@@ -10,10 +10,10 @@
 class InGameState : public GameState
 {
 	public:
-		InGameState(sdl::Renderer& renderer);
+		explicit InGameState(sdl::Renderer& renderer);
 		void handle_events(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
-		void update(Uint64 time_step) override;
+		void update() override;
 
 		void temp_function(Ui* ui);
 

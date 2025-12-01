@@ -16,7 +16,7 @@ GameController::~GameController() //SDL_GameControllerClose
 	SDL_GameControllerClose(game_controller_);
 }
 
-SDL_GameController* GameController::Get() const
+SDL_GameController* GameController::fetch() const
 {
 	return game_controller_;
 }

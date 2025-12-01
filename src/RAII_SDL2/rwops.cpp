@@ -19,7 +19,7 @@ RWops::~RWops() //SDL_RWclose
 	}
 }
 
-SDL_RWops* RWops::Get() const
+SDL_RWops* RWops::fetch() const
 {
 	return rwops_;
 }

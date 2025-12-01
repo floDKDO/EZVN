@@ -5,8 +5,6 @@
 #include "GUI/texttoggle.h"
 #include "GUI/texttogglegroup.h"
 
-#include <iostream>
-
 //TODO : garder les vectors de C-pointeurs ??
 
 Game::Game()
@@ -46,13 +44,13 @@ void Game::create_main_menu()
 	ui_elements_popup.push_back(std::make_unique<TextButton>("Yes", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 300, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 	ui_elements_popup.push_back(std::make_unique<TextButton>("No", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
-	//main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), renderer_);
-	main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), "Are you sure you would like to close the game?", std::move(ui_elements_popup), ui_elements_popup[1].get(), renderer_);
+	//main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), renderer_);
+	main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), "Are you sure you would like to close the game?", std::move(ui_elements_popup), renderer_);
 }
 
 void Game::create_settings_menu()
 {
-	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string>{"Windowed", "Fullscreen"}, SDL_Color{200, 200, 200, 255}, SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, 50, 100, true, renderer.Get(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
+	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string>{"Windowed", "Fullscreen"}, SDL_Color{200, 200, 200, 255}, SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, 50, 100, true, renderer.fetch(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
 
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
@@ -60,10 +58,10 @@ void Game::create_settings_menu()
 	ui_elements.push_back(std::make_unique<TextButton>("Return", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 200, 500, renderer_, std::bind(&Game::previous_menu_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer_, std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer_, std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 30, 0, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 30, 60, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, SDL_Color{200, 200, 200, 255}, SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 
-	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), ui_elements[0].get(), renderer_);
+	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), renderer_);
 }
 
 void Game::play_function(Ui* ui)
@@ -113,7 +111,7 @@ void Game::slider_text_function(Ui* ui)
 {
 	Slider* slider = dynamic_cast<Slider*>(ui);
 	std::cout << "Changed value (" << slider->current_value_ << ") of slider!" << std::endl;
-	Text::global_text_speed_ = slider->current_value_;
+	Text::global_text_divisor_ = slider->current_value_;
 }
 
 void Game::texttoggle_full_screen_function(Ui* ui)
@@ -193,9 +191,9 @@ void Game::draw()
 	renderer_.present();
 }
 
-void Game::update(Uint64 time_step)
+void Game::update()
 {
-	get_state()->update(time_step);
+	get_state()->update();
 }
 
 void Game::update_fps_count(const std::string fps)

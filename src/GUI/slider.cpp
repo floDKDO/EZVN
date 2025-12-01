@@ -3,8 +3,9 @@
 #include <iostream>
 
 Slider::Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), bar_(path_bar, x, y, renderer), handle_(path_handle, x, y - 5, renderer), min_value_(min_value), max_value_(max_value), current_value_(max_value/2), 
-	is_dragged_(false), is_selected_(false), diff_(0), text_(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar_.position_.h*3, renderer) //TODO : pas de couleur fixée...
+	: Ui(renderer), bar_(path_bar, x, y, renderer), handle_(path_handle, x, y - 5, renderer), min_value_(min_value), max_value_(max_value), current_value_((max_value + min_value) / 2), 
+	is_dragged_(false), is_selected_(false), delta_mouse_handle_x_(0), 
+	text_(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar_.position_.h*3, renderer) //TODO : pas de couleur fixée... => paramètre
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
@@ -16,7 +17,7 @@ Slider::Slider(const std::string path_bar, const std::string path_handle, unsign
 bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y)
 {
 	float logical_x, logical_y;
-	SDL_RenderWindowToLogical(renderer_.Get(), mouse_x, mouse_y, &logical_x, &logical_y);
+	SDL_RenderWindowToLogical(renderer_.fetch(), mouse_x, mouse_y, &logical_x, &logical_y);
 
 	return (handle_.position_.y + handle_.position_.h > logical_y
 		 && handle_.position_.y < logical_y
@@ -31,19 +32,19 @@ void Slider::handle_movement()
 
 	if(is_dragged_)
 	{
-		if(logical_mouse_x > diff_) //TODO : code presque dupliqué dans la méthode on_pointer_down()
+		if(logical_mouse_x > delta_mouse_handle_x_) //TODO : code presque dupliqué dans la méthode on_pointer_down()
 		{
-			if(logical_mouse_x - diff_ < bar_.position_.x - (handle_.position_.w / 2))
+			if(logical_mouse_x - delta_mouse_handle_x_ < bar_.position_.x - (handle_.position_.w / 2))
 			{
 				handle_.position_.x = bar_.position_.x - (handle_.position_.w / 2);
 			}
-			else if(logical_mouse_x - diff_ > bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2))
+			else if(logical_mouse_x - delta_mouse_handle_x_ > bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2))
 			{
 				handle_.position_.x = bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2);
 			}
 			else
 			{
-				handle_.position_.x = logical_mouse_x - diff_;
+				handle_.position_.x = logical_mouse_x - delta_mouse_handle_x_;
 			}
 		}
 	}
@@ -81,7 +82,7 @@ void Slider::on_pointer_down_hook_end()
 	{
 		handle_.position_.x = logical_mouse_x - (handle_.position_.w / 2);
 	}
-	diff_ = logical_mouse_x - handle_.position_.x;
+	delta_mouse_handle_x_ = logical_mouse_x - handle_.position_.x;
 	is_dragged_ = true;
 }
 
@@ -163,11 +164,9 @@ void Slider::draw(sdl::Renderer& renderer)
 	text_.draw(renderer);
 }
 
-void Slider::update(Uint64 time_step)
+void Slider::update()
 {
-	(void)time_step;
-
-	text_.update(time_step);
+	text_.update();
 
 	if(handle_.position_.x + (handle_.position_.w / 2) == bar_.position_.x)
 	{
@@ -179,7 +178,7 @@ void Slider::update(Uint64 time_step)
 	}
 	else
 	{
-		current_value_ = min_value_ + float((handle_.position_.x + (handle_.position_.w / 2) - bar_.position_.x)) / (bar_.position_.w) * 100;
+		current_value_ = min_value_ + float((handle_.position_.x + (handle_.position_.w / 2) - bar_.position_.x)) / (bar_.position_.w) * (max_value_ - min_value_);
 	}
 }
 

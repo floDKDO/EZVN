@@ -9,11 +9,11 @@ class Textbox
 	public:
 		Textbox(SDL_Color text_color, sdl::Renderer& renderer);
 
-		void show_new_dialogue(std::string new_dialogue, Character* speaker = nullptr);
+		void show_new_dialogue(std::string new_dialogue, std::string speaker = "" /*Character * speaker = nullptr*/);
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
-		void update(Uint64 time_step);
+		void update();
 
 		//Character current_speaker_;
 		std::string current_speaker_; //TODO : à sûrement remplacer par Character

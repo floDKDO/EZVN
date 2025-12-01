@@ -40,11 +40,9 @@ class Image
 		int get_xcenter() const;
 		void zoom(const float zoom, Uint64 time=0);
 		void resize(const int w, const int h);
-		void set_position(const int x, const int y, Uint64 time=0);
+		void set_position(const int x, const int y);
 		void set_position_xcenter(const int x, const int y);
-		void set_center(Uint64 time = 0);
-
-		//TODO : void set_character_position(Transform t);
+		void set_center();
 
 		void night_filter();
 		void afternoon_filter();
@@ -56,7 +54,7 @@ class Image
 		SDL_Rect position_;
 		SDL_Rect initial_rect_;
 
-		Uint64 last_time_; //TODO : trouver un meilleur nom
+		Uint64 last_time_;
 
 	protected:
 		

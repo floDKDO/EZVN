@@ -14,7 +14,7 @@ class Font
 		Font& operator=(const Font& font) = delete;
 		~Font(); //TTF_CloseFont
 
-		TTF_Font* Get() const;
+		TTF_Font* fetch() const;
 		void size_UTF8(const std::string text, int* w, int* h);
 		void set_style(int style);
 		void set_outline(int outline);

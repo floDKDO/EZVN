@@ -4,23 +4,20 @@
 
 #include <SDL2/SDL.h>
 
-//TODO : écrire tous les paramètres en snake_case
-//TODO : renommer les méthodes Get() en autre chose pour ne pas confondre avec get() des unique_ptr
-
 namespace sdl
 {
 
 class Surface
 {
 	public:
-		Surface(Font& font, const std::string text, SDL_Color fg, Uint32 wrapLength); //TTF_RenderUTF8_Blended_Wrapped();
+		Surface(Font& font, const std::string text, SDL_Color fg, Uint32 wrap_length); //TTF_RenderUTF8_Blended_Wrapped();
 		explicit Surface(const std::string file); //IMG_Load
 		Surface(const Surface& surface) = delete;
 		Surface& operator=(const Surface& surface) = delete;
 		~Surface(); //SDL_FreeSurface
 
-		SDL_Surface* Get() const;
-		void set_blend_mode(SDL_BlendMode blendMode);
+		SDL_Surface* fetch() const;
+		void set_blend_mode(SDL_BlendMode blend_mode);
 		void blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect);
 
 	protected:

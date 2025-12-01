@@ -20,7 +20,7 @@ class Inputfield : public Ui
 		void on_input_released_hook_end(const SDL_Event& e) override;
 		void handle_events_hook_end(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
-		void update(Uint64 time_step) override;
+		void update() override;
 		SDL_Rect get_rect() const override;
 
 		void on_typing(const SDL_Event& e);

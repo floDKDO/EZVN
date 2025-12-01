@@ -15,9 +15,8 @@ void TextToggle::draw(sdl::Renderer& renderer)
 	text_.draw(renderer);
 }
 
-void TextToggle::update(Uint64 time_step)
+void TextToggle::update()
 {
-	(void)time_step;
 	if(is_checked_)
 	{
 		text_.change_color(color_checked_);

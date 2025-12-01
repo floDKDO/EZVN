@@ -14,7 +14,7 @@ class RWops
 		RWops& operator=(const RWops& rwops) = delete;
 		~RWops(); //SDL_RWclose
 
-		SDL_RWops* Get() const;
+		SDL_RWops* fetch() const;
 
 	protected:
 

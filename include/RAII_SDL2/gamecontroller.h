@@ -13,7 +13,7 @@ class GameController
 		GameController& operator=(const GameController& game_controller) = delete;
 		~GameController(); //SDL_GameControllerClose
 
-		SDL_GameController* Get() const;
+		SDL_GameController* fetch() const;
 
 	protected:
 

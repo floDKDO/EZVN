@@ -24,11 +24,11 @@ Image::Image(const std::string path, const int x, const int y, sdl::Renderer& re
 	{
 		sdl::RWops rwops(path, "rb"); 
 
-		if(rwops.Get() != nullptr && (IMG_isGIF(rwops.Get()) || IMG_isWEBP(rwops.Get())))
+		if(rwops.fetch() != nullptr && (IMG_isGIF(rwops.fetch()) || IMG_isWEBP(rwops.fetch())))
 		{
 			is_animated_ = true;
 			animated_image_ = std::make_unique<sdl::Animation>(path);
-			texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->Get()->frames[frame_index_]);
+			texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->fetch()->frames[frame_index_]);
 		}
 		else
 		{
@@ -104,7 +104,7 @@ void Image::zoom(const float zoom, Uint64 time)
 	static float zoome = 1.0f;
 	static bool animation_finished = false;
 
-	if(!animation_finished && zoom != 1.0f) //TODO : si time == 0
+	if(!animation_finished && time != 0)
 	{
 		position_w *= zoome;
 		position_h *= zoome;
@@ -130,7 +130,7 @@ void Image::resize(const int w, const int h)
 	position_ = {position_.x, position_.y, w, h};
 }
 
-void Image::set_position(const int x, const int y, Uint64 time)
+void Image::set_position(const int x, const int y)
 {
 	std::cout << "SET POS ***********************************************************\n";
 	position_ = {x, y, position_.w, position_.h};
@@ -142,7 +142,7 @@ void Image::set_position_xcenter(const int x, const int y)
 	position_ = {x - std::abs(get_xcenter()), y, position_.w, position_.h};
 }
 
-void Image::set_center(Uint64 time)
+void Image::set_center()
 {
 	position_ = {1280 / 2 - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
 }
@@ -176,14 +176,14 @@ void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 
 void Image::draw(sdl::Renderer& renderer)
 {
-	SDL_RenderCopyEx(renderer.Get(), texture_->Get(), nullptr, &(position_), angle_, nullptr, flip_);
+	SDL_RenderCopyEx(renderer.fetch(), texture_->fetch(), nullptr, &(position_), angle_, nullptr, flip_);
 	if(is_animated_)
 	{
-		if(frame_index_ < animated_image_->Get()->count - 1)
+		if(frame_index_ < animated_image_->fetch()->count - 1)
 		{
 			frame_index_ += 1;
 		}
 		else frame_index_ = 0;
-		texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->Get()->frames[frame_index_]);
+		texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->fetch()->frames[frame_index_]);
 	}
 }

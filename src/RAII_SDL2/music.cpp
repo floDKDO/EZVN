@@ -18,7 +18,7 @@ Music::~Music() //Mix_FreeMusic
 	Mix_FreeMusic(music_);
 }
 
-Mix_Music* Music::Get() const
+Mix_Music* Music::fetch() const
 {
 	return music_;
 }

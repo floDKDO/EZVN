@@ -8,7 +8,7 @@
 class UiManager
 {
 	public:
-		UiManager(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected);
+		explicit UiManager(std::vector<std::unique_ptr<Ui>> ui_elements);
 
 		enum class Axis
 		{
@@ -22,7 +22,7 @@ class UiManager
 		bool is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode);
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
-		void update(Uint64 time_step);
+		void update();
 
 		Ui* previous_selected_;
 		Ui* current_selected_;

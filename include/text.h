@@ -28,11 +28,11 @@ class Text
 
 		int get_width_one_char(char c);
 		int get_width_text();
-		int get_height_one_char(char c); //TODO : utiliser ces deux fonctions
+		int get_height_one_char(char c); 
 		int get_height_text();
 
 		void draw(sdl::Renderer& renderer);
-		void update(Uint64 time_step);
+		void update();
 
 		std::string text_;
 		SDL_Color color_;
@@ -46,7 +46,8 @@ class Text
 		std::string text_dialogue_;
 		int index_dialogue_;
 
-		static int global_text_speed_;
+		static int global_text_divisor_;
+		static const int initial_text_speed_ = 500;
 
 		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
 
@@ -57,7 +58,7 @@ class Text
 
 		std::string font_path_;
 
-		Uint64 last_time_; //TODO : trouver un meilleur nom
+		Uint64 last_time_; 
 
 	protected:
 

@@ -3,17 +3,18 @@
 
 #include <iostream>
 
-UiManager::UiManager(std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected)
-	: ui_elements_(std::move(ui_elements)), previous_selected_(nullptr), current_selected_(ui_selected)
+UiManager::UiManager(std::vector<std::unique_ptr<Ui>> ui_elements)
+	: ui_elements_(std::move(ui_elements)), previous_selected_(nullptr)
 {
 	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
 		std::vector<Ui*> nodes = ui_element->get_navigation_nodes();
 		navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
 	}
+	current_selected_ = ui_elements_[0].get();
+	current_selected_->state_ = State::SELECTED;
 
 	assign_ui_on_moving();
-	ui_selected->state_ = State::SELECTED; //TODO : retirer le paramètre et sélectionner le premier UI de ui_elements ??
 }
 
 bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode)
@@ -127,7 +128,7 @@ void UiManager::handle_events(const SDL_Event& e)
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
-			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI)
+			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI_)
 			{
 				if(previous_selected_ != nullptr && ui != previous_selected_ && previous_selected_->state_ != State::NORMAL)
 				{
@@ -153,11 +154,11 @@ void UiManager::draw(sdl::Renderer& renderer)
 	}
 }
 
-void UiManager::update(Uint64 time_step)
+void UiManager::update()
 {
 	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
-		ui_element->update(time_step);
+		ui_element->update();
 		if(ui_element->state_ == State::SELECTED)
 		{
 			previous_selected_ = current_selected_;

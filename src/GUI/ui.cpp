@@ -247,7 +247,7 @@ void Ui::handle_events(const SDL_Event& e)
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI) 
+			if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI_) 
 			{
 				on_pointer_down();
 			}
@@ -262,7 +262,7 @@ void Ui::handle_events(const SDL_Event& e)
 
 		case SDL_MOUSEMOTION:
 		{
-			if(is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI)
+			if(is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI_)
 			{
 				on_pointer_enter();
 			}
@@ -285,7 +285,7 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 	SDL_GetMouseState(&real_mouse_x, &real_mouse_y);
 
 	float temp_logical_mouse_x = 0, temp_logical_mouse_y = 0;
-	SDL_RenderWindowToLogical(renderer_.Get(), real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
+	SDL_RenderWindowToLogical(renderer_.fetch(), real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
 	*logical_mouse_x = int(temp_logical_mouse_x);
 	*logical_mouse_y = int(temp_logical_mouse_y);
 }
@@ -309,7 +309,7 @@ int Ui::is_mouse_on_ui()
 			return i;
 		}
 	}
-	return MOUSE_NOT_ON_ANY_UI;
+	return MOUSE_NOT_ON_ANY_UI_;
 }
 
 std::vector<Ui*> Ui::get_navigation_nodes()

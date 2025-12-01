@@ -47,11 +47,11 @@ void CheckableGroup::draw(sdl::Renderer& renderer)
 	top_text_.draw(renderer);
 }
 
-void CheckableGroup::update(Uint64 time_step)
+void CheckableGroup::update()
 {
 	for(std::unique_ptr<Checkable> const& c : checkables_)
 	{
-		c->update(time_step);
+		c->update();
 		if(c->state_ == State::SELECTED)
 		{
 			if(selected_checkable_ == nullptr || selected_checkable_ == c.get())
@@ -66,7 +66,7 @@ void CheckableGroup::update(Uint64 time_step)
 	}
 	selected_checkable_ = nullptr;
 
-	top_text_.update(time_step);
+	top_text_.update();
 }
 
 void CheckableGroup::handle_events(const SDL_Event& e)

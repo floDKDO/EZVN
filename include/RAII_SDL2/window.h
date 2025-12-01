@@ -16,7 +16,7 @@ class Window
 		Window& operator=(const Window& window) = delete;
 		~Window(); //SDL_DestroyWindow
 
-		SDL_Window* Get() const;
+		SDL_Window* fetch() const;
 		void set_title(const std::string title);
 		void set_icon(sdl::Surface& icon);
 		void set_full_screen();

@@ -9,11 +9,11 @@
 class PopUpConfirmation
 {
 	public:
-		PopUpConfirmation(const std::string text, std::vector<std::unique_ptr<Ui>> ui_elements, Ui* ui_selected, sdl::Renderer& renderer);
+		PopUpConfirmation(const std::string text, std::vector<std::unique_ptr<Ui>> ui_elements, sdl::Renderer& renderer);
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
-		void update(Uint64 time_step);
+		void update();
 
 	protected:
 

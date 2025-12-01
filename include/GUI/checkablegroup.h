@@ -16,7 +16,7 @@ class CheckableGroup : public Ui
 		void on_click(Checkable* c);
 
 		void draw(sdl::Renderer& renderer) override;
-		void update(Uint64 time_step) override;
+		void update() override;
 		void handle_events(const SDL_Event& e) override;
 		std::vector<Ui*> get_navigation_nodes() override;
 

@@ -21,9 +21,9 @@ void Button::draw(sdl::Renderer& renderer)
 	text_.draw(renderer);
 }
 
-void Button::update(Uint64 time_step)
+void Button::update()
 {
-	(void)time_step;
+
 }
 
 SDL_Rect Button::get_rect() const

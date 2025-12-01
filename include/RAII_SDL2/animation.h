@@ -14,7 +14,7 @@ class Animation
 		Animation& operator=(const Animation& animation) = delete;
 		~Animation(); //IMG_FreeAnimation
 
-		IMG_Animation* Get() const;
+		IMG_Animation* fetch() const;
 
 	protected:
 

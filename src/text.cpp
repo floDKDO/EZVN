@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-int Text::global_text_speed_ = 15;
+int Text::global_text_divisor_ = 45;
 
 Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length)
 	:text_(text), color_(color), font_size_(font_size), font_style_(0), renderer_(renderer), wrap_length_(wrap_length), text_dialogue_(""), index_dialogue_(0), 
-	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), /*local_text_speed_(global_text_speed_),*/ last_time_(0), 
+	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), /*local_text_speed_(global_text_divisor_),*/ last_time_(0), 
 	font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(1)
 {
 	int w, h;
@@ -47,8 +47,8 @@ void Text::create_surface_texture()
 			surface_ = std::make_unique<sdl::Surface>(font_, text_, color_, wrap_length_);
 		}
 	}
-	position_.w = surface_->Get()->w;
-	position_.h = surface_->Get()->h;
+	position_.w = surface_->fetch()->w;
+	position_.h = surface_->fetch()->h;
 
 	SDL_Rect rect = {-outline_size_, -outline_size_, position_.w, position_.h};
 
@@ -130,7 +130,7 @@ int Text::get_width_one_char(char c)
 	return w;
 }
 
-int Text::get_width_text() //TODO : combiner les deux fonctions en une seule ??
+int Text::get_width_text() 
 {
 	int w;
 	font_.size_UTF8(text_, &w, nullptr);
@@ -154,20 +154,21 @@ int Text::get_height_text()
 
 void Text::draw(sdl::Renderer& renderer)
 {
-	SDL_RenderCopy(renderer.Get(), texture_->Get(), nullptr, &position_);
+	SDL_RenderCopy(renderer.fetch(), texture_->fetch(), nullptr, &position_);
 }
 
 //TODO : écrire le code spécifique aux dialogues dans la classe TextBox ??
 //TODO : écrire le code spécifique aux inputfields dans la classe Inputfield ??
-void Text::update(Uint64 time_step) 
+void Text::update() 
 {
 	if(is_dialogue_) 
 	{
-		if(time_step - last_time_ > global_text_speed_ && index_dialogue_ < text_.length()) 
+		Uint64 now = SDL_GetTicks64();
+		if(now - last_time_ > (int(float(initial_text_speed_) / float(global_text_divisor_))) && index_dialogue_ < text_.length())
 		{
 			text_dialogue_.push_back(text_[index_dialogue_]);
 			index_dialogue_ += 1;
-			last_time_ = SDL_GetTicks64();
+			last_time_ = now;
 		}
 
 		if(index_dialogue_ == text_.length() - 1)

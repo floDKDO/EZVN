@@ -4,8 +4,6 @@
 #include "image.h"
 #include "text.h"
 
-//TODO : que gauche à droite pour l'instant
-//TODO : que des nombres entiers pour l'instant
 class Slider : public Ui
 {
 	public:
@@ -27,7 +25,7 @@ class Slider : public Ui
 		void on_enter_pressed_hook_end() override;
 
 		void draw(sdl::Renderer& renderer) override;
-		void update(Uint64 time_step) override;
+		void update() override;
 		void handle_events_hook_end(const SDL_Event& e) override;
 		SDL_Rect get_rect() const override;
 
@@ -37,8 +35,8 @@ class Slider : public Ui
 
 		bool is_selected_; //When we press Enter on a SELECTED Slider
 		bool is_dragged_;
-		//SDL_Rect handle_position;
-		int diff_; //TODO : renommer
+		//SDL_Rect handle_position; //TODO : n'est normalement pas utile
+		int delta_mouse_handle_x_; //x position of the mouse in comparison to the x position of the handle
 
 	protected:
 
@@ -48,6 +46,6 @@ class Slider : public Ui
 		Text text_;
 
 		static const unsigned int INDEX_RECT_BAR_ = 0;
-		//static const unsigned int INDEX_RECT_HANDLE = 1; //TODO : n'est normalement pas utile
+		//static const unsigned int INDEX_RECT_HANDLE_ = 1; //TODO : n'est normalement pas utile
 };
 
