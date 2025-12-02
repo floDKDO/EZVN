@@ -26,7 +26,6 @@ class CheckableGroup : public Ui
 		Checkable* selected_checkable_; 
 		bool only_one_has_to_be_checked_;
 		Text top_text_; 
-		int y_spacing_between_checkable_;
 		
 	protected:
 		CheckableGroup(size_t number_of_checkables, bool only_one_has_to_be_checked, std::string top_text, int x, int y, sdl::Renderer& renderer);

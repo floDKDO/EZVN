@@ -4,6 +4,7 @@
 #include "GUI/textbutton.h"
 #include "GUI/texttoggle.h"
 #include "GUI/texttogglegroup.h"
+#include "GUI/checkboxgroup.h"
 #include "constants.h"
 
 //TODO : garder les vectors de C-pointeurs ??
@@ -59,7 +60,7 @@ void Game::create_settings_menu()
 	ui_elements.push_back(std::make_unique<Slider>(0, 100, 450, 200, "Music effect", renderer_, std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<Slider>(30, 60, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
-
+	//ui_elements.push_back(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
 }
 

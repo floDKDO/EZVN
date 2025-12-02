@@ -3,7 +3,8 @@
 #include <SDL2/SDL.h>
 #include <string>
 
-//TODO : écrire l'info de la variable à la fin => delta
+//TODO : normaliser la taille des textes
+//TODO : centrer les boutons du menu principal
 
 namespace constants
 {
@@ -20,14 +21,22 @@ namespace constants
 	inline constexpr int button_text_size_ = 30;
 	inline constexpr SDL_Color button_text_color_ = {255, 255, 255, 255};
 
+	inline constexpr int checkboxgroup_y_spacing_ = 150;
+	inline constexpr int texttogglegroup_y_spacing_ = 100;
+
+	inline constexpr int checkablegroup_top_text_y_delta_ = -100;
 	inline const std::string checkablegroup_font_ = "fonts/Aller_Rg.ttf";
 	inline constexpr int checkablegroup_text_size_ = 50;
 	inline constexpr SDL_Color checkablegroup_text_color_ = {255, 255, 255, 255};
 
-	inline const std::string checkbox_normal_ = "img/gui/button_normal.png";
-	inline const std::string checkbox_selected_ = "img/gui/button_selected.png";
-	inline const std::string checkbox_clicked_ = "img/gui/button_clicked.png";
+	inline const std::string checkbox_normal_ = "img/gui/checkbox_normal.png";
+	inline const std::string checkbox_selected_ = "img/gui/checkbox_selected.png";
+	inline const std::string checkbox_clicked_ = "img/gui/checkbox_clicked.png";
 	inline const std::string checkbox_check_mark_ = "img/gui/check_mark.png";
+	inline const std::string checkbox_font_ = "fonts/Aller_Rg.ttf";
+	inline constexpr int checkbox_text_x_delta_ = 10;
+	inline constexpr int checkbox_text_size_ = 30;
+	inline constexpr SDL_Color checkbox_text_color_ = {255, 255, 255, 255};
 
 	inline const std::string inputfield_container_ = "img/gui/inputfield_container.png";
 	inline const std::string inputfield_font_ = "fonts/Aller_Rg.ttf";
@@ -42,7 +51,9 @@ namespace constants
 
 	inline const std::string slider_container_ = "img/gui/slider_container.png";
 	inline const std::string slider_handle_ = "img/gui/slider_handle.png";
+	inline constexpr int slider_handle_y_delta_ = -5;
 	inline const std::string slider_font_ = "fonts/Aller_Rg.ttf";
+	inline constexpr int slider_text_y_delta_ = -70;
 	inline constexpr int slider_text_size_ = 50;
 	inline constexpr SDL_Color slider_text_color_ = {255, 255, 255, 255};
 
@@ -79,6 +90,9 @@ namespace constants
 	inline const std::string namebox_font_ = "fonts/Aller_Rg.ttf";
 	inline constexpr int namebox_text_size_ = 30;
 	inline constexpr SDL_Color namebox_text_color_ = {255, 255, 255, 255};
+
+	inline constexpr int buttongroup_y_spacing_ = 60; //= choice menu
+	inline constexpr int buttongroup_width_ = 400; //= choice menu
 
 	inline const std::string window_icon_ = "img/gui/window_icon.png"; 
 	inline const std::string game_name_ = "EZVN";

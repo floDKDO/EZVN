@@ -12,8 +12,6 @@
 
 //TODO : ordre des membres dans les classes selon l'ordre voulu des appels des destructeurs
 
-//TODO : ne créer qu'une seule font ??
-
 //TODO : mettre en private les méthodes qui doivent l'être
 
 //TODO : vérifier qui j'ai bien mis le suffixe "f" pour les float

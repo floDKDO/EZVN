@@ -96,7 +96,6 @@ class Ui
 	protected:
 		explicit Ui(sdl::Renderer& renderer);
 
-		//TODO : stocker en "variables globales" select_sound, click_sound et une police par défaut ?
 		Sound select_sound_;
 		Sound click_sound_;
 		bool is_selected_sound_played_;

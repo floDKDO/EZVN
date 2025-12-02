@@ -4,16 +4,15 @@
 #include <iostream>
 
 Slider::Slider(unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), container_(constants::slider_container_, x, y, renderer), handle_(constants::slider_handle_, x, y - 5, renderer), min_value_(min_value), max_value_(max_value), 
+	: Ui(renderer), container_(constants::slider_container_, x, y, renderer), handle_(constants::slider_handle_, x, y + constants::slider_handle_y_delta_, renderer), min_value_(min_value), max_value_(max_value),
 	current_value_((max_value + min_value) / 2), is_dragged_(false), is_selected_(false), delta_mouse_handle_x_(0), 
-	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y - container_.position_.h*3, renderer) 
+	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer) 
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
 	handle_.position_.x += (float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (container_.position_.w - handle_.position_.w);
+	text_.position_.x += (container_.position_.w - text_.position_.w) / 2;
 }
-
-//TODO : position dans Image, Text et Ui... => pk pas retirer la position de Ui vu qu'on copie celle de l'Image/Text dans celle de Ui ?
 
 bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y)
 {

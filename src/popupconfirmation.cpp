@@ -15,8 +15,8 @@ void PopUpConfirmation::handle_events(const SDL_Event& e)
 
 void PopUpConfirmation::draw(sdl::Renderer& renderer)
 {
-	text_.draw(renderer);
 	frame_.draw(renderer);
+	text_.draw(renderer);
 	ui_manager_.draw(renderer);
 }
 

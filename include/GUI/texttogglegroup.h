@@ -3,6 +3,7 @@
 #include "GUI/checkablegroup.h"
 #include "GUI/texttogglegroup.h"
 #include "GUI/texttoggle.h"
+#include "constants.h"
 
 template<size_t N>
 class TextToggleGroup : public CheckableGroup
@@ -33,7 +34,8 @@ TextToggleGroup<N>::TextToggleGroup(std::string top_text, std::vector<std::strin
 		{
 			is_checked = false;
 		}
-		checkables_.push_back(std::make_unique<TextToggle>(texts[i], x, y + y_spacing_between_checkable_ * i, is_checked, renderer, callback_functions[i]));
+		checkables_.push_back(std::make_unique<TextToggle>(texts[i], x, y + constants::texttogglegroup_y_spacing_ * i, is_checked, renderer, callback_functions[i]));
 		checkables_[i]->checkable_group_ = this;
 	}
+	top_text_.position_.x += (checkables_[0]->get_rect().w - top_text_.position_.w) / 2;
 }
