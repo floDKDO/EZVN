@@ -10,22 +10,27 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
 	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {
-	textbox_.set_position((1280 - textbox_.position_.w) / 2, 720 - textbox_.position_.h - 6); //TODO : hardcodé
-	namebox_.set_position(textbox_.position_.x + 37, textbox_.position_.y - namebox_.position_.h);
+	textbox_.set_position((constants::window_width_ - textbox_.position_.w) / 2, constants::window_height_ - textbox_.position_.h - constants::textbox_y_delta_); 
+	namebox_.set_position(textbox_.position_.x + constants::namebox_textbox_x_delta_, textbox_.position_.y - namebox_.position_.h);
+
 	text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
 	text_name_box_.position_.y = namebox_.position_.y + ((namebox_.position_.h - text_name_box_.get_height_text()) / 2);
-	text_.position_.x = textbox_.position_.x + 30; 
-	text_.position_.y = textbox_.position_.y + 25;
-	text_.wrap_length_ = textbox_.position_.w - 40;
-	triangle_.position_.x = textbox_.position_.x + textbox_.position_.w - 30;
-	triangle_.position_.y = textbox_.position_.y + 115;
+
+	text_.position_.x = textbox_.position_.x + constants::textbox_text_x_delta_; 
+	text_.position_.y = textbox_.position_.y + constants::textbox_text_y_delta_;
+
+	text_.wrap_length_ = textbox_.position_.w - (constants::textbox_text_x_delta_ * 2); 
+	std::cout << text_.wrap_length_ << std::endl;
+
+	triangle_.position_.x = textbox_.position_.x + textbox_.position_.w - constants::textbox_end_dialogue_indicator_x_delta_; 
+	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 
 }
 
 void Textbox::show_new_dialogue(std::string new_dialogue, std::string speaker /*Character* speaker*/)
 {
 	if(text_.is_finished_)
 	{
-		//TODO : version à utiliser si Character* à la place de std::strings
+		//TODO : version à utiliser si Character* à la place de std::string
 		/*if(speaker == nullptr) //Narrator
 		{
 			current_speaker_.clear();

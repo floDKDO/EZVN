@@ -3,10 +3,15 @@
 #include <SDL2/SDL.h>
 #include <string>
 
+//TODO : écrire l'info de la variable à la fin => delta
+
 namespace constants
 {
-	inline constexpr int text_outline_size = 1;
-	inline constexpr SDL_Color text_outline_color = {255, 205, 230, 255};
+	inline constexpr int window_width_ = 1280;
+	inline constexpr int window_height_ = 720;
+
+	inline constexpr int text_outline_size_ = 1;
+	inline constexpr SDL_Color text_outline_color_ = {255, 205, 230, 255};
 
 	inline const std::string button_normal_ = "img/gui/button_normal.png";
 	inline const std::string button_selected_ = "img/gui/button_selected.png";
@@ -54,17 +59,25 @@ namespace constants
 	inline const std::string texttoggle_font_ = "fonts/Aller_Rg.ttf";
 	inline constexpr int texttoggle_text_size_ = 50;
 
+	inline constexpr int textbox_y_delta_ = -6;
 	inline const std::string textbox_image_ = "img/gui/textbox.png";
-	inline const std::string textbox_end_dialogue_indicator_ = "img/gui/textbox_end_dialogue_indicator.png";
 	inline const std::string textbox_font_ = "fonts/Aller_Rg.ttf";
 	inline constexpr int textbox_text_size_ = 20;
 	inline constexpr SDL_Color textbox_text_color_ = {255, 255, 255, 255};
 
 	inline constexpr int textbox_textbuttons_text_size_ = 10;
 
+	inline constexpr int textbox_text_x_delta_ = 30;
+	inline constexpr int textbox_text_y_delta_ = 25;
+
+	inline constexpr int textbox_end_dialogue_indicator_x_delta_ = -30;
+	inline constexpr int textbox_end_dialogue_indicator_y_delta_ = 115;
+	inline const std::string textbox_end_dialogue_indicator_ = "img/gui/textbox_end_dialogue_indicator.png";
+
+	inline constexpr int namebox_textbox_x_delta_ = 37;
 	inline const std::string namebox_image_ = "img/gui/namebox.png";
 	inline const std::string namebox_font_ = "fonts/Aller_Rg.ttf";
-	inline constexpr int namebox_text_size_ = 20;
+	inline constexpr int namebox_text_size_ = 30;
 	inline constexpr SDL_Color namebox_text_color_ = {255, 255, 255, 255};
 
 	inline const std::string window_icon_ = "img/gui/window_icon.png"; 

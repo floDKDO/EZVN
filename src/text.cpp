@@ -8,7 +8,7 @@ int Text::global_text_divisor_ = 45;
 Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length)
 	:text_(text), color_(color), font_size_(font_size), font_style_(0), renderer_(renderer), wrap_length_(wrap_length), text_dialogue_(""), index_dialogue_(0), 
 	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), /*local_text_speed_(global_text_divisor_),*/ last_time_(0), 
-	font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(constants::text_outline_size)
+	font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(constants::text_outline_size_)
 {
 	int w, h;
 	font_.size_UTF8(text_, &w, &h);
@@ -32,19 +32,19 @@ void Text::create_surface_texture()
 {
 	if(text_.empty() || (is_dialogue_ && text_dialogue_.empty()))
 	{
-		surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, " ", constants::text_outline_color, wrap_length_);
+		surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, " ", constants::text_outline_color_, wrap_length_);
 		surface_ = std::make_unique<sdl::Surface>(font_, " ", color_, wrap_length_);
 	}
 	else
 	{
 		if(is_dialogue_)
 		{
-			surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, text_dialogue_, constants::text_outline_color, wrap_length_);
+			surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, text_dialogue_, constants::text_outline_color_, wrap_length_);
 			surface_ = std::make_unique<sdl::Surface>(font_, text_dialogue_, color_, wrap_length_);
 		}
 		else
 		{
-			surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, text_, constants::text_outline_color, wrap_length_);
+			surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, text_, constants::text_outline_color_, wrap_length_);
 			surface_ = std::make_unique<sdl::Surface>(font_, text_, color_, wrap_length_);
 		}
 	}

@@ -26,6 +26,8 @@
 
 //TODO : const
 
+//TODO : si valeur de wrap_length pas connue dans le constructeur ?
+
 
 int main(int argc, char* argv[])
 {

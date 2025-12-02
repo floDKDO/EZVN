@@ -10,7 +10,7 @@
 
 Game::Game()
 	: sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
-	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH_, WINDOW_HEIGHT_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
+	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
 	window_icon_(constants::window_icon_),
@@ -18,7 +18,7 @@ Game::Game()
 {
 	window_.set_icon(window_icon_);
 
-	renderer_.set_logical_size(WINDOW_WIDTH_, WINDOW_HEIGHT_);
+	renderer_.set_logical_size(constants::window_width_, constants::window_height_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
 
 	in_game_ = std::make_unique<InGameState>(renderer_);

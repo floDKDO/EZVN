@@ -1,4 +1,5 @@
 #include "transformstep.h"
+#include "constants.h"
 
 #include <iostream>
 
@@ -205,15 +206,15 @@ void TransformStep::set_position_yoffset(Image& image, const int y, Uint64 time)
 
 void TransformStep::set_center(Image& image, Uint64 time)
 {
-	no_modif_common(image.position_.x == (1280 / 2 - std::abs(get_xcenter(image))) && image.position_.y == (720 / 2 - std::abs(get_ycenter(image))));
+	no_modif_common(image.position_.x == (constants::window_width_ / 2 - std::abs(get_xcenter(image))) && image.position_.y == (constants::window_height_ / 2 - std::abs(get_ycenter(image))));
 
 	instant_modif_common([&]()
 	{
-		image.position_ = {1280 / 2 - std::abs(get_xcenter(image)), 720 / 2 - std::abs(get_ycenter(image)), image.position_.w, image.position_.h};
+		image.position_ = {constants::window_width_ / 2 - std::abs(get_xcenter(image)), constants::window_height_ / 2 - std::abs(get_ycenter(image)), image.position_.w, image.position_.h};
 	}
 	, time);
 
-	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y, 1280 / 2 - std::abs(get_xcenter(image)), 720 / 2 - std::abs(get_ycenter(image))); },
+	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y, constants::window_width_ / 2 - std::abs(get_xcenter(image)), constants::window_height_ / 2 - std::abs(get_ycenter(image))); },
 	[&](PositionStep& position_step) -> bool
 	{
 		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
@@ -225,12 +226,14 @@ void TransformStep::set_center(Image& image, Uint64 time)
 		image.position_.x = int(position_step.f_position_x_);
 		image.position_.y = int(position_step.f_position_y_);
 
-		//std::cout << "x: " << 1280 / 2 - std::abs(get_xcenter(image)) << " et initial_x : " << position_step.initial_position_x_ << " et image_x : " << image.position_.x << std::endl;
-		//std::cout << "y: " << 720 / 2  - std::abs(get_ycenter(image)) << " et initial_y: " << position_step.initial_position_y_ << " et image_y: " << image.position_.y << std::endl;
+		//std::cout << "x: " << constants::window_width_ / 2 - std::abs(get_xcenter(image)) << " et initial_x : " << position_step.initial_position_x_ << " et image_x : " << image.position_.x << std::endl;
+		//std::cout << "y: " << constants::window_height_ / 2  - std::abs(get_ycenter(image)) << " et initial_y: " << position_step.initial_position_y_ << " et image_y: " << image.position_.y << std::endl;
 		//std::cout << "\n";
 
-		return ((position_step.initial_position_x_ <= 1280 / 2 - std::abs(get_xcenter(image)) && image.position_.x >= 1280 / 2 - std::abs(get_xcenter(image))) || (position_step.initial_position_x_ > 1280 / 2 - std::abs(get_xcenter(image)) && image.position_.x <= 1280 / 2 - std::abs(get_xcenter(image))))
-			&& ((position_step.initial_position_y_ <= 720 / 2 - std::abs(get_ycenter(image)) && image.position_.y >= 720 / 2 - std::abs(get_ycenter(image))) || (position_step.initial_position_y_ > 720 / 2 - std::abs(get_ycenter(image)) && image.position_.y <= 720 / 2 - std::abs(get_ycenter(image))));
+		return ((position_step.initial_position_x_ <= constants::window_width_ / 2 - std::abs(get_xcenter(image)) && image.position_.x >= constants::window_width_ / 2 - std::abs(get_xcenter(image))) 
+			|| (position_step.initial_position_x_ > constants::window_width_ / 2 - std::abs(get_xcenter(image)) && image.position_.x <= constants::window_width_ / 2 - std::abs(get_xcenter(image))))
+			&& ((position_step.initial_position_y_ <= constants::window_height_ / 2 - std::abs(get_ycenter(image)) && image.position_.y >= constants::window_height_ / 2 - std::abs(get_ycenter(image))) 
+			|| (position_step.initial_position_y_ > constants::window_height_ / 2 - std::abs(get_ycenter(image)) && image.position_.y <= constants::window_height_ / 2 - std::abs(get_ycenter(image))));
 	}
 	, time);
 }

@@ -70,8 +70,5 @@ class Game
 
 	private:
 		std::stack<GameState*> states_;
-
-		static const int WINDOW_WIDTH_ = 1280; 
-		static const int WINDOW_HEIGHT_ = 720;
 };
 

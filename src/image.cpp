@@ -1,5 +1,6 @@
 #include "image.h"
 #include "RAII_SDL2/rwops.h"
+#include "constants.h"
 
 #include <iostream>
 
@@ -144,7 +145,7 @@ void Image::set_position_xcenter(const int x, const int y)
 
 void Image::set_center()
 {
-	position_ = {1280 / 2 - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
+	position_ = {constants::window_width_ / 2 - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
 }
 
 void Image::night_filter()
