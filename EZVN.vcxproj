@@ -181,6 +181,7 @@
     <ClCompile Include="src\transformstep.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\constants.h" />
     <ClInclude Include="include\GUI\button.h" />
     <ClInclude Include="include\character.h" />
     <ClInclude Include="include\GUI\buttongroup.h" />

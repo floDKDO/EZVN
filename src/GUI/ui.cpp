@@ -1,4 +1,5 @@
 #include "GUI/ui.h"
+#include "constants.h"
 
 #include <iostream>
 
@@ -10,7 +11,7 @@ Ui::Ui(sdl::Renderer& renderer)
 	:renderer_(renderer),
 	select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 
 	state_(State::NORMAL), 
-	select_sound_("sounds/base_select.ogg"), click_sound_("sounds/base_click.ogg"), 
+	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_), 
 	is_selected_sound_played_(false),
 	callback_function_(nullptr),
 	pointer_on_ui_when_pointer_up_(true),

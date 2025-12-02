@@ -24,6 +24,8 @@
 
 //TODO : vérifier que je n'ai pas oublier explicit pour les constructeurs à un paramètre
 
+//TODO : const
+
 
 int main(int argc, char* argv[])
 {

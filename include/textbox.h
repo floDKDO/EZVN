@@ -7,7 +7,7 @@
 class Textbox
 {
 	public:
-		Textbox(SDL_Color text_color, sdl::Renderer& renderer);
+		Textbox(sdl::Renderer& renderer);
 
 		void show_new_dialogue(std::string new_dialogue, std::string speaker = "" /*Character * speaker = nullptr*/);
 

@@ -6,7 +6,7 @@
 #include <algorithm>
 
 InGameState::InGameState(sdl::Renderer& renderer)
-	: renderer_(renderer), textbox_({255, 255, 255, 255}, renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
+	: renderer_(renderer), textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
 {
 	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
@@ -18,17 +18,17 @@ InGameState::InGameState(sdl::Renderer& renderer)
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
 
-	ui_elements.push_back(std::make_unique<TextButton>("History", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[0].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Skip", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, x_textbutton + 8, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Skip", x_textbutton + 8, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[1].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Auto", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, x_textbutton + 16, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Auto", x_textbutton + 16, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[2].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Save", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, x_textbutton + 24, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Save", x_textbutton + 24, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[3].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Load", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, x_textbutton + 32, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Load", x_textbutton + 32, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[4].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, x_textbutton + 40, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Settings", x_textbutton + 40, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
 
 	menu_ = std::make_unique<UiManager>(std::move(ui_elements));
 

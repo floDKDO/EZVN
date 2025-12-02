@@ -4,6 +4,7 @@
 #include "GUI/textbutton.h"
 #include "GUI/texttoggle.h"
 #include "GUI/texttogglegroup.h"
+#include "constants.h"
 
 //TODO : garder les vectors de C-pointeurs ??
 
@@ -12,15 +13,13 @@ Game::Game()
 	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH_, WINDOW_HEIGHT_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
-	window_icon_("img/gui/window_icon.png"),
+	window_icon_(constants::window_icon_),
 	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr)
 {
 	window_.set_icon(window_icon_);
 
 	renderer_.set_logical_size(WINDOW_WIDTH_, WINDOW_HEIGHT_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
-
-	game_name_ = "EZVN";
 
 	in_game_ = std::make_unique<InGameState>(renderer_);
 	create_main_menu();
@@ -34,34 +33,34 @@ void Game::create_main_menu()
 	ui_elements.reserve(10);
 
 	//ici, std::placeholders::_1 est nécessaire car l'appel à la fonction de callback (ce qui est retourné par std::bind) est de la forme : f(this) => on spécifie l'argument lors de l'appel au callable et pas directement sa valeur dans std::bind
-	ui_elements.push_back(std::make_unique<TextButton>("Play", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<TextButton>("Settings", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<TextButton>("Quit", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Play", 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Settings", 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextButton>("Quit", 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
 
 	std::vector<std::unique_ptr<Ui>> ui_elements_popup;
 	ui_elements_popup.reserve(10);
 
-	ui_elements_popup.push_back(std::make_unique<TextButton>("Yes", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 300, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
-	ui_elements_popup.push_back(std::make_unique<TextButton>("No", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
+	ui_elements_popup.push_back(std::make_unique<TextButton>("Yes", 300, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), true));
+	ui_elements_popup.push_back(std::make_unique<TextButton>("No", 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), true));
 
-	//main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), renderer_);
-	main_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), "Are you sure you would like to close the game?", std::move(ui_elements_popup), renderer_);
+	//main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
+	main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), "Are you sure you would like to close the game?", std::move(ui_elements_popup), renderer_);
 }
 
 void Game::create_settings_menu()
 {
-	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string>{"Windowed", "Fullscreen"}, SDL_Color{200, 200, 200, 255}, SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, 50, 100, true, renderer.fetch(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
+	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer.fetch(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
 
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
 	 
-	ui_elements.push_back(std::make_unique<TextButton>("Return", SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, SDL_Color{255, 0, 0, 255}, 200, 500, renderer_, std::bind(&Game::previous_menu_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 800, 200, "Sound effect", renderer_, std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 0, 100, 450, 200, "Music effect", renderer_, std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<Slider>("img/gui/slider_bar.png", "img/gui/slider_handle.png", 30, 60, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, SDL_Color{200, 200, 200, 255}, SDL_Color{255, 255, 255, 255}, SDL_Color{255, 0, 0, 255}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
+	ui_elements.push_back(std::make_unique<TextButton>("Return", 200, 500, renderer_, std::bind(&Game::previous_menu_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<Slider>(0, 100, 800, 200, "Sound effect", renderer_, std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<Slider>(0, 100, 450, 200, "Music effect", renderer_, std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<Slider>(30, 60, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 
-	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/fond.png", std::move(ui_elements), renderer_);
+	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
 }
 
 void Game::play_function(Ui* ui)
@@ -198,5 +197,5 @@ void Game::update()
 
 void Game::update_fps_count(const std::string fps)
 {
-	window_.set_title(game_name_ + fps);
+	window_.set_title(constants::game_name_ + fps);
 }

@@ -260,5 +260,8 @@
     <ClInclude Include="include\GUI\buttongroup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

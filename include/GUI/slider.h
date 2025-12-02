@@ -7,7 +7,7 @@
 class Slider : public Ui
 {
 	public:
-		Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Slider(unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		bool is_mouse_on_handle(int mouse_x, int mouse_y);
 		void handle_movement();
@@ -41,11 +41,11 @@ class Slider : public Ui
 	protected:
 
 	private:
-		Image bar_;
+		Image container_;
 		Image handle_;
 		Text text_;
 
-		static const unsigned int INDEX_RECT_BAR_ = 0;
+		static const unsigned int INDEX_RECT_CONTAINER_ = 0;
 		//static const unsigned int INDEX_RECT_HANDLE_ = 1; //TODO : n'est normalement pas utile
 };
 

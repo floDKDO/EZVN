@@ -1,13 +1,14 @@
 #include "GUI/inputfield.h"
+#include "constants.h"
 
 #include <iostream>
 
-Inputfield::Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), text_("", color_normal, "fonts/Aller_Rg.ttf", 50, x+7, y, renderer),
-	  normal_(path, x, y, renderer), color_normal_(color_normal), 
+Inputfield::Inputfield(unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+	: Ui(renderer), text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x+7, y, renderer),
+	  normal_(constants::inputfield_container_, x, y, renderer),
 	  character_limit_(character_limit),
-	  text_caret_("|", color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
-	  text_placeholder_("...", color_normal, "fonts/Aller_Rg.ttf", 50, x, y, renderer), 
+	  text_caret_("|", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
+	  text_placeholder_("...", constants::inputfield_placeholder_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
 	  is_editing_(false), is_writing_(false), index_caret_(0), offset_caret_(0)
 {
 	callback_function_ = callback_function;

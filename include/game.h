@@ -57,7 +57,6 @@ class Game
 		sdl::GameController game_controller_;
 
 		sdl::Surface window_icon_;
-		std::string game_name_;
 
 		std::unique_ptr<MenuState> main_menu_;
 		std::unique_ptr<MenuState> settings_menu_;

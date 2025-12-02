@@ -1,10 +1,10 @@
 #include "GUI/textbutton.h"
+#include "constants.h"
 
 #include <iostream>
 
-TextButton::TextButton(const std::string text, const SDL_Color color_normal, const SDL_Color color_selected, const SDL_Color color_clicked, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), text_(text, color_normal, "fonts/Aller_Rg.ttf", 10, x, y, renderer), //TODO : taille de la police doit être un paramètre
-	  color_normal_(color_normal), color_selected_(color_selected), color_clicked_(color_clicked)
+TextButton::TextButton(const std::string text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, bool is_on_textbox)
+	: Ui(renderer), text_(text, constants::textbutton_text_color_, constants::textbutton_font_, is_on_textbox ? constants::textbox_textbuttons_text_size_ : constants::textbutton_text_size_, x, y, renderer)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
@@ -18,11 +18,11 @@ void TextButton::draw(sdl::Renderer& renderer)
 void TextButton::update()
 {
 	if(state_ == State::NORMAL)
-		text_.change_color(color_normal_);
+		text_.change_color(constants::textbutton_normal_color_);
 	else if(state_ == State::SELECTED)
-		text_.change_color(color_selected_);
+		text_.change_color(constants::textbutton_selected_color_);
 	else if(state_ == State::CLICKED)
-		text_.change_color(color_clicked_);
+		text_.change_color(constants::textbutton_clicked_color_);
 }
 
 SDL_Rect TextButton::get_rect() const

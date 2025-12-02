@@ -1,10 +1,11 @@
 #include "GUI/checkbox.h"
+#include "constants.h"
 
 #include <iostream>
 
-Checkbox::Checkbox(const std::string path_normal, const std::string path_selected, const std::string path_clicked, const std::string path_checked, const int x, const int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Checkable(is_checked, renderer), normal_(path_normal, x, y, renderer), selected_(path_selected, x, y, renderer), clicked_(path_clicked, x, y, renderer), 
-	  check_mark_(path_checked, x, y, renderer)
+Checkbox::Checkbox(const int x, const int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+	: Checkable(is_checked, renderer), normal_(constants::checkbox_normal_, x, y, renderer), selected_(constants::checkbox_selected_, x, y, renderer), clicked_(constants::checkbox_clicked_, x, y, renderer),
+	  check_mark_(constants::checkbox_check_mark_, x, y, renderer)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;

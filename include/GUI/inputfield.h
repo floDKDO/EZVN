@@ -7,7 +7,7 @@
 class Inputfield : public Ui
 {
 	public:
-		Inputfield(const std::string path, const SDL_Color color_normal, unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Inputfield(unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void on_pointer_up_hook_end() override;
 
@@ -32,7 +32,6 @@ class Inputfield : public Ui
 
 	private:
 		Image normal_;
-		SDL_Color color_normal_;
 
 		unsigned int character_limit_;
 

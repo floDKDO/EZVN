@@ -1,15 +1,16 @@
 #include "GUI/slider.h"
+#include "constants.h"
 
 #include <iostream>
 
-Slider::Slider(const std::string path_bar, const std::string path_handle, unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), bar_(path_bar, x, y, renderer), handle_(path_handle, x, y - 5, renderer), min_value_(min_value), max_value_(max_value), current_value_((max_value + min_value) / 2), 
-	is_dragged_(false), is_selected_(false), delta_mouse_handle_x_(0), 
-	text_(text, {255, 255, 255, 255}, "fonts/Aller_Rg.ttf", 50, x, y - bar_.position_.h*3, renderer) //TODO : pas de couleur fixée... => paramètre
+Slider::Slider(unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+	: Ui(renderer), container_(constants::slider_container_, x, y, renderer), handle_(constants::slider_handle_, x, y - 5, renderer), min_value_(min_value), max_value_(max_value), 
+	current_value_((max_value + min_value) / 2), is_dragged_(false), is_selected_(false), delta_mouse_handle_x_(0), 
+	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y - container_.position_.h*3, renderer) 
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
-	handle_.position_.x += (float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (bar_.position_.w - handle_.position_.w);
+	handle_.position_.x += (float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (container_.position_.w - handle_.position_.w);
 }
 
 //TODO : position dans Image, Text et Ui... => pk pas retirer la position de Ui vu qu'on copie celle de l'Image/Text dans celle de Ui ?
@@ -34,13 +35,13 @@ void Slider::handle_movement()
 	{
 		if(logical_mouse_x > delta_mouse_handle_x_) //TODO : code presque dupliqué dans la méthode on_pointer_down()
 		{
-			if(logical_mouse_x - delta_mouse_handle_x_ < bar_.position_.x - (handle_.position_.w / 2))
+			if(logical_mouse_x - delta_mouse_handle_x_ < container_.position_.x - (handle_.position_.w / 2))
 			{
-				handle_.position_.x = bar_.position_.x - (handle_.position_.w / 2);
+				handle_.position_.x = container_.position_.x - (handle_.position_.w / 2);
 			}
-			else if(logical_mouse_x - delta_mouse_handle_x_ > bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2))
+			else if(logical_mouse_x - delta_mouse_handle_x_ > container_.position_.x + container_.position_.w - (handle_.position_.w / 2))
 			{
-				handle_.position_.x = bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2);
+				handle_.position_.x = container_.position_.x + container_.position_.w - (handle_.position_.w / 2);
 			}
 			else
 			{
@@ -70,13 +71,13 @@ void Slider::on_pointer_down_hook_end()
 	int logical_mouse_x, logical_mouse_y;
 	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 
-	if(logical_mouse_x - (handle_.position_.w / 2) < bar_.position_.x)
+	if(logical_mouse_x - (handle_.position_.w / 2) < container_.position_.x)
 	{
-		handle_.position_.x = bar_.position_.x - (handle_.position_.w / 2);
+		handle_.position_.x = container_.position_.x - (handle_.position_.w / 2);
 	}
-	else if(logical_mouse_x - (handle_.position_.w / 2) > bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2))
+	else if(logical_mouse_x - (handle_.position_.w / 2) > container_.position_.x + container_.position_.w - (handle_.position_.w / 2))
 	{
-		handle_.position_.x = bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2);
+		handle_.position_.x = container_.position_.x + container_.position_.w - (handle_.position_.w / 2);
 	}
 	else
 	{
@@ -119,10 +120,10 @@ void Slider::on_left_pressed()
 		if(lock_ && state_ == State::SELECTED)
 		{
 			lock_ = false;
-			handle_.position_.x -= bar_.position_.w / 10;
-			if(handle_.position_.x + (handle_.position_.w / 2) < bar_.position_.x)
+			handle_.position_.x -= container_.position_.w / 10;
+			if(handle_.position_.x + (handle_.position_.w / 2) < container_.position_.x)
 			{
-				handle_.position_.x = bar_.position_.x - (handle_.position_.w / 2);
+				handle_.position_.x = container_.position_.x - (handle_.position_.w / 2);
 			}
 		}
 	}
@@ -139,10 +140,10 @@ void Slider::on_right_pressed()
 		if(lock_ && state_ == State::SELECTED)
 		{
 			lock_ = false;
-			handle_.position_.x += bar_.position_.w / 10;
-			if(handle_.position_.x + (handle_.position_.w / 2) > bar_.position_.x + bar_.position_.w)
+			handle_.position_.x += container_.position_.w / 10;
+			if(handle_.position_.x + (handle_.position_.w / 2) > container_.position_.x + container_.position_.w)
 			{
-				handle_.position_.x = bar_.position_.x + bar_.position_.w - (handle_.position_.w / 2);
+				handle_.position_.x = container_.position_.x + container_.position_.w - (handle_.position_.w / 2);
 			}
 		}
 	}
@@ -159,7 +160,7 @@ void Slider::on_enter_pressed_hook_end()
 
 void Slider::draw(sdl::Renderer& renderer)
 {
-	bar_.draw(renderer);
+	container_.draw(renderer);
 	handle_.draw(renderer);
 	text_.draw(renderer);
 }
@@ -168,23 +169,23 @@ void Slider::update()
 {
 	text_.update();
 
-	if(handle_.position_.x + (handle_.position_.w / 2) == bar_.position_.x)
+	if(handle_.position_.x + (handle_.position_.w / 2) == container_.position_.x)
 	{
 		current_value_ = min_value_;
 	}
-	else if(handle_.position_.x + (handle_.position_.w / 2) == bar_.position_.x + bar_.position_.w)
+	else if(handle_.position_.x + (handle_.position_.w / 2) == container_.position_.x + container_.position_.w)
 	{
 		current_value_ = max_value_;
 	}
 	else
 	{
-		current_value_ = min_value_ + float((handle_.position_.x + (handle_.position_.w / 2) - bar_.position_.x)) / (bar_.position_.w) * (max_value_ - min_value_);
+		current_value_ = min_value_ + float((handle_.position_.x + (handle_.position_.w / 2) - container_.position_.x)) / (container_.position_.w) * (max_value_ - min_value_);
 	}
 }
 
 void Slider::handle_events_hook_end(const SDL_Event& e)
 {
-	//Code that allow to move the handle by clicking on it even if it go beyond the bar of the slider
+	//Code that allow to move the handle by clicking on it even if it go beyond the container of the slider
 	int logical_mouse_x, logical_mouse_y;
 	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 	if(e.type == SDL_MOUSEBUTTONDOWN)
@@ -198,5 +199,5 @@ void Slider::handle_events_hook_end(const SDL_Event& e)
 
 SDL_Rect Slider::get_rect() const
 {
-	return bar_.position_; //handle.position n'est normalement pas utile
+	return container_.position_; //handle.position n'est normalement pas utile
 }

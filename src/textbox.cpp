@@ -1,13 +1,14 @@
 #include "textbox.h"
+#include "constants.h"
 
 #include <iostream>
 
-Textbox::Textbox(SDL_Color text_color, sdl::Renderer& renderer)
-	: namebox_("img/gui/namebox.png", 0, 0, renderer), 
-	textbox_("img/gui/textbox.png", 0, 0, renderer), 
-	text_("", text_color, "fonts/Aller_Rg.ttf", 20, 0, 0, renderer, 10), 
-	text_name_box_("", text_color, "fonts/Aller_Rg.ttf", 30, 0, 0, renderer), //TODO : paramètres de position inutiles 
-	triangle_("img/gui/triangle_textbox.png", 0, 0, renderer)
+Textbox::Textbox(sdl::Renderer& renderer)
+	: namebox_(constants::namebox_image_, 0, 0, renderer),
+	textbox_(constants::textbox_image_, 0, 0, renderer),
+	text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, 10),
+	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
+	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {
 	textbox_.set_position((1280 - textbox_.position_.w) / 2, 720 - textbox_.position_.h - 6); //TODO : hardcodé
 	namebox_.set_position(textbox_.position_.x + 37, textbox_.position_.y - namebox_.position_.h);
@@ -24,6 +25,7 @@ void Textbox::show_new_dialogue(std::string new_dialogue, std::string speaker /*
 {
 	if(text_.is_finished_)
 	{
+		//TODO : version à utiliser si Character* à la place de std::strings
 		/*if(speaker == nullptr) //Narrator
 		{
 			current_speaker_.clear();
