@@ -18,12 +18,11 @@ class Sound
 	protected:
 
 	private:
-		int channel_;
+		static int unused_channel_;
 		bool loop_;
 		std::string path_;
 		sdl::Chunk sound_;
 		int local_sound_volume_; //TODO
-
-		static int unused_channel_;
+		int channel_;
 };
 

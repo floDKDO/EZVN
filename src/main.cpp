@@ -8,21 +8,13 @@
 
 //TODO : possibilité de juste mettre une couleur un peu plus claire pour représenter un Ui dans l'état SELECTED
 
-//TODO : ordre des membres dans les classes par rapport aux constructeurs
-
 //TODO : ordre des membres dans les classes selon l'ordre voulu des appels des destructeurs
-
-//TODO : mettre en private les méthodes qui doivent l'être
 
 //TODO : vérifier qui j'ai bien mis le suffixe "f" pour les float
 
 //TODO : utiliser les bons types (ex : unsigned int)
 
-//TODO : écrire les accolades des constructeurs vides comme ça : {}
-
-//TODO : vérifier que je n'ai pas oublier explicit pour les constructeurs à un paramètre
-
-//TODO : const pour les méthodes
+//TODO : const pour les références/pointeurs en paramètre
 
 //TODO : si valeur de wrap_length pas connue dans le constructeur ?
 

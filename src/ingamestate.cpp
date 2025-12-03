@@ -7,7 +7,7 @@
 #include <algorithm>
 
 InGameState::InGameState(sdl::Renderer& renderer)
-	: renderer_(renderer), textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
+	: textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false), renderer_(renderer)
 {
 	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
 

@@ -8,9 +8,7 @@
 
 TransformStep::TransformStep()
 	: transform_step_finished_(false), is_init_(false)
-{
-
-}
+{}
 
 void TransformStep::flip_vertically(Image& image) const
 {

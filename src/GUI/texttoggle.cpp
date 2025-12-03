@@ -3,8 +3,11 @@
 
 #include <iostream>
 
+const unsigned int TextToggle::index_rect_texttoggle_ = 0;
+
 TextToggle::TextToggle(const std::string text, const int x, const int y, const bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Checkable(is_checked, renderer), text_(text, constants::texttoggle_unchecked_color_, constants::texttoggle_font_, constants::texttoggle_text_size_, x, y, renderer)
+	: Checkable(is_checked, renderer), 
+	text_(text, constants::texttoggle_unchecked_color_, constants::texttoggle_font_, constants::texttoggle_text_size_, x, y, renderer)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;

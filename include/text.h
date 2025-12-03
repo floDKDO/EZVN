@@ -34,33 +34,7 @@ class Text
 		void draw(sdl::Renderer& renderer);
 		void update();
 
-		std::string text_;
-		SDL_Color color_;
-		int font_size_;
-		int font_style_;
-		SDL_Rect position_;
-		sdl::Renderer& renderer_; //solution temporaire
-		Uint32 wrap_length_;
-
-		bool is_dialogue_;
-		std::string text_dialogue_;
-		int index_dialogue_;
-
 		static int global_text_divisor_;
-		static const int initial_text_speed_ = 500;
-
-		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
-
-		bool is_finished_;
-
-		std::string previous_text_;
-		int previous_font_style_;
-
-		std::string font_path_;
-
-		Uint64 last_time_; 
-
-	protected:
 
 	private:
 		void create_surface_texture();
@@ -68,8 +42,40 @@ class Text
 		std::unique_ptr<sdl::Surface> surface_;
 		std::unique_ptr<sdl::Surface> surface_outline_;
 		std::unique_ptr<sdl::Texture> texture_;
+
+	public:
+		std::string text_;
+		std::string text_dialogue_;
+		int index_dialogue_;
+		bool is_finished_;
+
+		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
+
+		Uint64 last_time_; 
+
+		Uint32 wrap_length_;
+
+		SDL_Rect position_;
+
+	protected:
+
+	private:
+		SDL_Color color_;
+
+		int font_size_;
+		int font_style_;
+		int previous_font_style_;
+		std::string font_path_;
 		sdl::Font font_;
 		sdl::Font font_outline_;
 		int outline_size_;
+
+		bool is_dialogue_;
+
+		std::string previous_text_;
+		
+		sdl::Renderer& renderer_; //solution temporaire
+
+		static const int initial_text_speed_;
 };
 

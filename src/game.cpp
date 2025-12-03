@@ -15,7 +15,7 @@ Game::Game()
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
 	window_icon_(constants::window_icon_),
-	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr)
+	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr), in_game_(nullptr), game_running_(true)
 {
 	window_.set_icon(window_icon_);
 

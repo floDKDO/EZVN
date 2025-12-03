@@ -15,17 +15,16 @@ class Textbox
 		void draw(sdl::Renderer& renderer);
 		void update();
 
-		//Character current_speaker_;
-		std::string current_speaker_; //TODO : à sûrement remplacer par Character
-		Image namebox_;
-		Image textbox_;
-		Image triangle_;
 		Text text_;
-		Text text_name_box_;
+		Image textbox_;
 
 	protected:
 
 	private:
-
+		//Character current_speaker_;
+		std::string current_speaker_; //TODO : à sûrement remplacer par Character
+		Image namebox_;
+		Text text_name_box_;
+		Image triangle_;
 };
 

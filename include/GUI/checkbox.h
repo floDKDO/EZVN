@@ -25,6 +25,6 @@ class Checkbox : public Checkable
 
 		Text text_;
 
-		static const unsigned int INDEX_RECT_CHECKBOX_ = 0;
+		static const unsigned int index_rect_checkbox_;
 };
 

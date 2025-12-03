@@ -42,19 +42,23 @@ class Transform
 	public:
 		Transform();
 
+		void show_transform(const TransformName transform_name, Image& image);
+
+	protected:
+
+	private:
 		struct TransformAllSteps
 		{
 			TransformAllSteps(/*TransformName transform_name,*/ const int number_of_transform_steps)
 				: current_step_number_(0), transform_finished_(false), number_of_transform_steps_(number_of_transform_steps), transform_steps_(number_of_transform_steps)
-			{}
+			{
+			}
 
 			int current_step_number_;
 			bool transform_finished_;
 			int number_of_transform_steps_;
 			std::vector<TransformStep> transform_steps_;
 		};
-
-		std::unordered_map<TransformName, TransformAllSteps> transforms_;
 
 		void tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) const;
 		void t11(Image& image);
@@ -80,6 +84,6 @@ class Transform
 		void f43(Image& image);
 		void f44(Image& image);
 
-		void show_transform(const TransformName transform_name, Image& image);
+		std::unordered_map<TransformName, TransformAllSteps> transforms_;
 };
 

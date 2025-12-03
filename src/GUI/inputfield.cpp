@@ -3,8 +3,11 @@
 
 #include <iostream>
 
+const unsigned int Inputfield::index_rect_inputfield_ = 0;
+
 Inputfield::Inputfield(const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y, renderer),
+	: Ui(renderer), 
+	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y, renderer),
 	  normal_(constants::inputfield_container_, x, y, renderer),
 	  character_limit_(character_limit),
 	  text_caret_("|", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),

@@ -20,13 +20,12 @@ class InGameState : public GameState
 	protected:
 
 	private:
-		std::unique_ptr<UiManager> menu_;
 		Textbox textbox_;
-		std::vector<std::unique_ptr<Character>> characters_;
 		Image background_;
-
 		bool hide_ui_textbox_;
-
 		sdl::Renderer& renderer_;
+
+		std::unique_ptr<UiManager> menu_;
+		std::vector<std::unique_ptr<Character>> characters_;
 };
 

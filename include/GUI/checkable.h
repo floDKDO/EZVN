@@ -16,12 +16,11 @@ class Checkable : public Ui
 
 		bool is_checked_;
 		bool previous_checked_;
-		CheckableGroup* checkable_group_ = nullptr;
+		CheckableGroup* checkable_group_;
 
 	protected:
 		Checkable(const bool is_checked, sdl::Renderer& renderer);
 
 	private:
-
 };
 

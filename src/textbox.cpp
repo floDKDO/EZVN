@@ -4,9 +4,9 @@
 #include <iostream>
 
 Textbox::Textbox(sdl::Renderer& renderer)
-	: namebox_(constants::namebox_image_, 0, 0, renderer),
-	textbox_(constants::textbox_image_, 0, 0, renderer),
-	text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, 10),
+	: text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, 10),
+	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""),
+	namebox_(constants::namebox_image_, 0, 0, renderer),
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
 	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {

@@ -4,21 +4,19 @@
 #include <iostream>
 
 bool Ui::lock_ = true;
+const int Ui::MOUSE_NOT_ON_ANY_UI_ = -1;
 
 //TODO : parfois un bug avec la touche Entrée au lancement du programme
 
 Ui::Ui(sdl::Renderer& renderer)
-	:renderer_(renderer),
-	select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 
-	state_(State::NORMAL), 
+	:select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 
+	state_(State::NORMAL), last_time_(0),
 	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_), 
 	is_selected_sound_played_(false),
-	callback_function_(nullptr),
 	pointer_on_ui_when_pointer_up_(true),
-	last_time_(0)
-{
-
-}
+	renderer_(renderer),
+	callback_function_(nullptr)
+{}
 
 void Ui::select_new(Ui* ui)
 {

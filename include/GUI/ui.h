@@ -77,7 +77,7 @@ class Ui
 
 		void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
 		int is_mouse_on_ui();
-		static const int MOUSE_NOT_ON_ANY_UI_ = -1;
+		static const int MOUSE_NOT_ON_ANY_UI_;
 
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
@@ -89,12 +89,12 @@ class Ui
 
 		State state_;
 
-		Uint64 last_time_; 
-
-		static bool lock_; 
-
 	protected:
 		explicit Ui(sdl::Renderer& renderer);
+
+		static bool lock_;
+
+		Uint64 last_time_;
 
 		Sound select_sound_;
 		Sound click_sound_;

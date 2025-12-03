@@ -17,6 +17,6 @@ class TextToggle : public Checkable
 	private:
 		Text text_;
 
-		static const unsigned int INDEX_RECT_TEXTTOGGLE_ = 0;
+		static const unsigned int index_rect_texttoggle_;
 };
 

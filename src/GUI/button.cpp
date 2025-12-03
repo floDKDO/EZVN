@@ -1,10 +1,12 @@
 #include "GUI/button.h"
 #include "constants.h"
 
+const unsigned int Button::index_rect_button_ = 0;
+
 Button::Button(const std::string text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), normal_(constants::button_normal_, x, y, renderer), selected_(constants::button_selected_, x, y, renderer), 
-	clicked_(constants::button_clicked_, x, y, renderer),
-	text_(text, constants::button_text_color_, constants::button_font_, constants::button_text_size_, x, y, renderer)
+	: Ui(renderer), text_(text, constants::button_text_color_, constants::button_font_, constants::button_text_size_, x, y, renderer),
+	normal_(constants::button_normal_, x, y, renderer), selected_(constants::button_selected_, x, y, renderer),
+	clicked_(constants::button_clicked_, x, y, renderer)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;

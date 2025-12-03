@@ -13,15 +13,9 @@ class Character
 		void draw(sdl::Renderer& renderer);
 		void update();
 
-		std::string name_;
-
-		//TODO : focus automatique
-		Transform t_;
-
 		Image character_; //TODO : juste pour tester => truc similaire à MPT par la suite
+		std::string name_;
 		//Image textbox_; //TODO : valeur par défaut au cas-où on ne souhaite pas avoir une textbox propre à chaque perso
-
-		SDL_Rect initial_rect_;
 
 		bool is_speaking_;
 
@@ -29,6 +23,8 @@ class Character
 
 
 	private:
-
+		//TODO : focus automatique
+		Transform t_;
+		//SDL_Rect initial_rect_;
 };
 

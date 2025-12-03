@@ -22,6 +22,6 @@ class Button : public Ui
 		Image selected_;
 		Image clicked_;
 
-		static const unsigned int INDEX_RECT_BUTTON_ = 0;
+		static const unsigned int index_rect_button_;
 };
 

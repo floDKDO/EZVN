@@ -53,9 +53,7 @@ class TransformStep
 
 		void reset(Image& image) const;
 
-		bool is_init_;
 		bool transform_step_finished_;
-
 
 	protected:
 
@@ -171,6 +169,7 @@ class TransformStep
 				float delta_b_frame_;
 		};
 
+		bool is_init_;
 		std::variant<std::monostate, PositionStep, SizeStep, RotateStep, AlphaStep, FilterStep> step_;
 };
 

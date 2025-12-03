@@ -49,10 +49,7 @@ class Game
 		sdl::SDLMixer sdl_mixer_;
 		sdl::SDLTTF sdl_ttf_;
 
-	public:
 		sdl::Window window_;
-
-	private:	
 		sdl::Renderer renderer_;
 		sdl::GameController game_controller_;
 

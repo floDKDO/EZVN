@@ -4,11 +4,12 @@
 #include <iostream>
 
 int Text::global_text_divisor_ = 45;
+const int Text::initial_text_speed_ = 500;
 
 Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length)
-	:text_(text), color_(color), font_size_(font_size), font_style_(0), renderer_(renderer), wrap_length_(wrap_length), text_dialogue_(""), index_dialogue_(0), 
-	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), /*local_text_speed_(global_text_divisor_),*/ last_time_(0), 
-	font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(constants::text_outline_size_)
+	:text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), last_time_(0), wrap_length_(wrap_length), color_(color), 
+	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(constants::text_outline_size_), 
+	previous_text_(""), renderer_(renderer) /*,local_text_speed_(global_text_divisor_),*/
 {
 	int w, h;
 	font_.size_UTF8(text_, &w, &h);

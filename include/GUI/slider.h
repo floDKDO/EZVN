@@ -29,15 +29,6 @@ class Slider : public Ui
 		void handle_events_hook_end(const SDL_Event& e) override;
 		SDL_Rect get_rect() const override;
 
-		unsigned int min_value_;
-		unsigned int max_value_;
-		unsigned int current_value_;
-
-		bool is_selected_; //When we press Enter on a SELECTED Slider
-		bool is_dragged_;
-		//SDL_Rect handle_position; //TODO : n'est normalement pas utile
-		int delta_mouse_handle_x_; //x position of the mouse in comparison to the x position of the handle
-
 	protected:
 
 	private:
@@ -45,7 +36,19 @@ class Slider : public Ui
 		Image handle_;
 		Text text_;
 
-		static const unsigned int INDEX_RECT_CONTAINER_ = 0;
-		//static const unsigned int INDEX_RECT_HANDLE_ = 1; //TODO : n'est normalement pas utile
+		unsigned int min_value_;
+		unsigned int max_value_;
+
+	public:
+		unsigned int current_value_;
+
+	private:
+		bool is_selected_; //When we press Enter on a SELECTED Slider
+		bool is_dragged_;
+		//SDL_Rect handle_position; //TODO : n'est normalement pas utile
+		int delta_mouse_handle_x_; //x position of the mouse in comparison to the x position of the handle
+
+		static const unsigned int index_rect_container_;
+		//static const unsigned int index_rect_handle_ = 1; //TODO : n'est normalement pas utile
 };
 

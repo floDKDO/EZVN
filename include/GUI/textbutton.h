@@ -17,6 +17,6 @@ class TextButton : public Ui
 	protected:
 
 	private:
-		static const unsigned int INDEX_RECT_TEXTBUTTON_ = 0;
+		static const unsigned int index_rect_textbutton_;
 };
 

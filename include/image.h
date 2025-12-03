@@ -13,21 +13,6 @@ class Image
 	public:
 		Image(const std::string path, const int x, const int y, sdl::Renderer& renderer, const int zorder=0);
 
-		enum class ImageType
-		{
-			NONE, //TODO : utile ?
-			BUTTON,
-			INPUTFIELD,
-			SLIDER,
-			TEXTBOX, 
-			TEXTBUTTON, //TODO : utile ?
-			TEXTTOGGLE, //TODO : utile ?
-			CHECKBOX,
-			GUI,
-			CHARACTER,
-			BACKGROUND
-		};
-
 		void show();
 		void hide();
 
@@ -50,10 +35,8 @@ class Image
 
 		void draw(sdl::Renderer& renderer);
 
-		int zorder_;
 		SDL_Rect position_;
-		SDL_Rect initial_rect_;
-
+		int zorder_;
 		Uint64 last_time_;
 
 	protected:
@@ -61,7 +44,25 @@ class Image
 
 	private:
 		std::string path_;
+
+		enum class ImageType
+		{
+			NONE, //TODO : utile ?
+			BUTTON,
+			INPUTFIELD,
+			SLIDER,
+			TEXTBOX,
+			TEXTBUTTON, //TODO : utile ?
+			TEXTTOGGLE, //TODO : utile ?
+			CHECKBOX,
+			GUI,
+			CHARACTER,
+			BACKGROUND
+		};
+
 		ImageType image_type_;
+		
+		SDL_Rect initial_rect_;
 		
 		Uint8 alpha_;
 		double angle_;
