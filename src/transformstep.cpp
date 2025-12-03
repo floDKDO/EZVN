@@ -12,17 +12,17 @@ TransformStep::TransformStep()
 
 }
 
-void TransformStep::flip_vertically(Image& image)
+void TransformStep::flip_vertically(Image& image) const
 {
 	image.flip_ = SDL_FLIP_VERTICAL;
 }
 
-void TransformStep::flip_horizontally(Image& image)
+void TransformStep::flip_horizontally(Image& image) const
 {
 	image.flip_ = SDL_FLIP_HORIZONTAL;
 }
 
-void TransformStep::flip_normal(Image& image)
+void TransformStep::flip_normal(Image& image) const
 {
 	image.flip_ = SDL_FLIP_NONE;
 }
@@ -356,7 +356,7 @@ void TransformStep::own_filter(Image& image, const Uint8 r, const Uint8 g, const
 
 //TODO : aussi sauvegarder angle, alpha etc ??
 //TODO : si pas besoin, alors utilité d'appeler cette fonction dans les méthodes au-dessus ??
-void TransformStep::reset(Image& image)
+void TransformStep::reset(Image& image) const
 {
 	image.position_ = image.initial_rect_;
 }

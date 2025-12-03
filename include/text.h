@@ -26,10 +26,10 @@ class Text
 		void unset_strike_through();
 		void unset_all();
 
-		int get_width_one_char(const char c);
-		int get_width_text();
-		int get_height_one_char(const char c);
-		int get_height_text();
+		int get_width_one_char(const char c) const;
+		int get_width_text() const;
+		int get_height_one_char(const char c) const;
+		int get_height_text() const;
 
 		void draw(sdl::Renderer& renderer);
 		void update();

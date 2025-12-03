@@ -17,10 +17,10 @@ class Window
 		~Window(); //SDL_DestroyWindow
 
 		SDL_Window* fetch() const;
-		void set_title(const std::string title);
-		void set_icon(sdl::Surface& icon);
-		void set_full_screen();
-		void set_windowed();
+		void set_title(const std::string title) const;
+		void set_icon(sdl::Surface& icon) const;
+		void set_full_screen() const;
+		void set_windowed() const;
 
 	protected:
 

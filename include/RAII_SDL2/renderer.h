@@ -17,12 +17,12 @@ class Renderer
 
 		SDL_Renderer* fetch() const;
 
-		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect);
-		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip);
-		void clear();
-		void present();
-		void set_logical_size(const int w, const int h);
-		void set_draw_blend_mode(const SDL_BlendMode blend_mode);
+		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect) const;
+		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip) const;
+		void clear() const;
+		void present() const;
+		void set_logical_size(const int w, const int h) const;
+		void set_draw_blend_mode(const SDL_BlendMode blend_mode) const;
 
 	protected:
 

@@ -291,7 +291,7 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 	*logical_mouse_y = int(temp_logical_mouse_y);
 }
 
-int Ui::is_mouse_on_ui() 
+int Ui::is_mouse_on_ui()
 {
 	int logical_mouse_x, logical_mouse_y;
 	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);

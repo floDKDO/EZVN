@@ -32,17 +32,17 @@ void Music::play_music(const bool loop, const int fadein_length)
 	music_.fade_in(loops, fadein_length * 1000);
 }
 
-void Music::pause_music() 
+void Music::pause_music() const
 {
 	music_.pause();
 }
 
-void Music::resume_music() 
+void Music::resume_music() const
 {
 	music_.resume();
 }
 
-void Music::stop_music(const int fadeout_length) 
+void Music::stop_music(const int fadeout_length) const
 {
 	music_.fade_out(fadeout_length * 1000);
 }
@@ -54,7 +54,7 @@ void Music::change_volume(const int volume) //[0; MIX_MAX_VOLUME(=128)]
 	music_.volume(volume * MIX_MAX_VOLUME / 100);
 }
 
-void Music::set_position(const double position) 
+void Music::set_position(const double position) const
 {
 	music_.set_position(position);
 }

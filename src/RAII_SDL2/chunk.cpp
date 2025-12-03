@@ -23,27 +23,27 @@ Mix_Chunk* Chunk::fetch() const
 	return chunk_;
 }
 
-void Chunk::fade_in(const int channel, int loops, int ms)
+void Chunk::fade_in(const int channel, int loops, int ms) const
 {
 	Mix_FadeInChannel(channel, chunk_, loops, ms);
 }
 
-void Chunk::fade_out(const int which, const int ms)
+void Chunk::fade_out(const int which, const int ms) const
 {
 	Mix_FadeOutChannel(which, ms);
 }
 
-void Chunk::pause(const int channel)
+void Chunk::pause(const int channel) const
 {
 	Mix_Pause(channel);
 }
 
-void Chunk::resume(const int channel)
+void Chunk::resume(const int channel) const
 {
 	Mix_Resume(channel);
 }
 
-void Chunk::volume(const int volume)
+void Chunk::volume(const int volume) const
 {
 	Mix_VolumeChunk(chunk_, volume);
 }

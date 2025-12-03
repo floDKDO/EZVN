@@ -15,9 +15,9 @@ class Font
 		~Font(); //TTF_CloseFont
 
 		TTF_Font* fetch() const;
-		void size_UTF8(const std::string text, int* w, int* h);
-		void set_style(const int style);
-		void set_outline(const int outline);
+		void size_UTF8(const std::string text, int* w, int* h) const;
+		void set_style(const int style) const;
+		void set_outline(const int outline) const;
 
 	protected:
 

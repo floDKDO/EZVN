@@ -56,7 +56,7 @@ class Transform
 
 		std::unordered_map<TransformName, TransformAllSteps> transforms_;
 
-		void tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t);
+		void tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) const;
 		void t11(Image& image);
 		void t21(Image& image);
 		void t22(Image& image);
@@ -68,7 +68,7 @@ class Transform
 		void t43(Image& image);
 		void t44(Image& image);
 
-		void focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f);
+		void focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f) const;
 		void f11(Image& image);
 		void f21(Image& image);
 		void f22(Image& image);

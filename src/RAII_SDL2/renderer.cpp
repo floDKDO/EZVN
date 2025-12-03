@@ -25,7 +25,7 @@ SDL_Renderer* Renderer::fetch() const
 	return renderer_;
 }
 
-void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect)
+void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect) const
 {
 	if(SDL_RenderCopy(renderer_, texture.fetch(), srcrect, dstrect) < 0)
 	{
@@ -33,7 +33,7 @@ void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* d
 	}
 }
 
-void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip)
+void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip) const
 {
 	if(SDL_RenderCopyEx(renderer_, texture.fetch(), srcrect, dstrect, angle, center, flip) < 0)
 	{
@@ -41,7 +41,7 @@ void Renderer::copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* d
 	}
 }
 
-void Renderer::clear()
+void Renderer::clear() const
 {
 	if(SDL_RenderClear(renderer_) < 0)
 	{
@@ -49,12 +49,12 @@ void Renderer::clear()
 	}
 }
 
-void Renderer::present()
+void Renderer::present() const
 {
 	SDL_RenderPresent(renderer_);
 }
 
-void Renderer::set_logical_size(const int w, const int h)
+void Renderer::set_logical_size(const int w, const int h) const
 {
 	if(SDL_RenderSetLogicalSize(renderer_, w, h) < 0)
 	{
@@ -62,7 +62,7 @@ void Renderer::set_logical_size(const int w, const int h)
 	}
 }
 
-void Renderer::set_draw_blend_mode(const SDL_BlendMode blend_mode)
+void Renderer::set_draw_blend_mode(const SDL_BlendMode blend_mode) const
 {
 	if(SDL_SetRenderDrawBlendMode(renderer_, blend_mode) < 0)
 	{

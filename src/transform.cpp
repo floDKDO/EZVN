@@ -29,7 +29,7 @@ Transform::Transform()
 	transforms_.insert({TransformName::f44, TransformAllSteps(/*TransformName::f44,*/ 5)});
 }
 
-void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t)
+void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) const
 {
 	switch(transform_t.current_step_number_)
 	{
@@ -122,7 +122,7 @@ void Transform::t44(Image& image)
 	tcommon(1080, image, transform_t44);
 }
 
-void Transform::focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f)
+void Transform::focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f) const
 {
 	switch(transform_f.current_step_number_)
 	{

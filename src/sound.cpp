@@ -37,17 +37,17 @@ void Sound::play_sound(const bool loop, const int fadein_length)
 	sound_.fade_in(channel_, loops, fadein_length);
 }
 
-void Sound::pause_sound()
+void Sound::pause_sound() const
 {
 	sound_.pause(channel_);
 }
 
-void Sound::resume_sound()
+void Sound::resume_sound() const
 {
 	sound_.resume(channel_);
 }
 
-void Sound::stop_sound(const int fadeout_length) 
+void Sound::stop_sound(const int fadeout_length) const
 {
 	sound_.fade_out(channel_, fadeout_length);
 }

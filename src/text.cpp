@@ -123,7 +123,7 @@ void Text::unset_all()
 	font_style_ = TTF_STYLE_NORMAL;
 }
 
-int Text::get_width_one_char(const char c)
+int Text::get_width_one_char(const char c) const
 {
 	std::string s(1, c);
 	int w;
@@ -131,14 +131,14 @@ int Text::get_width_one_char(const char c)
 	return w;
 }
 
-int Text::get_width_text() 
+int Text::get_width_text()  const
 {
 	int w;
 	font_.size_UTF8(text_, &w, nullptr);
 	return w;
 }
 
-int Text::get_height_one_char(const char c)
+int Text::get_height_one_char(const char c) const
 {
 	std::string s(1, c);
 	int h;
@@ -146,7 +146,7 @@ int Text::get_height_one_char(const char c)
 	return h;
 }
 
-int Text::get_height_text()
+int Text::get_height_text() const
 {
 	int h;
 	font_.size_UTF8(text_, nullptr, &h);

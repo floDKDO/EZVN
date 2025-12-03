@@ -144,7 +144,7 @@ void Game::pop_state()
 	states_.pop();
 }
 
-GameState* Game::get_state()
+GameState* Game::get_state() const
 {
 	if(states_.empty())
 		std::cerr << "VIDE!\n";
@@ -196,7 +196,7 @@ void Game::update()
 	get_state()->update();
 }
 
-void Game::update_fps_count(const std::string fps)
+void Game::update_fps_count(const std::string fps) const
 {
 	window_.set_title(constants::game_name_ + fps);
 }

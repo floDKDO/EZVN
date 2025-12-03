@@ -10,9 +10,9 @@ class TransformStep
 	public:
 		TransformStep();
 
-		void flip_vertically(Image& image);
-		void flip_horizontally(Image& image);
-		void flip_normal(Image& image);
+		void flip_vertically(Image& image) const;
+		void flip_horizontally(Image& image) const;
+		void flip_normal(Image& image) const;
 
 		int get_xcenter(Image& image) const;
 		int get_ycenter(Image& image) const;
@@ -51,7 +51,7 @@ class TransformStep
 		void afternoon_filter(Image& image, const Uint64 time = 0);
 		void own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, const Uint64 time = 0);
 
-		void reset(Image& image);
+		void reset(Image& image) const;
 
 		bool is_init_;
 		bool transform_step_finished_;

@@ -23,7 +23,7 @@ TTF_Font* Font::fetch() const
 	return font_;
 }
 
-void Font::size_UTF8(const std::string text, int* w, int* h)
+void Font::size_UTF8(const std::string text, int* w, int* h) const
 {
 	if(TTF_SizeUTF8(font_, text.c_str(), w, h) == -1)
 	{
@@ -31,12 +31,12 @@ void Font::size_UTF8(const std::string text, int* w, int* h)
 	}
 }
 
-void Font::set_style(const int style)
+void Font::set_style(const int style) const
 {
 	TTF_SetFontStyle(font_, style);
 }
 
-void Font::set_outline(const int outline)
+void Font::set_outline(const int outline) const
 {
 	TTF_SetFontOutline(font_, outline);
 }

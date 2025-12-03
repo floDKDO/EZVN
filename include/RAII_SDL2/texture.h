@@ -18,10 +18,10 @@ class Texture
 		~Texture(); //SDL_DestroyTexture
 
 		SDL_Texture* fetch() const;
-		void set_alpha_mod(const Uint8 alpha);
-		void set_color_mod(const Uint8 r, const Uint8 g, const Uint8 b);
-		void set_blend_mode(const SDL_BlendMode blend_mode);
-		void query(Uint32* format, int* access, int* w, int* h);
+		void set_alpha_mod(const Uint8 alpha) const;
+		void set_color_mod(const Uint8 r, const Uint8 g, const Uint8 b) const;
+		void set_blend_mode(const SDL_BlendMode blend_mode) const;
+		void query(Uint32* format, int* access, int* w, int* h) const;
 
 	protected:
 

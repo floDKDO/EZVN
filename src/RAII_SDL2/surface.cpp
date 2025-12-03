@@ -31,7 +31,7 @@ SDL_Surface* Surface::fetch() const
 	return surface_;
 }
 
-void Surface::set_blend_mode(const SDL_BlendMode blend_mode)
+void Surface::set_blend_mode(const SDL_BlendMode blend_mode) const
 {
 	if(SDL_SetSurfaceBlendMode(surface_, blend_mode) < 0)
 	{
@@ -39,7 +39,7 @@ void Surface::set_blend_mode(const SDL_BlendMode blend_mode)
 	}
 }
 
-void Surface::blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect)
+void Surface::blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect) const
 {
 	if(SDL_BlitSurface(surface_, srcrect, dst.fetch(), dstrect) < 0)
 	{

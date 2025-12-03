@@ -20,13 +20,13 @@ class Game
 
 		void push_state(GameState* state);
 		void pop_state(); 
-		GameState* get_state();
+		GameState* get_state() const;
 
 		void handle_events();
 		void draw();
 		void update();
 
-		void update_fps_count(const std::string fps);
+		void update_fps_count(const std::string fps) const;
 
 	private:
 		void create_main_menu();

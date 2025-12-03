@@ -8,11 +8,11 @@ class Music
 		explicit Music(const std::string path);
 
 		void play_music(const bool loop = false, const int fadein_length = 0); //unité = s
-		void pause_music();
-		void resume_music();
-		void stop_music(const int fadeout_length=0); //unité = s
+		void pause_music() const;
+		void resume_music() const;
+		void stop_music(const int fadeout_length=0) const; //unité = s
 		void change_volume(const int volume); //unité = pourcentage
-		void set_position(const double position); //unité = seconde
+		void set_position(const double position) const; //unité = seconde
 
 		static int global_music_volume_;
 

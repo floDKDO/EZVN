@@ -17,8 +17,8 @@ class Surface
 		~Surface(); //SDL_FreeSurface
 
 		SDL_Surface* fetch() const;
-		void set_blend_mode(const SDL_BlendMode blend_mode);
-		void blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect);
+		void set_blend_mode(const SDL_BlendMode blend_mode) const;
+		void blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect) const;
 
 	protected:
 

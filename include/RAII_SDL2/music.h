@@ -15,12 +15,12 @@ class Music
 		~Music(); //Mix_FreeMusic
 
 		Mix_Music* fetch() const;
-		void fade_in(const int loops, const int ms);
-		void fade_out(const int ms);
-		void pause();
-		void resume();
-		void volume(const int volume);
-		void set_position(const double position);
+		void fade_in(const int loops, const int ms) const;
+		void fade_out(const int ms) const;
+		void pause() const;
+		void resume() const;
+		void volume(const int volume) const;
+		void set_position(const double position) const;
 
 	protected:
 

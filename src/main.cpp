@@ -22,7 +22,7 @@
 
 //TODO : vérifier que je n'ai pas oublier explicit pour les constructeurs à un paramètre
 
-//TODO : const
+//TODO : const pour les méthodes
 
 //TODO : si valeur de wrap_length pas connue dans le constructeur ?
 

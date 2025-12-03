@@ -23,7 +23,7 @@ Mix_Music* Music::fetch() const
 	return music_;
 }
 
-void Music::fade_in(const int loops, const int ms)
+void Music::fade_in(const int loops, const int ms) const
 {
 	if(Mix_FadeInMusic(music_, loops, ms) == -1)
 	{
@@ -31,27 +31,27 @@ void Music::fade_in(const int loops, const int ms)
 	}
 }
 
-void Music::fade_out(const int ms)
+void Music::fade_out(const int ms) const
 {
 	Mix_FadeOutMusic(ms);
 }
 
-void Music::pause()
+void Music::pause() const
 {
 	Mix_PauseMusic();
 }
 
-void Music::resume()
+void Music::resume() const
 {
 	Mix_ResumeMusic();
 }
 
-void Music::volume(const int volume)
+void Music::volume(const int volume) const
 {
 	Mix_VolumeMusic(volume);
 }
 
-void Music::set_position(const double position)
+void Music::set_position(const double position) const
 {
 	if(Mix_SetMusicPosition(position) == -1)
 	{

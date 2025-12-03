@@ -21,17 +21,17 @@ SDL_Window* Window::fetch() const
 	return window_;
 }
 
-void Window::set_title(const std::string title)
+void Window::set_title(const std::string title) const
 {
 	SDL_SetWindowTitle(window_, title.c_str());
 }
 
-void Window::set_icon(sdl::Surface& icon)
+void Window::set_icon(sdl::Surface& icon) const
 {
 	SDL_SetWindowIcon(window_, icon.fetch());
 }
 
-void Window::set_full_screen()
+void Window::set_full_screen() const
 {
 	if(SDL_SetWindowFullscreen(window_, SDL_WINDOW_FULLSCREEN) < 0)
 	{
@@ -39,7 +39,7 @@ void Window::set_full_screen()
 	}
 }
 
-void Window::set_windowed()
+void Window::set_windowed() const
 {
 	if(SDL_SetWindowFullscreen(window_, 0) < 0)
 	{
