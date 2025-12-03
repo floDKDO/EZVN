@@ -62,7 +62,7 @@ class TransformStep
 				PositionStep(const int initial_position_x, const int initial_position_y, const int x, const int y)
 					: initial_position_x_(initial_position_x), initial_position_y_(initial_position_y),
 					f_position_x_(float(initial_position_x)), f_position_y_(float(initial_position_y)),
-					delta_x_(x - initial_position_x), delta_y_(y - initial_position_y),
+					delta_x_(float(x - initial_position_x)), delta_y_(float(y - initial_position_y)),
 					delta_x_frame_(0.0f), delta_y_frame_(0.0f)
 				{}
 
@@ -94,7 +94,7 @@ class TransformStep
 				SizeStep(const int initial_size_w, const int initial_size_h, const int w, const int h)
 					: initial_size_w_(initial_size_w), initial_size_h_(initial_size_h),
 					f_size_w_(float(initial_size_w)), f_size_h_(float(initial_size_h)),
-					delta_w_(w - initial_size_w), delta_h_(h - initial_size_h),
+					delta_w_(float(w - initial_size_w)), delta_h_(float(h - initial_size_h)),
 					delta_w_frame_(0.0f), delta_h_frame_(0.0f)
 				{}
 
@@ -129,7 +129,7 @@ class TransformStep
 			public:
 				AlphaStep(const int initial_alpha, const int alpha)
 					: initial_alpha_(initial_alpha), f_alpha_(float(initial_alpha)),
-					delta_alpha_(alpha - initial_alpha), delta_alpha_frame_(0.0f)
+					delta_alpha_(float(alpha - initial_alpha)), delta_alpha_frame_(0.0f)
 				{}
 
 				int initial_alpha_;
@@ -146,7 +146,7 @@ class TransformStep
 				FilterStep(const int initial_r, const int initial_g, const int initial_b, const int r, const int g, const int b)
 					: initial_r_(initial_r), initial_g_(initial_g), initial_b_(initial_b),
 					f_r_(float(initial_r)), f_g_(float(initial_g)), f_b_(float(initial_b)),
-					delta_r_(r - initial_r), delta_g_(g - initial_g), delta_b_(b - initial_b),
+					delta_r_(float(r - initial_r)), delta_g_(float(g - initial_g)), delta_b_(float(b - initial_b)),
 					delta_r_frame_(0.0f), delta_g_frame_(0.0f), delta_b_frame_(0.0f)
 				{}
 

@@ -73,31 +73,31 @@ void Image::rotate(const double angle)
 
 void Image::flip_vertically()
 {
-	std::cout << "FLIP V ***********************************************************\n";
+	//std::cout << "FLIP V ***********************************************************\n";
 	flip_ = SDL_FLIP_VERTICAL;
 }
 
 void Image::flip_horizontally()
 {
-	std::cout << "FLIP H ***********************************************************\n";
+	//std::cout << "FLIP H ***********************************************************\n";
 	flip_ = SDL_FLIP_HORIZONTAL;
 }
 
 void Image::flip_normal()
 {
-	std::cout << "FLIP N ***********************************************************\n";
+	//std::cout << "FLIP N ***********************************************************\n";
 	flip_ = SDL_FLIP_NONE;
 }
 
 int Image::get_xcenter() const
 {
-	std::cout << "GET XCENTER ***********************************************************\n";
+	//std::cout << "GET XCENTER ***********************************************************\n";
 	return position_.w / 2;
 }
 
 void Image::zoom(const float zoom)
 {
-	std::cout << "ZOOM ***********************************************************\n";
+	//std::cout << "ZOOM ***********************************************************\n";
 
 	float position_w = float(position_.w);
 	float position_h = float(position_.h);
@@ -111,19 +111,19 @@ void Image::zoom(const float zoom)
 
 void Image::resize(const int w, const int h)
 {
-	std::cout << "RESIZE ***********************************************************\n";
+	//std::cout << "RESIZE ***********************************************************\n";
 	position_ = {position_.x, position_.y, w, h};
 }
 
 void Image::set_position(const int x, const int y)
 {
-	std::cout << "SET POS ***********************************************************\n";
+	//std::cout << "SET POS ***********************************************************\n";
 	position_ = {x, y, position_.w, position_.h};
 }
 
 void Image::set_position_xcenter(const int x, const int y)
 {
-	std::cout << "SET POS XCENTER ***********************************************************\n";
+	//std::cout << "SET POS XCENTER ***********************************************************\n";
 	position_ = {x - std::abs(get_xcenter()), y, position_.w, position_.h};
 }
 
@@ -134,7 +134,7 @@ void Image::set_center()
 
 void Image::night_filter()
 {
-	std::cout << "N FILTER ***********************************************************\n";
+	//std::cout << "N FILTER ***********************************************************\n";
 	r_ = 127;
 	g_ = 127;
 	b_ = 165;
@@ -143,7 +143,7 @@ void Image::night_filter()
 
 void Image::afternoon_filter()
 {
-	std::cout << "A FILTER ***********************************************************\n";
+	//std::cout << "A FILTER ***********************************************************\n";
 	r_ = 210;
 	g_ = 150;
 	b_ = 130;
@@ -152,7 +152,7 @@ void Image::afternoon_filter()
 
 void Image::own_filter(const Uint8 r, const Uint8 g, const Uint8 b)
 {
-	std::cout << "O FILTER ***********************************************************\n";
+	//std::cout << "O FILTER ***********************************************************\n";
 	r_ = r;
 	g_ = g;
 	b_ = b;

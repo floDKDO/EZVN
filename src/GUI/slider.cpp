@@ -13,7 +13,7 @@ Slider::Slider(const unsigned int min_value, const unsigned int max_value, const
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
-	handle_.position_.x += (float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (container_.position_.w - handle_.position_.w);
+	handle_.position_.x += int((float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (container_.position_.w - handle_.position_.w));
 	text_.position_.x += (container_.position_.w - text_.position_.w) / 2;
 }
 
@@ -181,7 +181,7 @@ void Slider::update()
 	}
 	else
 	{
-		current_value_ = min_value_ + float((handle_.position_.x + (handle_.position_.w / 2) - container_.position_.x)) / (container_.position_.w) * (max_value_ - min_value_);
+		current_value_ = min_value_ + unsigned int (float((handle_.position_.x + (handle_.position_.w / 2) - container_.position_.x)) / (container_.position_.w) * (max_value_ - min_value_));
 	}
 }
 

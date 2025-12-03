@@ -194,12 +194,12 @@ void TransformStep::set_position_xycenter(Image& image, const int x, const int y
 
 void TransformStep::set_position_xoffset(Image& image, const int x, const Uint64 time)
 {
-	set_position_common(image, image.position_.x + x, image.position_.y, time);
+	set_position_common(image, image.initial_rect_.x + x, image.position_.y, time);
 }
 
 void TransformStep::set_position_yoffset(Image& image, const int y, const Uint64 time)
 {
-	set_position_common(image, image.position_.x, image.position_.y + y, time);
+	set_position_common(image, image.position_.x, image.initial_rect_.y + y, time);
 }
 
 void TransformStep::set_center(Image& image, const Uint64 time)

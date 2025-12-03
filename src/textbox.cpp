@@ -20,7 +20,6 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	text_.position_.y = textbox_.position_.y + constants::textbox_text_y_delta_;
 
 	text_.wrap_length_ = textbox_.position_.w - (constants::textbox_text_x_delta_ * 2); 
-	std::cout << text_.wrap_length_ << std::endl;
 
 	triangle_.position_.x = textbox_.position_.x + textbox_.position_.w + constants::textbox_end_dialogue_indicator_x_delta_; 
 	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 

@@ -27,6 +27,8 @@ Transform::Transform()
 	transforms_.insert({TransformName::f42, TransformAllSteps(/*TransformName::f42,*/ 5)});
 	transforms_.insert({TransformName::f43, TransformAllSteps(/*TransformName::f43,*/ 5)});
 	transforms_.insert({TransformName::f44, TransformAllSteps(/*TransformName::f44,*/ 5)});
+
+	transforms_.insert({TransformName::test, TransformAllSteps(2)});
 }
 
 void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) const
@@ -59,7 +61,6 @@ void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSte
 		default:
 			break;
 	}
-
 }
 
 void Transform::t11(Image& image)
@@ -214,6 +215,27 @@ void Transform::f44(Image& image)
 	focus_common(1080, image, transform_f44);
 }
 
+void Transform::test(Image& image) 
+{
+	Transform::TransformAllSteps& transform_t = transforms_.find(TransformName::test)->second;
+	switch(transform_t.current_step_number_)
+	{
+		case 0:
+			//transform_t.transform_steps_[0].zoom(image, 0.5f, 3000);
+			transform_t.transform_steps_[1].set_position_yoffset(image, 100, 3000);
+			if(/*transform_t.transform_steps_[0].transform_step_finished_
+			&&*/ transform_t.transform_steps_[1].transform_step_finished_)
+			{
+				transform_t.current_step_number_ += 1;
+				transform_t.transform_finished_ = true;
+			}
+			break;
+
+		default:
+			break;
+	}
+}
+
 void Transform::show_transform(const TransformName transform_name, Image& image)
 {
 	switch(transform_name)
@@ -296,6 +318,10 @@ void Transform::show_transform(const TransformName transform_name, Image& image)
 
 		case TransformName::f44: 
 			f44(image);
+			break;
+
+		case TransformName::test:
+			test(image);
 			break;
 
 		default:

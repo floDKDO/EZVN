@@ -8,8 +8,6 @@
 
 //TODO : possibilité de juste mettre une couleur un peu plus claire pour représenter un Ui dans l'état SELECTED
 
-//TODO : vérifier qui j'ai bien mis le suffixe "f" pour les float
-
 //TODO : utiliser les bons types (ex : unsigned int)
 
 //TODO : const pour les références/pointeurs en paramètre

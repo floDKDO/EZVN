@@ -5,7 +5,6 @@
 #include "GUI/texttoggle.h"
 #include "GUI/texttogglegroup.h"
 #include "GUI/checkboxgroup.h"
-#include "constants.h"
 
 //TODO : garder les vectors de C-pointeurs ??
 
