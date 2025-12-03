@@ -10,7 +10,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
 	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {
-	textbox_.set_position((constants::window_width_ - textbox_.position_.w) / 2, constants::window_height_ - textbox_.position_.h - constants::textbox_y_delta_); 
+	textbox_.set_position((constants::window_width_ - textbox_.position_.w) / 2, constants::window_height_ - textbox_.position_.h + constants::textbox_y_delta_); 
 	namebox_.set_position(textbox_.position_.x + constants::namebox_textbox_x_delta_, textbox_.position_.y - namebox_.position_.h);
 
 	text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
@@ -22,7 +22,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	text_.wrap_length_ = textbox_.position_.w - (constants::textbox_text_x_delta_ * 2); 
 	std::cout << text_.wrap_length_ << std::endl;
 
-	triangle_.position_.x = textbox_.position_.x + textbox_.position_.w - constants::textbox_end_dialogue_indicator_x_delta_; 
+	triangle_.position_.x = textbox_.position_.x + textbox_.position_.w + constants::textbox_end_dialogue_indicator_x_delta_; 
 	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 
 }
 

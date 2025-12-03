@@ -1,6 +1,7 @@
 #include "ingamestate.h"
 #include "GUI/textbutton.h"
 #include "transform.h"
+#include "constants.h"
 
 #include <iostream>
 #include <algorithm>
@@ -10,25 +11,23 @@ InGameState::InGameState(sdl::Renderer& renderer)
 {
 	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
-	//TODO : beaucoup trop de trucs hardcodés
-
-	int x_textbutton = textbox_.textbox_.position_.x + 283;
-	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h - 24;
+	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_textbuttons_x_delta_;
+	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_textbuttons_y_delta_;
 
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
 
 	ui_elements.push_back(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements[0].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Skip", x_textbutton + 8, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements[1].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Auto", x_textbutton + 16, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements[2].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Save", x_textbutton + 24, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements[3].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Load", x_textbutton + 32, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements[4].get())->text_.get_width_text();
-	ui_elements.push_back(std::make_unique<TextButton>("Settings", x_textbutton + 40, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	x_textbutton += dynamic_cast<TextButton*>(ui_elements[0].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
+	ui_elements.push_back(std::make_unique<TextButton>("Skip", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	x_textbutton += dynamic_cast<TextButton*>(ui_elements[1].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
+	ui_elements.push_back(std::make_unique<TextButton>("Auto", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	x_textbutton += dynamic_cast<TextButton*>(ui_elements[2].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
+	ui_elements.push_back(std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	x_textbutton += dynamic_cast<TextButton*>(ui_elements[3].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
+	ui_elements.push_back(std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	x_textbutton += dynamic_cast<TextButton*>(ui_elements[4].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
+	ui_elements.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
 
 	menu_ = std::make_unique<UiManager>(std::move(ui_elements));
 

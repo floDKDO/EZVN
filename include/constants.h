@@ -40,6 +40,7 @@ namespace constants
 
 	inline const std::string inputfield_container_ = "img/gui/inputfield_container.png";
 	inline const std::string inputfield_font_ = "fonts/Aller_Rg.ttf";
+	inline constexpr int inputfield_text_x_delta_ = 7;
 	inline constexpr int inputfield_text_size_ = 50;
 	inline constexpr SDL_Color inputfield_text_color_ = {0, 0, 0, 255};
 	inline constexpr SDL_Color inputfield_placeholder_text_color_ = {204, 204, 204, 255};
@@ -76,7 +77,10 @@ namespace constants
 	inline constexpr int textbox_text_size_ = 20;
 	inline constexpr SDL_Color textbox_text_color_ = {255, 255, 255, 255};
 
-	inline constexpr int textbox_textbuttons_text_size_ = 10;
+	inline constexpr int textbox_textbuttons_text_size_ = 13;
+	inline constexpr int textbox_textbuttons_x_delta_ = 283;
+	inline constexpr int textbox_textbuttons_y_delta_ = -28;
+	inline constexpr int textbox_textbuttons_x_spacing_ = 9;
 
 	inline constexpr int textbox_text_x_delta_ = 30;
 	inline constexpr int textbox_text_y_delta_ = 25;
