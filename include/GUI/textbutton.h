@@ -12,11 +12,10 @@ class TextButton : public Ui
 		void update() override;
 		SDL_Rect get_rect() const override;
 
-		Text text_;
-
-	protected:
-
 	private:
 		static const unsigned int index_rect_textbutton_;
+
+	public:
+		Text text_;
 };
 

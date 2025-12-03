@@ -35,12 +35,15 @@ class Image
 
 		void draw(sdl::Renderer& renderer);
 
+	private:
+		std::unique_ptr<sdl::Animation> animated_image_;
+		std::unique_ptr<sdl::Texture> texture_;
+
+	public:
 		SDL_Rect position_;
 		int zorder_;
-		Uint64 last_time_;
 
-	protected:
-		
+		Uint64 last_time_;
 
 	private:
 		std::string path_;
@@ -66,14 +69,11 @@ class Image
 		
 		Uint8 alpha_;
 		double angle_;
-		
 		SDL_RendererFlip flip_;
 		Uint8 r_, g_, b_;
 
 		int frame_index_;
 		bool is_animated_;
-		std::unique_ptr<sdl::Animation> animated_image_;
 
-		std::unique_ptr<sdl::Texture> texture_; 
 		sdl::Renderer& renderer_; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
 };

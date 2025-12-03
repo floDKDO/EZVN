@@ -16,8 +16,6 @@ class Animation
 
 		IMG_Animation* fetch() const;
 
-	protected:
-
 	private:
 		IMG_Animation* animation_;
 };

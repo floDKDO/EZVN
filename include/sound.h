@@ -15,13 +15,12 @@ class Sound
 
 		static int global_sound_volume_;
 
-	protected:
-
 	private:
 		static int unused_channel_;
+
+		sdl::Chunk sound_;
 		bool loop_;
 		std::string path_;
-		sdl::Chunk sound_;
 		int local_sound_volume_; //TODO
 		int channel_;
 };

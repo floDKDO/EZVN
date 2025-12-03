@@ -51,6 +51,7 @@ class Game
 
 		sdl::Window window_;
 		sdl::Renderer renderer_;
+
 		sdl::GameController game_controller_;
 
 		sdl::Surface window_icon_;

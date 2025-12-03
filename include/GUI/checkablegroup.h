@@ -30,6 +30,5 @@ class CheckableGroup : public Ui
 		size_t number_of_checkables_;
 		Checkable* selected_checkable_;
 		bool only_one_has_to_be_checked_;
-		
 };
 

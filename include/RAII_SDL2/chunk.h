@@ -21,8 +21,6 @@ class Chunk
 		void resume(const int channel) const;
 		void volume(const int volume) const;
 
-	protected:
-
 	private:
 		Mix_Chunk* chunk_;
 };

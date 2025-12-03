@@ -26,9 +26,9 @@ class Inputfield : public Ui
 		void on_typing(const SDL_Event& e);
 		void set_character_limit(unsigned int character_limit);
 
-	protected:
-
 	private:
+		static const unsigned int index_rect_inputfield_;
+
 		Text text_;
 		Image normal_;
 
@@ -42,7 +42,5 @@ class Inputfield : public Ui
 		
 		unsigned int index_caret_;
 		int offset_caret_; 
-
-		static const unsigned int index_rect_inputfield_;
 };
 

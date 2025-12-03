@@ -29,9 +29,10 @@ class Slider : public Ui
 		void handle_events_hook_end(const SDL_Event& e) override;
 		SDL_Rect get_rect() const override;
 
-	protected:
-
 	private:
+		static const unsigned int index_rect_container_;
+		//static const unsigned int index_rect_handle_ = 1; //TODO : n'est normalement pas utile
+
 		Image container_;
 		Image handle_;
 		Text text_;
@@ -47,8 +48,5 @@ class Slider : public Ui
 		bool is_dragged_;
 		//SDL_Rect handle_position; //TODO : n'est normalement pas utile
 		int delta_mouse_handle_x_; //x position of the mouse in comparison to the x position of the handle
-
-		static const unsigned int index_rect_container_;
-		//static const unsigned int index_rect_handle_ = 1; //TODO : n'est normalement pas utile
 };
 

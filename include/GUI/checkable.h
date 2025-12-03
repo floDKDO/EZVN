@@ -20,7 +20,5 @@ class Checkable : public Ui
 
 	protected:
 		Checkable(const bool is_checked, sdl::Renderer& renderer);
-
-	private:
 };
 

@@ -16,8 +16,6 @@ class Music
 
 		static int global_music_volume_;
 
-	protected:
-
 	private:
 		bool loop_;
 		std::string path_;

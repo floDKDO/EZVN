@@ -13,10 +13,6 @@ class SDLTTF
 		SDLTTF& operator=(const SDLTTF& sdl) = delete;
 		~SDLTTF();
 
-	protected:
-
-	private:
-
 };
 }
 

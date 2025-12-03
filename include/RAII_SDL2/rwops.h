@@ -16,8 +16,6 @@ class RWops
 
 		SDL_RWops* fetch() const;
 
-	protected:
-
 	private:
 		SDL_RWops* rwops_;
 };

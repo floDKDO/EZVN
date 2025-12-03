@@ -15,11 +15,9 @@ class PopUpConfirmation
 		void draw(sdl::Renderer& renderer);
 		void update();
 
-	protected:
-
 	private:
+		UiManager ui_manager_; //2 TextButtons
 		Text text_;
 		Image frame_;
-		UiManager ui_manager_; //2 TextButtons
 };
 

@@ -55,8 +55,6 @@ class TransformStep
 
 		bool transform_step_finished_;
 
-	protected:
-
 	private:
 		struct PositionStep //set_position(), set_position_xcenter(), set_position_ycenter(), set_position_xycenter(), set_center() => n'utilise pas y !
 		{

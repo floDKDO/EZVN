@@ -19,8 +19,6 @@ class Font
 		void set_style(const int style) const;
 		void set_outline(const int outline) const;
 
-	protected:
-
 	private:
 		TTF_Font* font_;
 };

@@ -10,10 +10,6 @@ class TextToggleGroup : public CheckableGroup
 {
 	public:
 		TextToggleGroup(const std::string top_text, const  std::vector<std::string> texts, const int x, const int y, const bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
-
-	protected:
-
-	private:
 };
 
 

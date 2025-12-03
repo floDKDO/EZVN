@@ -15,8 +15,6 @@ class GameController
 
 		SDL_GameController* fetch() const;
 
-	protected:
-
 	private:
 		SDL_GameController* game_controller_;
 };

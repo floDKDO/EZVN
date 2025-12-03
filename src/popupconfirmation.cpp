@@ -2,8 +2,9 @@
 #include "constants.h"
 
 PopUpConfirmation::PopUpConfirmation(const std::string text, std::vector<std::unique_ptr<Ui>> ui_elements, sdl::Renderer& renderer)
-	: text_(text, constants::popupconfirmation_text_color_, constants::popupconfirmation_font_, constants::popupconfirmation_text_size_, 0, 0, renderer), 
-	frame_(constants::popupconfirmation_frame_, 0, 0, renderer), ui_manager_(std::move(ui_elements))
+	: ui_manager_(std::move(ui_elements)),
+	text_(text, constants::popupconfirmation_text_color_, constants::popupconfirmation_font_, constants::popupconfirmation_text_size_, 0, 0, renderer), 
+	frame_(constants::popupconfirmation_frame_, 0, 0, renderer)
 {
 	frame_.set_center();
 }

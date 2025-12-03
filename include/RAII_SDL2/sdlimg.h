@@ -13,9 +13,5 @@ class SDLImage
 		SDLImage& operator=(const SDLImage& sdl) = delete;
 		~SDLImage();
 
-	protected:
-
-	private:
-
 };
 }

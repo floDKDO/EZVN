@@ -13,15 +13,15 @@ class Button : public Ui
 		void update() override;
 		SDL_Rect get_rect() const override; 
 
-		Text text_; //TODO : public = temporaire pour tester les choice menu dans buttongroup.h
+	private:
+		static const unsigned int index_rect_button_;
 
-	protected:
+	public:
+		Text text_; //TODO : public = temporaire pour tester les choice menu dans buttongroup.h
 
 	private:
 		Image normal_;
 		Image selected_;
 		Image clicked_;
-
-		static const unsigned int index_rect_button_;
 };
 

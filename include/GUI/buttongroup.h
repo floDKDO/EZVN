@@ -20,12 +20,9 @@ class ButtonGroup : public Ui
 
 		void buttongroup_function(Ui* ui);
 
-	protected:
-
 	private:
-		Button* selected_button_;
 		std::vector<std::unique_ptr<Button>> buttons_;
-
+		Button* selected_button_;
 };
 
 template<size_t N>

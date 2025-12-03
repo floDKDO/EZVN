@@ -13,9 +13,5 @@ class SDL
 		SDL& operator=(const SDL& sdl) = delete;
 		~SDL();
 
-	protected:
-
-	private:
-
 };
 }

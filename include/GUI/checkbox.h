@@ -15,16 +15,14 @@ class Checkbox : public Checkable
 		void update() override;
 		SDL_Rect get_rect() const override;
 
-	protected:
-
 	private:
+		static const unsigned int index_rect_checkbox_;
+
 		Image normal_;
 		Image selected_;
 		Image clicked_;
 		Image check_mark_; 
 
 		Text text_;
-
-		static const unsigned int index_rect_checkbox_;
 };
 

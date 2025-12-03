@@ -18,11 +18,10 @@ class Textbox
 		Text text_;
 		Image textbox_;
 
-	protected:
-
 	private:
 		//Character current_speaker_;
 		std::string current_speaker_; //TODO : à sûrement remplacer par Character
+
 		Image namebox_;
 		Text text_name_box_;
 		Image triangle_;

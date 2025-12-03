@@ -44,8 +44,6 @@ class Transform
 
 		void show_transform(const TransformName transform_name, Image& image);
 
-	protected:
-
 	private:
 		struct TransformAllSteps
 		{

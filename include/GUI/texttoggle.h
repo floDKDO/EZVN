@@ -12,11 +12,9 @@ class TextToggle : public Checkable
 		void update() override;
 		SDL_Rect get_rect() const override;
 
-	protected:
-
 	private:
-		Text text_;
-
 		static const unsigned int index_rect_texttoggle_;
+
+		Text text_;
 };
 

@@ -29,8 +29,6 @@ class UiManager
 
 		std::vector<Ui*> navigation_list_;
 
-	protected:
-
 	private:
 		std::vector<std::unique_ptr<Ui>> ui_elements_;
 

@@ -23,8 +23,6 @@ class Texture
 		void set_blend_mode(const SDL_BlendMode blend_mode) const;
 		void query(Uint32* format, int* access, int* w, int* h) const;
 
-	protected:
-
 	private:
 		SDL_Texture* texture_;
 };

@@ -77,10 +77,11 @@ class Ui
 
 		void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
 		int is_mouse_on_ui();
-		static const int MOUSE_NOT_ON_ANY_UI_;
 
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
+
+		static const int MOUSE_NOT_ON_ANY_UI_;
 
 		Ui* select_on_up_;
 		Ui* select_on_down_;
@@ -99,14 +100,14 @@ class Ui
 		Sound select_sound_;
 		Sound click_sound_;
 		bool is_selected_sound_played_;
+
 		bool pointer_on_ui_when_pointer_up_; 
+
 		sdl::Renderer& renderer_; //do not own it !!
 
 		std::function<void(Ui* ui)> callback_function_;
 
-
 	private:
 		void select_new(Ui* ui);
-
 };
 

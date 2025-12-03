@@ -8,8 +8,6 @@
 
 //TODO : possibilité de juste mettre une couleur un peu plus claire pour représenter un Ui dans l'état SELECTED
 
-//TODO : ordre des membres dans les classes selon l'ordre voulu des appels des destructeurs
-
 //TODO : vérifier qui j'ai bien mis le suffixe "f" pour les float
 
 //TODO : utiliser les bons types (ex : unsigned int)
@@ -19,7 +17,6 @@
 //TODO : si valeur de wrap_length pas connue dans le constructeur ?
 
 //TODO : supprimer les .cpp inutiles où tout le code est dans le header à cause des templates ?
-
 
 int main(int argc, char* argv[])
 {

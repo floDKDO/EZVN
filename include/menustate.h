@@ -16,12 +16,10 @@ class MenuState : public GameState
 
 		bool is_popup_confirmation_visible_;
 
-	protected:
-
 	private:
+		std::unique_ptr<PopUpConfirmation> popup_confirmation_;
+
 		UiManager ui_manager_;
 		Image background_;
-		std::unique_ptr<PopUpConfirmation> popup_confirmation_;
-	
 };
 

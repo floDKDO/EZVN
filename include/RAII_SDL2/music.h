@@ -22,8 +22,6 @@ class Music
 		void volume(const int volume) const;
 		void set_position(const double position) const;
 
-	protected:
-
 	private:
 		Mix_Music* music_;
 };

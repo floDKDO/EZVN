@@ -20,8 +20,6 @@ class Surface
 		void set_blend_mode(const SDL_BlendMode blend_mode) const;
 		void blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect) const;
 
-	protected:
-
 	private:
 		SDL_Surface* surface_;
 };

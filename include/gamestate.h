@@ -14,7 +14,5 @@ class GameState
 
 	protected:
 		GameState() = default;
-
-	private:
 };
 

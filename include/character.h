@@ -19,9 +19,6 @@ class Character
 
 		bool is_speaking_;
 
-	protected:
-
-
 	private:
 		//TODO : focus automatique
 		Transform t_;

@@ -39,6 +39,8 @@ class Text
 	private:
 		void create_surface_texture();
 
+		static const int initial_text_speed_;
+
 		std::unique_ptr<sdl::Surface> surface_;
 		std::unique_ptr<sdl::Surface> surface_outline_;
 		std::unique_ptr<sdl::Texture> texture_;
@@ -57,8 +59,6 @@ class Text
 
 		SDL_Rect position_;
 
-	protected:
-
 	private:
 		SDL_Color color_;
 
@@ -75,7 +75,5 @@ class Text
 		std::string previous_text_;
 		
 		sdl::Renderer& renderer_; //solution temporaire
-
-		static const int initial_text_speed_;
 };
 

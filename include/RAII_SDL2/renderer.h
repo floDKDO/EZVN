@@ -24,8 +24,6 @@ class Renderer
 		void set_logical_size(const int w, const int h) const;
 		void set_draw_blend_mode(const SDL_BlendMode blend_mode) const;
 
-	protected:
-
 	private:
 		SDL_Renderer* renderer_;
 };

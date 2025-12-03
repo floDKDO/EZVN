@@ -13,9 +13,5 @@ class SDLMixer
 		SDLMixer& operator=(const SDLMixer& sdl) = delete;
 		~SDLMixer();
 
-	protected:
-
-	private:
-
 };
 }
