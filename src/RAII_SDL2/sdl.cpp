@@ -5,7 +5,7 @@
 namespace sdl
 {
 
-SDL::SDL(Uint32 flags)
+SDL::SDL(const Uint32 flags)
 {
 	if(SDL_Init(flags) < 0)
 	{

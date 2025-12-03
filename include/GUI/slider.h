@@ -7,9 +7,9 @@
 class Slider : public Ui
 {
 	public:
-		Slider(unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
-		bool is_mouse_on_handle(int mouse_x, int mouse_y);
+		bool is_mouse_on_handle(const int mouse_x, const int mouse_y);
 		void handle_movement();
 		void unselect();
 

@@ -38,7 +38,7 @@ class Image
 		void flip_normal();
 
 		int get_xcenter() const;
-		void zoom(const float zoom, Uint64 time=0);
+		void zoom(const float zoom);
 		void resize(const int w, const int h);
 		void set_position(const int x, const int y);
 		void set_position_xcenter(const int x, const int y);

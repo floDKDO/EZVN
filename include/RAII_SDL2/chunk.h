@@ -15,11 +15,11 @@ class Chunk
 		~Chunk(); //Mix_FreeChunk
 
 		Mix_Chunk* fetch() const;
-		void fade_in(int channel, int loops, int ms);
-		void fade_out(int which, int ms);
-		void pause(int channel);
-		void resume(int channel);
-		void volume(int volume);
+		void fade_in(const int channel, const int loops, const int ms);
+		void fade_out(const int which, const int ms);
+		void pause(const int channel);
+		void resume(const int channel);
+		void volume(const int volume);
 
 	protected:
 

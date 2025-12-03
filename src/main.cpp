@@ -26,6 +26,8 @@
 
 //TODO : si valeur de wrap_length pas connue dans le constructeur ?
 
+//TODO : supprimer les .cpp inutiles où tout le code est dans le header à cause des templates ?
+
 
 int main(int argc, char* argv[])
 {

@@ -11,7 +11,7 @@ namespace sdl
 class Window
 {
 	public:
-		Window(const std::string title, int x, int y, int w, int h, Uint32 flags); //SDL_CreateWindow
+		Window(const std::string title, const int x, const int y, const int w, const int h, const Uint32 flags); //SDL_CreateWindow
 		Window(const Window& window) = delete;
 		Window& operator=(const Window& window) = delete;
 		~Window(); //SDL_DestroyWindow

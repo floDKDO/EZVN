@@ -26,7 +26,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 
 }
 
-void Textbox::show_new_dialogue(std::string new_dialogue, std::string speaker /*Character* speaker*/)
+void Textbox::show_new_dialogue(const std::string new_dialogue, const std::string speaker /*Character* speaker*/)
 {
 	if(text_.is_finished_)
 	{

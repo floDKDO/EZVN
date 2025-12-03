@@ -45,7 +45,7 @@ SDL_Texture* Texture::fetch() const
 	return texture_;
 }
 
-void Texture::set_alpha_mod(Uint8 alpha)
+void Texture::set_alpha_mod(const Uint8 alpha)
 {
 	if(SDL_SetTextureAlphaMod(texture_, alpha) < 0)
 	{
@@ -53,7 +53,7 @@ void Texture::set_alpha_mod(Uint8 alpha)
 	}
 }
 
-void Texture::set_color_mod(Uint8 r, Uint8 g, Uint8 b)
+void Texture::set_color_mod(const Uint8 r, const Uint8 g, const Uint8 b)
 {
 	if(SDL_SetTextureColorMod(texture_, r, g, b) < 0)
 	{
@@ -61,7 +61,7 @@ void Texture::set_color_mod(Uint8 r, Uint8 g, Uint8 b)
 	}
 }
 
-void Texture::set_blend_mode(SDL_BlendMode blend_mode)
+void Texture::set_blend_mode(const SDL_BlendMode blend_mode)
 {
 	if(SDL_SetTextureBlendMode(texture_, blend_mode) < 0)
 	{

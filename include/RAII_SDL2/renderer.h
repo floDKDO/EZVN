@@ -10,7 +10,7 @@ class Texture;
 class Renderer
 {
 	public:
-		Renderer(Window& window, int index, Uint32 flags); //SDL_CreateRenderer()
+		Renderer(Window& window, const int index, const Uint32 flags); //SDL_CreateRenderer()
 		Renderer(const Renderer& renderer) = delete;
 		Renderer& operator=(const Renderer& renderer) = delete;
 		~Renderer(); //SDL_DestroyRenderer
@@ -21,8 +21,8 @@ class Renderer
 		void copy(Texture& texture, const SDL_Rect* srcrect, const SDL_Rect* dstrect, const double angle, const SDL_Point* center, const SDL_RendererFlip flip);
 		void clear();
 		void present();
-		void set_logical_size(int w, int h);
-		void set_draw_blend_mode(SDL_BlendMode blend_mode);
+		void set_logical_size(const int w, const int h);
+		void set_draw_blend_mode(const SDL_BlendMode blend_mode);
 
 	protected:
 

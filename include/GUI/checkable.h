@@ -19,7 +19,7 @@ class Checkable : public Ui
 		CheckableGroup* checkable_group_ = nullptr;
 
 	protected:
-		Checkable(bool is_checked, sdl::Renderer& renderer);
+		Checkable(const bool is_checked, sdl::Renderer& renderer);
 
 	private:
 

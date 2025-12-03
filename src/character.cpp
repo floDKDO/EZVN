@@ -3,14 +3,14 @@
 
 #include <iostream>
 
-Character::Character(std::string name, std::string character_path, sdl::Renderer& renderer, int zorder)
+Character::Character(const std::string name, const std::string character_path, sdl::Renderer& renderer, const int zorder)
 	: character_(character_path, 0, 0, renderer, zorder)
 	, name_(name), is_speaking_(false), initial_rect_(character_.position_)
 {
 
 }
 
-void Character::set_transform(TransformName transform_name)
+void Character::set_transform(const TransformName transform_name)
 {
 	t_.show_transform(transform_name, character_);
 }

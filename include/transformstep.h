@@ -17,39 +17,39 @@ class TransformStep
 		int get_xcenter(Image& image) const;
 		int get_ycenter(Image& image) const;
 
-		void no_modif_common(bool condition);
+		void no_modif_common(const bool condition);
 
 		template<typename F>
-		void instant_modif_common(F instant_modif_fonc, Uint64 time);
+		void instant_modif_common(F instant_modif_fonc, const Uint64 time);
 
 		template<typename Factory, typename F>
-		void each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Uint64 time = 0);
+		void each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, const Uint64 time = 0);
 
-		void alpha_common(Uint8 alpha, Image& image, Uint64 time = 0); 
-		void show(Image& image, Uint64 time = 0);
-		void hide(Image& image, Uint64 time = 0);
-		void set_alpha(Image& image, Uint8 alpha, Uint64 time = 0);
+		void alpha_common(Uint8 alpha, Image& image, const Uint64 time = 0);
+		void show(Image& image, const Uint64 time = 0);
+		void hide(Image& image, const Uint64 time = 0);
+		void set_alpha(Image& image, const Uint8 alpha, const Uint64 time = 0);
 
-		void rotate(Image& image, const double angle, Uint64 time = 0);
+		void rotate(Image& image, const double angle, const Uint64 time = 0);
 
-		void zoom(Image& image, const float zoom, Uint64 time = 0);
-		void resize(Image& image, const int w, const int h, Uint64 time = 0);
+		void zoom(Image& image, const float zoom, const Uint64 time = 0);
+		void resize(Image& image, const int w, const int h, const Uint64 time = 0);
 
-		void set_position_common(Image& image, const int x, const int y, Uint64 time = 0); 
-		void set_position(Image& image, const int x, const int y, Uint64 time = 0);
-		void set_position_xcenter(Image& image, const int x, Uint64 time = 0);
-		void set_position_ycenter(Image& image, const int y, Uint64 time = 0);
-	    void set_position_xycenter(Image& image, const int x, const int y, Uint64 time = 0);
+		void set_position_common(Image& image, const int x, const int y, const Uint64 time = 0);
+		void set_position(Image& image, const int x, const int y, const Uint64 time = 0);
+		void set_position_xcenter(Image& image, const int x, const Uint64 time = 0);
+		void set_position_ycenter(Image& image, const int y, const Uint64 time = 0);
+	    void set_position_xycenter(Image& image, const int x, const int y, const Uint64 time = 0);
 
-		void set_position_xoffset(Image& image, const int x, Uint64 time = 0);
-		void set_position_yoffset(Image& image, const int y, Uint64 time = 0);
+		void set_position_xoffset(Image& image, const int x, const Uint64 time = 0);
+		void set_position_yoffset(Image& image, const int y, const Uint64 time = 0);
 
-		void set_center(Image& image, Uint64 time = 0);
+		void set_center(Image& image, const Uint64 time = 0);
 
-		void filter_common(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time = 0); 
-		void night_filter(Image& image, Uint64 time = 0);
-		void afternoon_filter(Image& image, Uint64 time = 0);
-		void own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time = 0);
+		void filter_common(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, const Uint64 time = 0);
+		void night_filter(Image& image, const Uint64 time = 0);
+		void afternoon_filter(Image& image, const Uint64 time = 0);
+		void own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, const Uint64 time = 0);
 
 		void reset(Image& image);
 

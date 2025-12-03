@@ -11,7 +11,7 @@ class CheckableGroup : public Ui
 	public:
 		virtual ~CheckableGroup() = default;
 
-		void uncheck_all_others(Checkable* checkable_to_not_uncheck);
+		void uncheck_all_others(const Checkable* checkable_to_not_uncheck);
 		void handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck);
 		void on_click(Checkable* c);
 
@@ -28,7 +28,7 @@ class CheckableGroup : public Ui
 		Text top_text_; 
 		
 	protected:
-		CheckableGroup(size_t number_of_checkables, bool only_one_has_to_be_checked, std::string top_text, int x, int y, sdl::Renderer& renderer);
+		CheckableGroup(const size_t number_of_checkables, const bool only_one_has_to_be_checked, const std::string top_text, const int x, const int y, sdl::Renderer& renderer);
 
 	private:
 };

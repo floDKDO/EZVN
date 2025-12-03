@@ -5,7 +5,7 @@
 namespace sdl
 {
 
-Surface::Surface(Font& font, const std::string text, SDL_Color fg, Uint32 wrap_length)
+Surface::Surface(Font& font, const std::string text, const SDL_Color fg, const Uint32 wrap_length)
 {
 	if((surface_ = TTF_RenderUTF8_Blended_Wrapped(font.fetch(), text.c_str(), fg, wrap_length)) == nullptr)
 	{
@@ -31,7 +31,7 @@ SDL_Surface* Surface::fetch() const
 	return surface_;
 }
 
-void Surface::set_blend_mode(SDL_BlendMode blend_mode)
+void Surface::set_blend_mode(const SDL_BlendMode blend_mode)
 {
 	if(SDL_SetSurfaceBlendMode(surface_, blend_mode) < 0)
 	{

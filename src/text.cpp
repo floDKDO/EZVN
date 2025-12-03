@@ -5,7 +5,7 @@
 
 int Text::global_text_divisor_ = 45;
 
-Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length)
+Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length)
 	:text_(text), color_(color), font_size_(font_size), font_style_(0), renderer_(renderer), wrap_length_(wrap_length), text_dialogue_(""), index_dialogue_(0), 
 	previous_text_(""), previous_font_style_(0), font_path_(font_path), is_finished_(false), /*local_text_speed_(global_text_divisor_),*/ last_time_(0), 
 	font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(constants::text_outline_size_)
@@ -72,7 +72,7 @@ void Text::hide()
 	texture_->set_alpha_mod(color_.a);
 }
 
-void Text::change_color(SDL_Color color)
+void Text::change_color(const SDL_Color color)
 {
 	color_ = color;
 	texture_->set_color_mod(color_.r, color_.g, color_.b);
@@ -123,7 +123,7 @@ void Text::unset_all()
 	font_style_ = TTF_STYLE_NORMAL;
 }
 
-int Text::get_width_one_char(char c)
+int Text::get_width_one_char(const char c)
 {
 	std::string s(1, c);
 	int w;
@@ -138,7 +138,7 @@ int Text::get_width_text()
 	return w;
 }
 
-int Text::get_height_one_char(char c)
+int Text::get_height_one_char(const char c)
 {
 	std::string s(1, c);
 	int h;

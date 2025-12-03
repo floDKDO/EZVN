@@ -10,11 +10,11 @@
 class Text
 {
 	public:
-		Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, Uint32 wrap_length=0);
+		Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length=0);
 
 		void show();
 		void hide();
-		void change_color(SDL_Color color);
+		void change_color(const SDL_Color color);
 
 		void set_italic();
 		void set_bold();
@@ -26,9 +26,9 @@ class Text
 		void unset_strike_through();
 		void unset_all();
 
-		int get_width_one_char(char c);
+		int get_width_one_char(const char c);
 		int get_width_text();
-		int get_height_one_char(char c); 
+		int get_height_one_char(const char c);
 		int get_height_text();
 
 		void draw(sdl::Renderer& renderer);

@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-TextButton::TextButton(const std::string text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, bool is_on_textbox)
+TextButton::TextButton(const std::string text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, const bool is_on_textbox)
 	: Ui(renderer), text_(text, constants::textbutton_text_color_, constants::textbutton_font_, is_on_textbox ? constants::textbox_textbuttons_text_size_ : constants::textbutton_text_size_, x, y, renderer)
 {
 	callback_function_ = callback_function;

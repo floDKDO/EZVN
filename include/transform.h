@@ -44,7 +44,7 @@ class Transform
 
 		struct TransformAllSteps
 		{
-			TransformAllSteps(/*TransformName transform_name,*/ int number_of_transform_steps)
+			TransformAllSteps(/*TransformName transform_name,*/ const int number_of_transform_steps)
 				: current_step_number_(0), transform_finished_(false), number_of_transform_steps_(number_of_transform_steps), transform_steps_(number_of_transform_steps)
 			{}
 
@@ -56,7 +56,7 @@ class Transform
 
 		std::unordered_map<TransformName, TransformAllSteps> transforms_;
 
-		void tcommon(int xpos, Image& image, Transform::TransformAllSteps& transform_t);
+		void tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t);
 		void t11(Image& image);
 		void t21(Image& image);
 		void t22(Image& image);
@@ -68,7 +68,7 @@ class Transform
 		void t43(Image& image);
 		void t44(Image& image);
 
-		void focus_common(int xpos, Image& image, Transform::TransformAllSteps& transform_f);
+		void focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f);
 		void f11(Image& image);
 		void f21(Image& image);
 		void f22(Image& image);
@@ -80,6 +80,6 @@ class Transform
 		void f43(Image& image);
 		void f44(Image& image);
 
-		void show_transform(TransformName transform_name, Image& image);
+		void show_transform(const TransformName transform_name, Image& image);
 };
 

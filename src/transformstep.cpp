@@ -37,7 +37,7 @@ int TransformStep::get_ycenter(Image& image) const
 	return image.position_.h / 2;
 }
 
-void TransformStep::no_modif_common(bool condition)
+void TransformStep::no_modif_common(const bool condition)
 {
 	if(condition)
 	{
@@ -47,7 +47,7 @@ void TransformStep::no_modif_common(bool condition)
 }
 
 template<typename F>
-void TransformStep::instant_modif_common(F instant_modif_fonc, Uint64 time)
+void TransformStep::instant_modif_common(F instant_modif_fonc, const Uint64 time)
 {
 	if(time == 0 && !transform_step_finished_)
 	{
@@ -58,7 +58,7 @@ void TransformStep::instant_modif_common(F instant_modif_fonc, Uint64 time)
 }
 
 template<typename Factory, typename F> 
-void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Uint64 time)
+void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, const Uint64 time)
 {
 	if(!transform_step_finished_ && time != 0)
 	{
@@ -81,7 +81,7 @@ void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_mo
 	}
 }
 
-void TransformStep::alpha_common(Uint8 alpha, Image& image, Uint64 time)
+void TransformStep::alpha_common(Uint8 alpha, Image& image, const Uint64 time)
 {
 	no_modif_common(image.alpha_ == alpha);
 
@@ -106,22 +106,22 @@ void TransformStep::alpha_common(Uint8 alpha, Image& image, Uint64 time)
 	, time);
 }
 
-void TransformStep::show(Image& image, Uint64 time)
+void TransformStep::show(Image& image, const Uint64 time)
 {
 	alpha_common(255, image, time);
 }
 
-void TransformStep::hide(Image& image, Uint64 time)
+void TransformStep::hide(Image& image, const Uint64 time)
 {
 	alpha_common(0, image, time);
 }
 
-void TransformStep::set_alpha(Image& image, Uint8 alpha, Uint64 time)
+void TransformStep::set_alpha(Image& image, const  Uint8 alpha, const Uint64 time)
 {
 	alpha_common(alpha, image, time);
 }
 
-void TransformStep::rotate(Image& image, const double angle, Uint64 time)
+void TransformStep::rotate(Image& image, const double angle, const Uint64 time)
 {
 	no_modif_common(image.angle_ == angle);
 
@@ -142,7 +142,7 @@ void TransformStep::rotate(Image& image, const double angle, Uint64 time)
 	, time);
 }
 
-void TransformStep::set_position_common(Image& image, const int x, const int y, Uint64 time)
+void TransformStep::set_position_common(Image& image, const int x, const int y, const Uint64 time)
 {
 	no_modif_common(image.position_.x == x && image.position_.y == y);
 
@@ -174,37 +174,37 @@ void TransformStep::set_position_common(Image& image, const int x, const int y, 
 	, time);
 }
 
-void TransformStep::set_position(Image& image, const int x, const int y, Uint64 time)
+void TransformStep::set_position(Image& image, const int x, const int y, const Uint64 time)
 {
 	set_position_common(image, x, y, time);
 }
 
-void TransformStep::set_position_xcenter(Image& image, const int x, Uint64 time)
+void TransformStep::set_position_xcenter(Image& image, const int x, const Uint64 time)
 {
 	set_position_common(image, x - std::abs(get_xcenter(image)), image.position_.y, time);
 }
 
-void TransformStep::set_position_ycenter(Image& image, const int y, Uint64 time)
+void TransformStep::set_position_ycenter(Image& image, const int y, const Uint64 time)
 {
 	set_position_common(image, image.position_.x, y - std::abs(get_ycenter(image)), time);
 }
 
-void TransformStep::set_position_xycenter(Image& image, const int x, const int y, Uint64 time)
+void TransformStep::set_position_xycenter(Image& image, const int x, const int y, const Uint64 time)
 {
 	set_position_common(image, x - std::abs(get_xcenter(image)), y - std::abs(get_ycenter(image)), time); 
 }
 
-void TransformStep::set_position_xoffset(Image& image, const int x, Uint64 time)
+void TransformStep::set_position_xoffset(Image& image, const int x, const Uint64 time)
 {
 	set_position_common(image, image.position_.x + x, image.position_.y, time);
 }
 
-void TransformStep::set_position_yoffset(Image& image, const int y, Uint64 time)
+void TransformStep::set_position_yoffset(Image& image, const int y, const Uint64 time)
 {
 	set_position_common(image, image.position_.x, image.position_.y + y, time);
 }
 
-void TransformStep::set_center(Image& image, Uint64 time)
+void TransformStep::set_center(Image& image, const Uint64 time)
 {
 	no_modif_common(image.position_.x == (constants::window_width_ / 2 - std::abs(get_xcenter(image))) && image.position_.y == (constants::window_height_ / 2 - std::abs(get_ycenter(image))));
 
@@ -238,7 +238,7 @@ void TransformStep::set_center(Image& image, Uint64 time)
 	, time);
 }
 
-void TransformStep::zoom(Image& image, const float zoom, Uint64 time)
+void TransformStep::zoom(Image& image, const float zoom, const Uint64 time)
 {
 	no_modif_common(zoom == 1.0f);
 
@@ -273,7 +273,7 @@ void TransformStep::zoom(Image& image, const float zoom, Uint64 time)
 	, time);
 }
 
-void TransformStep::resize(Image& image, const int w, const int h, Uint64 time)
+void TransformStep::resize(Image& image, const int w, const int h, const Uint64 time)
 {
 	no_modif_common(image.position_.w == w && image.position_.h == h);
 
@@ -301,7 +301,7 @@ void TransformStep::resize(Image& image, const int w, const int h, Uint64 time)
 	, time);
 }
 
-void TransformStep::filter_common(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time)
+void TransformStep::filter_common(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, const Uint64 time)
 {
 	no_modif_common(image.r_ == r && image.g_ == g && image.b_ == b);
 
@@ -339,17 +339,17 @@ void TransformStep::filter_common(Image& image, const Uint8 r, const Uint8 g, co
 	, time);
 }
 
-void TransformStep::night_filter(Image& image, Uint64 time)
+void TransformStep::night_filter(Image& image, const Uint64 time)
 {
 	filter_common(image, 127, 127, 165, time);
 }
 
-void TransformStep::afternoon_filter(Image& image, Uint64 time)
+void TransformStep::afternoon_filter(Image& image, const Uint64 time)
 {
 	filter_common(image, 210, 150, 130, time);
 }
 
-void TransformStep::own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, Uint64 time)
+void TransformStep::own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, const Uint64 time)
 {
 	filter_common(image, r, g, b, time);
 }

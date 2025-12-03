@@ -95,34 +95,18 @@ int Image::get_xcenter() const
 	return position_.w / 2;
 }
 
-void Image::zoom(const float zoom, Uint64 time)
+void Image::zoom(const float zoom)
 {
 	std::cout << "ZOOM ***********************************************************\n";
 
 	float position_w = float(position_.w);
 	float position_h = float(position_.h);
 
-	static float zoome = 1.0f;
-	static bool animation_finished = false;
+	position_w *= zoom;
+	position_h *= zoom;
 
-	if(!animation_finished && time != 0)
-	{
-		position_w *= zoome;
-		position_h *= zoome;
-
-		position_.w = int(position_w);
-		position_.h = int(position_h);
-
-		zoome += (zoom - 1.0f) / (60.0f / (1000.0f / float(time))); //1.0f = zoom sans modif, 60.0f = FPS, 1000.0f = 1000 ms
-
-		std::cout << "ZOOME: " << zoome << ", Zoom: " << zoom << std::endl;
-
-		if((zoom < 1.0f && zoome <= zoom) || (zoom > 1.0f && zoome >= zoom)) 
-		{
-			//animation terminée
-			animation_finished = true;
-		}
-	}
+	position_.w = int(position_w);
+	position_.h = int(position_h);
 }
 
 void Image::resize(const int w, const int h)

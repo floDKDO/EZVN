@@ -5,7 +5,7 @@
 namespace sdl
 {
 
-Font::Font(const std::string file, int ptsize) //TTF_OpenFont
+Font::Font(const std::string file, const int ptsize) //TTF_OpenFont
 {
 	if((font_ = TTF_OpenFont(file.c_str(), ptsize)) == nullptr)
 	{
@@ -31,12 +31,12 @@ void Font::size_UTF8(const std::string text, int* w, int* h)
 	}
 }
 
-void Font::set_style(int style)
+void Font::set_style(const int style)
 {
 	TTF_SetFontStyle(font_, style);
 }
 
-void Font::set_outline(int outline)
+void Font::set_outline(const int outline)
 {
 	TTF_SetFontOutline(font_, outline);
 }

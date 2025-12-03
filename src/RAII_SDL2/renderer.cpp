@@ -6,7 +6,7 @@
 namespace sdl
 {
 
-Renderer::Renderer(Window& window, int index, Uint32 flags) //SDL_CreateRenderer()
+Renderer::Renderer(Window& window, const int index, const Uint32 flags) //SDL_CreateRenderer()
 {
 	if((renderer_ = SDL_CreateRenderer(window.fetch(), index, flags)) == nullptr)
 	{
@@ -54,7 +54,7 @@ void Renderer::present()
 	SDL_RenderPresent(renderer_);
 }
 
-void Renderer::set_logical_size(int w, int h)
+void Renderer::set_logical_size(const int w, const int h)
 {
 	if(SDL_RenderSetLogicalSize(renderer_, w, h) < 0)
 	{
@@ -62,7 +62,7 @@ void Renderer::set_logical_size(int w, int h)
 	}
 }
 
-void Renderer::set_draw_blend_mode(SDL_BlendMode blend_mode)
+void Renderer::set_draw_blend_mode(const SDL_BlendMode blend_mode)
 {
 	if(SDL_SetRenderDrawBlendMode(renderer_, blend_mode) < 0)
 	{

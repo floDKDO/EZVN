@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-CheckableGroup::CheckableGroup(size_t number_of_checkables, bool only_one_has_to_be_checked, std::string top_text, int x, int y, sdl::Renderer& renderer)
+CheckableGroup::CheckableGroup(const size_t number_of_checkables, const bool only_one_has_to_be_checked, const std::string top_text, const int x, const int y, sdl::Renderer& renderer)
 	: Ui(renderer), y_spacing_text_(constants::checkablegroup_top_text_y_delta_), number_of_checkables_(number_of_checkables), only_one_has_to_be_checked_(only_one_has_to_be_checked), 
 	top_text_(top_text, constants::checkablegroup_text_color_, constants::checkablegroup_font_, constants::checkablegroup_text_size_, x, y + y_spacing_text_, renderer), 
 	selected_checkable_(nullptr) 
@@ -11,7 +11,7 @@ CheckableGroup::CheckableGroup(size_t number_of_checkables, bool only_one_has_to
 	
 }
 
-void CheckableGroup::uncheck_all_others(Checkable* checkable_to_not_uncheck)
+void CheckableGroup::uncheck_all_others(const Checkable* checkable_to_not_uncheck)
 {
 	for(std::unique_ptr<Checkable> const& c : checkables_)
 	{

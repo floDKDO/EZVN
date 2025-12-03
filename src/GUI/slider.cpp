@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Slider::Slider(unsigned int min_value, unsigned int max_value, const int x, const int y, std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+Slider::Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), container_(constants::slider_container_, x, y, renderer), handle_(constants::slider_handle_, x, y + constants::slider_handle_y_delta_, renderer), min_value_(min_value), max_value_(max_value),
 	current_value_((max_value + min_value) / 2), is_dragged_(false), is_selected_(false), delta_mouse_handle_x_(0), 
 	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer) 
@@ -14,7 +14,7 @@ Slider::Slider(unsigned int min_value, unsigned int max_value, const int x, cons
 	text_.position_.x += (container_.position_.w - text_.position_.w) / 2;
 }
 
-bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y)
+bool Slider::is_mouse_on_handle(const int mouse_x, const int mouse_y)
 {
 	float logical_x, logical_y;
 	SDL_RenderWindowToLogical(renderer_.fetch(), mouse_x, mouse_y, &logical_x, &logical_y);

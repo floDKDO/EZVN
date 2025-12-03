@@ -9,7 +9,7 @@
 class Checkbox : public Checkable
 {
 	public:
-		Checkbox(std::string text, const int x, const int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Checkbox(const std::string text, const int x, const int y, const bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

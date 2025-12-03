@@ -7,7 +7,7 @@
 class Inputfield : public Ui
 {
 	public:
-		Inputfield(unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Inputfield(const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void on_pointer_up_hook_end() override;
 

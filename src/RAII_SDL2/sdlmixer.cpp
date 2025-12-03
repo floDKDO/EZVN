@@ -5,7 +5,7 @@
 namespace sdl
 {
 
-SDLMixer::SDLMixer(int flags)
+SDLMixer::SDLMixer(const int flags)
 {
 	if(Mix_Init(flags) == 0)
 	{

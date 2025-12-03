@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Checkable::Checkable(bool is_checked, sdl::Renderer& renderer)
+Checkable::Checkable(const bool is_checked, sdl::Renderer& renderer)
 	: Ui(renderer), is_checked_(is_checked), previous_checked_(is_checked)
 {
 

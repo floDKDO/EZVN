@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+//TODO : "5" obligatoire ??
 Transform::Transform()
 {
 	transforms_.insert({TransformName::t11, TransformAllSteps(/*TransformName::t11,*/ 5)});
@@ -28,7 +29,7 @@ Transform::Transform()
 	transforms_.insert({TransformName::f44, TransformAllSteps(/*TransformName::f44,*/ 5)});
 }
 
-void Transform::tcommon(int xpos, Image& image, Transform::TransformAllSteps& transform_t)
+void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t)
 {
 	switch(transform_t.current_step_number_)
 	{
@@ -121,7 +122,7 @@ void Transform::t44(Image& image)
 	tcommon(1080, image, transform_t44);
 }
 
-void Transform::focus_common(int xpos, Image& image, Transform::TransformAllSteps& transform_f)
+void Transform::focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f)
 {
 	switch(transform_f.current_step_number_)
 	{
@@ -213,7 +214,7 @@ void Transform::f44(Image& image)
 	focus_common(1080, image, transform_f44);
 }
 
-void Transform::show_transform(TransformName transform_name, Image& image)
+void Transform::show_transform(const TransformName transform_name, Image& image)
 {
 	switch(transform_name)
 	{

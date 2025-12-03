@@ -3,7 +3,7 @@
 namespace sdl
 {
 
-SDLImage::SDLImage(int flags)
+SDLImage::SDLImage(const int flags)
 {
 	if(IMG_Init(flags) == 0)
 	{
