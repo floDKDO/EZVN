@@ -4,17 +4,14 @@
 #include "RAII_SDL2/texture.h"
 #include "RAII_SDL2/font.h"
 #include "RAII_SDL2/renderer.h"
+#include "drawable.h"
 
 #include <memory>
 
-class Text
+class Text : public Drawable
 {
 	public:
 		Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length=0);
-
-		void show();
-		void hide();
-		void change_color(const SDL_Color color);
 
 		void set_italic();
 		void set_bold();
@@ -31,7 +28,7 @@ class Text
 		int get_height_one_char(const char c) const;
 		int get_height_text() const;
 
-		void draw(sdl::Renderer& renderer);
+		void draw(sdl::Renderer& renderer) override;
 		void update();
 
 		static int global_text_divisor_;
@@ -43,7 +40,6 @@ class Text
 
 		std::unique_ptr<sdl::Surface> surface_;
 		std::unique_ptr<sdl::Surface> surface_outline_;
-		std::unique_ptr<sdl::Texture> texture_;
 
 	public:
 		std::string text_;
@@ -53,14 +49,10 @@ class Text
 
 		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
 
-		Uint64 last_time_; 
-
 		Uint32 wrap_length_;
 
-		SDL_Rect position_;
-
 	private:
-		SDL_Color color_;
+		//SDL_Color color_; //TODO : r, g, b ??
 
 		int font_size_;
 		int font_style_;

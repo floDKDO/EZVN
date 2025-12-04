@@ -8,6 +8,7 @@ PopUpConfirmation::PopUpConfirmation(const std::string text, std::vector<std::un
 	background_(constants::popupconfirmation_background, 0, 0, renderer)
 {
 	frame_.set_center();
+	text_.set_center();
 }
 
 void PopUpConfirmation::handle_events(const SDL_Event& e)

@@ -16,6 +16,8 @@
 
 //TODO : supprimer les .cpp inutiles où tout le code est dans le header à cause des templates ?
 
+//TODO : r, g, b, a ou SDL_Color ?? x, y ou {x, h} dans un Vec2 ??
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;

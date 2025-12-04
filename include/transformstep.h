@@ -10,13 +10,6 @@ class TransformStep
 	public:
 		TransformStep();
 
-		void flip_vertically(Image& image) const;
-		void flip_horizontally(Image& image) const;
-		void flip_normal(Image& image) const;
-
-		int get_xcenter(Image& image) const;
-		int get_ycenter(Image& image) const;
-
 		void no_modif_common(const bool condition);
 
 		template<typename F>

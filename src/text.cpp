@@ -7,10 +7,12 @@ int Text::global_text_divisor_ = 45;
 const int Text::initial_text_speed_ = 500;
 
 Text::Text(const std::string text, const SDL_Color color, const std::string font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length)
-	:text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), last_time_(0), wrap_length_(wrap_length), color_(color), 
+	: text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),  
 	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(constants::text_outline_size_), 
 	previous_text_(""), renderer_(renderer) /*,local_text_speed_(global_text_divisor_),*/
 {
+	color_ = color;
+
 	int w, h;
 	font_.size_UTF8(text_, &w, &h);
 	position_ = {x, y, w, h};
@@ -59,24 +61,6 @@ void Text::create_surface_texture()
 
 	texture_ = std::make_unique<sdl::Texture>(renderer_, *surface_);
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
-}
-
-void Text::show()
-{
-	color_.a = 255;
-	texture_->set_alpha_mod(color_.a);
-}
-
-void Text::hide()
-{
-	color_.a = 0;
-	texture_->set_alpha_mod(color_.a);
-}
-
-void Text::change_color(const SDL_Color color)
-{
-	color_ = color;
-	texture_->set_color_mod(color_.r, color_.g, color_.b);
 }
 
 void Text::set_italic()
