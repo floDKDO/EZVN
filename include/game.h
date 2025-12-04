@@ -34,10 +34,8 @@ class Game
 
 		void play_function(Ui* ui);
 		void settings_function(Ui* ui);
-		void quit_function(Ui* ui);
 
-		void popupconfirmation_quit_function(Ui* ui);
-		void popupconfirmation_return_function(Ui* ui);
+		void confirmationpopup_quit_function(Ui* ui);
 
 		void previous_menu_function(Ui* ui);
 		void slider_sound_function(Ui* ui);

@@ -1,5 +1,6 @@
 #include "GUI/uimanager.h"
 #include "GUI/slider.h"
+#include "GUI/confirmationpopup.h"
 
 #include <iostream>
 
@@ -8,6 +9,19 @@ UiManager::UiManager(std::vector<std::unique_ptr<Ui>> ui_elements)
 {
 	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
+		//TODO : dégeulasse !!
+		if(dynamic_cast<TextButton*>(ui_element.get()) != nullptr) 
+		{
+			TextButton* textbutton = dynamic_cast<TextButton*>(ui_element.get());
+			if(textbutton->confirmationpopup_ != nullptr)
+			{
+				std::vector<Ui*> nodes = textbutton->get_navigation_nodes();
+				navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
+				std::vector<Ui*> nodes2 = textbutton->confirmationpopup_->get_navigation_nodes();
+				navigation_list_.insert(navigation_list_.end(), nodes2.begin(), nodes2.end());
+			}
+		}
+
 		std::vector<Ui*> nodes = ui_element->get_navigation_nodes();
 		navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
 	}
@@ -126,23 +140,35 @@ void UiManager::handle_events(const SDL_Event& e)
 {
 	for(Ui* ui : navigation_list_)
 	{
-		if(e.type == SDL_MOUSEMOTION)
+		if(Ui::is_pop_up_visible_) //TODO : approximatif
 		{
-			if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI_)
+			TextButton* textbutton_confirmationpopup = dynamic_cast<TextButton*>(ui);
+			if(textbutton_confirmationpopup->confirmationpopup_ != nullptr)
 			{
-				if(previous_selected_ != nullptr && ui != previous_selected_ && previous_selected_->state_ != State::NORMAL)
-				{
-					previous_selected_->state_ = State::NORMAL;
-					if(dynamic_cast<Slider*>(previous_selected_) != nullptr)
-					{
-						dynamic_cast<Slider*>(previous_selected_)->unselect();
-					}
-				}
-				previous_selected_ = current_selected_;
-				current_selected_ = ui;
+				textbutton_confirmationpopup->confirmationpopup_->yes_.handle_events(e);
+				textbutton_confirmationpopup->confirmationpopup_->no_.handle_events(e);
 			}
 		}
-		ui->handle_events(e);
+		else
+		{
+			if(e.type == SDL_MOUSEMOTION)
+			{
+				if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI_)
+				{
+					if(previous_selected_ != nullptr && ui != previous_selected_ && previous_selected_->state_ != State::NORMAL)
+					{
+						previous_selected_->state_ = State::NORMAL;
+						if(dynamic_cast<Slider*>(previous_selected_) != nullptr)
+						{
+							dynamic_cast<Slider*>(previous_selected_)->unselect();
+						}
+					}
+					previous_selected_ = current_selected_;
+					current_selected_ = ui;
+				}
+			}
+			ui->handle_events(e);
+		}
 	}
 }
 

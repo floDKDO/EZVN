@@ -4,6 +4,7 @@
 #include <iostream>
 
 bool Ui::lock_ = true;
+int Ui::is_pop_up_visible_ = false;
 const int Ui::MOUSE_NOT_ON_ANY_UI_ = -1;
 
 //TODO : parfois un bug avec la touche Entrée au lancement du programme

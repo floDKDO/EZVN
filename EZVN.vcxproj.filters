@@ -129,7 +129,7 @@
     <ClCompile Include="src\menustate.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\popupconfirmation.cpp">
+    <ClCompile Include="src\GUI\confirmationpopup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\transformstep.cpp">
@@ -254,7 +254,7 @@
     <ClInclude Include="include\menustate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\popupconfirmation.h">
+    <ClInclude Include="include\GUI\confirmationpopup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\transformstep.h">

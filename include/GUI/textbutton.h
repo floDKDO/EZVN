@@ -3,6 +3,10 @@
 #include "GUI/ui.h"
 #include "text.h"
 
+#include <memory>
+
+class ConfirmationPopUp;
+
 enum class TextButtonKind
 {
 	NORMAL,
@@ -14,6 +18,7 @@ class TextButton : public Ui
 {
 	public:
 		TextButton(const std::string text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, const TextButtonKind textbutton_kind = TextButtonKind::NORMAL); 
+		TextButton(const std::string text, const int x, const int y, sdl::Renderer& renderer, const std::string text_popup, std::function<void(Ui* ui)> callback_function, const TextButtonKind textbutton_kind = TextButtonKind::NORMAL);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
@@ -24,5 +29,6 @@ class TextButton : public Ui
 
 	public:
 		Text text_;
+		std::unique_ptr<ConfirmationPopUp> confirmationpopup_;
 };
 

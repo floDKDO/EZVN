@@ -2,7 +2,7 @@
 
 #include "gamestate.h"
 #include "image.h"
-#include "popupconfirmation.h"
+#include "GUI/confirmationpopup.h"
 #include "GUI/uimanager.h"
 
 class MenuState : public GameState
