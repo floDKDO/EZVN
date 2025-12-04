@@ -95,6 +95,12 @@ int Image::get_xcenter() const
 	return position_.w / 2;
 }
 
+int Image::get_ycenter() const
+{
+	//std::cout << "GET YCENTER ***********************************************************\n";
+	return position_.h / 2;
+}
+
 void Image::zoom(const float zoom)
 {
 	//std::cout << "ZOOM ***********************************************************\n";
@@ -129,7 +135,7 @@ void Image::set_position_xcenter(const int x, const int y)
 
 void Image::set_center()
 {
-	position_ = {constants::window_width_ / 2 - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
+	position_ = {constants::window_width_ / 2 - std::abs(get_xcenter()), constants::window_height_ / 2 - std::abs(get_ycenter()), position_.w, position_.h};
 }
 
 void Image::night_filter()

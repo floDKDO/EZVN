@@ -40,8 +40,8 @@ void Game::create_main_menu()
 	std::vector<std::unique_ptr<Ui>> ui_elements_popup;
 	ui_elements_popup.reserve(10);
 
-	ui_elements_popup.push_back(std::make_unique<TextButton>("Yes", 300, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), true));
-	ui_elements_popup.push_back(std::make_unique<TextButton>("No", 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), true));
+	ui_elements_popup.push_back(std::make_unique<TextButton>("Yes", 300, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), TextButtonKind::ON_FRAME));
+	ui_elements_popup.push_back(std::make_unique<TextButton>("No", 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), TextButtonKind::ON_FRAME));
 
 	//main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
 	main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), "Are you sure you would like to close the game?", std::move(ui_elements_popup), renderer_);

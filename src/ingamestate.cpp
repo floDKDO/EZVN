@@ -17,17 +17,17 @@ InGameState::InGameState(sdl::Renderer& renderer)
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
 
-	ui_elements.push_back(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	ui_elements.push_back(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[0].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
-	ui_elements.push_back(std::make_unique<TextButton>("Skip", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	ui_elements.push_back(std::make_unique<TextButton>("Skip", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[1].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
-	ui_elements.push_back(std::make_unique<TextButton>("Auto", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	ui_elements.push_back(std::make_unique<TextButton>("Auto", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[2].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
-	ui_elements.push_back(std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	ui_elements.push_back(std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[3].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
-	ui_elements.push_back(std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	ui_elements.push_back(std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements[4].get())->text_.get_width_text() + constants::textbox_textbuttons_x_spacing_;
-	ui_elements.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), true));
+	ui_elements.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer_, std::bind(&InGameState::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 
 	menu_ = std::make_unique<UiManager>(std::move(ui_elements));
 

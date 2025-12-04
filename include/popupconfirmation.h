@@ -19,5 +19,6 @@ class PopUpConfirmation
 		UiManager ui_manager_; //2 TextButtons
 		Text text_;
 		Image frame_;
+		Image background_;
 };
 
