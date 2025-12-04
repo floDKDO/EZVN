@@ -36,6 +36,9 @@ class Game
 		void settings_function(Ui* ui);
 		void quit_function(Ui* ui);
 
+		void popupconfirmation_quit_function(Ui* ui);
+		void popupconfirmation_return_function(Ui* ui);
+
 		void previous_menu_function(Ui* ui);
 		void slider_sound_function(Ui* ui);
 		void slider_music_function(Ui* ui);

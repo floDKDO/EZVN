@@ -52,8 +52,6 @@ class Text : public Drawable
 		Uint32 wrap_length_;
 
 	private:
-		//SDL_Color color_; //TODO : r, g, b ??
-
 		int font_size_;
 		int font_style_;
 		int previous_font_style_;

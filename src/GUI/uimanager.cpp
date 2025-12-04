@@ -50,7 +50,7 @@ bool UiManager::is_candidate_closer(const Ui* const ui, const Ui* const candidat
 	return false;
 }
 
-//ui = ui to which we assign a "select_on"
+//ui = ui to which we assign a "select_on_*"
 //candidate = the current ui in the inner for loop
 //current_best = the "select_on_*" we try to assign to ui (up, down, left or right)
 void UiManager::get_ui_facing(Ui* ui, Ui* candidate, Ui*& current_best, const Axis mode) const

@@ -5,20 +5,23 @@
 #include "GUI/textbutton.h"
 
 #include <string>
+#include <array>
 
-class PopUpConfirmation
+class PopUpConfirmation : public Ui
 {
 	public:
-		PopUpConfirmation(const std::string text, std::vector<std::unique_ptr<Ui>> ui_elements, sdl::Renderer& renderer);
+		PopUpConfirmation(const std::string text, sdl::Renderer& renderer, std::array<std::function<void(Ui* ui)>, 2> callback_functions);
 
-		void handle_events(const SDL_Event& e);
-		void draw(sdl::Renderer& renderer);
-		void update();
+		void draw(sdl::Renderer& renderer) override;
+		void update() override;
 
 	private:
-		UiManager ui_manager_; //2 TextButtons
+		bool is_popupconfirmation_visible_;
+
 		Text text_;
 		Image frame_;
 		Image background_;
+		TextButton yes_;
+		TextButton no_;
 };
 

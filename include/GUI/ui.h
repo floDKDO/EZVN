@@ -73,7 +73,7 @@ class Ui
 		virtual void handle_events_hook_end(const SDL_Event& e) { (void)e; }
 
 		virtual void draw(sdl::Renderer& renderer) = 0;
-		virtual void update() = 0;
+		virtual void update() = 0; //TODO : obligé ou juste virtual ??
 
 		void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
 		int is_mouse_on_ui();

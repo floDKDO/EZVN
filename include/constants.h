@@ -8,6 +8,7 @@
 
 namespace constants
 {
+
 inline constexpr int window_width_ = 1280;
 inline constexpr int window_height_ = 720;
 
@@ -46,9 +47,11 @@ inline constexpr SDL_Color inputfield_text_color_ = {0, 0, 0, 255};
 inline constexpr SDL_Color inputfield_placeholder_text_color_ = {204, 204, 204, 255};
 
 inline const std::string popupconfirmation_frame_ = "img/GUI/pop_up_confirmation.png";
+inline constexpr int popupconfirmation_width_ = 411;
 inline const std::string popupconfirmation_background = "img/GUI/confirm.png";
 inline const std::string popupconfirmation_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int popupconfirmation_text_size_ = 20;
+inline constexpr int popupconfirmation_text_x_delta_ = 30;
 inline constexpr SDL_Color popupconfirmation_text_color_ = {255, 255, 255, 255};
 
 inline const std::string slider_container_ = "img/gui/slider_container.png";
@@ -104,4 +107,5 @@ inline const std::string game_name_ = "EZVN";
 
 inline const std::string sound_hover_ = "sounds/hover.ogg";
 inline const std::string sound_click_ = "sounds/click.ogg";
+
 }

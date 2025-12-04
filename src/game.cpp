@@ -36,15 +36,9 @@ void Game::create_main_menu()
 	ui_elements.push_back(std::make_unique<TextButton>("Play", 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Settings", 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<TextButton>("Quit", 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1)));
+	ui_elements.push_back(std::make_unique<PopUpConfirmation>("Are you sure you would like to close the game?", renderer_, std::array<std::function<void(Ui * ui)>, 2>{std::bind(&Game::popupconfirmation_quit_function, this, std::placeholders::_1), std::bind(&Game::popupconfirmation_return_function, this, std::placeholders::_1)}));
 
-	std::vector<std::unique_ptr<Ui>> ui_elements_popup;
-	ui_elements_popup.reserve(10);
-
-	ui_elements_popup.push_back(std::make_unique<TextButton>("Yes", 300, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), TextButtonKind::ON_FRAME));
-	ui_elements_popup.push_back(std::make_unique<TextButton>("No", 600, 500, renderer_, std::bind(&Game::quit_function, this, std::placeholders::_1), TextButtonKind::ON_FRAME));
-
-	//main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
-	main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), "Are you sure you would like to close the game?", std::move(ui_elements_popup), renderer_);
+	main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
 }
 
 void Game::create_settings_menu()
@@ -81,8 +75,21 @@ void Game::quit_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Quit!" << std::endl;
-	main_menu_->is_popup_confirmation_visible_ = true;
-	//game_running_ = false;
+	//main_menu_->is_popup_confirmation_visible_ = true; //TODO
+}
+
+void Game::popupconfirmation_quit_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Clicked Yes!" << std::endl;
+	game_running_ = false;
+}
+
+void Game::popupconfirmation_return_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Clicked No!" << std::endl;
+	//main_menu_->is_popup_confirmation_visible_ = false; //TODO
 }
 
 void Game::previous_menu_function(Ui* ui)
