@@ -26,8 +26,8 @@ void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements
 		TextButton* textbutton = nullptr; 
 		if((textbutton = dynamic_cast<TextButton*>(ui_element.get())) != nullptr && textbutton->confirmationpopup_ != nullptr)
 		{
-			std::vector<Ui*> nodes = textbutton->confirmationpopup_->get_navigation_nodes(); 
-			navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end()); //Also add the textbuttons of the ConfirmationPopUp
+			std::vector<Ui*> textbuttons_popup = textbutton->confirmationpopup_->get_navigation_nodes(); 
+			navigation_list_.insert(navigation_list_.end(), textbuttons_popup.begin(), textbuttons_popup.end()); //Also add the textbuttons of the ConfirmationPopUp
 		}
 	}
 

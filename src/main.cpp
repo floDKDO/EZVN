@@ -1,8 +1,6 @@
 #include "game.h"
 
 #include <iostream>
-#include <chrono>
-#include <thread>
 
 //TODO : lambdas à la place des std::bind ??
 
@@ -23,33 +21,7 @@ int main(int argc, char* argv[])
 	(void)argc, (void)argv;
 	
 	Game game;
+	game.run();
 
-	const int FPS = 60;
-	const int FRAME_TIME = int((1.0f / FPS) * 1000.0f);
-
-	Uint64 second = 0;
-	Uint64 begin_current_frame = 0;
-	Uint64 end_current_frame = 0;
-	unsigned int frame_count = 0;
-
-	while(game.game_running_)
-	{
-		begin_current_frame = SDL_GetTicks64();
-		frame_count += 1;
-
-		game.handle_events();
-		game.update();
-		game.draw();
-
-		if(SDL_GetTicks64() - second >= 1000)
-		{
-			std::string fps_count = ", FPS: " + std::to_string(frame_count);
-			game.update_fps_count(fps_count);
-			second = SDL_GetTicks64();
-			frame_count = 0;
-		}
-		end_current_frame = SDL_GetTicks64();
-		std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_TIME - (end_current_frame - begin_current_frame)));
-	}
 	return 0;
 }

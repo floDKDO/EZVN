@@ -17,6 +17,8 @@ class Game
 	public:
 		Game();
 
+		void run();
+
 		void push_state(GameState* state);
 		void pop_state(); 
 		GameState* get_state() const;

@@ -4,6 +4,9 @@
 #include "mainmenu.h"
 #include "settingsmenu.h"
 
+#include <chrono>
+#include <thread>
+
 //TODO : garder les vectors de C-pointeurs ??
 
 Game::Game()
@@ -25,6 +28,45 @@ Game::Game()
 	//create_main_menu();
 	//create_settings_menu();
 	push_state(main_menu_.get());
+}
+
+void Game::run()
+{
+	const Uint64 FPS = 60;
+	const Uint64 FRAME_TIME = Uint64((1.0f / FPS) * 1000.0f);
+
+	Uint64 second = 0;
+	Uint64 begin_current_frame = 0;
+	Uint64 end_current_frame = 0;
+	unsigned int frame_count = 0;
+
+	while(game_running_)
+	{
+		begin_current_frame = SDL_GetTicks64();
+		frame_count += 1;
+
+		handle_events();
+		update();
+		draw();
+
+		if(SDL_GetTicks64() - second >= 1000)
+		{
+			std::string fps_count = ", FPS: " + std::to_string(frame_count);
+			update_fps_count(fps_count);
+			second = SDL_GetTicks64();
+			frame_count = 0;
+		}
+		end_current_frame = SDL_GetTicks64();
+
+		Uint64 elapsed = end_current_frame - begin_current_frame;
+		//Uint64 delay = FRAME_TIME - elapsed;
+
+		if(FRAME_TIME > elapsed)
+		{
+			//SDL_Delay(delay); //TODO : utiliser SDL_Delay ??
+			std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_TIME - (end_current_frame - begin_current_frame)));
+		}
+	}
 }
 
 /*void Game::create_main_menu()
