@@ -4,31 +4,47 @@
 
 #include <iostream>
 
-UiManager::UiManager(std::vector<std::unique_ptr<Ui>> ui_elements)
-	: ui_elements_(std::move(ui_elements)), previous_selected_(nullptr)
-{
-	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
-	{
-		//TODO : dégeulasse !!
-		if(dynamic_cast<TextButton*>(ui_element.get()) != nullptr) 
-		{
-			TextButton* textbutton = dynamic_cast<TextButton*>(ui_element.get());
-			if(textbutton->confirmationpopup_ != nullptr)
-			{
-				std::vector<Ui*> nodes = textbutton->get_navigation_nodes();
-				navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
-				std::vector<Ui*> nodes2 = textbutton->confirmationpopup_->get_navigation_nodes();
-				navigation_list_.insert(navigation_list_.end(), nodes2.begin(), nodes2.end());
-			}
-		}
+UiManager::UiManager()
+	: previous_selected_(nullptr), current_selected_(nullptr)
+{}
 
+void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements)
+{
+	//ui_elements_.clear();
+	navigation_list_.clear();
+
+	/*for(int i = 0; i < ui_elements.size(); ++i)
+	{
+		ui_elements_.push_back(ui_elements[i].get());
+	}*/
+
+	for(std::unique_ptr<Ui> const& ui_element : ui_elements)
+	{
 		std::vector<Ui*> nodes = ui_element->get_navigation_nodes();
 		navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
+
+		TextButton* textbutton = nullptr; 
+		if((textbutton = dynamic_cast<TextButton*>(ui_element.get())) != nullptr && textbutton->confirmationpopup_ != nullptr)
+		{
+			std::vector<Ui*> nodes = textbutton->confirmationpopup_->get_navigation_nodes(); 
+			navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end()); //Also add the textbuttons of the ConfirmationPopUp
+		}
 	}
-	current_selected_ = ui_elements_[0].get();
-	current_selected_->state_ = State::SELECTED;
 
 	assign_ui_on_moving();
+
+	for(Ui* ui : navigation_list_)
+	{
+		if(ui->state_ == State::SELECTED)
+		{
+			current_selected_ = ui;
+			std::cout << "SELECTED FOUND!\n";
+			return;
+		}
+	}
+	std::cout << "NO SELECTED FOUND...\n";
+	current_selected_ = navigation_list_[0];
+	current_selected_->state_ = State::SELECTED;
 }
 
 bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode) const
@@ -151,7 +167,7 @@ void UiManager::handle_events(const SDL_Event& e)
 		}
 		else
 		{
-			if(e.type == SDL_MOUSEMOTION)
+			if(e.type == SDL_MOUSEMOTION) 
 			{
 				if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI_)
 				{
@@ -172,23 +188,23 @@ void UiManager::handle_events(const SDL_Event& e)
 	}
 }
 
-void UiManager::draw(sdl::Renderer& renderer)
+/*void UiManager::draw(sdl::Renderer& renderer)
 {
 	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
 	{
 		ui_element->draw(renderer);
 	}
-}
+}*/
 
 void UiManager::update()
 {
-	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
+	for(Ui* ui_element : navigation_list_) //TODO : fonctionne ou remettre ui_elements_ ?
 	{
 		ui_element->update();
 		if(ui_element->state_ == State::SELECTED)
 		{
 			previous_selected_ = current_selected_;
-			current_selected_ = ui_element.get();
+			current_selected_ = ui_element;
 		}
 	}
 }

@@ -1,8 +1,7 @@
 #pragma once
 
 #include "gamestate.h"
-#include "menustate.h"
-#include "ingamestate.h"
+#include "GUI/uimanager.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/gamecontroller.h"
@@ -29,8 +28,8 @@ class Game
 		void update_fps_count(const std::string fps) const;
 
 	private:
-		void create_main_menu();
-		void create_settings_menu();
+		//void create_main_menu();
+		//void create_settings_menu();
 
 		void play_function(Ui* ui);
 		void settings_function(Ui* ui);
@@ -50,19 +49,24 @@ class Game
 		sdl::SDLMixer sdl_mixer_;
 		sdl::SDLTTF sdl_ttf_;
 
+	public:
 		sdl::Window window_;
+
+	private:
 		sdl::Renderer renderer_;
 
 		sdl::GameController game_controller_;
 
 		sdl::Surface window_icon_;
 
-		std::unique_ptr<MenuState> main_menu_;
-		std::unique_ptr<MenuState> settings_menu_;
-		std::unique_ptr<MenuState> load_menu_;
-		std::unique_ptr<MenuState> save_menu_;
+		UiManager ui_manager_;
 
-		std::unique_ptr<InGameState> in_game_;
+	public:
+		std::unique_ptr<GameState> main_menu_;
+		std::unique_ptr<GameState> settings_menu_;
+		std::unique_ptr<GameState> load_menu_;
+		std::unique_ptr<GameState> save_menu_;
+		std::unique_ptr<GameState> in_game_;
 
 	public:
 		bool game_running_;

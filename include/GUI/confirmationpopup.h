@@ -1,7 +1,6 @@
 #pragma once
 
 #include "image.h"
-#include "GUI/uimanager.h"
 #include "GUI/textbutton.h"
 
 #include <string>

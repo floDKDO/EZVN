@@ -147,10 +147,10 @@
     <ClCompile Include="src\gamestate.cpp" />
     <ClCompile Include="src\image.cpp" />
     <ClCompile Include="src\GUI\inputfield.cpp" />
-    <ClCompile Include="src\ingamestate.cpp" />
+    <ClCompile Include="src\ingame.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\GUI\uimanager.cpp" />
-    <ClCompile Include="src\menustate.cpp" />
+    <ClCompile Include="src\mainmenu.cpp" />
     <ClCompile Include="src\music.cpp" />
     <ClCompile Include="src\GUI\confirmationpopup.cpp" />
     <ClCompile Include="src\RAII_SDL2\animation.cpp" />
@@ -168,6 +168,7 @@
     <ClCompile Include="src\RAII_SDL2\texture.cpp" />
     <ClCompile Include="src\RAII_SDL2\window.cpp" />
     <ClCompile Include="src\GUI\slider.cpp" />
+    <ClCompile Include="src\settingsmenu.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\textbox.cpp" />
@@ -192,9 +193,9 @@
     <ClInclude Include="include\gamestate.h" />
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\GUI\inputfield.h" />
-    <ClInclude Include="include\ingamestate.h" />
+    <ClInclude Include="include\ingame.h" />
     <ClInclude Include="include\GUI\uimanager.h" />
-    <ClInclude Include="include\menustate.h" />
+    <ClInclude Include="include\mainmenu.h" />
     <ClInclude Include="include\music.h" />
     <ClInclude Include="include\GUI\confirmationpopup.h" />
     <ClInclude Include="include\RAII_SDL2\animation.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="include\RAII_SDL2\texture.h" />
     <ClInclude Include="include\RAII_SDL2\window.h" />
     <ClInclude Include="include\GUI\slider.h" />
+    <ClInclude Include="include\settingsmenu.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />
     <ClInclude Include="include\textbox.h" />
@@ -224,6 +226,9 @@
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\GUI\ui.h" />
     <ClInclude Include="include\transformstep.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

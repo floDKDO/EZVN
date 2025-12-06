@@ -8,6 +8,7 @@ int Ui::is_pop_up_visible_ = false;
 const int Ui::MOUSE_NOT_ON_ANY_UI_ = -1;
 
 //TODO : parfois un bug avec la touche Entrée au lancement du programme
+//TODO : bug si sélection d'un UI avec la souris et déplacement avec le clavier => le son de hover n'est pas joué
 
 Ui::Ui(sdl::Renderer& renderer)
 	:select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 

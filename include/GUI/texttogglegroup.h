@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GUI/checkablegroup.h"
-#include "GUI/texttogglegroup.h"
 #include "GUI/texttoggle.h"
 #include "constants.h"
 

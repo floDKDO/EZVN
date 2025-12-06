@@ -123,10 +123,7 @@
     <ClCompile Include="src\GUI\checkable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ingamestate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\menustate.cpp">
+    <ClCompile Include="src\ingame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\confirmationpopup.cpp">
@@ -139,6 +136,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\drawable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mainmenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\settingsmenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,10 +251,7 @@
     <ClInclude Include="include\GUI\checkable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ingamestate.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\menustate.h">
+    <ClInclude Include="include\ingame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\confirmationpopup.h">
@@ -269,5 +269,14 @@
     <ClInclude Include="include\drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\mainmenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\settingsmenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

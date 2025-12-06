@@ -3,14 +3,15 @@
 #include "gamestate.h"
 #include "textbox.h"
 #include "character.h"
-#include "GUI/uimanager.h"
 #include <vector>
 #include <memory>
 
-class InGameState : public GameState
+class InGame : public GameState
 {
 	public:
-		explicit InGameState(sdl::Renderer& renderer);
+		InGame(Game& game, sdl::Renderer& renderer);
+
+		void build_ui_elements(sdl::Renderer& renderer) override;
 		void handle_events(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
@@ -18,14 +19,10 @@ class InGameState : public GameState
 		void temp_function(Ui* ui);
 
 	private:
-		std::unique_ptr<UiManager> menu_;
-
 		std::vector<std::unique_ptr<Character>> characters_;
 
 		Textbox textbox_;
 		Image background_;
 		bool hide_ui_textbox_;
-
-		sdl::Renderer& renderer_;
 };
 
