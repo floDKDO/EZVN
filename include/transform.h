@@ -35,16 +35,18 @@ enum class TransformName
 	f43,
 	f44,
 
-	test
+	test, none
 };
 
 class Transform
 {
 	//TODO : on show/replace/hide => https://www.renpy.org/doc/html/transforms.html#external-atl-events
 	public:
-		Transform();
+		Transform(const TransformName transform_name);
 
 		void show_transform(const TransformName transform_name, Image& image);
+
+		TransformName transform_name_;
 
 	private:
 		struct TransformAllSteps

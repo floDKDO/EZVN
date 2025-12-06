@@ -9,6 +9,7 @@
 #include "RAII_SDL2/sdlmixer.h"
 #include "RAII_SDL2/sdlimg.h"
 #include "RAII_SDL2/sdlttf.h"
+#include "transform.h"
 
 #include <stack>
 
@@ -28,6 +29,9 @@ class Game
 		void update();
 
 		void update_fps_count(const std::string fps) const;
+
+		void add_character(const std::string name, const std::string character_path);
+		void add_new_dialogue(const std::string dialogue, const std::string character_name, const TransformName transform_name);
 
 	private:
 		//void create_main_menu();

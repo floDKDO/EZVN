@@ -5,6 +5,7 @@
 #include "character.h"
 #include <vector>
 #include <memory>
+#include <tuple>
 
 class InGame : public GameState
 {
@@ -18,9 +19,12 @@ class InGame : public GameState
 
 		void temp_function(Ui* ui);
 
-	private:
 		std::vector<std::unique_ptr<Character>> characters_;
+		std::vector<std::tuple<std::string, Character*, TransformName>> dialogues_;
 
+		size_t current_dialogue_index_;
+
+	private:
 		Textbox textbox_;
 		Image background_;
 		bool hide_ui_textbox_;

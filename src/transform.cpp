@@ -4,7 +4,8 @@
 #include <iostream>
 
 //TODO : "5" obligatoire ??
-Transform::Transform()
+Transform::Transform(const TransformName transform_name) //TODO : temporaire
+	: transform_name_(transform_name)
 {
 	transforms_.insert({TransformName::t11, TransformAllSteps(/*TransformName::t11,*/ 5)});
 	transforms_.insert({TransformName::t21, TransformAllSteps(/*TransformName::t21,*/ 5)});
@@ -36,6 +37,7 @@ void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSte
 	switch(transform_t.current_step_number_)
 	{
 		case 0:
+			transform_t.transform_steps_[0].reset(image); //TODO : pas le bon indice mais nécessaire en fin de compte
 			transform_t.transform_steps_[0].hide(image);
 			transform_t.transform_steps_[1].set_position_yoffset(image, -26);
 			transform_t.transform_steps_[2].zoom(image, 0.8f);
@@ -128,6 +130,7 @@ void Transform::focus_common(const int xpos, Image& image, Transform::TransformA
 	switch(transform_f.current_step_number_)
 	{
 		case 0:
+			transform_f.transform_steps_[0].reset(image); //TODO : pas le bon indice mais nécessaire en fin de compte
 			transform_f.transform_steps_[0].hide(image);
 			transform_f.transform_steps_[1].set_position_yoffset(image, -65);
 			transform_f.transform_steps_[2].zoom(image, 0.84f);

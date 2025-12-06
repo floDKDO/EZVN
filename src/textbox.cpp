@@ -25,24 +25,25 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 
 }
 
-void Textbox::show_new_dialogue(const std::string new_dialogue, const std::string speaker /*Character* speaker*/)
+void Textbox::show_new_dialogue(const std::string new_dialogue, Character* speaker, TransformName transform_name)
 {
 	if(text_.is_finished_)
 	{
 		//TODO : version à utiliser si Character* à la place de std::string
-		/*if(speaker == nullptr) //Narrator
+		if(speaker == nullptr) //Narrator
 		{
 			current_speaker_.clear();
 		}
 		else
 		{
 			current_speaker_ = speaker->name_;
+			speaker->set_transform(transform_name);
 
 			text_name_box_.text_ = current_speaker_;
 			text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
-		}*/
+		}
 
-		if(speaker.empty()) //Narrator
+		/*if(speaker.empty()) //Narrator
 		{
 			current_speaker_.clear();
 		}
@@ -52,7 +53,7 @@ void Textbox::show_new_dialogue(const std::string new_dialogue, const std::strin
 
 			text_name_box_.text_ = current_speaker_;
 			text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
-		}
+		}*/
 
 		text_.is_finished_ = false;
 		text_.index_dialogue_ = 0;
@@ -77,7 +78,7 @@ void Textbox::handle_events(const SDL_Event& e)
 			{
 				case SDLK_SPACE:
 					//Prochain dialogue
-					show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
+					//show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
 					break;
 
 				default:
@@ -88,7 +89,7 @@ void Textbox::handle_events(const SDL_Event& e)
 		case SDL_MOUSEBUTTONDOWN:
 			if(e.button.button == SDL_BUTTON_LEFT)
 			{
-				show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
+				//show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
 			}
 			break;
 
@@ -123,7 +124,7 @@ void Textbox::update()
 		text_name_box_.update();
 	}
 
-	Uint64 now = SDL_GetTicks64();
+	Uint64 now = SDL_GetTicks64(); 
 	if(text_.is_finished_)
 	{
 		if(now - triangle_.last_time_ > 500)

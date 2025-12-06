@@ -1,4 +1,6 @@
 #include "game.h"
+#include "character.h"
+#include "transform.h"
 
 #include <iostream>
 
@@ -21,6 +23,11 @@ int main(int argc, char* argv[])
 	(void)argc, (void)argv;
 	
 	Game game;
+	game.add_character("Sayori", "img/characters/sayori.png");
+	game.add_new_dialogue("HEYYYYYY!", "Sayori", TransformName::t11); //TODO : texte convertit en l'enum dans la méthode
+	game.add_new_dialogue("How are you MC?", "Sayori", TransformName::t33);
+	game.add_new_dialogue("HEYYYYYY!", "Sayori", TransformName::f41); //TODO : texte convertit en l'enum dans la méthode
+	game.add_new_dialogue("How are you MC?", "Sayori", TransformName::t21);
 	game.run();
 
 	return 0;

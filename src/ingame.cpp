@@ -7,18 +7,18 @@
 #include <algorithm>
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
+	: GameState(game), current_dialogue_index_(0), textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
 {
 	build_ui_elements(renderer);
 
 	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
 
-	characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", renderer, 1));
+	/*characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", renderer, 1));
 	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", renderer, 4));
 	characters_.push_back(std::make_unique<Character>("Natsuki", "img/characters/natsuki.png", renderer, 3));
-	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", renderer, 2));
+	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", renderer, 2));*/
 
-	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
+	//std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
 }
 
 void InGame::build_ui_elements(sdl::Renderer& renderer)
@@ -60,7 +60,17 @@ void InGame::handle_events(const SDL_Event& e)
 				return;
 			}
 		}
-		textbox_.handle_events(e);
+
+		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
+		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
+		{
+			if(current_dialogue_index_ < dialogues_.size())
+			{
+				textbox_.show_new_dialogue(std::get<0>(dialogues_[current_dialogue_index_]), (std::get<1>(dialogues_[current_dialogue_index_])), std::get<2>(dialogues_[current_dialogue_index_]));
+				current_dialogue_index_ += 1;
+			}
+		}
+		//textbox_.handle_events(e);
 	}
 
 	if(e.type == SDL_MOUSEBUTTONDOWN)
@@ -102,7 +112,8 @@ void InGame::update()
 
 		for(std::unique_ptr<Character> const& c : characters_)
 		{
-			if(c->name_ == "Sayori")
+			c->t_.show_transform(c->t_.transform_name_, c->character_);
+			/*if(c->name_ == "Sayori")
 			{
 				c->set_transform(TransformName::t41);
 			}
@@ -117,7 +128,7 @@ void InGame::update()
 			else if(c->name_ == "Yuri")
 			{
 				c->set_transform(TransformName::t44);
-			}
+			}*/
 		}
 	}
 }

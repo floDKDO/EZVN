@@ -19,9 +19,11 @@ class Character
 
 		bool is_speaking_;
 
-	private:
 		//TODO : focus automatique
 		Transform t_;
+
+	private:
+		
 		//SDL_Rect initial_rect_;
 };
 

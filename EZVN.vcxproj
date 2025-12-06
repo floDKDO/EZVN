@@ -181,6 +181,8 @@
     <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\GUI\ui.cpp" />
     <ClCompile Include="src\transformstep.cpp" />
+    <ClCompile Include="src\transition.cpp" />
+    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\constants.h" />
@@ -226,6 +228,7 @@
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\GUI\ui.h" />
     <ClInclude Include="include\transformstep.h" />
+    <ClInclude Include="include\transition.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

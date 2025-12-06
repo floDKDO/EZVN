@@ -168,3 +168,17 @@ void Game::update_fps_count(const std::string fps) const
 {
 	window_.set_title(constants::game_name_ + fps);
 }
+
+void Game::add_character(const std::string name, const std::string character_path)
+{
+	dynamic_cast<InGame*>(in_game_.get())->characters_.push_back(std::make_unique<Character>(name, character_path, renderer_, 1));
+	std::cout << "ICI " << dynamic_cast<InGame*>(in_game_.get())->characters_.size() << std::endl;
+}
+
+void Game::add_new_dialogue(const std::string dialogue, const std::string character_name, const TransformName transform_name)
+{
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+
+	in_game_ptr->dialogues_.push_back(std::tuple<std::string, Character*, TransformName>(dialogue, in_game_ptr->characters_[0].get(), transform_name));
+	//dynamic_cast<InGame*>(in_game_.get())->characters_[0]->set_transform(transform_name); //TODO : transfo au moment du dialogue, pas directement
+}
