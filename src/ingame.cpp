@@ -7,11 +7,11 @@
 #include <algorithm>
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), current_dialogue_index_(0), textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
+	: GameState(game), counter_(1), current_line_(0), textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
 {
 	build_ui_elements(renderer);
 
-	textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring.";
+	//textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring."; //TODO : il faut retirer cela !!
 
 	/*characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", renderer, 1));
 	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", renderer, 4));
@@ -41,6 +41,23 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 	ui_elements_.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 }
 
+void InGame::add_character(const std::string name, const std::string character_path, sdl::Renderer& renderer)
+{
+	characters_.push_back(std::make_unique<Character>(name, character_path, renderer, 1));
+}
+
+Character* InGame::get_character(const std::string name) 
+{
+	for(const std::unique_ptr<Character>& c : characters_)
+	{
+		if(c->name_ == name)
+		{
+			return c.get();
+		}
+	}
+	return nullptr;
+}
+
 void InGame::temp_function(Ui* ui)
 {
 	(void)ui;
@@ -64,10 +81,30 @@ void InGame::handle_events(const SDL_Event& e)
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
-			if(current_dialogue_index_ < dialogues_.size())
+			if(dialogues_.find(current_line_) == dialogues_.begin()) //tout premier dialogue
 			{
-				textbox_.show_new_dialogue(std::get<0>(dialogues_[current_dialogue_index_]), (std::get<1>(dialogues_[current_dialogue_index_])), std::get<2>(dialogues_[current_dialogue_index_]));
-				current_dialogue_index_ += 1;
+				//std::cout << "FIRSTTTTTRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n";
+				current_line_ = std::next(dialogues_.begin(), counter_)->first;
+				//std::cout << "MODIF DE CURRENT_LINE1: " << current_line_ << std::endl;
+				textbox_.show_new_dialogue(dialogues_[current_line_].first, dialogues_[current_line_].second);
+				return;
+			}
+
+			if(dialogues_.count(current_line_))
+			{
+				//std::cout << "--CURRENT_LINE: " << current_line_ << std::endl;
+				
+				if(textbox_.text_.is_finished_) //empêcher le spam d'espace
+				{
+					//std::cout << "DEDANS\n";
+					if(std::next(dialogues_.begin(), counter_ + 1) != dialogues_.end())
+					{
+						counter_ += 1;
+					}
+					current_line_ = std::next(dialogues_.begin(), counter_)->first;
+					textbox_.show_new_dialogue(dialogues_[current_line_].first, dialogues_[current_line_].second);
+					//current_line_ += 1; //ne pas incrémenter dans le cas du tout premier dialogue
+				}
 			}
 		}
 		//textbox_.handle_events(e);
@@ -87,7 +124,20 @@ void InGame::draw(sdl::Renderer& renderer)
 	background_.draw(renderer);
 	for(std::unique_ptr<Character> const& c : characters_)
 	{
-		c->draw(renderer);
+		for(unsigned int i = current_line_; i > 0; --i)
+		{
+			//std::cout << "I : " << i << std::endl;
+			if(characters_transforms_.count(i) && characters_transforms_[i].first->name_ == c->name_)
+			{
+				c->is_visible_ = true;
+				c->set_transform(characters_transforms_[i].second);
+				c->draw(renderer);
+				break;
+			}
+		}
+
+		//TODO : chercher si "c" est dans characters_transforms_ et si oui, afficher sa dernière transfo selon la ligne (ligne = valeur max de l'indice dans characters_transforms_ ??)
+		//c->draw(renderer); //TODO : affichage selon ligne (dernière transfo de chaque personnage)
 	}
 
 	if(!hide_ui_textbox_)
@@ -102,6 +152,15 @@ void InGame::draw(sdl::Renderer& renderer)
 
 void InGame::update()
 {
+	//TODO : ne fonctionnera plus avec le vecteur de personnages
+	//std::cout << current_line_ << " et " << dialogues_.count(current_line_) << std::endl;
+	if(!dialogues_.count(current_line_) && current_line_ <= (--dialogues_.end())->first) //ne pas incrémenter au-delà la clef max
+	{
+		current_line_ += 1;
+		//std::cout << "CURRENT_LINE: " << current_line_ << std::endl;
+		//std::cout << std::boolalpha << textbox_.text_.is_finished_ << std::endl;
+	}
+
 	if(!hide_ui_textbox_)
 	{
 		textbox_.update();
@@ -113,22 +172,6 @@ void InGame::update()
 		for(std::unique_ptr<Character> const& c : characters_)
 		{
 			c->t_.show_transform(c->t_.transform_name_, c->character_);
-			/*if(c->name_ == "Sayori")
-			{
-				c->set_transform(TransformName::t41);
-			}
-			else if(c->name_ == "Monika")
-			{
-				c->set_transform(TransformName::t42);
-			}
-			else if(c->name_ == "Natsuki")
-			{
-				c->set_transform(TransformName::t43);
-			}
-			else if(c->name_ == "Yuri")
-			{
-				c->set_transform(TransformName::t44);
-			}*/
 		}
 	}
 }

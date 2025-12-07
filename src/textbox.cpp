@@ -5,7 +5,7 @@
 
 Textbox::Textbox(sdl::Renderer& renderer)
 	: text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, 10),
-	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""),
+	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""), 
 	namebox_(constants::namebox_image_, 0, 0, renderer),
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
 	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
@@ -25,36 +25,27 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 
 }
 
-void Textbox::show_new_dialogue(const std::string new_dialogue, Character* speaker, TransformName transform_name)
+void Textbox::set_initial_dialogue(const std::string new_dialogue, Character* speaker)
+{
+	text_.is_finished_ = true;
+	show_new_dialogue(new_dialogue, speaker);
+}
+
+void Textbox::show_new_dialogue(const std::string new_dialogue, Character* speaker)
 {
 	if(text_.is_finished_)
 	{
-		//TODO : version à utiliser si Character* à la place de std::string
-		if(speaker == nullptr) //Narrator
+		if(speaker == nullptr)
 		{
 			current_speaker_.clear();
 		}
 		else
 		{
 			current_speaker_ = speaker->name_;
-			speaker->set_transform(transform_name);
-
 			text_name_box_.text_ = current_speaker_;
 			text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
 		}
-
-		/*if(speaker.empty()) //Narrator
-		{
-			current_speaker_.clear();
-		}
-		else
-		{
-			current_speaker_ = speaker;
-
-			text_name_box_.text_ = current_speaker_;
-			text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
-		}*/
-
+		
 		text_.is_finished_ = false;
 		text_.index_dialogue_ = 0;
 		text_.text_ = "";
@@ -69,9 +60,30 @@ void Textbox::show_new_dialogue(const std::string new_dialogue, Character* speak
 	}
 }
 
+//TODO : inutile ??
+void Textbox::show_new_dialogue(const std::string new_dialogue) //Narrator
+{
+	/*if(text_.is_finished_)
+	{
+		current_speaker_.clear();
+
+		text_.is_finished_ = false;
+		text_.index_dialogue_ = 0;
+		text_.text_ = "";
+		text_.text_dialogue_ = "";
+		text_.text_ = new_dialogue;
+
+		if(!current_speaker_.empty())
+		{
+			text_.text_.insert(0, "\"");
+			text_.text_.append("\"");
+		}
+	}*/
+}
+
 void Textbox::handle_events(const SDL_Event& e)
 {
-	switch(e.type)
+	/*switch(e.type)
 	{
 		case SDL_KEYDOWN:
 			switch(e.key.keysym.sym)
@@ -98,7 +110,7 @@ void Textbox::handle_events(const SDL_Event& e)
 
 		default:
 			break;
-	}
+	}*/
 }
 
 void Textbox::draw(sdl::Renderer& renderer)

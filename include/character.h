@@ -18,6 +18,7 @@ class Character
 		//Image textbox_; //TODO : valeur par défaut au cas-où on ne souhaite pas avoir une textbox propre à chaque perso
 
 		bool is_speaking_;
+		bool is_visible_;
 
 		//TODO : focus automatique
 		Transform t_;

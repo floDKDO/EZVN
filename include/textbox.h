@@ -9,7 +9,9 @@ class Textbox
 	public:
 		Textbox(sdl::Renderer& renderer);
 
-		void show_new_dialogue(const std::string new_dialogue, Character* speaker = nullptr, TransformName transform_name = TransformName::none);
+		void set_initial_dialogue(const std::string new_dialogue, Character* speaker);
+		void show_new_dialogue(const std::string new_dialogue, Character* speaker); 
+		void show_new_dialogue(const std::string new_dialogue);
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);

@@ -44,7 +44,7 @@ class TransformStep
 		void afternoon_filter(Image& image, const Uint64 time = 0);
 		void own_filter(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, const Uint64 time = 0);
 
-		void reset(Image& image) const;
+		void reset(Image& image);
 
 		bool transform_step_finished_;
 

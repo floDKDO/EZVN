@@ -40,6 +40,10 @@ void Game::run()
 	Uint64 end_current_frame = 0;
 	unsigned int frame_count = 0;
 
+	//mettre le premier dialogue dans la Textbox => plus petite clef
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	in_game_ptr->textbox_.set_initial_dialogue(in_game_ptr->dialogues_.begin()->second.first, in_game_ptr->dialogues_.begin()->second.second);
+
 	while(game_running_)
 	{
 		begin_current_frame = SDL_GetTicks64();
@@ -169,16 +173,40 @@ void Game::update_fps_count(const std::string fps) const
 	window_.set_title(constants::game_name_ + fps);
 }
 
-void Game::add_character(const std::string name, const std::string character_path)
+void Game::create_character(const std::string character_name, const std::string character_path)
 {
-	dynamic_cast<InGame*>(in_game_.get())->characters_.push_back(std::make_unique<Character>(name, character_path, renderer_, 1));
-	std::cout << "ICI " << dynamic_cast<InGame*>(in_game_.get())->characters_.size() << std::endl;
+	dynamic_cast<InGame*>(in_game_.get())->add_character(character_name, character_path, renderer_);
 }
 
-void Game::add_new_dialogue(const std::string dialogue, const std::string character_name, const TransformName transform_name)
+void Game::show_character(unsigned int line_number, const std::string character_name, const TransformName transform_name)
+{
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	Character* character = in_game_ptr->get_character(character_name);
+	//character->is_visible_ = true;
+	//character->set_transform(transform_name);
+
+	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name}}); //TODO : make_pair ou accolades ??
+}
+
+void Game::hide_character(unsigned int line_number, const std::string character_name)
+{
+	//TODO : hide_character
+}
+
+void Game::add_new_dialogue(unsigned int line_number, const std::string character_name, const std::string dialogue)
 {
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 
-	in_game_ptr->dialogues_.push_back(std::tuple<std::string, Character*, TransformName>(dialogue, in_game_ptr->characters_[0].get(), transform_name));
-	//dynamic_cast<InGame*>(in_game_.get())->characters_[0]->set_transform(transform_name); //TODO : transfo au moment du dialogue, pas directement
+	Character* character = in_game_ptr->get_character(character_name);
+	//TODO : il y a une copie de l'unique_ptr ??
+	if(character != nullptr)
+	{
+		in_game_ptr->dialogues_.insert({line_number, {dialogue, character}});
+	}
+}
+
+void Game::add_new_dialogue(unsigned int line_number, const std::string dialogue)
+{
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	in_game_ptr->dialogues_.insert({line_number, {dialogue, nullptr}});
 }

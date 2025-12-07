@@ -170,6 +170,7 @@
     <ClCompile Include="src\GUI\slider.cpp" />
     <ClCompile Include="src\settingsmenu.cpp" />
     <ClCompile Include="src\sound.cpp" />
+    <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\textbox.cpp" />
     <ClCompile Include="src\GUI\textbutton.cpp" />
@@ -182,7 +183,6 @@
     <ClCompile Include="src\GUI\ui.cpp" />
     <ClCompile Include="src\transformstep.cpp" />
     <ClCompile Include="src\transition.cpp" />
-    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\constants.h" />

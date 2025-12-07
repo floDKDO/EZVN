@@ -3,31 +3,34 @@
 
 #include <iostream>
 
-//TODO : "5" obligatoire ??
+//TODO : "6" obligatoire ??
+
+//TODO : bug avec les transfos
+
 Transform::Transform(const TransformName transform_name) //TODO : temporaire
 	: transform_name_(transform_name)
 {
-	transforms_.insert({TransformName::t11, TransformAllSteps(/*TransformName::t11,*/ 5)});
-	transforms_.insert({TransformName::t21, TransformAllSteps(/*TransformName::t21,*/ 5)});
-	transforms_.insert({TransformName::t22, TransformAllSteps(/*TransformName::t22,*/ 5)});
-	transforms_.insert({TransformName::t31, TransformAllSteps(/*TransformName::t31,*/ 5)});
-	transforms_.insert({TransformName::t32, TransformAllSteps(/*TransformName::t32,*/ 5)});
-	transforms_.insert({TransformName::t33, TransformAllSteps(/*TransformName::t33,*/ 5)});
-	transforms_.insert({TransformName::t41, TransformAllSteps(/*TransformName::t41,*/ 5)});
-	transforms_.insert({TransformName::t42, TransformAllSteps(/*TransformName::t42,*/ 5)});
-	transforms_.insert({TransformName::t43, TransformAllSteps(/*TransformName::t43,*/ 5)});
-	transforms_.insert({TransformName::t44, TransformAllSteps(/*TransformName::t44,*/ 5)});
+	transforms_.insert({TransformName::t11, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t21, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t22, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t31, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t32, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t33, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t41, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t42, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t43, TransformAllSteps(6)});
+	transforms_.insert({TransformName::t44, TransformAllSteps(6)});
 
-	transforms_.insert({TransformName::f11, TransformAllSteps(/*TransformName::f11,*/ 5)});
-	transforms_.insert({TransformName::f21, TransformAllSteps(/*TransformName::f21,*/ 5)});
-	transforms_.insert({TransformName::f22, TransformAllSteps(/*TransformName::f22,*/ 5)});
-	transforms_.insert({TransformName::f31, TransformAllSteps(/*TransformName::f31,*/ 5)});
-	transforms_.insert({TransformName::f32, TransformAllSteps(/*TransformName::f32,*/ 5)});
-	transforms_.insert({TransformName::f33, TransformAllSteps(/*TransformName::f33,*/ 5)});
-	transforms_.insert({TransformName::f41, TransformAllSteps(/*TransformName::f41,*/ 5)});
-	transforms_.insert({TransformName::f42, TransformAllSteps(/*TransformName::f42,*/ 5)});
-	transforms_.insert({TransformName::f43, TransformAllSteps(/*TransformName::f43,*/ 5)});
-	transforms_.insert({TransformName::f44, TransformAllSteps(/*TransformName::f44,*/ 5)});
+	transforms_.insert({TransformName::f11, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f21, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f22, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f31, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f32, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f33, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f41, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f42, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f43, TransformAllSteps(6)});
+	transforms_.insert({TransformName::f44, TransformAllSteps(6)});
 
 	transforms_.insert({TransformName::test, TransformAllSteps(2)});
 }
@@ -37,23 +40,24 @@ void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSte
 	switch(transform_t.current_step_number_)
 	{
 		case 0:
-			transform_t.transform_steps_[0].reset(image); //TODO : pas le bon indice mais nécessaire en fin de compte
-			transform_t.transform_steps_[0].hide(image);
-			transform_t.transform_steps_[1].set_position_yoffset(image, -26);
-			transform_t.transform_steps_[2].zoom(image, 0.8f);
-			transform_t.transform_steps_[3].set_position_xcenter(image, xpos);
+			transform_t.transform_steps_[0].reset(image);
+			transform_t.transform_steps_[1].hide(image);
+			transform_t.transform_steps_[2].set_position_yoffset(image, -26);
+			transform_t.transform_steps_[3].zoom(image, 0.8f);
+			transform_t.transform_steps_[4].set_position_xcenter(image, xpos);
 			if(transform_t.transform_steps_[0].transform_step_finished_
 			&& transform_t.transform_steps_[1].transform_step_finished_
 			&& transform_t.transform_steps_[2].transform_step_finished_
-			&& transform_t.transform_steps_[3].transform_step_finished_)
+			&& transform_t.transform_steps_[3].transform_step_finished_
+			&& transform_t.transform_steps_[4].transform_step_finished_)
 			{
 				transform_t.current_step_number_ += 1;
 			}
 			break;
 
 		case 1:
-			transform_t.transform_steps_[4].show(image, 250);
-			if(transform_t.transform_steps_[4].transform_step_finished_)
+			transform_t.transform_steps_[5].show(image, 250);
+			if(transform_t.transform_steps_[5].transform_step_finished_)
 			{
 				transform_t.current_step_number_ += 1;
 				transform_t.transform_finished_ = true;
@@ -130,23 +134,24 @@ void Transform::focus_common(const int xpos, Image& image, Transform::TransformA
 	switch(transform_f.current_step_number_)
 	{
 		case 0:
-			transform_f.transform_steps_[0].reset(image); //TODO : pas le bon indice mais nécessaire en fin de compte
-			transform_f.transform_steps_[0].hide(image);
-			transform_f.transform_steps_[1].set_position_yoffset(image, -65);
-			transform_f.transform_steps_[2].zoom(image, 0.84f);
-			transform_f.transform_steps_[3].set_position_xcenter(image, xpos);
+			transform_f.transform_steps_[0].reset(image);
+			transform_f.transform_steps_[1].hide(image);
+			transform_f.transform_steps_[2].set_position_yoffset(image, -65);
+			transform_f.transform_steps_[3].zoom(image, 0.84f);
+			transform_f.transform_steps_[4].set_position_xcenter(image, xpos);
 			if(transform_f.transform_steps_[0].transform_step_finished_
 			&& transform_f.transform_steps_[1].transform_step_finished_
 			&& transform_f.transform_steps_[2].transform_step_finished_
-			&& transform_f.transform_steps_[3].transform_step_finished_)
+			&& transform_f.transform_steps_[3].transform_step_finished_
+			&& transform_f.transform_steps_[4].transform_step_finished_)
 			{
 				transform_f.current_step_number_ += 1;
 			}
 			break;
 
 		case 1:
-			transform_f.transform_steps_[4].show(image, 250);
-			if(transform_f.transform_steps_[4].transform_step_finished_)
+			transform_f.transform_steps_[5].show(image, 250);
+			if(transform_f.transform_steps_[5].transform_step_finished_)
 			{
 				transform_f.current_step_number_ += 1;
 				transform_f.transform_finished_ = true;

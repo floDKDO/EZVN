@@ -317,8 +317,8 @@ void TransformStep::own_filter(Image& image, const Uint8 r, const Uint8 g, const
 }
 
 //TODO : aussi sauvegarder angle, alpha etc ??
-//TODO : si pas besoin, alors utilité d'appeler cette fonction dans les méthodes au-dessus ??
-void TransformStep::reset(Image& image) const
+void TransformStep::reset(Image& image) 
 {
 	image.position_ = image.initial_rect_;
+	transform_step_finished_ = true;
 }

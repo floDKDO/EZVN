@@ -53,8 +53,7 @@ class Transform
 		{
 			TransformAllSteps(/*TransformName transform_name,*/ const int number_of_transform_steps)
 				: current_step_number_(0), transform_finished_(false), number_of_transform_steps_(number_of_transform_steps), transform_steps_(number_of_transform_steps)
-			{
-			}
+			{}
 
 			int current_step_number_;
 			bool transform_finished_;

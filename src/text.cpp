@@ -148,7 +148,7 @@ void Text::draw(sdl::Renderer& renderer)
 void Text::update() 
 {
 	if(is_dialogue_) 
-	{
+	{		
 		Uint64 now = SDL_GetTicks64();
 		if(now - last_time_ > (int(float(initial_text_speed_) / float(global_text_divisor_))) && index_dialogue_ < text_.length())
 		{
@@ -157,7 +157,7 @@ void Text::update()
 			last_time_ = now;
 		}
 
-		if(index_dialogue_ == text_.length() - 1)
+		if(text_.length() == 0 || index_dialogue_ == text_.length() - 1) //TODO : text_.length() == 0 obligatoire ??
 		{
 			is_finished_ = true;
 		}

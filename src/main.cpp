@@ -23,11 +23,20 @@ int main(int argc, char* argv[])
 	(void)argc, (void)argv;
 	
 	Game game;
-	game.add_character("Sayori", "img/characters/sayori.png");
-	game.add_new_dialogue("HEYYYYYY!", "Sayori", TransformName::f11); //TODO : texte convertit en l'enum dans la méthode
-	game.add_new_dialogue("How are you MC?", "Sayori", TransformName::t11);
-	game.add_new_dialogue("HEYYYYYY!", "Sayori", TransformName::f41); //TODO : texte convertit en l'enum dans la méthode
-	game.add_new_dialogue("How are you MC?", "Sayori", TransformName::t21);
+	game.create_character("Sayori", "img/characters/sayori.png");
+	//game.create_character("Monika", "img/characters/monika.png");
+	//game.create_character("Yuri", "img/characters/yuri.png");
+	//game.create_character("Natsuki", "img/characters/natsuki.png");
+	game.show_character(__LINE__, "Sayori", TransformName::f11); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
+	game.show_character(__LINE__, "Sayori", TransformName::f44); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue(__LINE__, "Elle est chiante...");
+	game.add_new_dialogue(__LINE__, "Sayori", "How are you MC?");
+	game.show_character(__LINE__, "Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
+	game.show_character(__LINE__, "Sayori", TransformName::f22); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue(__LINE__, "Sayori", "How are you MC?");
+
 	game.run();
 
 	return 0;
