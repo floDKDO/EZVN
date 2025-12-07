@@ -100,7 +100,6 @@ class Ui
 
 		Sound select_sound_;
 		Sound click_sound_;
-		bool is_selected_sound_played_;
 
 		bool pointer_on_ui_when_pointer_up_; 
 

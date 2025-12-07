@@ -8,13 +8,11 @@ int Ui::is_pop_up_visible_ = false;
 const int Ui::MOUSE_NOT_ON_ANY_UI_ = -1;
 
 //TODO : parfois un bug avec la touche Entrée au lancement du programme
-//TODO : bug si sélection d'un UI avec la souris et déplacement avec le clavier => le son de hover n'est pas joué
 
 Ui::Ui(sdl::Renderer& renderer)
-	:select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 
+	: select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 
 	state_(State::NORMAL), last_time_(0),
 	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_), 
-	is_selected_sound_played_(false),
 	pointer_on_ui_when_pointer_up_(true),
 	renderer_(renderer),
 	callback_function_(nullptr)
@@ -24,11 +22,7 @@ void Ui::select_new(Ui* ui)
 {
 	state_ = State::NORMAL;
 	ui->state_ = State::SELECTED;
-	if(!is_selected_sound_played_)
-	{
-		select_sound_.play_sound();
-		is_selected_sound_played_ = true;
-	}
+	select_sound_.play_sound();
 }
 
 void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
@@ -62,11 +56,7 @@ void Ui::on_pointer_enter()
 	if(state_ == State::NORMAL) 
 	{
 		state_ = State::SELECTED;
-		if(!is_selected_sound_played_)
-		{
-			select_sound_.play_sound();
-			is_selected_sound_played_ = true;
-		}
+		select_sound_.play_sound();
 		on_pointer_enter_hook_end();
 	}
 }
@@ -77,7 +67,6 @@ void Ui::on_pointer_exit()
 	{
 		state_ = State::SELECTED; 
 	}
-	is_selected_sound_played_ = false;
 	on_pointer_exit_hook_end(); //TODO : dans le if ??
 }
 
@@ -161,7 +150,6 @@ void Ui::on_up_released()
 	if(!lock_ && state_ == State::SELECTED)
 	{
 		lock_ = true;
-		is_selected_sound_played_ = false;
 		on_up_released_hook_end();
 	}
 }
@@ -171,7 +159,6 @@ void Ui::on_down_released()
 	if(!lock_ && state_ == State::SELECTED)
 	{
 		lock_ = true;
-		is_selected_sound_played_ = false;
 		on_down_released_hook_end();
 	}
 }
@@ -181,7 +168,6 @@ void Ui::on_left_released()
 	if(!lock_ && state_ == State::SELECTED)
 	{
 		lock_ = true;
-		is_selected_sound_played_ = false;
 		on_left_released_hook_end();
 	}
 }
@@ -191,7 +177,6 @@ void Ui::on_right_released()
 	if(!lock_ && state_ == State::SELECTED)
 	{
 		lock_ = true;
-		is_selected_sound_played_ = false;
 		on_right_released_hook_end();
 	}
 }
