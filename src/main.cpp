@@ -21,8 +21,6 @@
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
-	
-	//TODO : problème si deux transfos identiques sont jouées au fur et à mesure => la suivante ne sera plus jouée...
 
 	Game game;
 	game.create_character("Sayori", "img/characters/sayori.png");
@@ -34,10 +32,14 @@ int main(int argc, char* argv[])
 	game.show_character(__LINE__, "Monika", TransformName::t43); //TODO : texte converti en l'enum dans la méthode
 	game.show_character(__LINE__, "Natsuki", TransformName::t44); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
-	game.show_character(__LINE__, "Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
+	game.hide_character(__LINE__, "Sayori");
+	game.show_background(__LINE__, "img/backgrounds/class.png");
+	//game.show_character(__LINE__, "Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Elle est chiante...");
+	game.hide_background(__LINE__);
 	game.show_character(__LINE__, "Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Sayori", "How are you MC?");
+	game.show_background(__LINE__, "img/backgrounds/night.png");
 	//game.show_character(__LINE__, "Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
 	game.show_character(__LINE__, "Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode

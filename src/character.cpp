@@ -17,7 +17,10 @@ void Character::set_transform(const TransformName transform_name)
 		t_.create_transform(transform_name);
 		//t_.transform_name_ = transform_name;
 		//std::cout << int(t_.transform_name_) << std::endl;
+
+		//TODO : si hide, mettre is_visible_ à false ??
 		is_visible_ = true;
+
 		//t_.show_transform(transform_name, character_);
 	}
 }

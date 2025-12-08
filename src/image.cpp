@@ -52,6 +52,58 @@ Image::Image(const std::string path, const int x, const int y, sdl::Renderer& re
 	initial_rect_ = position_;
 }
 
+//TODO : trop de répétitions avec le constructeur
+void Image::change_image(const std::string new_path, const int x, const int y, sdl::Renderer& renderer)
+{
+	path_ = new_path;
+	position_.x = x;
+	position_.y = y;
+
+	if(path_.find("img/characters/") != std::string::npos)
+	{
+		image_type_ = ImageType::CHARACTER;
+	}
+	else if(path_.find("img/gui/") != std::string::npos)
+	{
+		image_type_ = ImageType::GUI;
+	}
+	else if(path_.find("img/backgrounds/") != std::string::npos)
+	{
+		image_type_ = ImageType::BACKGROUND;
+	}
+	else image_type_ = ImageType::NONE;
+
+	if(image_type_ == ImageType::CHARACTER || image_type_ == ImageType::NONE)
+	{
+		sdl::RWops rwops(path_, "rb");
+
+		if(rwops.fetch() != nullptr && (IMG_isGIF(rwops.fetch()) || IMG_isWEBP(rwops.fetch())))
+		{
+			is_animated_ = true;
+			animated_image_ = std::make_unique<sdl::Animation>(path_);
+			texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->fetch()->frames[frame_index_]);
+		}
+		else
+		{
+			is_animated_ = false;
+			texture_ = std::make_unique<sdl::Texture>(renderer, path_);
+		}
+	}
+	else
+	{
+		is_animated_ = false;
+		texture_ = std::make_unique<sdl::Texture>(renderer, path_);
+	}
+
+	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
+
+	int w, h;
+	texture_->query(nullptr, nullptr, &w, &h);
+
+	position_ = {x, y, w, h};
+	initial_rect_ = position_;
+}
+
 void Image::draw(sdl::Renderer& renderer)
 {
 	//std::cout << "HEHEHEHEHEHE " << path_ << std::endl;

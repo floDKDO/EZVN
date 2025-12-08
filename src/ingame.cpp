@@ -6,8 +6,8 @@
 #include <iostream>
 #include <algorithm>
 
-InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), counter_(1), current_line_(0), textbox_(renderer), background_("img/backgrounds/class.png", 0, 0, renderer), hide_ui_textbox_(false)
+InGame::InGame(Game& game, sdl::Renderer& renderer) //TODO : ne rien afficher si pas de background
+	: GameState(game), counter_(1), current_line_(0), textbox_(renderer), hide_ui_textbox_(false)
 {
 	build_ui_elements(renderer);
 
@@ -56,6 +56,26 @@ Character* InGame::get_character(const std::string name)
 		}
 	}
 	return nullptr;
+}
+
+void InGame::change_background(const std::string background_path, sdl::Renderer& renderer)
+{
+	//TODO
+	if(background_path.empty())
+	{
+		background_.reset(); //TODO : juste ??
+	}
+	else
+	{
+		if(background_ == nullptr)
+		{
+			background_ = std::make_unique<Image>(background_path, 0, 0, renderer);
+		}
+		else
+		{
+			background_->change_image(background_path, 0, 0, renderer);
+		}
+	}
 }
 
 void InGame::temp_function(Ui* ui)
@@ -121,7 +141,22 @@ void InGame::handle_events(const SDL_Event& e)
 
 void InGame::draw(sdl::Renderer& renderer)
 {
-	background_.draw(renderer);
+	for(unsigned int i = current_line_; i > 0; --i)
+	{
+		//std::cout << "I : " << i << std::endl;
+		if(backgrounds_.count(i))
+		{
+			//std::cout << "=========================================================================\n";
+			change_background(backgrounds_[i], renderer);
+			break;
+		}
+	}
+
+	if(background_ != nullptr)
+	{
+		background_->draw(renderer);
+	}
+
 	for(std::unique_ptr<Character> const& c : characters_)
 	{
 		//std::cout << "********************************************************************************\n";

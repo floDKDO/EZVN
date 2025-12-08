@@ -226,3 +226,19 @@ void Game::add_new_dialogue(unsigned int line_number, const std::string dialogue
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	in_game_ptr->dialogues_.insert({line_number, {dialogue, nullptr}});
 }
+
+void Game::show_background(unsigned int line_number, const std::string background_path)
+{
+	//TODO
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	in_game_ptr->backgrounds_.insert({line_number, background_path});
+	//in_game_ptr->change_background(background_path, renderer_);
+}
+
+void Game::hide_background(unsigned int line_number)
+{
+	//TODO
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	in_game_ptr->backgrounds_.insert({line_number, ""});
+	//in_game_ptr->change_background(background_path, renderer_);
+}

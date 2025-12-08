@@ -36,6 +36,8 @@ class Game
 		void hide_character(unsigned int line_number, const std::string character_name);
 		void add_new_dialogue(unsigned int line_number, const std::string character_name, const std::string dialogue);
 		void add_new_dialogue(unsigned int line_number, const std::string dialogue);
+		void show_background(unsigned int line_number, const std::string background_path);
+		void hide_background(unsigned int line_number);
 
 	private:
 		//void create_main_menu();

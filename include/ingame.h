@@ -22,6 +22,8 @@ class InGame : public GameState
 		void add_character(const std::string name, const std::string character_path, sdl::Renderer& renderer);
 		Character* get_character(const std::string name);
 
+		void change_background(const std::string background_path, sdl::Renderer& renderer);
+
 		void temp_function(Ui* ui);
 
 		std::vector<std::unique_ptr<Character>> characters_;
@@ -29,6 +31,7 @@ class InGame : public GameState
 		//TODO : enregistrer la ligne de la demande
 		std::map<unsigned int, std::pair<Character*, const TransformName>> characters_transforms_; 
 		std::map<unsigned int, std::pair<const std::string, Character*>> dialogues_;
+		std::map<unsigned int, const std::string> backgrounds_;
 
 		unsigned int counter_; //TODO : renommer
 		unsigned int current_line_; //TODO : remplacer par le numéro de ligne courant
@@ -36,8 +39,7 @@ class InGame : public GameState
 		Textbox textbox_; //TODO : remettre private
 
 	private:
-		
-		Image background_;
+		std::unique_ptr<Image> background_; //TODO : utiliser un pointeur pour que l'image puisse être vide ??
 		bool hide_ui_textbox_;
 };
 
