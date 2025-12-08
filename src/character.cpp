@@ -8,12 +8,18 @@ Character::Character(const std::string name, const std::string character_path, s
 	, name_(name), is_speaking_(false), is_visible_(false), t_(TransformName::none)//, initial_rect_(character_.position_)
 {}
 
+//TODO : ne pas l'appeler en boucle !!
 void Character::set_transform(const TransformName transform_name)
 {
-	//std::cout << "CALLED for : " << int(transform_name) << std::endl;
-	t_.transform_name_ = transform_name;
-	is_visible_ = true;
-	//t_.show_transform(transform_name, character_);
+	if(t_.transform_name_ != transform_name)
+	{
+		std::cout << "CALLED for : " << int(transform_name) << std::endl;
+		t_.create_transform(transform_name);
+		//t_.transform_name_ = transform_name;
+		//std::cout << int(t_.transform_name_) << std::endl;
+		is_visible_ = true;
+		//t_.show_transform(transform_name, character_);
+	}
 }
 
 

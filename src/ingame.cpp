@@ -124,7 +124,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	background_.draw(renderer);
 	for(std::unique_ptr<Character> const& c : characters_)
 	{
-		std::cout << "********************************************************************************\n";
+		//std::cout << "********************************************************************************\n";
 		c->draw(renderer); //TODO : draw avant que la transfo ait commencée...
 		//TODO : chercher si "c" est dans characters_transforms_ et si oui, afficher sa dernière transfo selon la ligne (ligne = valeur max de l'indice dans characters_transforms_ ??)
 		//c->draw(renderer); //TODO : affichage selon ligne (dernière transfo de chaque personnage)
@@ -149,10 +149,10 @@ void InGame::update()
 	{
 		for(unsigned int i = current_line_; i > 0; --i)
 		{
-			std::cout << "I : " << i << std::endl;
+			//std::cout << "I : " << i << std::endl;
 			if(characters_transforms_.count(i) && characters_transforms_[i].first->name_ == c->name_)
 			{
-				std::cout << "=========================================================================\n";
+				//std::cout << "=========================================================================\n";
 				c->set_transform(characters_transforms_[i].second);
 				break;
 			}

@@ -44,9 +44,11 @@ class Transform
 	public:
 		Transform(const TransformName transform_name);
 
+		void create_transform(const TransformName transform_name);
 		void show_transform(const TransformName transform_name, Image& image);
 
 		TransformName transform_name_;
+		TransformName previous_transform_name_;
 
 	private:
 		struct TransformAllSteps
@@ -56,12 +58,12 @@ class Transform
 			{}
 
 			int current_step_number_;
-			bool transform_finished_;
+			bool transform_finished_; //TODO : membre inutilisé
 			int number_of_transform_steps_;
 			std::vector<TransformStep> transform_steps_;
 		};
 
-		void tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) const;
+		void tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t);
 		void t11(Image& image);
 		void t21(Image& image);
 		void t22(Image& image);
@@ -73,7 +75,7 @@ class Transform
 		void t43(Image& image);
 		void t44(Image& image);
 
-		void focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f) const;
+		void focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f);
 		void f11(Image& image);
 		void f21(Image& image);
 		void f22(Image& image);

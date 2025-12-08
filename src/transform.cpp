@@ -8,7 +8,7 @@
 //TODO : bug avec les transfos
 
 Transform::Transform(const TransformName transform_name) //TODO : temporaire
-	: transform_name_(transform_name)
+	: transform_name_(transform_name), previous_transform_name_(transform_name_)
 {
 	transforms_.insert({TransformName::t11, TransformAllSteps(6)});
 	transforms_.insert({TransformName::t21, TransformAllSteps(6)});
@@ -34,39 +34,45 @@ Transform::Transform(const TransformName transform_name) //TODO : temporaire
 
 	transforms_.insert({TransformName::test, TransformAllSteps(2)});
 	transforms_.insert({TransformName::hide, TransformAllSteps(1)});
+	transforms_.insert({TransformName::none, TransformAllSteps(0)});
 }
 
-void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) const
+void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) 
 {
-	switch(transform_t.current_step_number_)
+	//TODO : problème => les élements de transforms_ ne sont pas remis à 0 à la fin d'une transfo...
+	if(!transform_t.transform_finished_)
 	{
-		case 0:
-			transform_t.transform_steps_[0].reset(image);
-			transform_t.transform_steps_[1].hide(image);
-			transform_t.transform_steps_[2].set_position_yoffset(image, -26);
-			transform_t.transform_steps_[3].zoom(image, 0.8f);
-			transform_t.transform_steps_[4].set_position_xcenter(image, xpos);
-			if(transform_t.transform_steps_[0].transform_step_finished_
-			&& transform_t.transform_steps_[1].transform_step_finished_
-			&& transform_t.transform_steps_[2].transform_step_finished_
-			&& transform_t.transform_steps_[3].transform_step_finished_
-			&& transform_t.transform_steps_[4].transform_step_finished_)
-			{
-				transform_t.current_step_number_ += 1;
-			}
-			break;
+		std::cout << "N " << transform_t.current_step_number_ << std::endl;
+		switch(transform_t.current_step_number_)
+		{
+			case 0:
+				transform_t.transform_steps_[0].reset(image);
+				transform_t.transform_steps_[1].hide(image);
+				transform_t.transform_steps_[2].set_position_yoffset(image, -26);
+				transform_t.transform_steps_[3].zoom(image, 0.8f);
+				transform_t.transform_steps_[4].set_position_xcenter(image, xpos);
+				if(transform_t.transform_steps_[0].transform_step_finished_
+				&& transform_t.transform_steps_[1].transform_step_finished_
+				&& transform_t.transform_steps_[2].transform_step_finished_
+				&& transform_t.transform_steps_[3].transform_step_finished_
+				&& transform_t.transform_steps_[4].transform_step_finished_)
+				{
+					transform_t.current_step_number_ += 1;
+				}
+				break;
 
-		case 1:
-			transform_t.transform_steps_[5].show(image, 250);
-			if(transform_t.transform_steps_[5].transform_step_finished_)
-			{
-				transform_t.current_step_number_ += 1;
-				transform_t.transform_finished_ = true;
-			}
-			break;
+			case 1:
+				transform_t.transform_steps_[5].show(image, 250);
+				if(transform_t.transform_steps_[5].transform_step_finished_)
+				{
+					transform_t.current_step_number_ += 1;
+					transform_t.transform_finished_ = true;
+				}
+				break;
 
-		default:
-			break;
+			default:
+				break;
+		}
 	}
 }
 
@@ -130,7 +136,7 @@ void Transform::t44(Image& image)
 	tcommon(1080, image, transform_t44);
 }
 
-void Transform::focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f) const
+void Transform::focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f) 
 {
 	switch(transform_f.current_step_number_)
 	{
@@ -245,7 +251,7 @@ void Transform::test(Image& image)
 	}
 }
 
-void Transform::hide(Image& image)
+void Transform::hide(Image& image) //TODO : paramètre optionnel time
 {
 	Transform::TransformAllSteps& transform_t = transforms_.find(TransformName::hide)->second;
 	switch(transform_t.current_step_number_)
@@ -262,6 +268,12 @@ void Transform::hide(Image& image)
 		default:
 			break;
 	}
+}
+
+void Transform::create_transform(const TransformName transform_name)
+{
+	transform_name_ = transform_name;
+	transforms_.at(transform_name) = TransformAllSteps(transforms_.at(transform_name).number_of_transform_steps_); //recreate the TransformAllSteps object associated with transform_name
 }
 
 void Transform::show_transform(const TransformName transform_name, Image& image)
@@ -354,6 +366,9 @@ void Transform::show_transform(const TransformName transform_name, Image& image)
 
 		case TransformName::hide:
 			hide(image);
+			break;
+
+		case TransformName::none:
 			break;
 
 		default:
