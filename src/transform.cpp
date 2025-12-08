@@ -33,6 +33,7 @@ Transform::Transform(const TransformName transform_name) //TODO : temporaire
 	transforms_.insert({TransformName::f44, TransformAllSteps(6)});
 
 	transforms_.insert({TransformName::test, TransformAllSteps(2)});
+	transforms_.insert({TransformName::hide, TransformAllSteps(1)});
 }
 
 void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) const
@@ -244,6 +245,25 @@ void Transform::test(Image& image)
 	}
 }
 
+void Transform::hide(Image& image)
+{
+	Transform::TransformAllSteps& transform_t = transforms_.find(TransformName::hide)->second;
+	switch(transform_t.current_step_number_)
+	{
+		case 0:
+			transform_t.transform_steps_[0].hide(image, 250);
+			if(transform_t.transform_steps_[0].transform_step_finished_)
+			{
+				transform_t.current_step_number_ += 1;
+				transform_t.transform_finished_ = true;
+			}
+			break;
+
+		default:
+			break;
+	}
+}
+
 void Transform::show_transform(const TransformName transform_name, Image& image)
 {
 	switch(transform_name)
@@ -332,7 +352,12 @@ void Transform::show_transform(const TransformName transform_name, Image& image)
 			test(image);
 			break;
 
+		case TransformName::hide:
+			hide(image);
+			break;
+
 		default:
+			std::cerr << "TRANSFORMATION NOT FOUND...\n";
 			break;
 	}
 }

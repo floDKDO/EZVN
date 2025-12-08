@@ -54,7 +54,9 @@ Image::Image(const std::string path, const int x, const int y, sdl::Renderer& re
 
 void Image::draw(sdl::Renderer& renderer)
 {
-	SDL_RenderCopyEx(renderer.fetch(), texture_->fetch(), nullptr, &(position_), angle_, nullptr, flip_);
+	//std::cout << "HEHEHEHEHEHE " << path_ << std::endl;
+	renderer.copy(*texture_, nullptr, &(position_), angle_, nullptr, flip_);
+	//SDL_RenderCopyEx(renderer.fetch(), texture_->fetch(), nullptr, &(position_), angle_, nullptr, flip_);
 	if(is_animated_)
 	{
 		if(frame_index_ < animated_image_->fetch()->count - 1)

@@ -29,8 +29,9 @@ int main(int argc, char* argv[])
 	//game.create_character("Natsuki", "img/characters/natsuki.png");
 	game.show_character(__LINE__, "Sayori", TransformName::f11); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
-	game.show_character(__LINE__, "Sayori", TransformName::f44); //TODO : texte converti en l'enum dans la méthode
+	game.show_character(__LINE__, "Sayori"); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Elle est chiante...");
+	game.hide_character(__LINE__, "Sayori");
 	game.add_new_dialogue(__LINE__, "Sayori", "How are you MC?");
 	game.show_character(__LINE__, "Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");

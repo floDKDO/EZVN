@@ -84,7 +84,7 @@ void InGame::handle_events(const SDL_Event& e)
 			if(dialogues_.find(current_line_) == dialogues_.begin()) //tout premier dialogue
 			{
 				//std::cout << "FIRSTTTTTRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n";
-				current_line_ = std::next(dialogues_.begin(), counter_)->first;
+				current_line_ = std::next(dialogues_.begin(), counter_)->first; //TODO : tester en incrémentant de counter_ au lieu d'utiliser std::next
 				//std::cout << "MODIF DE CURRENT_LINE1: " << current_line_ << std::endl;
 				textbox_.show_new_dialogue(dialogues_[current_line_].first, dialogues_[current_line_].second);
 				return;
@@ -124,18 +124,8 @@ void InGame::draw(sdl::Renderer& renderer)
 	background_.draw(renderer);
 	for(std::unique_ptr<Character> const& c : characters_)
 	{
-		for(unsigned int i = current_line_; i > 0; --i)
-		{
-			//std::cout << "I : " << i << std::endl;
-			if(characters_transforms_.count(i) && characters_transforms_[i].first->name_ == c->name_)
-			{
-				c->is_visible_ = true;
-				c->set_transform(characters_transforms_[i].second);
-				c->draw(renderer);
-				break;
-			}
-		}
-
+		std::cout << "********************************************************************************\n";
+		c->draw(renderer); //TODO : draw avant que la transfo ait commencée...
 		//TODO : chercher si "c" est dans characters_transforms_ et si oui, afficher sa dernière transfo selon la ligne (ligne = valeur max de l'indice dans characters_transforms_ ??)
 		//c->draw(renderer); //TODO : affichage selon ligne (dernière transfo de chaque personnage)
 	}
@@ -154,6 +144,21 @@ void InGame::update()
 {
 	//TODO : ne fonctionnera plus avec le vecteur de personnages
 	//std::cout << current_line_ << " et " << dialogues_.count(current_line_) << std::endl;
+
+	for(std::unique_ptr<Character> const& c : characters_)
+	{
+		for(unsigned int i = current_line_; i > 0; --i)
+		{
+			std::cout << "I : " << i << std::endl;
+			if(characters_transforms_.count(i) && characters_transforms_[i].first->name_ == c->name_)
+			{
+				std::cout << "=========================================================================\n";
+				c->set_transform(characters_transforms_[i].second);
+				break;
+			}
+		}
+	}
+
 	if(!dialogues_.count(current_line_) && current_line_ <= (--dialogues_.end())->first) //ne pas incrémenter au-delà la clef max
 	{
 		current_line_ += 1;

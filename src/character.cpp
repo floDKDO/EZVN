@@ -12,6 +12,7 @@ void Character::set_transform(const TransformName transform_name)
 {
 	//std::cout << "CALLED for : " << int(transform_name) << std::endl;
 	t_.transform_name_ = transform_name;
+	is_visible_ = true;
 	//t_.show_transform(transform_name, character_);
 }
 

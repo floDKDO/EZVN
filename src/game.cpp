@@ -185,12 +185,28 @@ void Game::show_character(unsigned int line_number, const std::string character_
 	//character->is_visible_ = true;
 	//character->set_transform(transform_name);
 
-	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name}}); //TODO : make_pair ou accolades ??
+	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name}}); //TODO : make_pair ou accolades (= initializer list) ??
+}
+
+void Game::show_character(unsigned int line_number, const std::string character_name)
+{
+	//garder la même transfo = ne pas déplacer le personnage
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	Character* character = in_game_ptr->get_character(character_name);
+	//character->is_visible_ = true;
+	//character->set_transform(transform_name);
+
+	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::none}}); //TODO : make_pair ou accolades (= initializer list) ??
 }
 
 void Game::hide_character(unsigned int line_number, const std::string character_name)
 {
-	//TODO : hide_character
+	//TODO : hide_character*
+	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	Character* character = in_game_ptr->get_character(character_name);
+
+	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::hide}});
+
 }
 
 void Game::add_new_dialogue(unsigned int line_number, const std::string character_name, const std::string dialogue)

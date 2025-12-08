@@ -32,6 +32,7 @@ class Game
 
 		void create_character(const std::string character_name, const std::string character_path);
 		void show_character(unsigned int line_number, const std::string character_name, const TransformName transform_name);
+		void show_character(unsigned int line_number, const std::string character_name);
 		void hide_character(unsigned int line_number, const std::string character_name);
 		void add_new_dialogue(unsigned int line_number, const std::string character_name, const std::string dialogue);
 		void add_new_dialogue(unsigned int line_number, const std::string dialogue);

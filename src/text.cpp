@@ -140,7 +140,8 @@ int Text::get_height_text() const
 
 void Text::draw(sdl::Renderer& renderer)
 {
-	SDL_RenderCopy(renderer.fetch(), texture_->fetch(), nullptr, &position_);
+	renderer.copy(*texture_, nullptr, &(position_), angle_, nullptr, flip_);
+	//SDL_RenderCopy(renderer.fetch(), texture_->fetch(), nullptr, &position_);
 }
 
 //TODO : écrire le code spécifique aux dialogues dans la classe TextBox ??

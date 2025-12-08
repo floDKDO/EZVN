@@ -35,7 +35,7 @@ enum class TransformName
 	f43,
 	f44,
 
-	test, none
+	test, hide, none
 };
 
 class Transform
@@ -86,6 +86,7 @@ class Transform
 		void f44(Image& image);
 
 		void test(Image& image);
+		void hide(Image& image); //TODO : time
 
 		std::unordered_map<TransformName, TransformAllSteps> transforms_;
 };
