@@ -5,7 +5,7 @@
 class Music
 {
 	public:
-		explicit Music(const std::string path);
+		explicit Music(const std::string_view path);
 
 		void play_music(const bool loop = false, const int fadein_length = 0); //unité = s
 		void pause_music() const;
@@ -18,7 +18,6 @@ class Music
 
 	private:
 		bool loop_;
-		std::string path_;
 		sdl::Music music_;
 		int local_music_volume_; //TODO
 };

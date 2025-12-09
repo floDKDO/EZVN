@@ -5,9 +5,9 @@
 namespace sdl
 {
 
-Music::Music(const std::string file) //Mix_LoadMUS
+Music::Music(const std::string_view file) //Mix_LoadMUS
 {
-	if((music_ = Mix_LoadMUS(file.c_str())) == nullptr)
+	if((music_ = Mix_LoadMUS(file.data())) == nullptr)
 	{
 		SDL_Log("(Mix_LoadMUS) %s\n", Mix_GetError());
 	}

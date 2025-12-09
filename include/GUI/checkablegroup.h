@@ -21,7 +21,7 @@ class CheckableGroup : public Ui
 		std::vector<Ui*> get_navigation_nodes() override;
 		
 	protected:
-		CheckableGroup(const size_t number_of_checkables, const bool only_one_has_to_be_checked, const std::string top_text, const int x, const int y, sdl::Renderer& renderer);
+		CheckableGroup(const size_t number_of_checkables, const bool only_one_has_to_be_checked, const std::string_view top_text, const int x, const int y, sdl::Renderer& renderer);
 
 		std::vector<std::unique_ptr<Checkable>> checkables_;
 		Text top_text_;

@@ -11,7 +11,7 @@
 class Text : public Drawable
 {
 	public:
-		Text(const std::string text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length=0);
+		Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length=0);
 
 		void set_italic();
 		void set_bold();
@@ -55,7 +55,7 @@ class Text : public Drawable
 		int font_size_;
 		int font_style_;
 		int previous_font_style_;
-		std::string font_path_;
+		std::string_view font_path_;
 		sdl::Font font_;
 		sdl::Font font_outline_;
 		int outline_size_;

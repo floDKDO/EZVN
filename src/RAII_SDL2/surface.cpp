@@ -5,9 +5,9 @@
 namespace sdl
 {
 
-Surface::Surface(Font& font, const std::string text, const SDL_Color fg, const Uint32 wrap_length)
+Surface::Surface(Font& font, const std::string_view text, const SDL_Color fg, const Uint32 wrap_length)
 {
-	if((surface_ = TTF_RenderUTF8_Blended_Wrapped(font.fetch(), text.c_str(), fg, wrap_length)) == nullptr)
+	if((surface_ = TTF_RenderUTF8_Blended_Wrapped(font.fetch(), text.data(), fg, wrap_length)) == nullptr)
 	{
 		SDL_Log("(TTF_RenderUTF8_Blended_Wrapped) %s\n", TTF_GetError());
 	}

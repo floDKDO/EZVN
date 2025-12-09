@@ -41,12 +41,12 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 	ui_elements_.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 }
 
-void InGame::add_character(const std::string name, const std::string character_path, sdl::Renderer& renderer)
+void InGame::add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer)
 {
 	characters_.push_back(std::make_unique<Character>(name, character_path, renderer, 1));
 }
 
-Character* InGame::get_character(const std::string name) 
+Character* InGame::get_character(const std::string_view name)
 {
 	for(const std::unique_ptr<Character>& c : characters_)
 	{
@@ -58,7 +58,7 @@ Character* InGame::get_character(const std::string name)
 	return nullptr;
 }
 
-void InGame::change_background(const std::string background_path, sdl::Renderer& renderer)
+void InGame::change_background(const std::string_view background_path, sdl::Renderer& renderer)
 {
 	//TODO
 	if(background_path.empty())

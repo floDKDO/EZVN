@@ -6,7 +6,7 @@
 class TextToggle : public Checkable
 {
 	public:
-		TextToggle(const std::string text, const int x, const int y, const bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		TextToggle(const std::string_view text, const int x, const int y, const bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

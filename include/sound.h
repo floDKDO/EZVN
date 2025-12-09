@@ -20,7 +20,6 @@ class Sound
 
 		sdl::Chunk sound_;
 		bool loop_;
-		std::string path_;
 		int local_sound_volume_; //TODO
 		int channel_;
 };

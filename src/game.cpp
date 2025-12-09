@@ -88,7 +88,7 @@ void Game::run()
 
 /*void Game::create_settings_menu()
 {
-	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer.fetch(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
+	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, 100, true, renderer.fetch(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
 
 	std::vector<std::unique_ptr<Ui>> ui_elements;
 	ui_elements.reserve(10);
@@ -97,8 +97,8 @@ void Game::run()
 	ui_elements.push_back(std::make_unique<Slider>(0, 100, 800, 200, "Sound effect", renderer_, std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<Slider>(0, 100, 450, 200, "Music effect", renderer_, std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
 	ui_elements.push_back(std::make_unique<Slider>(30, 60, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
-	//ui_elements.push_back(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
+	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
+	//ui_elements.push_back(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
 }*/
 
@@ -168,17 +168,17 @@ void Game::update()
 	ui_manager_.update();
 }
 
-void Game::update_fps_count(const std::string fps) const
+void Game::update_fps_count(const std::string_view fps) const
 {
-	window_.set_title(std::string(constants::game_name_) + fps);
+	window_.set_title(std::string(constants::game_name_) + std::string(fps));
 }
 
-void Game::create_character(const std::string character_name, const std::string character_path)
+void Game::create_character(const std::string_view character_name, const std::string_view character_path)
 {
 	dynamic_cast<InGame*>(in_game_.get())->add_character(character_name, character_path, renderer_);
 }
 
-void Game::show_character(unsigned int line_number, const std::string character_name, const TransformName transform_name)
+void Game::show_character(unsigned int line_number, const std::string_view character_name, const TransformName transform_name)
 {
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
@@ -188,7 +188,7 @@ void Game::show_character(unsigned int line_number, const std::string character_
 	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name}}); //TODO : make_pair ou accolades (= initializer list) ??
 }
 
-void Game::show_character(unsigned int line_number, const std::string character_name)
+void Game::show_character(unsigned int line_number, const std::string_view character_name)
 {
 	//garder la même transfo = ne pas déplacer le personnage
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
@@ -199,7 +199,7 @@ void Game::show_character(unsigned int line_number, const std::string character_
 	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::none}}); //TODO : make_pair ou accolades (= initializer list) ??
 }
 
-void Game::hide_character(unsigned int line_number, const std::string character_name)
+void Game::hide_character(unsigned int line_number, const std::string_view character_name)
 {
 	//TODO : hide_character*
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
@@ -209,7 +209,7 @@ void Game::hide_character(unsigned int line_number, const std::string character_
 
 }
 
-void Game::add_new_dialogue(unsigned int line_number, const std::string character_name, const std::string dialogue)
+void Game::add_new_dialogue(unsigned int line_number, const std::string_view character_name, const std::string_view dialogue)
 {
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 
@@ -221,13 +221,13 @@ void Game::add_new_dialogue(unsigned int line_number, const std::string characte
 	}
 }
 
-void Game::add_new_dialogue(unsigned int line_number, const std::string dialogue)
+void Game::add_new_dialogue(unsigned int line_number, const std::string_view dialogue)
 {
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	in_game_ptr->dialogues_.insert({line_number, {dialogue, nullptr}});
 }
 
-void Game::show_background(unsigned int line_number, const std::string background_path)
+void Game::show_background(unsigned int line_number, const std::string_view background_path)
 {
 	//TODO
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());

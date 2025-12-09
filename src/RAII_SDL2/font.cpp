@@ -5,9 +5,9 @@
 namespace sdl
 {
 
-Font::Font(const std::string file, const int ptsize) //TTF_OpenFont
+Font::Font(const std::string_view file, const int ptsize) //TTF_OpenFont
 {
-	if((font_ = TTF_OpenFont(file.c_str(), ptsize)) == nullptr)
+	if((font_ = TTF_OpenFont(file.data(), ptsize)) == nullptr)
 	{
 		SDL_Log("(TTF_OpenFont) %s\n", TTF_GetError());
 	}
@@ -23,9 +23,9 @@ TTF_Font* Font::fetch() const
 	return font_;
 }
 
-void Font::size_UTF8(const std::string text, int* w, int* h) const
+void Font::size_UTF8(const std::string_view text, int* w, int* h) const
 {
-	if(TTF_SizeUTF8(font_, text.c_str(), w, h) == -1)
+	if(TTF_SizeUTF8(font_, text.data(), w, h) == -1)
 	{
 		SDL_Log("(TTF_SizeUTF8) %s\n", TTF_GetError());
 	}

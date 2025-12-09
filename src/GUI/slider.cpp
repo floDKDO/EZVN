@@ -5,7 +5,7 @@
 
 const unsigned int Slider::index_rect_container_ = 0;
 
-Slider::Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+Slider::Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), container_(constants::slider_container_, x, y, renderer), handle_(constants::slider_handle_, x, y + constants::slider_handle_y_delta_, renderer), 
 	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
 	min_value_(min_value), max_value_(max_value), current_value_((max_value + min_value) / 2), 

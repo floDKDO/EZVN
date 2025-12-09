@@ -19,10 +19,10 @@ class InGame : public GameState
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 
-		void add_character(const std::string name, const std::string character_path, sdl::Renderer& renderer);
-		Character* get_character(const std::string name);
+		void add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer);
+		Character* get_character(const std::string_view name);
 
-		void change_background(const std::string background_path, sdl::Renderer& renderer);
+		void change_background(const std::string_view background_path, sdl::Renderer& renderer);
 
 		void temp_function(Ui* ui);
 
@@ -30,8 +30,8 @@ class InGame : public GameState
 
 		//TODO : enregistrer la ligne de la demande
 		std::map<unsigned int, std::pair<Character*, const TransformName>> characters_transforms_; 
-		std::map<unsigned int, std::pair<const std::string, Character*>> dialogues_;
-		std::map<unsigned int, const std::string> backgrounds_;
+		std::map<unsigned int, std::pair<const std::string_view, Character*>> dialogues_;
+		std::map<unsigned int, const std::string_view> backgrounds_;
 
 		unsigned int counter_; //TODO : renommer
 		unsigned int current_line_; //TODO : remplacer par le numéro de ligne courant

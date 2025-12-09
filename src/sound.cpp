@@ -4,7 +4,7 @@ int Sound::global_sound_volume_ = MIX_MAX_VOLUME / 2;
 int Sound::unused_channel_ = 0;
 
 Sound::Sound(const std::string_view path)
-	: sound_(path), loop_(false), path_(path), local_sound_volume_(global_sound_volume_), channel_(unused_channel_)
+	: sound_(path), loop_(false), local_sound_volume_(global_sound_volume_), channel_(unused_channel_)
 {
 	unused_channel_ += 1;
 	if(unused_channel_ == MIX_CHANNELS)

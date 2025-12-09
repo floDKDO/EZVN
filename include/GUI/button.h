@@ -7,7 +7,7 @@
 class Button : public Ui
 {
 	public:
-		Button(const std::string text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Button(const std::string_view text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

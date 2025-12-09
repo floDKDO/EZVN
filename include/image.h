@@ -12,7 +12,7 @@ class Image : public Drawable
 	public:
 		Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder=0);
 
-		void change_image(const std::string new_path, const int x, const int y, sdl::Renderer& renderer);
+		void change_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
 
 	private:
@@ -22,7 +22,7 @@ class Image : public Drawable
 		int zorder_;
 
 	private:
-		std::string path_;
+		std::string_view path_;
 
 		enum class ImageType
 		{

@@ -53,7 +53,7 @@ Image::Image(const std::string_view path, const int x, const int y, sdl::Rendere
 }
 
 //TODO : trop de répétitions avec le constructeur
-void Image::change_image(const std::string new_path, const int x, const int y, sdl::Renderer& renderer)
+void Image::change_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer)
 {
 	path_ = new_path;
 	position_.x = x;

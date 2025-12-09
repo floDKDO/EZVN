@@ -3,9 +3,9 @@
 namespace sdl
 {
 
-RWops::RWops(const std::string_view file, const std::string mode) //SDL_RWFromFile
+RWops::RWops(const std::string_view file, const std::string_view mode) //SDL_RWFromFile
 {
-	if((rwops_ = SDL_RWFromFile(file.data(), mode.c_str())) == nullptr)
+	if((rwops_ = SDL_RWFromFile(file.data(), mode.data())) == nullptr)
 	{
 		SDL_Log("(SDL_RWFromFile) %s\n", SDL_GetError());
 	}

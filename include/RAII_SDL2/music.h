@@ -9,7 +9,7 @@ namespace sdl
 class Music
 {
 	public:
-		explicit Music(const std::string file); //Mix_LoadMUS
+		explicit Music(const std::string_view file); //Mix_LoadMUS
 		Music(const Music& music) = delete;
 		Music& operator=(const Music& music) = delete;
 		~Music(); //Mix_FreeMusic

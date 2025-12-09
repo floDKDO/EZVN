@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Character::Character(const std::string name, const std::string character_path, sdl::Renderer& renderer, const int zorder)
+Character::Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const int zorder)
 	: character_(character_path, 0, 0, renderer, zorder)
 	, name_(name), is_speaking_(false), is_visible_(false), t_(TransformName::none)//, initial_rect_(character_.position_)
 {}

@@ -3,9 +3,9 @@
 namespace sdl
 {
 
-Window::Window(const std::string title, const int x, const int y, const int w, const int h, const Uint32 flags) //SDL_CreateWindow
+Window::Window(const std::string_view title, const int x, const int y, const int w, const int h, const Uint32 flags) //SDL_CreateWindow
 {
-	if((window_ = SDL_CreateWindow(title.c_str(), x, y, w, h, flags)) == nullptr)
+	if((window_ = SDL_CreateWindow(title.data(), x, y, w, h, flags)) == nullptr)
 	{
 		SDL_Log("(SDL_CreateWindow) %s\n", SDL_GetError());
 	}
@@ -21,9 +21,9 @@ SDL_Window* Window::fetch() const
 	return window_;
 }
 
-void Window::set_title(const std::string title) const
+void Window::set_title(const std::string_view title) const
 {
-	SDL_SetWindowTitle(window_, title.c_str());
+	SDL_SetWindowTitle(window_, title.data());
 }
 
 void Window::set_icon(sdl::Surface& icon) const

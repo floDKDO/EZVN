@@ -2,8 +2,8 @@
 
 int Music::global_music_volume_ = MIX_MAX_VOLUME / 2;
 
-Music::Music(const std::string path)
-	: loop_(false), path_(path), music_(path), local_music_volume_(global_music_volume_)
+Music::Music(const std::string_view path)
+	: loop_(false), music_(path), local_music_volume_(global_music_volume_)
 {}
 
 void Music::play_music(const bool loop, const int fadein_length)

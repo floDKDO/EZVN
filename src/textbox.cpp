@@ -25,13 +25,13 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 
 }
 
-void Textbox::set_initial_dialogue(const std::string new_dialogue, Character* speaker)
+void Textbox::set_initial_dialogue(const std::string_view new_dialogue, Character* speaker)
 {
 	text_.is_finished_ = true;
 	show_new_dialogue(new_dialogue, speaker);
 }
 
-void Textbox::show_new_dialogue(const std::string new_dialogue, Character* speaker)
+void Textbox::show_new_dialogue(const std::string_view new_dialogue, Character* speaker)
 {
 	if(text_.is_finished_)
 	{
@@ -61,7 +61,7 @@ void Textbox::show_new_dialogue(const std::string new_dialogue, Character* speak
 }
 
 //TODO : inutile ??
-void Textbox::show_new_dialogue(const std::string new_dialogue) //Narrator
+void Textbox::show_new_dialogue(const std::string_view new_dialogue) //Narrator
 {
 	/*if(text_.is_finished_)
 	{
