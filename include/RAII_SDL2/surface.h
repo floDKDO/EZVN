@@ -11,7 +11,7 @@ class Surface
 {
 	public:
 		Surface(Font& font, const std::string text, const SDL_Color fg, const Uint32 wrap_length); //TTF_RenderUTF8_Blended_Wrapped();
-		explicit Surface(const std::string file); //IMG_Load
+		explicit Surface(const std::string_view file); //IMG_Load
 		Surface(const Surface& surface) = delete;
 		Surface& operator=(const Surface& surface) = delete;
 		~Surface(); //SDL_FreeSurface

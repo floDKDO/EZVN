@@ -5,9 +5,9 @@
 namespace sdl
 {
 
-Chunk::Chunk(const std::string file) //Mix_LoadWAV
+Chunk::Chunk(const std::string_view file) //Mix_LoadWAV
 {
-	if((chunk_ = Mix_LoadWAV(file.c_str())) == nullptr)
+	if((chunk_ = Mix_LoadWAV(file.data())) == nullptr)
 	{
 		SDL_Log("(Mix_LoadWAV) %s\n", Mix_GetError());
 	}

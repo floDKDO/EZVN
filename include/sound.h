@@ -5,7 +5,7 @@
 class Sound
 {
 	public:
-		explicit Sound(const std::string path);
+		explicit Sound(const std::string_view path);
 
 		void play_sound(const bool loop=false, const int fadein_length=0); 
 		void pause_sound() const;

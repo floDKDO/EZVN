@@ -13,9 +13,9 @@ Surface::Surface(Font& font, const std::string text, const SDL_Color fg, const U
 	}
 }
 
-Surface::Surface(const std::string file)
+Surface::Surface(const std::string_view file)
 {
-	if((surface_ = IMG_Load(file.c_str())) == nullptr)
+	if((surface_ = IMG_Load(file.data())) == nullptr)
 	{
 		SDL_Log("(IMG_Load) %s\n", IMG_GetError());
 	}

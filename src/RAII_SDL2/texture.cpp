@@ -23,9 +23,9 @@ Texture::Texture(Renderer& renderer, SDL_Surface* surface) //SDL_CreateTextureFr
 	}
 }
 
-Texture::Texture(Renderer& renderer, const std::string file) //IMG_LoadTexture()
+Texture::Texture(Renderer& renderer, const std::string_view file) //IMG_LoadTexture()
 {
-	texture_ = IMG_LoadTexture(renderer.fetch(), file.c_str());
+	texture_ = IMG_LoadTexture(renderer.fetch(), file.data());
 	if(texture_ == nullptr) //TODO: gérer le cas pour les backgrounds
 	{
 		if((texture_ = IMG_LoadTexture(renderer.fetch(), "img/characters/image_not_found.png")) == nullptr)

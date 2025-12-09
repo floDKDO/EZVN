@@ -170,7 +170,7 @@ void Game::update()
 
 void Game::update_fps_count(const std::string fps) const
 {
-	window_.set_title(constants::game_name_ + fps);
+	window_.set_title(std::string(constants::game_name_) + fps);
 }
 
 void Game::create_character(const std::string character_name, const std::string character_path)

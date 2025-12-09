@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-Image::Image(const std::string path, const int x, const int y, sdl::Renderer& renderer, const int zorder)
+Image::Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder)
 	: zorder_(zorder), path_(path), frame_index_(0), renderer_(renderer)
 {
 	if(path_.find("img/characters/") != std::string::npos)

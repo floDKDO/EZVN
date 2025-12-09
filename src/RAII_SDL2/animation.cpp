@@ -3,9 +3,9 @@
 namespace sdl
 {
 
-Animation::Animation(const std::string file) //IMG_LoadAnimation
+Animation::Animation(const std::string_view file) //IMG_LoadAnimation
 {
-	if((animation_ = IMG_LoadAnimation(file.c_str())) == nullptr) //=> GIF ou WEBP
+	if((animation_ = IMG_LoadAnimation(file.data())) == nullptr) //=> GIF ou WEBP
 	{
 		SDL_Log("(IMG_LoadAnimation) %s\n", IMG_GetError());
 	}

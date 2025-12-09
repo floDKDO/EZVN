@@ -9,7 +9,7 @@ namespace sdl
 class Animation
 {
 	public:
-		explicit Animation(const std::string file); //IMG_LoadAnimation
+		explicit Animation(const std::string_view file); //IMG_LoadAnimation
 		Animation(const Animation& animation) = delete;
 		Animation& operator=(const Animation& animation) = delete;
 		~Animation(); //IMG_FreeAnimation
