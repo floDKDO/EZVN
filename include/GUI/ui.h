@@ -76,13 +76,12 @@ class Ui
 		virtual void update() = 0; //TODO : obligé ou juste virtual ??
 
 		void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
-		int is_mouse_on_ui();
+		bool is_mouse_on_ui();
 
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
 
 		static int is_pop_up_visible_;
-		static const int MOUSE_NOT_ON_ANY_UI_;
 
 		Ui* select_on_up_;
 		Ui* select_on_down_;

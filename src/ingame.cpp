@@ -92,7 +92,7 @@ void InGame::handle_events(const SDL_Event& e)
 		{
 			ui->handle_events(e);
 
-			if(ui->is_mouse_on_ui() != Ui::MOUSE_NOT_ON_ANY_UI_) //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
+			if(ui->is_mouse_on_ui()) //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
 			{
 				return;
 			}

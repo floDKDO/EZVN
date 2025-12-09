@@ -5,7 +5,6 @@
 
 bool Ui::lock_ = true;
 int Ui::is_pop_up_visible_ = false;
-const int Ui::MOUSE_NOT_ON_ANY_UI_ = -1;
 
 //TODO : parfois un bug avec la touche Entrée au lancement du programme
 
@@ -233,7 +232,7 @@ void Ui::handle_events(const SDL_Event& e)
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI_) 
+			if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_ui()) 
 			{
 				on_pointer_down();
 			}
@@ -248,7 +247,7 @@ void Ui::handle_events(const SDL_Event& e)
 
 		case SDL_MOUSEMOTION:
 		{
-			if(is_mouse_on_ui() != MOUSE_NOT_ON_ANY_UI_)
+			if(is_mouse_on_ui())
 			{
 				on_pointer_enter();
 			}
@@ -276,14 +275,14 @@ void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) 
 	*logical_mouse_y = int(temp_logical_mouse_y);
 }
 
-int Ui::is_mouse_on_ui()
+bool Ui::is_mouse_on_ui() 
 {
 	int logical_mouse_x, logical_mouse_y;
 	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 
 	std::vector<Ui*> all_ui = get_navigation_nodes();
 
-	for(int i = 0; i < all_ui.size(); ++i)
+	for(size_t i = 0; i < all_ui.size(); ++i)
 	{
 		const SDL_Rect& rect = all_ui[i]->get_rect();
 
@@ -292,10 +291,10 @@ int Ui::is_mouse_on_ui()
 		&& rect.x + rect.w > logical_mouse_x
 		&& rect.x < logical_mouse_x)
 		{
-			return i;
+			return true;
 		}
 	}
-	return MOUSE_NOT_ON_ANY_UI_;
+	return false;
 }
 
 std::vector<Ui*> Ui::get_navigation_nodes()

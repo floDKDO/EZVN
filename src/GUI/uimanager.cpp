@@ -49,6 +49,8 @@ void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements
 
 bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode) const
 {
+	SDL_assert(mode == Axis::X_AXIS || mode == Axis::Y_AXIS);
+
 	if(mode == Axis::X_AXIS)
 	{
 		return (pos_ui1.x >= pos_ui2.x && pos_ui1.x <= pos_ui2.x + pos_ui2.w)
@@ -59,11 +61,12 @@ bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2
 		return (pos_ui1.y >= pos_ui2.y && pos_ui1.y <= pos_ui2.y + pos_ui2.h)
 			|| (pos_ui1.y + pos_ui1.h >= pos_ui2.y && pos_ui1.y + pos_ui1.h <= pos_ui2.y + pos_ui2.h);
 	}
-	return false; 
 }
 
 bool UiManager::is_candidate_closer(const Ui* const ui, const Ui* const candidate, const Ui* const current_best, const Axis mode) const
 {
+	SDL_assert(mode == Axis::X_AXIS || mode == Axis::Y_AXIS);
+
 	const int diff_best_x = std::abs(ui->get_rect().x - current_best->get_rect().x);
 	const int diff_candidate_x = std::abs(ui->get_rect().x - candidate->get_rect().x);
 	const int diff_best_y = std::abs(ui->get_rect().y - current_best->get_rect().y);
@@ -77,7 +80,6 @@ bool UiManager::is_candidate_closer(const Ui* const ui, const Ui* const candidat
 	{
 		return diff_best_y > diff_candidate_y || (diff_best_y == diff_candidate_y && diff_best_x > diff_candidate_x);
 	}
-	return false;
 }
 
 //ui = ui to which we assign a "select_on_*"
@@ -169,7 +171,7 @@ void UiManager::handle_events(const SDL_Event& e)
 		{
 			if(e.type == SDL_MOUSEMOTION) 
 			{
-				if(ui->is_mouse_on_ui() != ui->MOUSE_NOT_ON_ANY_UI_)
+				if(ui->is_mouse_on_ui())
 				{
 					if(previous_selected_ != nullptr && ui != previous_selected_ && previous_selected_->state_ != State::NORMAL)
 					{
