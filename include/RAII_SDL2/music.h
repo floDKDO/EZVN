@@ -11,7 +11,9 @@ class Music
 	public:
 		explicit Music(const std::string_view file); //Mix_LoadMUS
 		Music(const Music& music) = delete;
+		Music(Music&& music);
 		Music& operator=(const Music& music) = delete;
+		Music& operator=(Music&& music);
 		~Music(); //Mix_FreeMusic
 
 		Mix_Music* fetch() const;

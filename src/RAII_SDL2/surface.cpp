@@ -21,9 +21,35 @@ Surface::Surface(const std::string_view file)
 	}
 }
 
+Surface::Surface(Surface&& surface)
+	: surface_(surface.surface_)
+{
+	surface.surface_ = nullptr;
+}
+
+Surface& Surface::operator=(Surface&& surface)
+{
+	if(this == &surface)
+	{
+		return *this;
+	}
+
+	if(surface_ != nullptr)
+	{
+		SDL_FreeSurface(surface_);
+	}
+
+	surface_ = surface.surface_;
+	surface.surface_ = nullptr;
+	return *this;
+}
+
 Surface::~Surface() //SDL_FreeSurface
 {
-	SDL_FreeSurface(surface_);
+	if(surface_ != nullptr)
+	{
+		SDL_FreeSurface(surface_);
+	}
 }
 
 SDL_Surface* Surface::fetch() const

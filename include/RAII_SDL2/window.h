@@ -13,7 +13,9 @@ class Window
 	public:
 		Window(const std::string_view title, const int x, const int y, const int w, const int h, const Uint32 flags); //SDL_CreateWindow
 		Window(const Window& window) = delete;
+		Window(Window&& window);
 		Window& operator=(const Window& window) = delete;
+		Window& operator=(Window&& window);
 		~Window(); //SDL_DestroyWindow
 
 		SDL_Window* fetch() const;

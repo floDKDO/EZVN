@@ -9,8 +9,10 @@ class SDLMixer
 {
 	public:
 		explicit SDLMixer(const int flags);
-		SDLMixer(const SDLMixer& sdl) = delete;
-		SDLMixer& operator=(const SDLMixer& sdl) = delete;
+		SDLMixer(const SDLMixer& sdl_mixer) = delete;
+		SDLMixer(SDLMixer&& sdl_mixer) = delete;
+		SDLMixer& operator=(const SDLMixer& sdl_mixer) = delete;
+		SDLMixer& operator=(SDLMixer&& sdl_mixer) = delete;
 		~SDLMixer();
 
 };

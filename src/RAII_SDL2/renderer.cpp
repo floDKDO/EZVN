@@ -15,9 +15,35 @@ Renderer::Renderer(Window& window, const int index, const Uint32 flags) //SDL_Cr
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 }
 
+Renderer::Renderer(Renderer&& renderer)
+	: renderer_(renderer.renderer_)
+{
+	renderer.renderer_ = nullptr;
+}
+
+Renderer& Renderer::operator=(Renderer&& renderer)
+{
+	if(this == &renderer)
+	{
+		return *this;
+	}
+
+	if(renderer_ != nullptr)
+	{
+		SDL_DestroyRenderer(renderer_);
+	}
+
+	renderer_ = renderer.renderer_;
+	renderer.renderer_ = nullptr;
+	return *this;
+}
+
 Renderer::~Renderer() //SDL_DestroyRenderer
 {
-	SDL_DestroyRenderer(renderer_);
+	if(renderer_ != nullptr)
+	{
+		SDL_DestroyRenderer(renderer_);
+	}
 }
 
 SDL_Renderer* Renderer::fetch() const

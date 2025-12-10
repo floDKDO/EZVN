@@ -12,7 +12,9 @@ class Renderer
 	public:
 		Renderer(Window& window, const int index, const Uint32 flags); //SDL_CreateRenderer()
 		Renderer(const Renderer& renderer) = delete;
+		Renderer(Renderer&& renderer);
 		Renderer& operator=(const Renderer& renderer) = delete;
+		Renderer& operator=(Renderer&& renderer);
 		~Renderer(); //SDL_DestroyRenderer
 
 		SDL_Renderer* fetch() const;

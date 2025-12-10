@@ -11,9 +11,35 @@ GameController::GameController() //SDL_GameControllerOpen
 	}
 }
 
+GameController::GameController(GameController&& game_controller)
+	: game_controller_(game_controller.game_controller_)
+{
+	game_controller.game_controller_ = nullptr;
+}
+
+GameController& GameController::operator=(GameController&& game_controller)
+{
+	if(this == &game_controller)
+	{
+		return *this;
+	}
+
+	if(game_controller_ != nullptr)
+	{
+		SDL_GameControllerClose(game_controller_);
+	}
+
+	game_controller_ = game_controller.game_controller_;
+	game_controller.game_controller_ = nullptr;
+	return *this;
+}
+
 GameController::~GameController() //SDL_GameControllerClose
 {
-	SDL_GameControllerClose(game_controller_);
+	if(game_controller_ != nullptr)
+	{
+		SDL_GameControllerClose(game_controller_);
+	}
 }
 
 SDL_GameController* GameController::fetch() const

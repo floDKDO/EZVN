@@ -14,7 +14,9 @@ class Texture
 		Texture(Renderer& renderer, SDL_Surface* surface); //SDL_CreateTextureFromSurface() with surface a frame from a IMG_Animation* => surface is not owned by the Texture class!!
 		Texture(Renderer& renderer, const std::string_view file); //IMG_LoadTexture()
 		Texture(const Texture& texture) = delete;
+		Texture(Texture&& texture);
 		Texture& operator=(const Texture& texture) = delete;
+		Texture& operator=(Texture&& texture);
 		~Texture(); //SDL_DestroyTexture
 
 		SDL_Texture* fetch() const;

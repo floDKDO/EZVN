@@ -35,9 +35,35 @@ Texture::Texture(Renderer& renderer, const std::string_view file) //IMG_LoadText
 	}
 }
 
+Texture::Texture(Texture&& texture)
+	: texture_(texture.texture_)
+{
+	texture.texture_ = nullptr;
+}
+
+Texture& Texture::operator=(Texture&& texture)
+{
+	if(this == &texture)
+	{
+		return *this;
+	}
+
+	if(texture_ != nullptr)
+	{
+		SDL_DestroyTexture(texture_);
+	}
+
+	texture_ = texture.texture_;
+	texture.texture_ = nullptr;
+	return *this;
+}
+
 Texture::~Texture() //SDL_DestroyTexture
 {
-	SDL_DestroyTexture(texture_);
+	if(texture_ != nullptr)
+	{
+		SDL_DestroyTexture(texture_);
+	}
 }
 
 SDL_Texture* Texture::fetch() const

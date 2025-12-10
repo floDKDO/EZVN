@@ -7,15 +7,15 @@
 Image::Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder)
 	: zorder_(zorder), path_(path), frame_index_(0), renderer_(renderer)
 {
-	if(path_.find("img/characters/") != std::string::npos)
+	if(path_.find("img/characters/") != std::string_view::npos)
 	{
 		image_type_ = ImageType::CHARACTER;
 	}
-	else if(path_.find("img/gui/") != std::string::npos)
+	else if(path_.find("img/gui/") != std::string_view::npos)
 	{
 		image_type_ = ImageType::GUI;
 	}
-	else if(path_.find("img/backgrounds/") != std::string::npos) 
+	else if(path_.find("img/backgrounds/") != std::string_view::npos)
 	{
 		image_type_ = ImageType::BACKGROUND;
 	}
@@ -59,15 +59,15 @@ void Image::change_image(const std::string_view new_path, const int x, const int
 	position_.x = x;
 	position_.y = y;
 
-	if(path_.find("img/characters/") != std::string::npos)
+	if(path_.find("img/characters/") != std::string_view::npos)
 	{
 		image_type_ = ImageType::CHARACTER;
 	}
-	else if(path_.find("img/gui/") != std::string::npos)
+	else if(path_.find("img/gui/") != std::string_view::npos)
 	{
 		image_type_ = ImageType::GUI;
 	}
-	else if(path_.find("img/backgrounds/") != std::string::npos)
+	else if(path_.find("img/backgrounds/") != std::string_view::npos)
 	{
 		image_type_ = ImageType::BACKGROUND;
 	}

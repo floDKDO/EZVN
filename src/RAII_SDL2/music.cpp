@@ -13,9 +13,35 @@ Music::Music(const std::string_view file) //Mix_LoadMUS
 	}
 }
 
+Music::Music(Music&& music)
+	: music_(music.music_)
+{
+	music.music_ = nullptr;
+}
+
+Music& Music::operator=(Music&& music)
+{
+	if(this == &music)
+	{
+		return *this;
+	}
+
+	if(music_ != nullptr)
+	{
+		Mix_FreeMusic(music_);
+	}
+
+	music_ = music.music_;
+	music.music_ = nullptr;
+	return *this;
+}
+
 Music::~Music() //Mix_FreeMusic
 {
-	Mix_FreeMusic(music_);
+	if(music_ != nullptr)
+	{
+		Mix_FreeMusic(music_);
+	}
 }
 
 Mix_Music* Music::fetch() const

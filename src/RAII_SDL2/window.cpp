@@ -11,9 +11,35 @@ Window::Window(const std::string_view title, const int x, const int y, const int
 	}
 }
 
+Window::Window(Window&& window)
+	: window_(window.window_)
+{
+	window.window_ = nullptr;
+}
+
+Window& Window::operator=(Window&& window)
+{
+	if(this == &window)
+	{
+		return *this;
+	}
+
+	if(window_ != nullptr)
+	{
+		SDL_DestroyWindow(window_);
+	}
+
+	window_ = window.window_;
+	window.window_ = nullptr;
+	return *this;
+}
+
 Window::~Window() //SDL_DestroyWindow
 {
-	SDL_DestroyWindow(window_);
+	if(window_ != nullptr)
+	{
+		SDL_DestroyWindow(window_);
+	}
 }
 
 SDL_Window* Window::fetch() const

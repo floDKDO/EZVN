@@ -13,9 +13,35 @@ Font::Font(const std::string_view file, const int ptsize) //TTF_OpenFont
 	}
 }
 
+Font::Font(Font&& font)
+	: font_(font.font_)
+{
+	font.font_ = nullptr;
+}
+
+Font& Font::operator=(Font&& font)
+{
+	if(this == &font)
+	{
+		return *this;
+	}
+
+	if(font_ != nullptr)
+	{
+		TTF_CloseFont(font_);
+	}
+
+	font_ = font.font_;
+	font.font_ = nullptr;
+	return *this;
+}
+
 Font::~Font() //TTF_CloseFont
 {
-	TTF_CloseFont(font_);
+	if(font_ != nullptr)
+	{
+		TTF_CloseFont(font_);
+	}
 }
 
 TTF_Font* Font::fetch() const

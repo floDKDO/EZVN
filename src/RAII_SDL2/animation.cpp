@@ -11,6 +11,29 @@ Animation::Animation(const std::string_view file) //IMG_LoadAnimation
 	}
 }
 
+Animation::Animation(Animation&& animation)
+	: animation_(animation.animation_)
+{
+	animation.animation_ = nullptr;
+}
+
+Animation& Animation::operator=(Animation&& animation)
+{
+	if(this == &animation)
+	{
+		return *this;
+	}
+
+	if(animation_ != nullptr)
+	{
+		IMG_FreeAnimation(animation_);
+	}
+
+	animation_ = animation.animation_;
+	animation.animation_ = nullptr;
+	return *this;
+}
+
 Animation::~Animation() //IMG_FreeAnimation
 {
 	IMG_FreeAnimation(animation_);

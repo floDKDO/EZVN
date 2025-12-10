@@ -22,6 +22,7 @@ void TransformStep::no_modif_common(const bool condition)
 template<typename F>
 void TransformStep::instant_modif_common(F instant_modif_fonc, const Uint64 time)
 {
+	SDL_assert(std::is_invocable_v<F>);
 	if(time == 0 && !transform_step_finished_)
 	{
 		instant_modif_fonc();
@@ -33,6 +34,7 @@ void TransformStep::instant_modif_common(F instant_modif_fonc, const Uint64 time
 template<typename Factory, typename F> 
 void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, const Uint64 time)
 {
+	SDL_assert(std::is_invocable_v<Factory>);
 	if(!transform_step_finished_ && time != 0)
 	{
 		//reset(image);

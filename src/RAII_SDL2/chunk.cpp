@@ -13,9 +13,35 @@ Chunk::Chunk(const std::string_view file) //Mix_LoadWAV
 	}
 }
 
+Chunk::Chunk(Chunk&& chunk)
+	: chunk_(chunk.chunk_)
+{
+	chunk.chunk_ = nullptr;
+}
+
+Chunk& Chunk::operator=(Chunk&& chunk)
+{
+	if(this == &chunk)
+	{
+		return *this;
+	}
+
+	if(chunk_ != nullptr)
+	{
+		Mix_FreeChunk(chunk_);
+	}
+
+	chunk_ = chunk.chunk_;
+	chunk.chunk_ = nullptr;
+	return *this;
+}
+
 Chunk::~Chunk() //Mix_FreeChunk
 {
-	Mix_FreeChunk(chunk_);
+	if(chunk_ != nullptr)
+	{
+		Mix_FreeChunk(chunk_);
+	}
 }
 
 Mix_Chunk* Chunk::fetch() const

@@ -11,7 +11,9 @@ class Font
 	public:
 		Font(const std::string_view file, const int ptsize); //TTF_OpenFont
 		Font(const Font& font) = delete;
+		Font(Font&& font);
 		Font& operator=(const Font& font) = delete;
+		Font& operator=(Font&& font);
 		~Font(); //TTF_CloseFont
 
 		TTF_Font* fetch() const;

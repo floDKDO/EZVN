@@ -10,7 +10,9 @@ class SDL
 	public:
 		explicit SDL(const Uint32 flags);
 		SDL(const SDL& sdl) = delete;
+		SDL(SDL&& sdl) = delete;
 		SDL& operator=(const SDL& sdl) = delete;
+		SDL& operator=(SDL&& sdl) = delete;
 		~SDL();
 
 };
