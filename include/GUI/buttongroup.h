@@ -21,7 +21,7 @@ class ButtonGroup : public Ui
 		void buttongroup_function(Ui* ui);
 
 	private:
-		std::vector<std::unique_ptr<Button>> buttons_;
+		std::vector<Button> buttons_;
 		Button* selected_button_;
 };
 
@@ -33,30 +33,30 @@ ButtonGroup<N>::ButtonGroup(const std::vector<std::string_view> texts, const int
 
 	for(unsigned int i = 0; i < N; ++i)
 	{
-		buttons_.push_back(std::make_unique<Button>(texts[i], (constants::window_width_ - constants::buttongroup_width_) / 2, y + i * constants::buttongroup_y_spacing_, renderer, std::bind(&ButtonGroup::buttongroup_function, this, std::placeholders::_1))); 
+		buttons_.push_back(Button(texts[i], (constants::window_width_ - constants::buttongroup_width_) / 2, y + i * constants::buttongroup_y_spacing_, renderer, std::bind(&ButtonGroup::buttongroup_function, this, std::placeholders::_1))); 
 	}
 }
 
 template<size_t N>
 void ButtonGroup<N>::draw(sdl::Renderer& renderer)
 {
-	for(const std::unique_ptr<Button>& b : buttons_)
+	for(Button& b : buttons_)
 	{
-		b->draw(renderer);
+		b.draw(renderer);
 	}
 }
 
 template<size_t N>
 void ButtonGroup<N>::update()
 {
-	for(const std::unique_ptr<Button>& b : buttons_)
+	for(Button& b : buttons_)
 	{
-		b->update();
-		if(b->state_ == State::SELECTED)
+		b.update();
+		if(b.state_ == State::SELECTED)
 		{
-			if(selected_button_ == nullptr || selected_button_ == b.get())
+			if(selected_button_ == nullptr || selected_button_ == &b)
 			{
-				selected_button_ = b.get();
+				selected_button_ = &b;
 			}
 			else
 			{
@@ -70,9 +70,9 @@ void ButtonGroup<N>::update()
 template<size_t N>
 void ButtonGroup<N>::handle_events(const SDL_Event& e)
 {
-	for(const std::unique_ptr<Button>& b : buttons_)
+	for(Button& b : buttons_)
 	{
-		b->handle_events(e);
+		b.handle_events(e);
 	}
 }
 
@@ -80,9 +80,9 @@ template<size_t N>
 std::vector<Ui*> ButtonGroup<N>::get_navigation_nodes()
 {
 	std::vector<Ui*> vector;
-	for(const std::unique_ptr<Button>& b : buttons_)
+	for(Button& b : buttons_)
 	{
-		vector.push_back(b.get());
+		vector.push_back(&b);
 	}
 	return vector;
 }

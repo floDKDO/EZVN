@@ -73,35 +73,6 @@ void Game::run()
 	}
 }
 
-/*void Game::create_main_menu()
-{
-	std::vector<std::unique_ptr<Ui>> ui_elements;
-	ui_elements.reserve(10);
-
-	//ici, std::placeholders::_1 est nécessaire car l'appel à la fonction de callback (ce qui est retourné par std::bind) est de la forme : f(this) => on spécifie l'argument lors de l'appel au callable et pas directement sa valeur dans std::bind
-	ui_elements.push_back(std::make_unique<TextButton>("Play", 600, 200, renderer_, std::bind(&Game::play_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<TextButton>("Settings", 600, 350, renderer_, std::bind(&Game::settings_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<TextButton>("Quit", 600, 500, renderer_, "Are you sure you would like to close the game?", std::bind(&Game::confirmationpopup_quit_function, this, std::placeholders::_1)));
-
-	main_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
-}*/
-
-/*void Game::create_settings_menu()
-{
-	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, 100, true, renderer.fetch(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
-
-	std::vector<std::unique_ptr<Ui>> ui_elements;
-	ui_elements.reserve(10);
-	 
-	ui_elements.push_back(std::make_unique<TextButton>("Return", 200, 500, renderer_, std::bind(&Game::previous_menu_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<Slider>(0, 100, 800, 200, "Sound effect", renderer_, std::bind(&Game::slider_sound_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<Slider>(0, 100, 450, 200, "Music effect", renderer_, std::bind(&Game::slider_music_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<Slider>(30, 60, 625, 350, "Text speed", renderer_, std::bind(&Game::slider_text_function, this, std::placeholders::_1)));
-	ui_elements.push_back(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
-	//ui_elements.push_back(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, 100, true, renderer_, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
-	settings_menu_ = std::make_unique<MenuState>("img/backgrounds/night.png", std::move(ui_elements), renderer_);
-}*/
-
 void Game::push_state(GameState* state)
 {
 	states_.push(state);

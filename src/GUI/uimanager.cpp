@@ -10,13 +10,7 @@ UiManager::UiManager()
 
 void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements)
 {
-	//ui_elements_.clear();
 	navigation_list_.clear();
-
-	/*for(int i = 0; i < ui_elements.size(); ++i)
-	{
-		ui_elements_.push_back(ui_elements[i].get());
-	}*/
 
 	for(const std::unique_ptr<Ui>& ui_element : ui_elements)
 	{

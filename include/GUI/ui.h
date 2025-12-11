@@ -16,6 +16,12 @@ enum class State
 class Ui
 {
 	public:
+		//nécessaires pour les push_back de Buttons dans ButtonGroup
+		Ui(const Ui& ui) = delete;
+		Ui(Ui&& ui) = default;
+		Ui& operator=(const Ui& ui) = delete;
+		Ui& operator=(Ui&& ui) = default;
+
 		virtual ~Ui() = default;
 
 		virtual void on_pointer_up(); //<=> on click (l'action se lance quand le clic est relaché)

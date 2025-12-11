@@ -10,15 +10,6 @@ InGame::InGame(Game& game, sdl::Renderer& renderer) //TODO : ne rien afficher si
 	: GameState(game), counter_(1), current_line_(0), textbox_(renderer), hide_ui_textbox_(false)
 {
 	build_ui_elements(renderer);
-
-	//textbox_.text_.text_ = "Come on PLAYER! Maybe literature isn\'t that boring."; //TODO : il faut retirer cela !!
-
-	/*characters_.push_back(std::make_unique<Character>("Sayori", "img/characters/sayori.png", renderer, 1));
-	characters_.push_back(std::make_unique<Character>("Monika", "img/characters/monika.png", renderer, 4));
-	characters_.push_back(std::make_unique<Character>("Natsuki", "img/characters/natsuki.png", renderer, 3));
-	characters_.push_back(std::make_unique<Character>("Yuri", "img/characters/yuri.png", renderer, 2));*/
-
-	//std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
 }
 
 void InGame::build_ui_elements(sdl::Renderer& renderer)
@@ -44,7 +35,8 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 void InGame::add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer)
 {
 	characters_.push_back(std::make_unique<Character>(name, character_path, renderer, 1));
-	//TODO : prendre en compte le zorder et appeler stable_sort
+	//TODO : prendre en compte le zorder et appeler stable_sort 
+	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
 }
 
 Character* InGame::get_character(const std::string_view name)

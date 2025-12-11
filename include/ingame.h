@@ -24,7 +24,7 @@ class InGame : public GameState
 
 		void temp_function(Ui* ui);
 
-		std::vector<std::unique_ptr<Character>> characters_;
+		std::vector<std::unique_ptr<Character>> characters_; //unique_ptr pour que stable_sort fonctionne
 
 		//TODO : enregistrer la ligne de la demande
 		std::map<unsigned int, std::pair<Character*, const TransformName>> characters_transforms_; 

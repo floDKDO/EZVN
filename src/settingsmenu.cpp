@@ -15,8 +15,6 @@ SettingsMenu::SettingsMenu(Game& game, const std::string_view background_path, s
 
 void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 {
-	//std::unique_ptr<Ui> togglegroup = std::make_unique<TextToggleGroup>(2, "Display", std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, 100, true, renderer.fetch(), std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)});
-
 	ui_elements_.reserve(10);
 
 	ui_elements_.push_back(std::make_unique<TextButton>("Return", 200, 500, renderer, std::bind(&SettingsMenu::previous_menu_function, this, std::placeholders::_1)));

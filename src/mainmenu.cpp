@@ -1,5 +1,6 @@
 #include "mainmenu.h"
 #include "GUI/textbutton.h"
+//#include "GUI/buttongroup.h"
 #include "game.h"
 
 #include <iostream>
@@ -18,6 +19,7 @@ void MainMenu::build_ui_elements(sdl::Renderer& renderer)
 	ui_elements_.push_back(std::make_unique<TextButton>("Play", 600, 200, renderer, std::bind(&MainMenu::play_function, this, std::placeholders::_1)));
 	ui_elements_.push_back(std::make_unique<TextButton>("Settings", 600, 350, renderer, std::bind(&MainMenu::settings_function, this, std::placeholders::_1)));
 	ui_elements_.push_back(std::make_unique<TextButton>("Quit", 600, 500, renderer, "Are you sure you would like to close the game?", std::bind(&MainMenu::confirmationpopup_quit_function, this, std::placeholders::_1)));
+	//ui_elements_.push_back(std::make_unique<ButtonGroup<2>>(std::vector<std::string_view>{"Windowed", "Fullscreen"}, 50, renderer));
 }
 
 void MainMenu::handle_events(const SDL_Event& e)

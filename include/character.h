@@ -6,6 +6,7 @@ class Character
 {
 	public:
 		Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const int zorder = 0);
+
 		//Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, int zorder = 0); //TODO : valeur par défaut au cas-où on ne souhaite pas avoir une textbox propre à chaque perso
 
 		void set_transform(const TransformName transform_name);
