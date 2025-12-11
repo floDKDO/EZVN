@@ -25,8 +25,6 @@ Game::Game()
 	in_game_ = std::make_unique<InGame>(*this, renderer_);
 	main_menu_ = std::make_unique<MainMenu>(*this, "img/backgrounds/night.png", renderer_);
 	settings_menu_ = std::make_unique<SettingsMenu>(*this, "img/backgrounds/night.png", renderer_);
-	//create_main_menu();
-	//create_settings_menu();
 	push_state(main_menu_.get());
 }
 
@@ -172,7 +170,6 @@ void Game::show_character(unsigned int line_number, const std::string_view chara
 
 void Game::hide_character(unsigned int line_number, const std::string_view character_name)
 {
-	//TODO : hide_character*
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
 
@@ -185,7 +182,6 @@ void Game::add_new_dialogue(unsigned int line_number, const std::string_view cha
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 
 	Character* character = in_game_ptr->get_character(character_name);
-	//TODO : il y a une copie de l'unique_ptr ??
 	if(character != nullptr)
 	{
 		in_game_ptr->dialogues_.insert({line_number, {dialogue, character}});
@@ -200,16 +196,12 @@ void Game::add_new_dialogue(unsigned int line_number, const std::string_view dia
 
 void Game::show_background(unsigned int line_number, const std::string_view background_path)
 {
-	//TODO
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	in_game_ptr->backgrounds_.insert({line_number, background_path});
-	//in_game_ptr->change_background(background_path, renderer_);
 }
 
 void Game::hide_background(unsigned int line_number)
 {
-	//TODO
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	in_game_ptr->backgrounds_.insert({line_number, ""});
-	//in_game_ptr->change_background(background_path, renderer_);
 }

@@ -10,7 +10,7 @@ Text::Text(const std::string_view text, const SDL_Color color, const std::string
 	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
 	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_), 
 	outline_size_(constants::text_outline_size_), font_outline_(create_outline()),
-	previous_text_(""), is_dialogue_(wrap_length_ != 0 ? true : false), 
+	previous_text_(""), is_animated_(wrap_length_ != 0 ? true : false),
 	surface_(create_surface(font_, color_)), surface_outline_(create_surface(font_outline_, constants::text_outline_color_))
     /*,local_text_speed_(global_text_divisor_),*/
 {
@@ -32,13 +32,13 @@ sdl::Font Text::create_outline()
 sdl::Surface Text::create_surface(sdl::Font& font, const SDL_Color color)
 {
 	std::string text;
-	if(text_.empty() || (is_dialogue_ && text_dialogue_.empty()))
+	if(text_.empty() || (is_animated_ && text_dialogue_.empty()))
 	{
 		text = " ";
 	}
 	else
 	{
-		if(is_dialogue_)
+		if(is_animated_)
 		{
 			text = text_dialogue_;
 		}
@@ -157,7 +157,7 @@ void Text::draw(sdl::Renderer& renderer)
 //TODO : écrire le code spécifique aux inputfields dans la classe Inputfield ??
 void Text::update() 
 {
-	if(is_dialogue_) 
+	if(is_animated_)
 	{		
 		Uint64 now = SDL_GetTicks64();
 		if(now - last_time_ > (int(float(initial_text_speed_) / float(global_text_divisor_))) && index_dialogue_ < text_.length())
@@ -181,11 +181,11 @@ void Text::update()
 		previous_font_style_ = font_style_;
 	}
 
-	if(previous_text_ != text_ || (is_dialogue_ && previous_text_ != text_dialogue_)) //the text has been modified (in a inputfield for example)
+	if(previous_text_ != text_ || (is_animated_ && previous_text_ != text_dialogue_)) //the text has been modified (in a inputfield for example)
 	{
 		recreate_surfaces_texture();
 
-		if(is_dialogue_)
+		if(is_animated_)
 		{
 			previous_text_ = text_dialogue_;
 		}

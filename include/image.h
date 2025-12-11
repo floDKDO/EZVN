@@ -40,5 +40,4 @@ class Image : public Drawable
 		std::string_view path_;
 		ImageType image_type_;
 		int frame_index_;
-		//sdl::Renderer& renderer_; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
 };

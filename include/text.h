@@ -58,11 +58,9 @@ class Text : public Drawable
 		sdl::Font font_outline_; //TODO : mettre l'outline en optionnel
 		
 		std::string previous_text_;
-		bool is_dialogue_; //TODO : renommer en is_animated_ ou supprimer (wrap_length_ suffit)
+		bool is_animated_; //TODO : préciser une wrap_length mais que le texte ne soit pas animé (pour pop-up) ??
 
 		sdl::Surface surface_;
 		sdl::Surface surface_outline_;
-
-		//sdl::Renderer& renderer_; //solution temporaire
 };
 

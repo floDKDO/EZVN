@@ -50,7 +50,7 @@ class Drawable
 		SDL_RendererFlip flip_;
 		SDL_Color color_;
 
-		sdl::Renderer& renderer_; //solution temporaire
+		sdl::Renderer& renderer_; //do not own it !!
 		
 	private:
 };

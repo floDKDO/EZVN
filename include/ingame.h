@@ -20,24 +20,24 @@ class InGame : public GameState
 		void add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer);
 		Character* get_character(const std::string_view name);
 
-		void change_background(const std::string_view background_path, sdl::Renderer& renderer);
+		void change_background(const std::string_view background_path);
 
 		void temp_function(Ui* ui);
 
 		std::vector<std::unique_ptr<Character>> characters_; //unique_ptr pour que stable_sort fonctionne
 
-		//TODO : enregistrer la ligne de la demande
 		std::map<unsigned int, std::tuple<Character*, const TransformName, int>> characters_transforms_; 
 		std::map<unsigned int, std::pair<const std::string_view, Character*>> dialogues_;
 		std::map<unsigned int, const std::string_view> backgrounds_;
 
-		unsigned int counter_; //TODO : renommer
-		unsigned int current_line_; //TODO : remplacer par le numéro de ligne courant
+		unsigned int dialogue_index_; 
+		unsigned int current_line_; 
 
 		Textbox textbox_; //TODO : remettre private
 
 	private:
 		std::unique_ptr<Image> background_; //TODO : utiliser un pointeur pour que l'image puisse être vide ??
 		bool hide_ui_textbox_;
+		sdl::Renderer &renderer_;
 };
 

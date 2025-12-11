@@ -5,9 +5,7 @@
 
 //TODO : "6" obligatoire ??
 
-//TODO : bug avec les transfos
-
-Transform::Transform(const TransformName transform_name) //TODO : temporaire
+Transform::Transform(const TransformName transform_name)
 	: transform_name_(transform_name), previous_transform_name_(transform_name_)
 {
 	transforms_.insert({TransformName::t11, TransformAllSteps(6)});
@@ -39,10 +37,9 @@ Transform::Transform(const TransformName transform_name) //TODO : temporaire
 
 void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) 
 {
-	//TODO : problème => les élements de transforms_ ne sont pas remis à 0 à la fin d'une transfo...
+	//TODO : mettre ce if pour chaque transform ??
 	if(!transform_t.transform_finished_)
 	{
-		std::cout << "N " << transform_t.current_step_number_ << std::endl;
 		switch(transform_t.current_step_number_)
 		{
 			case 0:

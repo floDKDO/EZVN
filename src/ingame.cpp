@@ -7,7 +7,7 @@
 #include <algorithm>
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) //TODO : ne rien afficher si pas de background
-	: GameState(game), counter_(1), current_line_(0), textbox_(renderer), hide_ui_textbox_(false)
+	: GameState(game), dialogue_index_(0), current_line_(0), textbox_(renderer), hide_ui_textbox_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer);
 }
@@ -49,22 +49,21 @@ Character* InGame::get_character(const std::string_view name)
 	return nullptr;
 }
 
-void InGame::change_background(const std::string_view background_path, sdl::Renderer& renderer)
+void InGame::change_background(const std::string_view background_path)
 {
-	//TODO
 	if(background_path.empty())
 	{
-		background_.reset(); //TODO : juste ??
+		background_.reset(); 
 	}
 	else
 	{
 		if(background_ == nullptr)
 		{
-			background_ = std::make_unique<Image>(background_path, 0, 0, renderer);
+			background_ = std::make_unique<Image>(background_path, 0, 0, renderer_);
 		}
 		else
 		{
-			background_->init_image(background_path, 0, 0, renderer);
+			background_->init_image(background_path, 0, 0, renderer_);
 		}
 	}
 }
@@ -92,15 +91,6 @@ void InGame::handle_events(const SDL_Event& e)
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
-			if(dialogues_.find(current_line_) == dialogues_.begin()) //tout premier dialogue
-			{
-				//std::cout << "FIRSTTTTTRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n";
-				current_line_ = std::next(dialogues_.begin(), counter_)->first; //TODO : tester en incrémentant de counter_ au lieu d'utiliser std::next
-				//std::cout << "MODIF DE CURRENT_LINE1: " << current_line_ << std::endl;
-				textbox_.show_new_dialogue(dialogues_[current_line_].first, dialogues_[current_line_].second);
-				return;
-			}
-
 			if(dialogues_.count(current_line_))
 			{
 				//std::cout << "--CURRENT_LINE: " << current_line_ << std::endl;
@@ -108,13 +98,12 @@ void InGame::handle_events(const SDL_Event& e)
 				if(textbox_.text_.is_finished_) //empêcher le spam d'espace
 				{
 					//std::cout << "DEDANS\n";
-					if(std::next(dialogues_.begin(), counter_ + 1) != dialogues_.end())
+					if(std::next(dialogues_.begin(), dialogue_index_ + 1) != dialogues_.end())
 					{
-						counter_ += 1;
+						dialogue_index_ += 1;
 					}
-					current_line_ = std::next(dialogues_.begin(), counter_)->first;
+					current_line_ = std::next(dialogues_.begin(), dialogue_index_)->first;
 					textbox_.show_new_dialogue(dialogues_[current_line_].first, dialogues_[current_line_].second);
-					//current_line_ += 1; //ne pas incrémenter dans le cas du tout premier dialogue
 				}
 			}
 		}
@@ -132,18 +121,6 @@ void InGame::handle_events(const SDL_Event& e)
 
 void InGame::draw(sdl::Renderer& renderer)
 {
-	//TODO : devrait être dans update() mais nécessite le renderer...
-	for(unsigned int i = current_line_; i > 0; --i)
-	{
-		//std::cout << "I : " << i << std::endl;
-		if(backgrounds_.count(i))
-		{
-			//std::cout << "=========================================================================\n";
-			change_background(backgrounds_[i], renderer);
-			break;
-		}
-	}
-
 	if(background_ != nullptr)
 	{
 		background_->draw(renderer);
@@ -154,9 +131,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	for(const std::unique_ptr<Character>& c : characters_)
 	{
 		//std::cout << "********************************************************************************\n";
-		c->draw(renderer); //TODO : draw avant que la transfo ait commencée...
-		//TODO : chercher si "c" est dans characters_transforms_ et si oui, afficher sa dernière transfo selon la ligne (ligne = valeur max de l'indice dans characters_transforms_ ??)
-		//c->draw(renderer); //TODO : affichage selon ligne (dernière transfo de chaque personnage)
+		c->draw(renderer); 
 	}
 
 	if(!hide_ui_textbox_)
@@ -186,6 +161,17 @@ void InGame::update()
 				c->character_.zorder_ = std::get<2>(characters_transforms_[i]);
 				break;
 			}
+		}
+	}
+
+	for(unsigned int i = current_line_; i > 0; --i)
+	{
+		//std::cout << "I : " << i << std::endl;
+		if(backgrounds_.count(i))
+		{
+			//std::cout << "=========================================================================\n";
+			change_background(backgrounds_[i]);
+			break;
 		}
 	}
 

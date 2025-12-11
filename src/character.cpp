@@ -8,12 +8,10 @@ Character::Character(const std::string_view name, const std::string_view charact
 	, name_(name), is_speaking_(false), is_visible_(false), t_(TransformName::none)//, initial_rect_(character_.position_)
 {}
 
-//TODO : ne pas l'appeler en boucle !!
 void Character::set_transform(const TransformName transform_name)
 {
 	if(t_.transform_name_ != transform_name)
 	{
-		std::cout << "CALLED for : " << int(transform_name) << std::endl;
 		t_.create_transform(transform_name);
 		//t_.transform_name_ = transform_name;
 		//std::cout << int(t_.transform_name_) << std::endl;
@@ -41,6 +39,5 @@ void Character::draw(sdl::Renderer& renderer)
 
 void Character::update()
 {
-	//TODO : appeler set_transform en boucle ici ??
-	//set_transform(TransformName::t11);
+
 }
