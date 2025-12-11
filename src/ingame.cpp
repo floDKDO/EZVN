@@ -74,7 +74,7 @@ void InGame::change_background(const std::string_view background_path, sdl::Rend
 		}
 		else
 		{
-			background_->change_image(background_path, 0, 0, renderer);
+			background_->init_image(background_path, 0, 0, renderer);
 		}
 	}
 }

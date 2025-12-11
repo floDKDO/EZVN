@@ -13,7 +13,7 @@ class Image : public Drawable
 	public:
 		Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder=0);
 
-		void change_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer);
+		void init_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
 
 		int zorder_;
