@@ -12,7 +12,7 @@ CheckableGroup::CheckableGroup(const size_t number_of_checkables, const bool onl
 
 void CheckableGroup::uncheck_all_others(const Checkable* checkable_to_not_uncheck)
 {
-	for(std::unique_ptr<Checkable> const& c : checkables_)
+	for(const std::unique_ptr<Checkable>& c : checkables_)
 	{
 		if(c.get() != checkable_to_not_uncheck)
 		{
@@ -40,7 +40,7 @@ void CheckableGroup::on_click(Checkable* c)
 
 void CheckableGroup::draw(sdl::Renderer& renderer)
 {
-	for(std::unique_ptr<Checkable> const& c : checkables_)
+	for(const std::unique_ptr<Checkable>& c : checkables_)
 	{
 		c->draw(renderer);
 	}
@@ -49,7 +49,7 @@ void CheckableGroup::draw(sdl::Renderer& renderer)
 
 void CheckableGroup::update()
 {
-	for(std::unique_ptr<Checkable> const& c : checkables_)
+	for(const std::unique_ptr<Checkable>& c : checkables_)
 	{
 		c->update();
 		if(c->state_ == State::SELECTED)
@@ -71,7 +71,7 @@ void CheckableGroup::update()
 
 void CheckableGroup::handle_events(const SDL_Event& e)
 {
-	for(std::unique_ptr<Checkable> const& c : checkables_)
+	for(const std::unique_ptr<Checkable>& c : checkables_)
 	{
 		c->handle_events(e);
 	}
@@ -80,7 +80,7 @@ void CheckableGroup::handle_events(const SDL_Event& e)
 std::vector<Ui*> CheckableGroup::get_navigation_nodes()
 {
 	std::vector<Ui*> vector;
-	for(std::unique_ptr<Checkable> const& c : checkables_)
+	for(const std::unique_ptr<Checkable>& c : checkables_)
 	{
 		vector.push_back(c.get());
 	}

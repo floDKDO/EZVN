@@ -27,19 +27,16 @@ Image::Image(const std::string_view path, const int x, const int y, sdl::Rendere
 
 		if(rwops.fetch() != nullptr && (IMG_isGIF(rwops.fetch()) || IMG_isWEBP(rwops.fetch())))
 		{
-			is_animated_ = true;
 			animated_image_ = std::make_unique<sdl::Animation>(path);
 			texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->fetch()->frames[frame_index_]);
 		}
 		else
 		{
-			is_animated_ = false;
 			texture_ = std::make_unique<sdl::Texture>(renderer, path);
 		}
 	}
 	else
 	{
-		is_animated_ = false;
 		texture_ = std::make_unique<sdl::Texture>(renderer, path);
 	}
 
@@ -79,19 +76,16 @@ void Image::change_image(const std::string_view new_path, const int x, const int
 
 		if(rwops.fetch() != nullptr && (IMG_isGIF(rwops.fetch()) || IMG_isWEBP(rwops.fetch())))
 		{
-			is_animated_ = true;
 			animated_image_ = std::make_unique<sdl::Animation>(path_);
 			texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->fetch()->frames[frame_index_]);
 		}
 		else
 		{
-			is_animated_ = false;
 			texture_ = std::make_unique<sdl::Texture>(renderer, path_);
 		}
 	}
 	else
 	{
-		is_animated_ = false;
 		texture_ = std::make_unique<sdl::Texture>(renderer, path_);
 	}
 
@@ -109,7 +103,7 @@ void Image::draw(sdl::Renderer& renderer)
 	//std::cout << "HEHEHEHEHEHE " << path_ << std::endl;
 	renderer.copy(*texture_, nullptr, &(position_), angle_, nullptr, flip_);
 	//SDL_RenderCopyEx(renderer.fetch(), texture_->fetch(), nullptr, &(position_), angle_, nullptr, flip_);
-	if(is_animated_)
+	if(animated_image_ != nullptr)
 	{
 		if(frame_index_ < animated_image_->fetch()->count - 1)
 		{

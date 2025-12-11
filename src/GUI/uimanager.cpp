@@ -18,7 +18,7 @@ void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements
 		ui_elements_.push_back(ui_elements[i].get());
 	}*/
 
-	for(std::unique_ptr<Ui> const& ui_element : ui_elements)
+	for(const std::unique_ptr<Ui>& ui_element : ui_elements)
 	{
 		std::vector<Ui*> nodes = ui_element->get_navigation_nodes();
 		navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
@@ -192,7 +192,7 @@ void UiManager::handle_events(const SDL_Event& e)
 
 /*void UiManager::draw(sdl::Renderer& renderer)
 {
-	for(std::unique_ptr<Ui> const& ui_element : ui_elements_)
+	for(const std::unique_ptr<Ui>& ui_element : ui_elements_)
 	{
 		ui_element->draw(renderer);
 	}

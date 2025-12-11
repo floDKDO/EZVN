@@ -44,6 +44,7 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 void InGame::add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer)
 {
 	characters_.push_back(std::make_unique<Character>(name, character_path, renderer, 1));
+	//TODO : prendre en compte le zorder et appeler stable_sort
 }
 
 Character* InGame::get_character(const std::string_view name)
@@ -157,7 +158,7 @@ void InGame::draw(sdl::Renderer& renderer)
 		background_->draw(renderer);
 	}
 
-	for(std::unique_ptr<Character> const& c : characters_)
+	for(const std::unique_ptr<Character>& c : characters_)
 	{
 		//std::cout << "********************************************************************************\n";
 		c->draw(renderer); //TODO : draw avant que la transfo ait commencée...
@@ -180,7 +181,7 @@ void InGame::update()
 	//TODO : ne fonctionnera plus avec le vecteur de personnages
 	//std::cout << current_line_ << " et " << dialogues_.count(current_line_) << std::endl;
 
-	for(std::unique_ptr<Character> const& c : characters_)
+	for(const std::unique_ptr<Character>& c : characters_)
 	{
 		for(unsigned int i = current_line_; i > 0; --i)
 		{
@@ -209,7 +210,7 @@ void InGame::update()
 			ui->update();
 		}
 
-		for(std::unique_ptr<Character> const& c : characters_)
+		for(const std::unique_ptr<Character>& c : characters_)
 		{
 			c->t_.show_transform(c->t_.transform_name_, c->character_);
 		}

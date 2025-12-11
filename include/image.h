@@ -42,7 +42,6 @@ class Image : public Drawable
 		ImageType image_type_;
 
 		int frame_index_;
-		bool is_animated_;
 
 		sdl::Renderer& renderer_; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
 };

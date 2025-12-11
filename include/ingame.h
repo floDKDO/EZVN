@@ -7,8 +7,6 @@
 #include <memory>
 #include <map>
 
-//TODO : ne pas utiliser .get() avec un unique_ptr ??
-
 class InGame : public GameState
 {
 	public:
