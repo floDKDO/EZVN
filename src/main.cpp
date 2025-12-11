@@ -18,6 +18,8 @@
 
 //TODO : r, g, b, a ou SDL_Color ?? x, y ou {x, h} dans un Vec2 ??
 
+//TODO : être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;

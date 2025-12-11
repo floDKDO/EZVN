@@ -1,13 +1,31 @@
 #include "RAII_SDL2/animation.h"
+#include "RAII_SDL2/rwops.h"
 
 namespace sdl
 {
 
 Animation::Animation(const std::string_view file) //IMG_LoadAnimation
 {
-	if((animation_ = IMG_LoadAnimation(file.data())) == nullptr) //=> GIF ou WEBP
+	sdl::RWops rwops(file, "rb");
+	if(rwops.is_gif())
 	{
-		SDL_Log("(IMG_LoadAnimation) %s\n", IMG_GetError());
+		if((animation_ = IMG_LoadGIFAnimation_RW(rwops.fetch())) == nullptr)
+		{
+			SDL_Log("(IMG_LoadGIFAnimation_RW) %s\n", IMG_GetError());
+		}
+	}
+	else if(rwops.is_webp())
+	{
+		if((animation_ = IMG_LoadWEBPAnimation_RW(rwops.fetch())) == nullptr)
+		{
+			SDL_Log("(IMG_LoadWEBPAnimation_RW) %s\n", IMG_GetError());
+		}
+	}
+	else
+	{
+		SDL_Log("Not an animation!\n");
+		animation_ = nullptr;
+		//TODO : exception
 	}
 }
 
@@ -36,7 +54,10 @@ Animation& Animation::operator=(Animation&& animation)
 
 Animation::~Animation() //IMG_FreeAnimation
 {
-	IMG_FreeAnimation(animation_);
+	if(animation_ != nullptr)
+	{
+		IMG_FreeAnimation(animation_);
+	}
 }
 
 IMG_Animation* Animation::fetch() const

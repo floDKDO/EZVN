@@ -1,5 +1,7 @@
 #include "RAII_SDL2/rwops.h"
 
+#include <SDL2/SDL_image.h>
+
 namespace sdl
 {
 
@@ -51,6 +53,24 @@ RWops::~RWops() //SDL_RWclose
 SDL_RWops* RWops::fetch() const
 {
 	return rwops_;
+}
+
+int RWops::is_gif() const
+{
+	if(rwops_ != nullptr)
+	{
+		return IMG_isGIF(rwops_);
+	}
+	return 0;
+}
+
+int RWops::is_webp() const
+{
+	if(rwops_ != nullptr)
+	{
+		return IMG_isWEBP(rwops_);
+	}
+	return 0;
 }
 
 }

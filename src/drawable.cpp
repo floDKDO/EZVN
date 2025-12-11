@@ -3,9 +3,8 @@
 
 #include <iostream>
 
-Drawable::Drawable()
-	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), angle_(0.0),
-	flip_(SDL_FLIP_NONE), color_({255, 255, 255, 255})
+Drawable::Drawable(sdl::Renderer& renderer, SDL_Color color)
+	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), angle_(0.0), flip_(SDL_FLIP_NONE), color_(color), renderer_(renderer)
 {}
 
 void Drawable::show()

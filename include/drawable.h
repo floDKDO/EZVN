@@ -42,13 +42,15 @@ class Drawable
 		SDL_Rect position_;
 
 	protected:
-		Drawable();
+		Drawable(sdl::Renderer& renderer, SDL_Color color = {255, 255, 255, 255});
 
 		std::unique_ptr<sdl::Texture> texture_;
 		SDL_Rect initial_rect_;
 		double angle_;
 		SDL_RendererFlip flip_;
 		SDL_Color color_;
+
+		sdl::Renderer& renderer_; //solution temporaire
 		
 	private:
 };

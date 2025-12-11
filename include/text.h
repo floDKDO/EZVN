@@ -33,37 +33,36 @@ class Text : public Drawable
 
 		static int global_text_divisor_;
 
-	private:
-		void create_surface_texture();
-
-		static const int initial_text_speed_;
-
-		std::unique_ptr<sdl::Surface> surface_;
-		std::unique_ptr<sdl::Surface> surface_outline_;
-
-	public:
 		std::string text_;
 		std::string text_dialogue_;
 		int index_dialogue_;
 		bool is_finished_;
-
+		Uint32 wrap_length_;
 		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
 
-		Uint32 wrap_length_;
-
 	private:
+		sdl::Font create_outline();
+
+		sdl::Surface create_surface(sdl::Font& font, const SDL_Color color);
+		void recreate_surfaces_texture();
+
+		static const int initial_text_speed_;
+
 		int font_size_;
 		int font_style_;
 		int previous_font_style_;
 		std::string_view font_path_;
 		sdl::Font font_;
-		sdl::Font font_outline_;
-		int outline_size_;
 
-		bool is_dialogue_;
-
-		std::string previous_text_;
+		int outline_size_; 
+		sdl::Font font_outline_; //TODO : mettre l'outline en optionnel
 		
-		sdl::Renderer& renderer_; //solution temporaire
+		std::string previous_text_;
+		bool is_dialogue_; //TODO : renommer en is_animated_ ou supprimer (wrap_length_ suffit)
+
+		sdl::Surface surface_;
+		sdl::Surface surface_outline_;
+
+		//sdl::Renderer& renderer_; //solution temporaire
 };
 

@@ -7,59 +7,68 @@ int Text::global_text_divisor_ = 45;
 const int Text::initial_text_speed_ = 500;
 
 Text::Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length)
-	: text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),  
-	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_), font_outline_(font_path_, font_size_), outline_size_(constants::text_outline_size_), 
-	previous_text_(""), renderer_(renderer) /*,local_text_speed_(global_text_divisor_),*/
+	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
+	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_), 
+	outline_size_(constants::text_outline_size_), font_outline_(create_outline()),
+	previous_text_(""), is_dialogue_(wrap_length_ != 0 ? true : false), 
+	surface_(create_surface(font_, color_)), surface_outline_(create_surface(font_outline_, constants::text_outline_color_))
+    /*,local_text_speed_(global_text_divisor_),*/
 {
-	color_ = color;
-
 	int w, h;
 	font_.size_UTF8(text_, &w, &h);
 	position_ = {x, y, w, h};
 
-	font_outline_.set_outline(outline_size_);
-
-	if(wrap_length_ != 0)
-	{
-		is_dialogue_ = true;
-	}
-	else
-	{
-		is_dialogue_ = false;
-	}
-
-	create_surface_texture();
+	texture_ = std::make_unique<sdl::Texture>(renderer_, surface_);
+	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 }
 
-void Text::create_surface_texture()
+sdl::Font Text::create_outline()
 {
+	sdl::Font font_outline = sdl::Font(font_path_, font_size_);
+	font_outline.set_outline(outline_size_);
+	return font_outline;
+}
+
+sdl::Surface Text::create_surface(sdl::Font& font, const SDL_Color color)
+{
+	std::string text;
 	if(text_.empty() || (is_dialogue_ && text_dialogue_.empty()))
 	{
-		surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, " ", constants::text_outline_color_, wrap_length_);
-		surface_ = std::make_unique<sdl::Surface>(font_, " ", color_, wrap_length_);
+		text = " ";
 	}
 	else
 	{
 		if(is_dialogue_)
 		{
-			surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, text_dialogue_, constants::text_outline_color_, wrap_length_);
-			surface_ = std::make_unique<sdl::Surface>(font_, text_dialogue_, color_, wrap_length_);
+			text = text_dialogue_;
 		}
 		else
 		{
-			surface_outline_ = std::make_unique<sdl::Surface>(font_outline_, text_, constants::text_outline_color_, wrap_length_);
-			surface_ = std::make_unique<sdl::Surface>(font_, text_, color_, wrap_length_);
+			text = text_;
 		}
 	}
-	position_.w = surface_->fetch()->w;
-	position_.h = surface_->fetch()->h;
 
-	SDL_Rect rect = {-outline_size_, -outline_size_, position_.w, position_.h};
+	sdl::Surface surface = sdl::Surface(font, text, color, wrap_length_);
+	surface.set_blend_mode(SDL_BLENDMODE_BLEND);
 
-	surface_outline_->set_blend_mode(SDL_BLENDMODE_BLEND);
-	surface_outline_->blit(nullptr, *surface_, &rect);
+	position_.w = surface.fetch()->w;
+	position_.h = surface.fetch()->h;
 
-	texture_ = std::make_unique<sdl::Texture>(renderer_, *surface_);
+	if(&font == &font_outline_)
+	{
+		SDL_Rect rect = {-outline_size_, -outline_size_, position_.w, position_.h};
+		surface.blit(nullptr, surface_, &rect);
+	}
+
+	return surface;
+}
+
+void Text::recreate_surfaces_texture()
+{
+	surface_ = create_surface(font_, color_);
+	surface_outline_ = create_surface(font_outline_, constants::text_outline_color_);
+
+	texture_ = std::make_unique<sdl::Texture>(renderer_, surface_);
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 }
 
@@ -168,13 +177,13 @@ void Text::update()
 	{
 		font_.set_style(font_style_);
 		font_outline_.set_style(font_style_);
-		create_surface_texture();
+		recreate_surfaces_texture();
 		previous_font_style_ = font_style_;
 	}
 
 	if(previous_text_ != text_ || (is_dialogue_ && previous_text_ != text_dialogue_)) //the text has been modified (in a inputfield for example)
 	{
-		create_surface_texture();
+		recreate_surfaces_texture();
 
 		if(is_dialogue_)
 		{

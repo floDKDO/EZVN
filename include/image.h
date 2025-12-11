@@ -6,6 +6,7 @@
 #include "drawable.h"
 
 #include <memory>
+#include <optional>
 
 class Image : public Drawable
 {
@@ -15,15 +16,9 @@ class Image : public Drawable
 		void change_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
 
-	private:
-		std::unique_ptr<sdl::Animation> animated_image_;
-
-	public:
 		int zorder_;
 
 	private:
-		std::string_view path_;
-
 		enum class ImageType
 		{
 			NONE, //TODO : utile ?
@@ -39,9 +34,11 @@ class Image : public Drawable
 			BACKGROUND
 		};
 
+		std::optional<sdl::Animation> create_animation(const std::string_view path);
+
+		std::optional<sdl::Animation> animated_image_; 
+		std::string_view path_;
 		ImageType image_type_;
-
 		int frame_index_;
-
-		sdl::Renderer& renderer_; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
+		//sdl::Renderer& renderer_; //solution temporaire => cette classe ne possède pas / don't owns ce pointeur
 };
