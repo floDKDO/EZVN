@@ -43,6 +43,7 @@ int main(int argc, char* argv[])
 	game.add_new_dialogue(__LINE__, "Sayori", "How are you MC?");
 	game.show_background(__LINE__, "img/backgrounds/night.png");
 	//game.show_character(__LINE__, "Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
+	game.show_character(__LINE__, "Sayori", TransformName::f42, 10); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
 	game.show_character(__LINE__, "Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue(__LINE__, "...");

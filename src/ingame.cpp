@@ -34,9 +34,7 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 
 void InGame::add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer)
 {
-	characters_.push_back(std::make_unique<Character>(name, character_path, renderer, 1));
-	//TODO : prendre en compte le zorder et appeler stable_sort 
-	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
+	characters_.push_back(std::make_unique<Character>(name, character_path, renderer)); 
 }
 
 Character* InGame::get_character(const std::string_view name)
@@ -134,6 +132,7 @@ void InGame::handle_events(const SDL_Event& e)
 
 void InGame::draw(sdl::Renderer& renderer)
 {
+	//TODO : devrait être dans update() mais nécessite le renderer...
 	for(unsigned int i = current_line_; i > 0; --i)
 	{
 		//std::cout << "I : " << i << std::endl;
@@ -150,6 +149,8 @@ void InGame::draw(sdl::Renderer& renderer)
 		background_->draw(renderer);
 	}
 
+	//TODO : coûteux car réalisé à chaque tour de boucle...
+	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
 	for(const std::unique_ptr<Character>& c : characters_)
 	{
 		//std::cout << "********************************************************************************\n";
@@ -178,10 +179,11 @@ void InGame::update()
 		for(unsigned int i = current_line_; i > 0; --i)
 		{
 			//std::cout << "I : " << i << std::endl;
-			if(characters_transforms_.count(i) && characters_transforms_[i].first->name_ == c->name_)
+			if(characters_transforms_.count(i) && std::get<0>(characters_transforms_[i])->name_ == c->name_)
 			{
 				//std::cout << "=========================================================================\n";
-				c->set_transform(characters_transforms_[i].second);
+				c->set_transform(std::get<1>(characters_transforms_[i]));
+				c->character_.zorder_ = std::get<2>(characters_transforms_[i]);
 				break;
 			}
 		}

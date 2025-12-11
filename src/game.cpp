@@ -149,17 +149,17 @@ void Game::create_character(const std::string_view character_name, const std::st
 	dynamic_cast<InGame*>(in_game_.get())->add_character(character_name, character_path, renderer_);
 }
 
-void Game::show_character(unsigned int line_number, const std::string_view character_name, const TransformName transform_name)
+void Game::show_character(unsigned int line_number, const std::string_view character_name, const TransformName transform_name, const int zorder)
 {
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
 	//character->is_visible_ = true;
 	//character->set_transform(transform_name);
 
-	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name}}); //TODO : make_pair ou accolades (= initializer list) ??
+	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
 }
 
-void Game::show_character(unsigned int line_number, const std::string_view character_name)
+void Game::show_character(unsigned int line_number, const std::string_view character_name, const int zorder)
 {
 	//garder la même transfo = ne pas déplacer le personnage
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
@@ -167,7 +167,7 @@ void Game::show_character(unsigned int line_number, const std::string_view chara
 	//character->is_visible_ = true;
 	//character->set_transform(transform_name);
 
-	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::none}}); //TODO : make_pair ou accolades (= initializer list) ??
+	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::none, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
 }
 
 void Game::hide_character(unsigned int line_number, const std::string_view character_name)
@@ -176,7 +176,7 @@ void Game::hide_character(unsigned int line_number, const std::string_view chara
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
 
-	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::hide}});
+	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::hide, character->character_.zorder_}});
 
 }
 
