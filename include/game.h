@@ -31,13 +31,13 @@ class Game
 		void update_fps_count(const std::string_view fps) const;
 
 		void create_character(const std::string_view character_name, const std::string_view character_path);
-		void show_character(unsigned int line_number, const std::string_view character_name, const TransformName transform_name, const int zorder = 0);
-		void show_character(unsigned int line_number, const std::string_view character_name, const int zorder = 0);
-		void hide_character(unsigned int line_number, const std::string_view character_name);
-		void add_new_dialogue(unsigned int line_number, const std::string_view character_name, const std::string_view dialogue);
-		void add_new_dialogue(unsigned int line_number, const std::string_view dialogue);
-		void show_background(unsigned int line_number, const std::string_view background_path);
-		void hide_background(unsigned int line_number);
+		void show_character(const std::string_view character_name, const TransformName transform_name, const int zorder = 0);
+		void show_character(const std::string_view character_name, const int zorder = 0);
+		void hide_character(const std::string_view character_name);
+		void add_new_dialogue(const std::string_view character_name, const std::string_view dialogue);
+		void add_new_dialogue(const std::string_view dialogue);
+		void show_background(const std::string_view background_path);
+		void hide_background();
 
 	private:
 		//void create_main_menu();

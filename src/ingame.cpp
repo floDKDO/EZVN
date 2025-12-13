@@ -7,7 +7,7 @@
 #include <algorithm>
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) //TODO : ne rien afficher si pas de background
-	: GameState(game), dialogue_index_(0), current_line_(0), textbox_(renderer), hide_ui_textbox_(false), renderer_(renderer)
+	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), textbox_(renderer), hide_ui_textbox_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer);
 }
@@ -49,6 +49,24 @@ Character* InGame::get_character(const std::string_view name)
 	return nullptr;
 }
 
+void InGame::insert_dialogue(const std::string_view character_name, const std::string_view dialogue)
+{
+	dialogues_.insert({unique_id_, {dialogue, get_character(character_name)}});
+	unique_id_ += 1;
+}
+
+void InGame::insert_background(const std::string_view background_path)
+{
+	backgrounds_.insert({unique_id_, background_path});
+	unique_id_ += 1;
+}
+
+void InGame::insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
+{
+	characters_transforms_.insert({unique_id_, {get_character(character_name), transform_name, zorder}});
+	unique_id_ += 1;
+}
+
 void InGame::change_background(const std::string_view background_path)
 {
 	if(background_path.empty())
@@ -64,6 +82,56 @@ void InGame::change_background(const std::string_view background_path)
 		else
 		{
 			background_->init_image(background_path, 0, 0, renderer_);
+		}
+	}
+}
+
+void InGame::show_next_dialogue()
+{
+	if(dialogues_.count(current_unique_id_))
+	{
+		if(textbox_.text_.is_finished_) //empêcher le spam d'espace
+		{
+			if((std::next(dialogues_.find(current_unique_id_), 1) != dialogues_.end()))
+			{
+				current_unique_id_ = std::next(dialogues_.find(current_unique_id_), 1)->first;
+				is_current_unique_id_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
+			}
+			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second);
+		}
+	}
+}
+
+void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
+{
+	SDL_assert(which_dialogue == WhichDialogue::next || which_dialogue == WhichDialogue::previous);
+
+	if(dialogues_.count(current_unique_id_))
+	{
+		if(textbox_.text_.is_finished_) //empêcher le spam d'espace
+		{
+			if(which_dialogue == WhichDialogue::next)
+			{
+				if((std::next(dialogues_.find(current_unique_id_), 1) != dialogues_.end()) 
+				&& (is_current_unique_id_saved_ && current_unique_id_ < current_unique_id_when_previous_))
+				{
+					current_unique_id_ = std::next(dialogues_.find(current_unique_id_), 1)->first;
+				}
+			}
+			else if(which_dialogue == WhichDialogue::previous)
+			{
+				if(!is_current_unique_id_saved_)
+				{
+					current_unique_id_when_previous_ = current_unique_id_;
+					is_current_unique_id_saved_ = true;
+				}
+
+				if(dialogues_.find(current_unique_id_) != dialogues_.begin())
+				{
+					current_unique_id_ = std::prev(dialogues_.find(current_unique_id_), 1)->first;
+				}
+			}
+			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second);
 		}
 	}
 }
@@ -91,20 +159,17 @@ void InGame::handle_events(const SDL_Event& e)
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
-			if(dialogues_.count(current_line_))
+			show_next_dialogue();
+		}
+		else if(e.type == SDL_MOUSEWHEEL) 
+		{
+			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
 			{
-				//std::cout << "--CURRENT_LINE: " << current_line_ << std::endl;
-				
-				if(textbox_.text_.is_finished_) //empêcher le spam d'espace
-				{
-					//std::cout << "DEDANS\n";
-					if(std::next(dialogues_.begin(), dialogue_index_ + 1) != dialogues_.end())
-					{
-						dialogue_index_ += 1;
-					}
-					current_line_ = std::next(dialogues_.begin(), dialogue_index_)->first;
-					textbox_.show_new_dialogue(dialogues_[current_line_].first, dialogues_[current_line_].second);
-				}
+				show_dialogue_mouse_wheel(WhichDialogue::previous);
+			}
+			else //scroll vers l'arrière => avancer d'un dialogue
+			{
+				show_dialogue_mouse_wheel(WhichDialogue::next);
 			}
 		}
 		//textbox_.handle_events(e);
@@ -112,7 +177,7 @@ void InGame::handle_events(const SDL_Event& e)
 
 	if(e.type == SDL_MOUSEBUTTONDOWN)
 	{
-		if(e.button.button == SDL_BUTTON_RIGHT)
+		if(e.button.button == SDL_BUTTON_RIGHT || e.button.button == SDL_BUTTON_MIDDLE)
 		{
 			hide_ui_textbox_ = !hide_ui_textbox_;
 		}
@@ -146,12 +211,9 @@ void InGame::draw(sdl::Renderer& renderer)
 
 void InGame::update()
 {
-	//TODO : ne fonctionnera plus avec le vecteur de personnages
-	//std::cout << current_line_ << " et " << dialogues_.count(current_line_) << std::endl;
-
 	for(const std::unique_ptr<Character>& c : characters_)
 	{
-		for(unsigned int i = current_line_; i > 0; --i)
+		for(unsigned int i = current_unique_id_; i != -1; --i)
 		{
 			//std::cout << "I : " << i << std::endl;
 			if(characters_transforms_.count(i) && std::get<0>(characters_transforms_[i])->name_ == c->name_)
@@ -164,7 +226,7 @@ void InGame::update()
 		}
 	}
 
-	for(unsigned int i = current_line_; i > 0; --i)
+	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		//std::cout << "I : " << i << std::endl;
 		if(backgrounds_.count(i))
@@ -175,10 +237,10 @@ void InGame::update()
 		}
 	}
 
-	if(!dialogues_.count(current_line_) && current_line_ <= (--dialogues_.end())->first) //ne pas incrémenter au-delà la clef max
+	if(!dialogues_.count(current_unique_id_) && current_unique_id_ <= (--dialogues_.end())->first) //ne pas incrémenter au-delà la clef max
 	{
-		current_line_ += 1;
-		//std::cout << "CURRENT_LINE: " << current_line_ << std::endl;
+		current_unique_id_ += 1;
+		//std::cout << "CURRENT_LINE: " << current_unique_id_ << std::endl;
 		//std::cout << std::boolalpha << textbox_.text_.is_finished_ << std::endl;
 	}
 

@@ -18,7 +18,7 @@
 
 //TODO : r, g, b, a ou SDL_Color ?? x, y ou {x, h} dans un Vec2 ??
 
-//TODO : être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
+//TODO:  être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
 
 int main(int argc, char* argv[])
 {
@@ -29,27 +29,27 @@ int main(int argc, char* argv[])
 	game.create_character("Monika", "img/characters/monika.png");
 	game.create_character("Yuri", "img/characters/yuri.png");
 	game.create_character("Natsuki", "img/characters/natsuki.png");
-	game.show_character(__LINE__, "Yuri", TransformName::t41); //TODO : texte converti en l'enum dans la méthode
-	game.show_character(__LINE__, "Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
-	game.show_character(__LINE__, "Monika", TransformName::t43); //TODO : texte converti en l'enum dans la méthode
-	game.show_character(__LINE__, "Natsuki", TransformName::t44); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
-	game.hide_character(__LINE__, "Sayori");
-	game.add_new_dialogue(__LINE__, "Yuri", "...");
-	game.show_background(__LINE__, "img/backgrounds/class.png");
-	//game.show_character(__LINE__, "Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue(__LINE__, "Elle est chiante...");
-	game.hide_background(__LINE__);
-	game.show_character(__LINE__, "Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue(__LINE__, "Sayori", "How are you MC?");
-	game.show_background(__LINE__, "img/backgrounds/night.png");
-	//game.show_character(__LINE__, "Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
-	game.show_character(__LINE__, "Sayori", TransformName::f42, 10); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue(__LINE__, "Sayori", "HEYYYYYY!");
-	game.show_character(__LINE__, "Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue(__LINE__, "...");
-	game.show_character(__LINE__, "Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue(__LINE__, "Sayori", "How are you MC?");
+	game.show_character("Yuri", TransformName::t41); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Monika", TransformName::t43); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Natsuki", TransformName::t44); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Sayori", "HEYYYYYY!");
+	game.show_character("Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Yuri", "...");
+	game.show_background("img/backgrounds/class.png");
+	//game.show_character("Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Elle est chiante...");
+	game.hide_background();
+	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Sayori", "How are you MC?");
+	game.show_background("img/backgrounds/night.png");
+	//game.show_character("Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Sayori", TransformName::f42, 10); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Sayori", "HEYYYYYY!");
+	game.show_character("Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("...");
+	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Sayori", "How are you MC?");
 
 	game.run();
 

@@ -44,9 +44,10 @@ class Transform
 	public:
 		Transform(const TransformName transform_name);
 
-		void create_transform(const TransformName transform_name);
+		void create_transform(const TransformName transform_name, bool is_visible);
 		void show_transform(const TransformName transform_name, Image& image);
 
+		bool is_character_visible_;
 		TransformName transform_name_;
 		TransformName previous_transform_name_;
 

@@ -12,12 +12,20 @@ void Character::set_transform(const TransformName transform_name)
 {
 	if(t_.transform_name_ != transform_name)
 	{
-		t_.create_transform(transform_name);
+		t_.create_transform(transform_name, is_visible_);
 		//t_.transform_name_ = transform_name;
 		//std::cout << int(t_.transform_name_) << std::endl;
 
 		//TODO : si hide, mettre is_visible_ à false ??
-		is_visible_ = true;
+		if(transform_name == TransformName::hide)
+		{
+			is_visible_ = false;
+		}
+		else
+		{
+			is_visible_ = true;
+		}
+		//std::cout << std::boolalpha << is_visible_ << std::endl;
 
 		//t_.show_transform(transform_name, character_);
 	}

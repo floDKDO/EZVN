@@ -147,61 +147,74 @@ void Game::create_character(const std::string_view character_name, const std::st
 	dynamic_cast<InGame*>(in_game_.get())->add_character(character_name, character_path, renderer_);
 }
 
-void Game::show_character(unsigned int line_number, const std::string_view character_name, const TransformName transform_name, const int zorder)
+void Game::show_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
 {
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
 	//character->is_visible_ = true;
 	//character->set_transform(transform_name);
+	//TODO : créer une fonction qui insert et incrémente le compteur
+	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??*/
 
-	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, transform_name, zorder);
 }
 
-void Game::show_character(unsigned int line_number, const std::string_view character_name, const int zorder)
+void Game::show_character(const std::string_view character_name, const int zorder)
 {
 	//garder la même transfo = ne pas déplacer le personnage
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
 	//character->is_visible_ = true;
 	//character->set_transform(transform_name);
+	//TODO : créer une fonction qui insert et incrémente le compteur
+	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::none, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??*/
 
-	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::none, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::none, zorder);
 }
 
-void Game::hide_character(unsigned int line_number, const std::string_view character_name)
+void Game::hide_character(const std::string_view character_name)
 {
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
 
-	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::hide, character->character_.zorder_}});
+	//in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::hide, character->character_.zorder_}}); //TODO : créer une fonction qui insert et incrémente le compteur*/
 
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::hide, character->character_.zorder_); 
 }
 
-void Game::add_new_dialogue(unsigned int line_number, const std::string_view character_name, const std::string_view dialogue)
+void Game::add_new_dialogue(const std::string_view character_name, const std::string_view dialogue)
 {
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 
 	Character* character = in_game_ptr->get_character(character_name);
 	if(character != nullptr)
 	{
-		in_game_ptr->dialogues_.insert({line_number, {dialogue, character}});
-	}
+		in_game_ptr->dialogues_.insert({line_number, {dialogue, character}}); //TODO : créer une fonction qui insert et incrémente le compteur
+	}*/
+
+	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue(character_name, dialogue);
 }
 
-void Game::add_new_dialogue(unsigned int line_number, const std::string_view dialogue)
+void Game::add_new_dialogue(const std::string_view dialogue)
 {
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	in_game_ptr->dialogues_.insert({line_number, {dialogue, nullptr}});
+	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	in_game_ptr->dialogues_.insert({line_number, {dialogue, nullptr}});//TODO : créer une fonction qui insert et incrémente le compteur*/
+
+	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("", dialogue); 
 }
 
-void Game::show_background(unsigned int line_number, const std::string_view background_path)
+void Game::show_background(const std::string_view background_path)
 {
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	in_game_ptr->backgrounds_.insert({line_number, background_path});
+	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	in_game_ptr->backgrounds_.insert({line_number, background_path});//TODO : créer une fonction qui insert et incrémente le compteur*/
+
+	dynamic_cast<InGame*>(in_game_.get())->insert_background(background_path);
 }
 
-void Game::hide_background(unsigned int line_number)
+void Game::hide_background()
 {
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	in_game_ptr->backgrounds_.insert({line_number, ""});
+	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
+	in_game_ptr->backgrounds_.insert({line_number, ""});//TODO : créer une fonction qui insert et incrémente le compteur*/
+
+	dynamic_cast<InGame*>(in_game_.get())->insert_background("");
 }

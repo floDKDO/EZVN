@@ -20,7 +20,20 @@ class InGame : public GameState
 		void add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer);
 		Character* get_character(const std::string_view name);
 
+		void insert_dialogue(const std::string_view character_name, const std::string_view dialogue);
+		void insert_background(const std::string_view background_path);
+		void insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder);
+
 		void change_background(const std::string_view background_path);
+
+		void show_next_dialogue(); 
+
+		enum class WhichDialogue
+		{
+			next,
+			previous
+		};
+		void show_dialogue_mouse_wheel(WhichDialogue which_dialogue);
 
 		void temp_function(Ui* ui);
 
@@ -30,8 +43,11 @@ class InGame : public GameState
 		std::map<unsigned int, std::pair<const std::string_view, Character*>> dialogues_;
 		std::map<unsigned int, const std::string_view> backgrounds_;
 
-		unsigned int dialogue_index_; 
-		unsigned int current_line_; 
+		mutable unsigned int unique_id_;
+		unsigned int current_unique_id_;
+
+		unsigned int current_unique_id_when_previous_;
+		bool is_current_unique_id_saved_;
 
 		Textbox textbox_; //TODO : remettre private
 

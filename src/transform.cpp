@@ -6,7 +6,7 @@
 //TODO : "6" obligatoire ??
 
 Transform::Transform(const TransformName transform_name)
-	: transform_name_(transform_name), previous_transform_name_(transform_name_)
+	: is_character_visible_(false), transform_name_(transform_name), previous_transform_name_(transform_name_)
 {
 	transforms_.insert({TransformName::t11, TransformAllSteps(6)});
 	transforms_.insert({TransformName::t21, TransformAllSteps(6)});
@@ -40,35 +40,63 @@ void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSte
 	//TODO : mettre ce if pour chaque transform ??
 	if(!transform_t.transform_finished_)
 	{
-		switch(transform_t.current_step_number_)
+		if(is_character_visible_) //<=> on replace
 		{
-			case 0:
-				transform_t.transform_steps_[0].reset(image);
-				transform_t.transform_steps_[1].hide(image);
-				transform_t.transform_steps_[2].set_position_yoffset(image, -26);
-				transform_t.transform_steps_[3].zoom(image, 0.8f);
-				transform_t.transform_steps_[4].set_position_xcenter(image, xpos);
-				if(transform_t.transform_steps_[0].transform_step_finished_
-				&& transform_t.transform_steps_[1].transform_step_finished_
-				&& transform_t.transform_steps_[2].transform_step_finished_
-				&& transform_t.transform_steps_[3].transform_step_finished_
-				&& transform_t.transform_steps_[4].transform_step_finished_)
-				{
-					transform_t.current_step_number_ += 1;
-				}
-				break;
+			switch(transform_t.current_step_number_)
+			{
+				case 0:
+					transform_t.transform_steps_[0].reset(image);
+					transform_t.transform_steps_[1].set_alpha(image, 255);
+					transform_t.transform_steps_[2].set_position_yoffset(image, -26);
+					transform_t.transform_steps_[3].zoom(image, 0.8f);
+					transform_t.transform_steps_[4].set_position_xcenter(image, xpos);
+					if(transform_t.transform_steps_[0].transform_step_finished_
+					&& transform_t.transform_steps_[1].transform_step_finished_
+					&& transform_t.transform_steps_[2].transform_step_finished_
+					&& transform_t.transform_steps_[3].transform_step_finished_
+					&& transform_t.transform_steps_[4].transform_step_finished_)
+					{
+						transform_t.current_step_number_ += 1;
+						transform_t.transform_finished_ = true;
+					}
+					break;
 
-			case 1:
-				transform_t.transform_steps_[5].show(image, 250);
-				if(transform_t.transform_steps_[5].transform_step_finished_)
-				{
-					transform_t.current_step_number_ += 1;
-					transform_t.transform_finished_ = true;
-				}
-				break;
+				default:
+					break;
+			}
+		}
+		else //<=> on show
+		{
+			switch(transform_t.current_step_number_)
+			{
+				case 0:
+					transform_t.transform_steps_[0].reset(image);
+					transform_t.transform_steps_[1].hide(image);
+					transform_t.transform_steps_[2].set_position_yoffset(image, -26);
+					transform_t.transform_steps_[3].zoom(image, 0.8f);
+					transform_t.transform_steps_[4].set_position_xcenter(image, xpos);
+					if(transform_t.transform_steps_[0].transform_step_finished_
+					&& transform_t.transform_steps_[1].transform_step_finished_
+					&& transform_t.transform_steps_[2].transform_step_finished_
+					&& transform_t.transform_steps_[3].transform_step_finished_
+					&& transform_t.transform_steps_[4].transform_step_finished_)
+					{
+						transform_t.current_step_number_ += 1;
+					}
+					break;
 
-			default:
-				break;
+				case 1:
+					transform_t.transform_steps_[5].show(image, 250);
+					if(transform_t.transform_steps_[5].transform_step_finished_)
+					{
+						transform_t.current_step_number_ += 1;
+						transform_t.transform_finished_ = true;
+					}
+					break;
+
+				default:
+					break;
+			}
 		}
 	}
 }
@@ -135,35 +163,67 @@ void Transform::t44(Image& image)
 
 void Transform::focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f) 
 {
-	switch(transform_f.current_step_number_)
+	//TODO : mettre ce if pour chaque transform ??
+	if(!transform_f.transform_finished_)
 	{
-		case 0:
-			transform_f.transform_steps_[0].reset(image);
-			transform_f.transform_steps_[1].hide(image);
-			transform_f.transform_steps_[2].set_position_yoffset(image, -65);
-			transform_f.transform_steps_[3].zoom(image, 0.84f);
-			transform_f.transform_steps_[4].set_position_xcenter(image, xpos);
-			if(transform_f.transform_steps_[0].transform_step_finished_
-			&& transform_f.transform_steps_[1].transform_step_finished_
-			&& transform_f.transform_steps_[2].transform_step_finished_
-			&& transform_f.transform_steps_[3].transform_step_finished_
-			&& transform_f.transform_steps_[4].transform_step_finished_)
+		if(is_character_visible_) //<=> on replace
+		{
+			switch(transform_f.current_step_number_)
 			{
-				transform_f.current_step_number_ += 1;
-			}
-			break;
+				case 0:
+					transform_f.transform_steps_[0].reset(image);
+					transform_f.transform_steps_[1].set_alpha(image, 255);
+					transform_f.transform_steps_[2].set_position_yoffset(image, -65);
+					transform_f.transform_steps_[3].zoom(image, 0.84f);
+					transform_f.transform_steps_[4].set_position_xcenter(image, xpos);
+					if(transform_f.transform_steps_[0].transform_step_finished_
+					&& transform_f.transform_steps_[1].transform_step_finished_
+					&& transform_f.transform_steps_[2].transform_step_finished_
+					&& transform_f.transform_steps_[3].transform_step_finished_
+					&& transform_f.transform_steps_[4].transform_step_finished_)
+					{
+						transform_f.current_step_number_ += 1;
+						transform_f.transform_finished_ = true;
+					}
+					break;
 
-		case 1:
-			transform_f.transform_steps_[5].show(image, 250);
-			if(transform_f.transform_steps_[5].transform_step_finished_)
+				default:
+					break;
+			}
+		}
+		else //<=> on show
+		{
+			switch(transform_f.current_step_number_)
 			{
-				transform_f.current_step_number_ += 1;
-				transform_f.transform_finished_ = true;
-			}
-			break;
+				case 0:
+					transform_f.transform_steps_[0].reset(image);
+					transform_f.transform_steps_[1].hide(image);
+					transform_f.transform_steps_[2].set_position_yoffset(image, -65);
+					transform_f.transform_steps_[3].zoom(image, 0.84f);
+					transform_f.transform_steps_[4].set_position_xcenter(image, xpos);
+					if(transform_f.transform_steps_[0].transform_step_finished_
+					&& transform_f.transform_steps_[1].transform_step_finished_
+					&& transform_f.transform_steps_[2].transform_step_finished_
+					&& transform_f.transform_steps_[3].transform_step_finished_
+					&& transform_f.transform_steps_[4].transform_step_finished_)
+					{
+						transform_f.current_step_number_ += 1;
+					}
+					break;
 
-		default:
-			break;
+				case 1:
+					transform_f.transform_steps_[5].show(image, 250);
+					if(transform_f.transform_steps_[5].transform_step_finished_)
+					{
+						transform_f.current_step_number_ += 1;
+						transform_f.transform_finished_ = true;
+					}
+					break;
+
+				default:
+					break;
+			}
+		}
 	}
 }
 
@@ -267,9 +327,10 @@ void Transform::hide(Image& image) //TODO : paramètre optionnel time
 	}
 }
 
-void Transform::create_transform(const TransformName transform_name)
+void Transform::create_transform(const TransformName transform_name, bool is_visible)
 {
 	transform_name_ = transform_name;
+	is_character_visible_ = is_visible; //to choose between on show and on replace
 	transforms_.at(transform_name) = TransformAllSteps(transforms_.at(transform_name).number_of_transform_steps_); //recreate the TransformAllSteps object associated with transform_name
 }
 
