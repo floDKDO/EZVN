@@ -1,7 +1,12 @@
 #include "textbox.h"
 #include "constants.h"
 
+#include <algorithm>
 #include <iostream>
+
+const Uint64 Textbox::minimum_time_ = 3000; //3s
+const Uint64 Textbox::maximum_time_ = 10000; //10s
+const Uint64 Textbox::base_delay_ = 1750; //1.75s
 
 Textbox::Textbox(sdl::Renderer& renderer)
 	: text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, 10),
@@ -31,9 +36,9 @@ void Textbox::set_initial_dialogue(const std::string_view new_dialogue, Characte
 	show_new_dialogue(new_dialogue, speaker);
 }
 
-void Textbox::show_new_dialogue(const std::string_view new_dialogue, Character* speaker)
+void Textbox::show_new_dialogue(const std::string_view new_dialogue, Character* speaker, bool wait_for_end_of_dialogue)
 {
-	if(text_.is_finished_)
+	if((text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
 	{
 		if(speaker == nullptr)
 		{
@@ -79,6 +84,11 @@ void Textbox::show_new_dialogue(const std::string_view new_dialogue) //Narrator
 			text_.text_.append("\"");
 		}
 	}*/
+}
+
+Uint64 Textbox::get_text_delay()
+{
+	return std::clamp(static_cast<Uint64>(Textbox::base_delay_ + (float(text_.text_.length()) / (Text::global_text_divisor_ / 2) * 1000)), Textbox::minimum_time_, Textbox::maximum_time_);
 }
 
 void Textbox::handle_events(const SDL_Event& e)

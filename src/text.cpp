@@ -4,7 +4,7 @@
 #include <iostream>
 
 int Text::global_text_divisor_ = 45;
-const int Text::initial_text_speed_ = 500;
+int Text::initial_text_speed_ = 500;
 
 Text::Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length)
 	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),

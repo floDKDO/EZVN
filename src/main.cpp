@@ -24,20 +24,22 @@ int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
 
+	//TODO : pause et window hide
+
 	Game game;
 	game.create_character("Sayori", "img/characters/sayori.png");
 	game.create_character("Monika", "img/characters/monika.png");
 	game.create_character("Yuri", "img/characters/yuri.png");
 	game.create_character("Natsuki", "img/characters/natsuki.png");
-	game.show_character("Yuri", TransformName::t41); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Monika", TransformName::t43); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Natsuki", TransformName::t44); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Yuri", TransformName::t41, 1); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Sayori", TransformName::f42, 0); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Monika", TransformName::t43, 1); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Natsuki", TransformName::t44, 1); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
 	game.show_character("Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue("Yuri", "...");
+	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
-	//game.show_character("Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
+	game.hide_character("Sayori"); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Elle est chiante...");
 	game.hide_background();
 	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode

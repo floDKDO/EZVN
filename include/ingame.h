@@ -3,6 +3,7 @@
 #include "gamestate.h"
 #include "textbox.h"
 #include "character.h"
+#include "GUI/texttoggle.h"
 #include <vector>
 #include <memory>
 #include <map>
@@ -16,6 +17,8 @@ class InGame : public GameState
 		void handle_events(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
+
+		TextToggle* get_texttoggle(const std::string_view text);
 
 		void add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer);
 		Character* get_character(const std::string_view name);
@@ -35,6 +38,7 @@ class InGame : public GameState
 		};
 		void show_dialogue_mouse_wheel(WhichDialogue which_dialogue);
 
+		void auto_function(Ui* ui);
 		void temp_function(Ui* ui);
 
 		std::vector<std::unique_ptr<Character>> characters_; //unique_ptr pour que stable_sort fonctionne
@@ -48,6 +52,8 @@ class InGame : public GameState
 
 		unsigned int current_unique_id_when_previous_;
 		bool is_current_unique_id_saved_;
+
+		Uint64 last_time_;
 
 		Textbox textbox_; //TODO : remettre private
 

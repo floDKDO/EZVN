@@ -47,5 +47,5 @@ void Character::draw(sdl::Renderer& renderer)
 
 void Character::update()
 {
-
+	t_.show_transform(t_.transform_name_, character_); 
 }

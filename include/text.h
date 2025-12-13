@@ -32,6 +32,7 @@ class Text : public Drawable
 		void update();
 
 		static int global_text_divisor_;
+		static int initial_text_speed_;
 
 		std::string text_;
 		std::string text_dialogue_;
@@ -45,8 +46,6 @@ class Text : public Drawable
 
 		sdl::Surface create_surface(sdl::Font& font, const SDL_Color color);
 		void recreate_surfaces_texture();
-
-		static const int initial_text_speed_;
 
 		int font_size_;
 		int font_style_;
