@@ -25,6 +25,9 @@ class Renderer
 		void present() const;
 		void set_logical_size(const int w, const int h) const;
 		void set_draw_blend_mode(const SDL_BlendMode blend_mode) const;
+		void set_draw_color(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
+		void fill_rect(const SDL_Rect* rect);
+		void draw_rect(const SDL_Rect* rect);
 
 	private:
 		SDL_Renderer* renderer_;

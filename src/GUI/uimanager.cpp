@@ -32,11 +32,11 @@ void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements
 		if(ui->state_ == State::SELECTED)
 		{
 			current_selected_ = ui;
-			std::cout << "SELECTED FOUND!\n";
+			//std::cout << "SELECTED FOUND!\n";
 			return;
 		}
 	}
-	std::cout << "NO SELECTED FOUND...\n";
+	//std::cout << "NO SELECTED FOUND...\n";
 	current_selected_ = navigation_list_[0];
 	current_selected_->state_ = State::SELECTED;
 }
@@ -167,12 +167,12 @@ void UiManager::handle_events(const SDL_Event& e)
 			{
 				if(ui->is_mouse_on_ui())
 				{
-					if(previous_selected_ != nullptr && ui != previous_selected_ && previous_selected_->state_ != State::NORMAL)
+					if(previous_selected_ != nullptr && ui != previous_selected_ && previous_selected_->state_ != State::NORMAL && !Ui::is_mouse_left_button_held_down_) //TODO : vérifier dernière condition
 					{
 						previous_selected_->state_ = State::NORMAL;
 						if(dynamic_cast<Slider*>(previous_selected_) != nullptr)
 						{
-							dynamic_cast<Slider*>(previous_selected_)->unselect();
+							dynamic_cast<Slider*>(previous_selected_)->disable_keyboard_focus();
 						}
 					}
 					previous_selected_ = current_selected_;

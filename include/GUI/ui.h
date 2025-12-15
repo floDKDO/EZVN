@@ -36,6 +36,7 @@ class Ui
 		virtual void on_pointer_exit();
 		virtual void on_pointer_exit_hook_end() {}
 
+		virtual void on_drag(){}
 
 		virtual void on_up_pressed();
 		virtual void on_up_pressed_hook_end() {}
@@ -88,6 +89,7 @@ class Ui
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
 
 		static int is_pop_up_visible_;
+		static bool is_mouse_left_button_held_down_;
 
 		Ui* select_on_up_;
 		Ui* select_on_down_;
@@ -107,7 +109,9 @@ class Ui
 		Sound click_sound_;
 
 		bool pointer_on_ui_when_pointer_up_; 
-
+		bool mouse_entered_;
+		bool mouse_was_on_ui_before_drag_;
+		
 		sdl::Renderer& renderer_; //do not own it !!
 
 		std::function<void(Ui* ui)> callback_function_;

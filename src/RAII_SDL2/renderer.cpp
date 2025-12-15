@@ -96,4 +96,28 @@ void Renderer::set_draw_blend_mode(const SDL_BlendMode blend_mode) const
 	}
 }
 
+void Renderer::set_draw_color(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
+{
+	if(SDL_SetRenderDrawColor(renderer_, r, g, b, a) < 0)
+	{
+		SDL_Log("(SDL_SetRenderDrawColor) %s\n", SDL_GetError());
+	}
+}
+
+void Renderer::fill_rect(const SDL_Rect* rect)
+{
+	if(SDL_RenderFillRect(renderer_, rect) < 0)
+	{
+		SDL_Log("(SDL_RenderFillRect) %s\n", SDL_GetError());
+	}
+}
+
+void Renderer::draw_rect(const SDL_Rect* rect)
+{
+	if(SDL_RenderDrawRect(renderer_, rect) < 0)
+	{
+		SDL_Log("(SDL_RenderDrawRect) %s\n", SDL_GetError());
+	}
+}
+
 }

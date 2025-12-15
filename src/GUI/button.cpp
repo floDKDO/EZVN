@@ -17,11 +17,17 @@ Button::Button(const std::string_view text, const int x, const int y, sdl::Rende
 void Button::draw(sdl::Renderer& renderer) 
 {
 	if(state_ == State::NORMAL)
+	{
 		normal_.draw(renderer);
+	}
 	else if(state_ == State::SELECTED)
+	{
 		selected_.draw(renderer);
+	}
 	else if(state_ == State::CLICKED)
+	{
 		clicked_.draw(renderer);
+	}
 
 	text_.draw(renderer);
 }

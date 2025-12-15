@@ -3,16 +3,18 @@
 
 #include <iostream>
 
-bool Ui::lock_ = true;
 int Ui::is_pop_up_visible_ = false;
+bool Ui::is_mouse_left_button_held_down_ = false;
+bool Ui::lock_ = true;
+
 
 //TODO : parfois un bug avec la touche Entrée au lancement du programme
 
 Ui::Ui(sdl::Renderer& renderer)
-	: select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr), 
+	: select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr),
 	state_(State::NORMAL), last_time_(0),
-	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_), 
-	pointer_on_ui_when_pointer_up_(true),
+	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_),
+	pointer_on_ui_when_pointer_up_(true), mouse_entered_(false), mouse_was_on_ui_before_drag_(false),
 	renderer_(renderer),
 	callback_function_(nullptr)
 {}
@@ -26,33 +28,30 @@ void Ui::select_new(Ui* ui)
 
 void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
 {
-	if(pointer_on_ui_when_pointer_up_)
+	if((pointer_on_ui_when_pointer_up_ && is_mouse_on_ui()) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
+	|| !pointer_on_ui_when_pointer_up_) //second conditon: the callback function is called even if the pointer is not on the UI when it is released/up
 	{
-		if(state_ == State::CLICKED)
-		{
-			state_ = State::SELECTED;
-			callback_function_(this);
-			click_sound_.play_sound();
-			on_pointer_up_hook_end();
-		}
-	}
-	else //the callback function is called even if the pointer is not on the UI when the pointer is released/up
-	{
+		state_ = State::SELECTED;
 		callback_function_(this);
 		click_sound_.play_sound();
 		on_pointer_up_hook_end();
 	}
+	is_mouse_left_button_held_down_ = false;
+	mouse_was_on_ui_before_drag_ = false;
 }
 
 void Ui::on_pointer_down() 
 {
+	is_mouse_left_button_held_down_ = true;
+	mouse_was_on_ui_before_drag_ = true;
 	state_ = State::CLICKED;
 	on_pointer_down_hook_end();
 }
 
 void Ui::on_pointer_enter() 
 {
-	if(state_ == State::NORMAL) 
+	mouse_entered_ = true;
+	if(state_ == State::NORMAL)
 	{
 		state_ = State::SELECTED;
 		select_sound_.play_sound();
@@ -62,11 +61,12 @@ void Ui::on_pointer_enter()
 
 void Ui::on_pointer_exit() 
 {
-	if(state_ == State::CLICKED)
+	if(state_ == State::CLICKED && pointer_on_ui_when_pointer_up_)
 	{
 		state_ = State::SELECTED; 
 	}
 	on_pointer_exit_hook_end(); //TODO : dans le if ??
+	mouse_entered_ = false;
 }
 
 void Ui::on_up_pressed()
@@ -232,28 +232,45 @@ void Ui::handle_events(const SDL_Event& e)
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_ui()) 
+			if(e.button.button == SDL_BUTTON_LEFT)
 			{
-				on_pointer_down();
+				if(is_mouse_on_ui() && !is_mouse_left_button_held_down_)
+				{
+					on_pointer_down();
+				}
 			}
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			if(e.button.button == SDL_BUTTON_LEFT && (state_ == State::SELECTED || state_ == State::CLICKED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
+			if(e.button.button == SDL_BUTTON_LEFT)
 			{
-				on_pointer_up();
+				if(is_mouse_left_button_held_down_ && (state_ == State::SELECTED || state_ == State::CLICKED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
+				{
+					on_pointer_up();
+				}
 			}
 			break;
 
-		case SDL_MOUSEMOTION:
+		case SDL_MOUSEMOTION: 
 		{
 			if(is_mouse_on_ui())
 			{
-				on_pointer_enter();
+				if(!mouse_entered_ && !is_mouse_left_button_held_down_)
+				{
+					on_pointer_enter();
+				}
 			}
 			else
 			{
-				on_pointer_exit();
+				if(mouse_entered_)
+				{
+					on_pointer_exit();
+				}
+			}
+
+			if(is_mouse_left_button_held_down_ && mouse_was_on_ui_before_drag_)
+			{
+				on_drag();
 			}
 		}
 		break;

@@ -18,14 +18,22 @@ Checkbox::Checkbox(const std::string_view text, const int x, const int y, const 
 void Checkbox::draw(sdl::Renderer& renderer)
 {
 	if(state_ == State::NORMAL)
+	{
 		normal_.draw(renderer);
+	}
 	else if(state_ == State::SELECTED)
+	{
 		selected_.draw(renderer);
+	}
 	else if(state_ == State::CLICKED)
+	{
 		clicked_.draw(renderer);
+	}
 
 	if(is_checked_)
+	{
 		check_mark_.draw(renderer);
+	}
 
 	text_.draw(renderer);
 }

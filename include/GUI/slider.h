@@ -10,13 +10,12 @@ class Slider : public Ui
 		Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		bool is_mouse_on_handle(const int mouse_x, const int mouse_y) const;
+		void disable_keyboard_focus();
 		void handle_movement();
-		void unselect();
 
-		void on_pointer_up() override; //<=> on click (l'action se lance quand le clic est relaché)
 		void on_pointer_down_hook_end() override;
-		void on_pointer_enter_hook_end() override;
-		void on_pointer_exit_hook_end() override;
+
+		void on_drag() override;
 
 		void on_up_pressed() override;
 		void on_down_pressed() override;
@@ -33,8 +32,10 @@ class Slider : public Ui
 		static const unsigned int index_rect_container_;
 		//static const unsigned int index_rect_handle_ = 1; //TODO : n'est normalement pas utile
 
-		Image container_;
-		Image handle_;
+		SDL_Rect container_;
+		SDL_Rect container_outline_;
+		SDL_Rect handle_;
+		SDL_Rect handle_outline_;
 		Text text_;
 
 		unsigned int min_value_;
@@ -44,8 +45,7 @@ class Slider : public Ui
 		unsigned int current_value_;
 
 	private:
-		bool is_selected_; //When we press Enter on a SELECTED Slider
-		bool is_dragged_;
+		bool has_keyboard_focus_; //When we press Enter on a SELECTED Slider
 		//SDL_Rect handle_position; //TODO : n'est normalement pas utile
 		int delta_mouse_handle_x_; //x position of the mouse in comparison to the x position of the handle
 };
