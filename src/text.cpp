@@ -6,13 +6,29 @@
 int Text::global_text_divisor_ = 45;
 int Text::initial_text_speed_ = 500;
 
-Text::Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length)
-	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
+Text::Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer)
+	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(0),
 	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_), 
 	outline_size_(constants::text_outline_size_), font_outline_(create_outline()),
-	previous_text_(""), is_animated_(wrap_length_ != 0 ? true : false),
+	previous_text_(""), is_animated_(false),
 	surface_(create_surface(font_, color_)), surface_outline_(create_surface(font_outline_, constants::text_outline_color_))
     /*,local_text_speed_(global_text_divisor_),*/
+{
+	int w, h;
+	font_.size_UTF8(text_, &w, &h);
+	position_ = {x, y, w, h};
+
+	texture_ = std::make_unique<sdl::Texture>(renderer_, surface_);
+	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
+}
+
+Text::Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, bool is_animated, const Uint32 wrap_length)
+	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
+	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_),
+	outline_size_(constants::text_outline_size_), font_outline_(create_outline()),
+	previous_text_(""), is_animated_(is_animated),
+	surface_(create_surface(font_, color_)), surface_outline_(create_surface(font_outline_, constants::text_outline_color_))
+	/*,local_text_speed_(global_text_divisor_),*/
 {
 	int w, h;
 	font_.size_UTF8(text_, &w, &h);
@@ -160,6 +176,7 @@ void Text::update()
 	if(is_animated_)
 	{		
 		Uint64 now = SDL_GetTicks64();
+
 		if(now - last_time_ > (int(float(initial_text_speed_) / float(global_text_divisor_))) && index_dialogue_ < text_.length())
 		{
 			text_dialogue_.push_back(text_[index_dialogue_]);
@@ -171,6 +188,10 @@ void Text::update()
 		{
 			is_finished_ = true;
 		}
+	}
+	else
+	{
+		is_finished_ = true; //pour bouton Skip
 	}
 
 	if(previous_font_style_ != font_style_)

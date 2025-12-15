@@ -7,7 +7,9 @@
 class Inputfield : public Ui
 {
 	public:
-		Inputfield(const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Inputfield(const std::string_view text_placeholder, const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+
+		void quit_editing();
 
 		void on_pointer_up_hook_end() override;
 
@@ -30,7 +32,9 @@ class Inputfield : public Ui
 		static const unsigned int index_rect_inputfield_;
 
 		Text text_;
-		Image normal_;
+
+		SDL_Rect container_;
+		SDL_Rect container_outline_;
 
 		unsigned int character_limit_;
 
@@ -43,4 +47,3 @@ class Inputfield : public Ui
 		unsigned int index_caret_;
 		int offset_caret_; 
 };
-

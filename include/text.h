@@ -11,7 +11,8 @@
 class Text : public Drawable
 {
 	public:
-		Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, const Uint32 wrap_length=0);
+		Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer);
+		Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, bool is_animated, const Uint32 wrap_length);
 
 		void set_italic();
 		void set_bold();
@@ -41,6 +42,9 @@ class Text : public Drawable
 		Uint32 wrap_length_;
 		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
 
+		//TODO : remettre en private
+		bool is_animated_; //TODO : préciser une wrap_length mais que le texte ne soit pas animé (pour pop-up et skip des dialogues) ??
+
 	private:
 		sdl::Font create_outline();
 
@@ -57,7 +61,7 @@ class Text : public Drawable
 		sdl::Font font_outline_; //TODO : mettre l'outline en optionnel
 		
 		std::string previous_text_;
-		bool is_animated_; //TODO : préciser une wrap_length mais que le texte ne soit pas animé (pour pop-up) ??
+		//bool is_animated_; //TODO : préciser une wrap_length mais que le texte ne soit pas animé (pour pop-up et skip des dialogues) ??
 
 		sdl::Surface surface_;
 		sdl::Surface surface_outline_;

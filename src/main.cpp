@@ -20,6 +20,8 @@
 
 //TODO:  être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
 
+//TODO : utilité des vector.reserve(10) ??
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;

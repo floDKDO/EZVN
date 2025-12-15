@@ -39,6 +39,7 @@ class InGame : public GameState
 		void show_dialogue_mouse_wheel(WhichDialogue which_dialogue);
 
 		void auto_function(Ui* ui);
+		void settings_function(Ui* ui);
 		void temp_function(Ui* ui);
 
 		std::vector<std::unique_ptr<Character>> characters_; //unique_ptr pour que stable_sort fonctionne

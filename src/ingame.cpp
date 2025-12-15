@@ -2,9 +2,12 @@
 #include "GUI/textbutton.h"
 #include "transform.h"
 #include "constants.h"
+#include "game.h"
 
 #include <iostream>
 #include <algorithm>
+
+//TODO : bizarre qu'un background "vide" soit parfois noir et parfois blanc... => sûrement à cause de SDL_SetRenderDrawColor()
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) //TODO : ne rien afficher si pas de background
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
@@ -30,7 +33,7 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements_[3].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 	ui_elements_.push_back(std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextButton*>(ui_elements_[4].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_elements_.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
+	ui_elements_.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::settings_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 }
 
 TextToggle* InGame::get_texttoggle(const std::string_view text)
@@ -111,7 +114,7 @@ void InGame::show_next_dialogue()
 				current_unique_id_ = std::next(dialogues_.find(current_unique_id_), 1)->first;
 				is_current_unique_id_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
 			}
-			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second);
+			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second, get_texttoggle("Skip")->is_checked_, true);
 		}
 	}
 }
@@ -156,6 +159,13 @@ void InGame::auto_function(Ui* ui)
 	}
 }
 
+void InGame::settings_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Clicked Settings!" << std::endl;
+	game_.push_state(game_.settings_menu_.get());
+}
+
 void InGame::temp_function(Ui* ui)
 {
 	(void)ui;
@@ -176,7 +186,6 @@ void InGame::handle_events(const SDL_Event& e)
 			}
 		}
 
-		//TODO : auto (compteur quand un dialogue s'est terminé) et skip
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
@@ -186,6 +195,7 @@ void InGame::handle_events(const SDL_Event& e)
 		{
 			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
 			{
+				get_texttoggle("Skip")->is_checked_ = false;
 				show_dialogue_mouse_wheel(WhichDialogue::previous); 
 			}
 			else //scroll vers l'arrière => avancer d'un dialogue
@@ -255,17 +265,10 @@ void InGame::update()
 		current_unique_id_ += 1;
 	}
 
-	//TODO
+	//TODO : les dialogues doivent être affichés en entier directement
 	if(get_texttoggle("Skip")->is_checked_)
 	{
-		//Text::initial_text_speed_ = 5;
-		//Text::global_text_divisor_ = 500;
 		show_next_dialogue();
-	}
-	else
-	{
-		//Text::initial_text_speed_ = 500;
-		//Text::global_text_divisor_ = 45;
 	}
 
 	if(get_texttoggle("Auto")->is_checked_)

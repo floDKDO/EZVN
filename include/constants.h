@@ -42,16 +42,21 @@ inline constexpr int checkbox_text_x_delta_ = 10;
 inline constexpr int checkbox_text_size_ = 30;
 inline constexpr SDL_Color checkbox_text_color_ = {255, 255, 255, 255};
 
-inline constexpr std::string_view inputfield_container_ = "img/gui/inputfield_container.png";
+inline constexpr int inputfield_container_width_ = 250;
+inline constexpr int inputfield_container_height_ = 45;
+inline constexpr SDL_Color inputfield_container_color_ = {255, 255, 255, 255};
+inline constexpr SDL_Color inputfield_outline_normal_color_ = {174, 84, 135, 255};
+inline constexpr SDL_Color inputfield_outline_selected_color_ = {221, 108, 172, 255};
+inline constexpr SDL_Color inputfield_outline_clicked_color_ = {255, 124, 198, 255};
 inline constexpr std::string_view inputfield_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int inputfield_text_x_delta_ = 7;
-inline constexpr int inputfield_text_size_ = 50;
+inline constexpr int inputfield_text_size_ = 30;
 inline constexpr SDL_Color inputfield_text_color_ = {0, 0, 0, 255};
 inline constexpr SDL_Color inputfield_placeholder_text_color_ = {204, 204, 204, 255};
 
 inline constexpr std::string_view confirmationpopup_frame_ = "img/GUI/confirmation_pop_up.png";
 inline constexpr int confirmationpopup_width_ = 411;
-inline constexpr std::string_view confirmationpopup_background = "img/GUI/confirm.png";
+inline constexpr std::string_view confirmationpopup_background_ = "img/GUI/confirm.png";
 inline constexpr std::string_view confirmationpopup_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int confirmationpopup_text_size_ = 20;
 inline constexpr int confirmationpopup_text_x_delta_ = 30;

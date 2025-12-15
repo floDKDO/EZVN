@@ -9,7 +9,7 @@ const Uint64 Textbox::maximum_time_ = 10000; //10s
 const Uint64 Textbox::base_delay_ = 1750; //1.75s
 
 Textbox::Textbox(sdl::Renderer& renderer)
-	: text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, 10),
+	: text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, true, 10),
 	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""), 
 	namebox_(constants::namebox_image_, 0, 0, renderer),
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
@@ -36,7 +36,7 @@ void Textbox::set_initial_dialogue(const std::string_view new_dialogue, Characte
 	show_new_dialogue(new_dialogue, speaker);
 }
 
-void Textbox::show_new_dialogue(const std::string_view new_dialogue, Character* speaker, bool wait_for_end_of_dialogue)
+void Textbox::show_new_dialogue(const std::string_view new_dialogue, Character* speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)
 {
 	if((text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
 	{
@@ -56,6 +56,7 @@ void Textbox::show_new_dialogue(const std::string_view new_dialogue, Character* 
 		text_.text_ = "";
 		text_.text_dialogue_ = "";
 		text_.text_ = new_dialogue;
+		text_.is_animated_ = !in_skip_mode;
 
 		if(!current_speaker_.empty())
 		{

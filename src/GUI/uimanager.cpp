@@ -1,5 +1,6 @@
 #include "GUI/uimanager.h"
 #include "GUI/slider.h"
+#include "GUI/inputfield.h"
 #include "GUI/confirmationpopup.h"
 
 #include <iostream>
@@ -173,6 +174,10 @@ void UiManager::handle_events(const SDL_Event& e)
 						if(dynamic_cast<Slider*>(previous_selected_) != nullptr)
 						{
 							dynamic_cast<Slider*>(previous_selected_)->disable_keyboard_focus();
+						}
+						else if(dynamic_cast<Inputfield*>(previous_selected_) != nullptr)
+						{
+							dynamic_cast<Inputfield*>(previous_selected_)->quit_editing();
 						}
 					}
 					previous_selected_ = current_selected_;

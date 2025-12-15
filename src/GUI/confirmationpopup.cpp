@@ -14,9 +14,9 @@ ConfirmationPopUp::ConfirmationPopUp(const std::string_view text, sdl::Renderer&
 		Ui::is_pop_up_visible_ = false; 
 	}, 
 	TextButtonKind::ON_FRAME), //TODO : hardcodé
-	text_(text, constants::confirmationpopup_text_color_, constants::confirmationpopup_font_, constants::confirmationpopup_text_size_, 0, 0, renderer, constants::confirmationpopup_width_ - constants::confirmationpopup_text_x_delta_),
+	text_(text, constants::confirmationpopup_text_color_, constants::confirmationpopup_font_, constants::confirmationpopup_text_size_, 0, 0, renderer, false, constants::confirmationpopup_width_ - constants::confirmationpopup_text_x_delta_),
 	frame_(constants::confirmationpopup_frame_, 0, 0, renderer),
-	background_(constants::confirmationpopup_background, 0, 0, renderer)
+	background_(constants::confirmationpopup_background_, 0, 0, renderer)
 {
 	frame_.set_center();
 	text_.set_center();
