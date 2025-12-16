@@ -120,6 +120,8 @@ void Game::handle_events()
 				break;
 		}
 		get_state()->handle_events(e);
+
+		//TODO important : utile ???
 		ui_manager_.handle_events(e);
 	}
 }

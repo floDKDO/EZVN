@@ -10,8 +10,7 @@ Slider::Slider(const unsigned int min_value, const unsigned int max_value, const
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}), 
 	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
-	min_value_(min_value), max_value_(max_value), current_value_((max_value + min_value) / 2), 
-	has_keyboard_focus_(false), delta_mouse_handle_x_(0)
+	min_value_(min_value), max_value_(max_value), current_value_((max_value + min_value) / 2), delta_mouse_handle_x_(0)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
@@ -41,7 +40,7 @@ void Slider::handle_movement()
 	int logical_mouse_x, logical_mouse_y;
 	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 
-	if(logical_mouse_x - (handle_.w / 2) < container_.x)
+	if(logical_mouse_x - (handle_.w / 2) < container_.x - (handle_.w / 2))
 	{
 		handle_.x = container_.x - (handle_.w / 2);
 		handle_outline_.x = handle_.x;
@@ -89,10 +88,9 @@ void Slider::on_left_pressed()
 {
 	if(has_keyboard_focus_)
 	{
-		if(lock_ && state_ == State::SELECTED)
+		if(state_ == State::SELECTED)
 		{
-			lock_ = false;
-			handle_.x -= container_.w / 10;
+			handle_.x -= container_.w / constants::slider_step_count_;
 			handle_outline_.x = handle_.x;
 			if(handle_.x + (handle_.w / 2) < container_.x)
 			{
@@ -111,10 +109,9 @@ void Slider::on_right_pressed()
 {
 	if(has_keyboard_focus_)
 	{
-		if(lock_ && state_ == State::SELECTED)
+		if(state_ == State::SELECTED)
 		{
-			lock_ = false;
-			handle_.x += container_.w / 10;
+			handle_.x += container_.w / constants::slider_step_count_;
 			handle_outline_.x = handle_.x;
 			if(handle_.x + (handle_.w / 2) > container_.x + container_.w)
 			{
@@ -180,7 +177,7 @@ void Slider::update()
 	}
 }
 
-//TODO : pas ouf...
+//TODO : pas ouf et ne fonctionne plus
 void Slider::handle_events_hook_end(const SDL_Event& e)
 {
 	//Code that allow to move the handle by clicking on it even if it go beyond the container of the slider
@@ -190,7 +187,7 @@ void Slider::handle_events_hook_end(const SDL_Event& e)
 	{
 		if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_handle(logical_mouse_x, logical_mouse_y))
 		{
-			on_pointer_down();
+			on_drag();
 		}
 	}
 }

@@ -76,6 +76,7 @@ inline constexpr std::string_view slider_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int slider_text_y_delta_ = -70;
 inline constexpr int slider_text_size_ = 50;
 inline constexpr SDL_Color slider_text_color_ = {174, 84, 135, 255};
+inline constexpr int slider_step_count_ = 10;
 
 inline constexpr SDL_Color textbutton_normal_color_ = {174, 84, 135, 255};
 inline constexpr SDL_Color textbutton_selected_color_ = {210, 210, 210, 255};

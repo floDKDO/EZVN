@@ -11,7 +11,7 @@ ConfirmationPopUp::ConfirmationPopUp(const std::string_view text, sdl::Renderer&
 	{
 		(void)ui;  
 		is_confirmationpopup_visible_ = false; 
-		Ui::is_pop_up_visible_ = false; 
+		//Ui::is_pop_up_visible_ = false; 
 	}, 
 	TextButtonKind::ON_FRAME), //TODO : hardcodé
 	text_(text, constants::confirmationpopup_text_color_, constants::confirmationpopup_font_, constants::confirmationpopup_text_size_, 0, 0, renderer, false, constants::confirmationpopup_width_ - constants::confirmationpopup_text_x_delta_),

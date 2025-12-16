@@ -45,7 +45,6 @@ class Slider : public Ui
 		unsigned int current_value_;
 
 	private:
-		bool has_keyboard_focus_; //When we press Enter on a SELECTED Slider
 		//SDL_Rect handle_position; //TODO : n'est normalement pas utile
 		int delta_mouse_handle_x_; //x position of the mouse in comparison to the x position of the handle
 };

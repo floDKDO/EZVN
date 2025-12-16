@@ -5,8 +5,6 @@
 
 const unsigned int Inputfield::index_rect_inputfield_ = 0;
 
-//TODO : bug doubles touches
-
 Inputfield::Inputfield(const std::string_view text_placeholder, const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), 
 	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y, renderer),
@@ -15,7 +13,7 @@ Inputfield::Inputfield(const std::string_view text_placeholder, const unsigned i
 	  character_limit_(character_limit),
 	  text_caret_("|", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
 	  text_placeholder_(text_placeholder, constants::inputfield_placeholder_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
-	  is_editing_(false), is_writing_(false), index_caret_(0), offset_caret_(0)
+	  is_writing_(false), index_caret_(0), offset_caret_(0)
 {
 	callback_function_ = callback_function;
 	SDL_SetTextInputRect(&(container_));
@@ -25,28 +23,24 @@ Inputfield::Inputfield(const std::string_view text_placeholder, const unsigned i
 
 void Inputfield::quit_editing()
 {
-	is_editing_ = false;
+	has_keyboard_focus_ = false;
 	is_writing_ = false;
 }
 
 void Inputfield::on_pointer_up_hook_end()
 {
-	is_editing_ = !is_editing_;
+	has_keyboard_focus_ = !has_keyboard_focus_;
 }
 
 void Inputfield::on_left_pressed()
 {
-	if(is_editing_)
+	if(has_keyboard_focus_)
 	{
-		if(lock_)
+		if(index_caret_ > 0)
 		{
-			lock_ = false;
-			if(index_caret_ > 0)
-			{
-				int current_char_width = text_.get_width_one_char(text_.text_[index_caret_ - 1]);
-				offset_caret_ += -current_char_width;
-				index_caret_ -= 1;
-			}
+			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_ - 1]);
+			offset_caret_ += -current_char_width;
+			index_caret_ -= 1;
 		}
 	}
 	else
@@ -57,17 +51,13 @@ void Inputfield::on_left_pressed()
 
 void Inputfield::on_right_pressed()
 {
-	if(is_editing_)
+	if(has_keyboard_focus_)
 	{
-		if(lock_)
+		if(index_caret_ < character_limit_ && index_caret_ < text_.text_.length())
 		{
-			lock_ = false;
-			if(index_caret_ < character_limit_ && index_caret_ < text_.text_.length())
-			{
-				int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
-				offset_caret_ += current_char_width;
-				index_caret_ += 1;
-			}
+			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
+			offset_caret_ += current_char_width;
+			index_caret_ += 1;
 		}
 	}
 	else
@@ -78,54 +68,43 @@ void Inputfield::on_right_pressed()
 
 void Inputfield::on_enter_pressed_hook_end()
 {
-	is_editing_ = !is_editing_;
+	has_keyboard_focus_ = !has_keyboard_focus_;
 }
 
 void Inputfield::on_backspace_pressed()
 {
-	if(is_editing_ && !text_.text_.empty())
+	if(has_keyboard_focus_ && !text_.text_.empty())
 	{
-		if(lock_)
+		if(index_caret_ > 0)
 		{
-			lock_ = false;
-			if(index_caret_ > 0)
-			{
-				text_.text_.erase(index_caret_ - 1, 1);
-				index_caret_ -= 1;
-			}
+			text_.text_.erase(index_caret_ - 1, 1);
+			index_caret_ -= 1;
 		}
 	}
 }
 
 void Inputfield::on_delete_pressed()
 {
-	if(is_editing_ && !text_.text_.empty())
+	if(has_keyboard_focus_ && !text_.text_.empty())
 	{
-		if(lock_)
+		if(index_caret_ < text_.text_.length())
 		{
-			lock_ = false;
-			if(index_caret_ < text_.text_.length())
-			{
-				int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
-				offset_caret_ += current_char_width;
-				text_.text_.erase(index_caret_, 1);
-			}
+			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
+			offset_caret_ += current_char_width;
+			text_.text_.erase(index_caret_, 1);
 		}
 	}
 }
 
 void Inputfield::on_input_pressed_hook_end(const SDL_Event& e)
 {
-	if(is_editing_)
+	if(has_keyboard_focus_)
 	{
 		is_writing_ = true;
 	}
 
-	//std::cout << int(e.key.repeat) << " " << int(e.key.timestamp) << std::endl;
-
 	if(e.key.keysym.sym == SDLK_BACKSPACE)
 	{
-		std::cout << "BACKSPACE\n";
 		on_backspace_pressed();
 	}
 	else if(e.key.keysym.sym == SDLK_DELETE)
@@ -138,25 +117,12 @@ void Inputfield::on_input_released_hook_end(const SDL_Event& e)
 {
 	(void)e;
 	is_writing_ = false;
-	lock_ = true;
 }
 
 void Inputfield::handle_events_hook_end(const SDL_Event& e)
 {
 	if(e.type == SDL_TEXTINPUT)
 	{
-		//std::cout << "Timestamp: " << int(e.text.timestamp) << ", text: " << e.text.text << std::endl;
-
-		/*static Uint32 last_timestamp = 0;
-		static std::string last_text = "";
-
-		if(e.text.timestamp == last_timestamp && e.text.text == last_text)
-		{
-			std::cout << "RETOUR\n";
-			return;
-		}
-		last_timestamp = e.text.timestamp;
-		last_text = e.text.text;*/
 		on_typing(e);
 	}
 }
@@ -184,7 +150,7 @@ void Inputfield::draw(sdl::Renderer& renderer)
 
 	if(text_.text_.empty()) 
 	{
-		if(!is_editing_)
+		if(!has_keyboard_focus_)
 		{
 			text_placeholder_.draw(renderer);
 		}
@@ -195,7 +161,7 @@ void Inputfield::draw(sdl::Renderer& renderer)
 		text_caret_.position_.x = get_rect().x + text_.position_.w + offset_caret_;
 	}
 
-	if(is_editing_)
+	if(has_keyboard_focus_)
 	{
 		text_caret_.draw(renderer);
 	}
@@ -219,10 +185,8 @@ void Inputfield::update()
 
 void Inputfield::on_typing(const SDL_Event& e)
 {
-	if(is_editing_ && text_.text_.length() < character_limit_ && lock_)
+	if(has_keyboard_focus_ && text_.text_.length() < character_limit_)
 	{
-		lock_ = false;
-		std::cout << "INSERT " << index_caret_ << std::endl;
 		text_.text_.insert(text_.text_.begin() + index_caret_, e.text.text[0]);
 		index_caret_ += 1;
 	}

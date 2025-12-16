@@ -88,9 +88,6 @@ class Ui
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
 
-		static int is_pop_up_visible_;
-		static bool is_mouse_left_button_held_down_;
-
 		Ui* select_on_up_;
 		Ui* select_on_down_;
 		Ui* select_on_left_;
@@ -98,25 +95,23 @@ class Ui
 
 		State state_;
 
+		bool has_keyboard_focus_;
+		bool mouse_entered_; //TODO : vérifier ces deux champs dans uimanager
+		bool mouse_was_on_ui_before_drag_;
+
+		Sound select_sound_;
+
 	protected:
 		explicit Ui(sdl::Renderer& renderer);
 
-		static bool lock_;
-
 		Uint64 last_time_;
 
-		Sound select_sound_;
 		Sound click_sound_;
 
 		bool pointer_on_ui_when_pointer_up_; 
-		bool mouse_entered_;
-		bool mouse_was_on_ui_before_drag_;
 		
 		sdl::Renderer& renderer_; //do not own it !!
 
 		std::function<void(Ui* ui)> callback_function_;
-
-	private:
-		void select_new(Ui* ui);
 };
 

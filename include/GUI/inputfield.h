@@ -41,7 +41,9 @@ class Inputfield : public Ui
 		Text text_caret_;
 		Text text_placeholder_;
 
-		bool is_editing_;
+		//TODO : remplacer par le bool has_keyboard_focus_ de Ui
+		//bool is_editing_;
+
 		bool is_writing_;
 		
 		unsigned int index_caret_;

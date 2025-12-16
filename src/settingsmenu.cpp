@@ -27,7 +27,7 @@ void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 
 void SettingsMenu::handle_events(const SDL_Event& e)
 {
-	GameState::handle_events(e);
+	//GameState::handle_events(e);
 }
 
 void SettingsMenu::draw(sdl::Renderer& renderer)

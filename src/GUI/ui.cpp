@@ -3,28 +3,16 @@
 
 #include <iostream>
 
-int Ui::is_pop_up_visible_ = false;
-bool Ui::is_mouse_left_button_held_down_ = false;
-bool Ui::lock_ = true;
-
-
 //TODO : parfois un bug avec la touche Entrée au lancement du programme
 
 Ui::Ui(sdl::Renderer& renderer)
 	: select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr),
 	state_(State::NORMAL), last_time_(0),
 	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_),
-	pointer_on_ui_when_pointer_up_(true), mouse_entered_(false), mouse_was_on_ui_before_drag_(false),
+	pointer_on_ui_when_pointer_up_(true), has_keyboard_focus_(false), mouse_entered_(false), mouse_was_on_ui_before_drag_(false),
 	renderer_(renderer),
 	callback_function_(nullptr)
 {}
-
-void Ui::select_new(Ui* ui)
-{
-	state_ = State::NORMAL;
-	ui->state_ = State::SELECTED;
-	select_sound_.play_sound();
-}
 
 void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
 {
@@ -36,13 +24,11 @@ void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
 		click_sound_.play_sound();
 		on_pointer_up_hook_end();
 	}
-	is_mouse_left_button_held_down_ = false;
 	mouse_was_on_ui_before_drag_ = false;
 }
 
 void Ui::on_pointer_down() 
 {
-	is_mouse_left_button_held_down_ = true;
 	mouse_was_on_ui_before_drag_ = true;
 	state_ = State::CLICKED;
 	on_pointer_down_hook_end();
@@ -71,50 +57,41 @@ void Ui::on_pointer_exit()
 
 void Ui::on_up_pressed()
 {
-	if(lock_ && state_ == State::SELECTED && select_on_up_ != nullptr)
+	if(state_ == State::SELECTED && select_on_up_ != nullptr)
 	{
-		select_new(select_on_up_);
-		lock_ = false;
 		on_up_pressed_hook_end();
 	}
 }
 
 void Ui::on_down_pressed()
 {
-	if(lock_ && state_ == State::SELECTED && select_on_down_ != nullptr)
+	if(state_ == State::SELECTED && select_on_down_ != nullptr)
 	{
-		select_new(select_on_down_);
-		lock_ = false;
 		on_down_pressed_hook_end();
 	}
 }
 
 void Ui::on_left_pressed()
 {
-	if(lock_ && state_ == State::SELECTED && select_on_left_ != nullptr)
+	if(state_ == State::SELECTED && select_on_left_ != nullptr)
 	{
-		select_new(select_on_left_);
-		lock_ = false;
 		on_left_pressed_hook_end();
 	}
 }
 
 void Ui::on_right_pressed()
 {
-	if(lock_ && state_ == State::SELECTED && select_on_right_ != nullptr)
+	if(state_ == State::SELECTED && select_on_right_ != nullptr)
 	{
-		select_new(select_on_right_);
-		lock_ = false;
 		on_right_pressed_hook_end();
 	}
 }
 
 void Ui::on_enter_pressed()
 {
-	if(lock_ && state_ == State::SELECTED) //TODO : remettre les if des fonctions on_***_pressed dans on_input_pressed ??
+	if(state_ == State::SELECTED) //TODO : remettre les if des fonctions on_***_pressed dans on_input_pressed ??
 	{
 		state_ = State::CLICKED;
-		lock_ = false;
 		on_enter_pressed_hook_end();
 	}
 }
@@ -146,36 +123,32 @@ void Ui::on_input_pressed(const SDL_Event& e)
 
 void Ui::on_up_released()
 {
-	if(!lock_ && state_ == State::SELECTED)
+	if(state_ == State::SELECTED)
 	{
-		lock_ = true;
 		on_up_released_hook_end();
 	}
 }
 
 void Ui::on_down_released()
 {
-	if(!lock_ && state_ == State::SELECTED)
+	if(state_ == State::SELECTED)
 	{
-		lock_ = true;
 		on_down_released_hook_end();
 	}
 }
 
 void Ui::on_left_released()
 {
-	if(!lock_ && state_ == State::SELECTED)
+	if(state_ == State::SELECTED)
 	{
-		lock_ = true;
 		on_left_released_hook_end();
 	}
 }
 
 void Ui::on_right_released()
 {
-	if(!lock_ && state_ == State::SELECTED)
+	if(state_ == State::SELECTED)
 	{
-		lock_ = true;
 		on_right_released_hook_end();
 	}
 }
@@ -187,7 +160,6 @@ void Ui::on_enter_released()
 		state_ = State::SELECTED;
 		callback_function_(this);
 		click_sound_.play_sound();
-		lock_ = true;
 		on_enter_released_hook_end();
 	}
 }
@@ -219,7 +191,7 @@ void Ui::on_input_released(const SDL_Event& e)
 
 void Ui::handle_events(const SDL_Event& e)
 {
-	switch(e.type)
+	/*switch(e.type)
 	{
 		case SDL_CONTROLLERBUTTONDOWN:
 		case SDL_KEYDOWN:
@@ -278,7 +250,7 @@ void Ui::handle_events(const SDL_Event& e)
 		default:
 			break;
 	}
-	handle_events_hook_end(e);
+	handle_events_hook_end(e);*/
 }
 
 void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
