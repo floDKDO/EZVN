@@ -7,7 +7,7 @@
 const unsigned int TextButton::index_rect_textbutton_ = 0;
 
 TextButton::TextButton(const std::string_view text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, const TextButtonKind textbutton_kind)
-	: Ui(renderer), 
+	: Ui(text, renderer), 
 	  text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == TextButtonKind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == TextButtonKind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer)
 {
 	callback_function_ = callback_function;

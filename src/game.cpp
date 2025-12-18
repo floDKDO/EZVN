@@ -14,7 +14,7 @@ Game::Game()
 	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
-	window_icon_(constants::window_icon_), ui_manager_(),
+	window_icon_(constants::window_icon_), 
 	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr), in_game_(nullptr), game_running_(true)
 {
 	window_.set_icon(window_icon_);
@@ -71,16 +71,50 @@ void Game::run()
 	}
 }
 
+void Game::request_push_state(GameState* state) //pour ne pas que les fonctions de callback rendent invalide current_selected_ via un appel direct à push_state qui vide le vector navigation_list_ dans lequel current_selected_ prend sa valeur
+{
+	RequestedAction requested_action = {Action::push, state};
+	requested_actions_.push(requested_action);
+}
+
+void Game::request_pop_state()
+{
+	RequestedAction requested_action = {Action::pop, nullptr};
+	requested_actions_.push(requested_action);
+}
+
+void Game::handle_requests()
+{
+	while(!requested_actions_.empty())
+	{
+		RequestedAction top = requested_actions_.top();
+		if(top.action == Action::push)
+		{
+			push_state(top.game_state);
+		}
+		else if(top.action == Action::pop)
+		{
+			pop_state();
+		}
+		requested_actions_.pop();
+	}
+}
+
 void Game::push_state(GameState* state)
 {
+	std::cout << "PUSH STATE\n";
+	//ui_manager_.clear_elements();
 	states_.push(state);
-	ui_manager_.set_elements(states_.top()->ui_elements_);
+	//states_.top()->build_ui_elements(renderer_);
+	//ui_manager_.set_elements();
 }
 
 void Game::pop_state()
 {
+	//ui_manager_.clear_elements();
 	states_.pop();
-	ui_manager_.set_elements(states_.top()->ui_elements_);
+	//states_.top()->build_ui_elements(renderer_);
+	//ui_manager_.set_elements();
 }
 
 GameState* Game::get_state() const
@@ -122,7 +156,7 @@ void Game::handle_events()
 		get_state()->handle_events(e);
 
 		//TODO important : utile ???
-		ui_manager_.handle_events(e);
+		//ui_manager_.handle_events(e);
 	}
 }
 
@@ -130,13 +164,15 @@ void Game::draw()
 {
 	renderer_.clear();
 	get_state()->draw(renderer_);
+	//ui_manager_.draw(renderer_);
 	renderer_.present();
 }
 
 void Game::update()
 {
+	handle_requests();
 	get_state()->update();
-	ui_manager_.update();
+	//ui_manager_.update();
 }
 
 void Game::update_fps_count(const std::string_view fps) const

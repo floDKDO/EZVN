@@ -9,9 +9,7 @@ class SettingsMenu : public GameState
 		SettingsMenu(Game& game, const std::string_view background_path, sdl::Renderer& renderer);
 
 		void build_ui_elements(sdl::Renderer& renderer) override;
-		void handle_events(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
-		void update() override;
 
 		void previous_menu_function(Ui* ui);
 		void slider_sound_function(Ui* ui);

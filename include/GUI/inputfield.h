@@ -11,21 +11,18 @@ class Inputfield : public Ui
 
 		void quit_editing();
 
-		void on_pointer_up_hook_end() override;
+		void on_pointer_up_hook_end(PointerEventData pointer_event_data) override;
 
 		void on_left_pressed() override;
 		void on_right_pressed() override;
 		void on_enter_pressed_hook_end() override;
-		void on_backspace_pressed();
-		void on_delete_pressed();
-		void on_input_pressed_hook_end(const SDL_Event& e) override;
-		void on_input_released_hook_end(const SDL_Event& e) override;
-		void handle_events_hook_end(const SDL_Event& e) override;
+		void on_backspace_pressed() override;
+		void on_delete_pressed() override;
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 		SDL_Rect get_rect() const override;
 
-		void on_typing(const SDL_Event& e);
+		void on_typing(const std::string_view text) override;
 		void set_character_limit(unsigned int character_limit);
 
 	private:
@@ -41,11 +38,10 @@ class Inputfield : public Ui
 		Text text_caret_;
 		Text text_placeholder_;
 
-		//TODO : remplacer par le bool has_keyboard_focus_ de Ui
-		//bool is_editing_;
-
-		bool is_writing_;
+		Uint64 last_blink_time_;
+		Uint64 last_input_time;
+		bool is_caret_visible_;
 		
-		unsigned int index_caret_;
+		size_t index_caret_;
 		int offset_caret_; 
 };

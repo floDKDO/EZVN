@@ -5,53 +5,55 @@
 
 //TODO : parfois un bug avec la touche Entrée au lancement du programme
 
-Ui::Ui(sdl::Renderer& renderer)
+Ui::Ui(const std::string_view text, sdl::Renderer& renderer)
 	: select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr),
 	state_(State::NORMAL), last_time_(0),
-	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_),
 	pointer_on_ui_when_pointer_up_(true), has_keyboard_focus_(false), mouse_entered_(false), mouse_was_on_ui_before_drag_(false),
-	renderer_(renderer),
-	callback_function_(nullptr)
+	wants_text_input_(false), renderer_(renderer),
+	callback_function_(nullptr), unique_id_(text)
 {}
 
-void Ui::on_pointer_up() //TODO : mettre les if dans handle_events ??
+void Ui::on_pointer_up(PointerEventData pointer_event_data) //TODO : mettre les if dans handle_events ??
 {
-	if((pointer_on_ui_when_pointer_up_ && is_mouse_on_ui()) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
-	|| !pointer_on_ui_when_pointer_up_) //second conditon: the callback function is called even if the pointer is not on the UI when it is released/up
+	//if((pointer_on_ui_when_pointer_up_ && is_mouse_on_ui()) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
+	//|| !pointer_on_ui_when_pointer_up_) //second conditon: the callback function is called even if the pointer is not on the UI when it is released/up
 	{
 		state_ = State::SELECTED;
+		std::cout << "AVANT son\n";
+		//click_sound_.play_sound();
+		std::cout << "APRES son\n";
 		callback_function_(this);
-		click_sound_.play_sound();
-		on_pointer_up_hook_end();
+		std::cout << "Adresse de this: " << this << std::endl;
+		on_pointer_up_hook_end(pointer_event_data);
+		mouse_was_on_ui_before_drag_ = false;
 	}
-	mouse_was_on_ui_before_drag_ = false;
 }
 
-void Ui::on_pointer_down() 
+void Ui::on_pointer_down(PointerEventData pointer_event_data)
 {
 	mouse_was_on_ui_before_drag_ = true;
 	state_ = State::CLICKED;
-	on_pointer_down_hook_end();
+	on_pointer_down_hook_end(pointer_event_data);
 }
 
-void Ui::on_pointer_enter() 
+void Ui::on_pointer_enter(PointerEventData pointer_event_data)
 {
-	mouse_entered_ = true;
-	if(state_ == State::NORMAL)
+	//if(state_ == State::NORMAL)
 	{
+		mouse_entered_ = true;
 		state_ = State::SELECTED;
-		select_sound_.play_sound();
-		on_pointer_enter_hook_end();
+		//select_sound_.play_sound();
+		on_pointer_enter_hook_end(pointer_event_data);
 	}
 }
 
-void Ui::on_pointer_exit() 
+void Ui::on_pointer_exit(PointerEventData pointer_event_data)
 {
 	if(state_ == State::CLICKED && pointer_on_ui_when_pointer_up_)
 	{
 		state_ = State::SELECTED; 
 	}
-	on_pointer_exit_hook_end(); //TODO : dans le if ??
+	on_pointer_exit_hook_end(pointer_event_data); //TODO : dans le if ??
 	mouse_entered_ = false;
 }
 
@@ -158,8 +160,8 @@ void Ui::on_enter_released()
 	if(state_ == State::CLICKED)
 	{
 		state_ = State::SELECTED;
+		//click_sound_.play_sound();
 		callback_function_(this);
-		click_sound_.play_sound();
 		on_enter_released_hook_end();
 	}
 }
@@ -253,7 +255,7 @@ void Ui::handle_events(const SDL_Event& e)
 	handle_events_hook_end(e);*/
 }
 
-void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
+/*void Ui::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
 {
 	int real_mouse_x = 0, real_mouse_y = 0;
 	SDL_GetMouseState(&real_mouse_x, &real_mouse_y);
@@ -284,7 +286,7 @@ bool Ui::is_mouse_on_ui()
 		}
 	}
 	return false;
-}
+}*/
 
 std::vector<Ui*> Ui::get_navigation_nodes()
 {

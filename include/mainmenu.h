@@ -9,9 +9,7 @@ class MainMenu : public GameState
 		MainMenu(Game& game, const std::string_view background_path, sdl::Renderer& renderer);
 
 		void build_ui_elements(sdl::Renderer& renderer) override;
-		void handle_events(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
-		void update() override;
 
 		void temp_function(Ui* ui);
 		void play_function(Ui* ui);
@@ -20,5 +18,6 @@ class MainMenu : public GameState
 
 	private:
 		Image background_;
+		std::string last_selected_before_changing_menu_;
 };
 

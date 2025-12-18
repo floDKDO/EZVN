@@ -2,20 +2,35 @@
 #include "GUI/slider.h"
 #include "GUI/inputfield.h"
 #include "GUI/confirmationpopup.h"
+#include "constants.h"
 
 #include <iostream>
 
 UiManager::UiManager()
-	: previous_selected_(nullptr), current_selected_(nullptr), is_mouse_left_button_held_down_(false)
+	: is_mouse_on_ui_(false), previous_selected_(nullptr), current_selected_(nullptr), is_mouse_left_button_held_down_(false),
+	select_sound_(constants::sound_hover_), click_sound_(constants::sound_click_), last_time_(0)
 {}
 
-void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements)
+//TODO : rvalue ref ??
+void UiManager::add_element(std::unique_ptr<Ui>&& ui)
 {
-	navigation_list_.clear();
+	ui_elements_.push_back(std::move(ui));
+}
 
-	for(const std::unique_ptr<Ui>& ui_element : ui_elements)
+void UiManager::clear_elements()
+{
+	ui_elements_.clear();
+	navigation_list_.clear();
+	current_selected_ = nullptr;
+	previous_selected_ = nullptr;
+}
+
+void UiManager::set_elements()
+{
+	for(const std::unique_ptr<Ui>& ui_element : ui_elements_)
 	{
 		std::vector<Ui*> nodes = ui_element->get_navigation_nodes();
+
 		navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
 
 		/*TextButton* textbutton = nullptr; 
@@ -28,6 +43,7 @@ void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements
 
 	assign_ui_on_moving();
 
+	//TODO : toujours utile ??
 	for(Ui* ui : navigation_list_)
 	{
 		if(ui->state_ == State::SELECTED)
@@ -38,6 +54,14 @@ void UiManager::set_elements(const std::vector<std::unique_ptr<Ui>>& ui_elements
 	}
 	current_selected_ = navigation_list_[0];
 	current_selected_->state_ = State::SELECTED;
+
+	/*std::cout << "Adresses dans navigation_list: ";
+	for(Ui* ui : navigation_list_)
+	{
+		std::cout << ui << ", ";
+	}
+	std::cout << std::endl;
+	std::cout << "Adresse de current_selected: " << current_selected_ << std::endl;*/
 }
 
 bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode) const
@@ -164,12 +188,12 @@ void UiManager::select_new(Ui* ui)
 	current_selected_ = ui;
 	current_selected_->state_ = State::SELECTED;
 
-	current_selected_->select_sound_.play_sound();
+	select_sound_.play_sound();
 }
 
-void UiManager::unselect_previous(Ui* ui)
+void UiManager::unselect_previous(Ui* ui, PointerEventData pointer_event_data)
 {
-	if(ui->is_mouse_on_ui())
+	if(is_mouse_on_specific_ui(ui, pointer_event_data))
 	{
 		if(current_selected_ != ui && !is_mouse_left_button_held_down_)
 		{
@@ -188,13 +212,141 @@ void UiManager::unselect_previous(Ui* ui)
 	}
 }
 
+//void UiManager::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
+//{
+//	int real_mouse_x = 0, real_mouse_y = 0;
+//	SDL_GetMouseState(&real_mouse_x, &real_mouse_y);
+//
+//	float temp_logical_mouse_x = 0, temp_logical_mouse_y = 0;
+//	SDL_RenderWindowToLogical(renderer_.fetch(), real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
+//	*logical_mouse_x = int(temp_logical_mouse_x);
+//	*logical_mouse_y = int(temp_logical_mouse_y);
+//}
+
+bool UiManager::is_mouse_on_ui(PointerEventData pointer_event_data)
+{
+	for(Ui* ui_element : navigation_list_)
+	{
+		return is_mouse_on_specific_ui(ui_element, pointer_event_data);
+	}
+	is_mouse_on_ui_ = false;
+	return false;
+}
+
+bool UiManager::is_mouse_on_specific_ui(Ui* ui, PointerEventData pointer_event_data)
+{
+	std::vector<Ui*> all_ui = ui->get_navigation_nodes();
+
+	for(size_t i = 0; i < all_ui.size(); ++i)
+	{
+		const SDL_Rect& rect = all_ui[i]->get_rect();
+
+		if(rect.y + rect.h > pointer_event_data.mouse_y
+		&& rect.y < pointer_event_data.mouse_y
+		&& rect.x + rect.w > pointer_event_data.mouse_x
+		&& rect.x < pointer_event_data.mouse_x)
+		{
+			is_mouse_on_ui_ = true;
+			return true;
+		}
+	}
+	is_mouse_on_ui_ = false;
+	return false;
+}
+
+void UiManager::on_input_pressed(const SDL_Event& e)
+{
+	if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP)
+			|| (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP))
+	{
+		current_selected_->on_up_pressed();
+		if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_up_ != nullptr)
+		{
+			select_new(current_selected_->select_on_up_);
+		}
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN)
+		 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN))
+	{
+		current_selected_->on_down_pressed();
+		if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_down_ != nullptr)
+		{
+			select_new(current_selected_->select_on_down_);
+		}
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT)
+		 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT))
+	{
+		current_selected_->on_left_pressed();
+		if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_left_ != nullptr)
+		{
+			select_new(current_selected_->select_on_left_);
+		}
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
+		 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT))
+	{
+		current_selected_->on_right_pressed();
+		if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_right_ != nullptr)
+		{
+			select_new(current_selected_->select_on_right_);
+		}
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+		 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN))
+	{
+		current_selected_->on_enter_pressed();
+	}
+	else if(e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_BACKSPACE)
+	{
+		current_selected_->on_backspace_pressed();
+	}
+	else if(e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DELETE)
+	{
+		current_selected_->on_delete_pressed();
+	}
+	//current_selected_->on_input_pressed_hook_end(e);
+}
+
+void UiManager::on_input_released(const SDL_Event& e)
+{
+	if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP)
+			|| (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP))
+	{
+		current_selected_->on_up_released();
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN)
+		 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN))
+	{
+		current_selected_->on_down_released();
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT)
+		 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT))
+	{
+		current_selected_->on_left_released();
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
+		 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT))
+	{
+		current_selected_->on_right_released();
+	}
+	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
+		 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN))
+	{
+		click_sound_.play_sound();
+		current_selected_->on_enter_released();
+	}
+	//current_selected_->on_input_released_hook_end(e);
+}
+
 void UiManager::handle_events(const SDL_Event& e)
 {
 	for(Ui* ui : navigation_list_)
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
-			unselect_previous(ui);
+			PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
+			unselect_previous(ui, pointer_event_data);
 		}
 	}
 
@@ -202,87 +354,22 @@ void UiManager::handle_events(const SDL_Event& e)
 	{
 		case SDL_CONTROLLERBUTTONDOWN:
 		case SDL_KEYDOWN:
-			if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP)
-			|| (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_UP))
-			{
-				current_selected_->on_up_pressed();
-				if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_up_ != nullptr)
-				{
-					select_new(current_selected_->select_on_up_);
-				}
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN)
-				 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_DOWN))
-			{
-				current_selected_->on_down_pressed();
-				if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_down_ != nullptr)
-				{
-					select_new(current_selected_->select_on_down_);
-				}
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT)
-				 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_LEFT))
-			{
-				current_selected_->on_left_pressed();
-				if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_left_ != nullptr)
-				{
-					select_new(current_selected_->select_on_left_);
-				}
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
-				 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RIGHT))
-			{
-				current_selected_->on_right_pressed();
-				if(!current_selected_->has_keyboard_focus_ && current_selected_->select_on_right_ != nullptr)
-				{
-					select_new(current_selected_->select_on_right_);
-				}
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONDOWN && e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-				 || (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_RETURN))
-			{
-				current_selected_->on_enter_pressed();
-			}
-			current_selected_->on_input_pressed_hook_end(e);
+			on_input_pressed(e);
 			break;
 
 		case SDL_CONTROLLERBUTTONUP:
 		case SDL_KEYUP:
-			if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_UP)
-			|| (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_UP))
-			{
-				current_selected_->on_up_released();
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_DOWN)
-				 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_DOWN))
-			{
-				current_selected_->on_down_released();
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT)
-				 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_LEFT))
-			{
-				current_selected_->on_left_released();
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
-				 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RIGHT))
-			{
-				current_selected_->on_right_released();
-			}
-			else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
-				 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN))
-			{
-				current_selected_->on_enter_released();
-			}
-			current_selected_->on_input_released_hook_end(e);
+			on_input_released(e);
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
 			if(e.button.button == SDL_BUTTON_LEFT)
 			{
-				if(current_selected_->is_mouse_on_ui() && !is_mouse_left_button_held_down_)
+				PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
+				if(is_mouse_on_specific_ui(current_selected_, pointer_event_data) && !is_mouse_left_button_held_down_)
 				{
 					is_mouse_left_button_held_down_ = true;
-					current_selected_->on_pointer_down();
+					current_selected_->on_pointer_down(pointer_event_data);
 				}
 			}
 			break;
@@ -290,50 +377,72 @@ void UiManager::handle_events(const SDL_Event& e)
 		case SDL_MOUSEBUTTONUP:
 			if(e.button.button == SDL_BUTTON_LEFT)
 			{
+				PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
 				if(is_mouse_left_button_held_down_ 
 				&& (current_selected_->state_ == State::SELECTED || current_selected_->state_ == State::CLICKED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
 				{
-					current_selected_->on_pointer_up();
-					is_mouse_left_button_held_down_ = false;
+					if((current_selected_->pointer_on_ui_when_pointer_up_ && is_mouse_on_specific_ui(current_selected_, pointer_event_data)) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
+					|| !current_selected_->pointer_on_ui_when_pointer_up_) //second conditon: the callback function is called even if the pointer is not on the UI when it is released/up
+					{
+						std::cout << "Adresse dans handle_events(): " << current_selected_ << std::endl;
+						current_selected_->on_pointer_up(pointer_event_data);
+						is_mouse_left_button_held_down_ = false;
+						click_sound_.play_sound();
+						std::cout << "Adresse à la sortie: " << current_selected_ << std::endl;
+					}
 				}
 			}
 			break;
 
 		case SDL_MOUSEMOTION:
-			if(current_selected_->is_mouse_on_ui())
+		{
+			PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
+			if(is_mouse_on_specific_ui(current_selected_, pointer_event_data))
 			{
 				if(!current_selected_->mouse_entered_ && !is_mouse_left_button_held_down_)
 				{
-					current_selected_->on_pointer_enter();
+					if(current_selected_->state_ == State::NORMAL)
+					{
+						select_sound_.play_sound();
+						current_selected_->on_pointer_enter(pointer_event_data);
+					}
 				}
 			}
 			else
 			{
 				if(current_selected_->mouse_entered_)
 				{
-					current_selected_->on_pointer_exit();
+					current_selected_->on_pointer_exit(pointer_event_data);
 				}
 			}
 
 			if(is_mouse_left_button_held_down_ && current_selected_->mouse_was_on_ui_before_drag_)
 			{
-				current_selected_->on_drag();
+				current_selected_->on_drag(pointer_event_data);
+			}
+		}
+			break;
+
+		case SDL_TEXTINPUT:
+			if(current_selected_->wants_text_input_)
+			{
+				current_selected_->on_typing(e.text.text);
 			}
 			break;
 
 		default:
 			break;
 	}
-	current_selected_->handle_events_hook_end(e);
+	//current_selected_->handle_events_hook_end(e);
 }
 
-/*void UiManager::draw(sdl::Renderer& renderer)
+void UiManager::draw(sdl::Renderer& renderer)
 {
-	for(const std::unique_ptr<Ui>& ui_element : ui_elements_)
+	for(const std::unique_ptr<Ui>& ui_element : ui_elements_) 
 	{
 		ui_element->draw(renderer);
 	}
-}*/
+}
 
 void UiManager::update()
 {

@@ -200,6 +200,7 @@
     <ClInclude Include="include\mainmenu.h" />
     <ClInclude Include="include\music.h" />
     <ClInclude Include="include\GUI\confirmationpopup.h" />
+    <ClInclude Include="include\pointereventdata.h" />
     <ClInclude Include="include\RAII_SDL2\animation.h" />
     <ClInclude Include="include\RAII_SDL2\chunk.h" />
     <ClInclude Include="include\RAII_SDL2\font.h" />

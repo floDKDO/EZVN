@@ -53,6 +53,8 @@ inline constexpr int inputfield_text_x_delta_ = 7;
 inline constexpr int inputfield_text_size_ = 30;
 inline constexpr SDL_Color inputfield_text_color_ = {0, 0, 0, 255};
 inline constexpr SDL_Color inputfield_placeholder_text_color_ = {204, 204, 204, 255};
+inline constexpr int inputfield_caret_blink_time_ = 300;
+inline constexpr int inputfield_idle_time_ = 500;
 
 inline constexpr std::string_view confirmationpopup_frame_ = "img/GUI/confirmation_pop_up.png";
 inline constexpr int confirmationpopup_width_ = 411;

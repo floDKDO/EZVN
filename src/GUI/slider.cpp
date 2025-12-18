@@ -6,11 +6,25 @@
 const unsigned int Slider::index_rect_container_ = 0;
 
 Slider::Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
+	: Ui(text, renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}), 
 	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
 	min_value_(min_value), max_value_(max_value), current_value_((max_value + min_value) / 2), delta_mouse_handle_x_(0)
+{
+	callback_function_ = callback_function;
+	pointer_on_ui_when_pointer_up_ = false;
+	handle_.x += int((float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (container_.w - handle_.w));
+	handle_outline_.x = handle_.x;
+	text_.position_.x += (container_.w - text_.position_.w) / 2;
+}
+
+Slider::Slider(const unsigned int min_value, const unsigned int max_value, const unsigned int current_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+	: Ui(text, renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
+	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
+	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
+	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
+	min_value_(min_value), max_value_(max_value), current_value_(current_value), delta_mouse_handle_x_(0)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
@@ -35,10 +49,9 @@ void Slider::disable_keyboard_focus()
 	has_keyboard_focus_ = false;
 }
 
-void Slider::handle_movement()
+void Slider::handle_movement(int mouse_x)
 {
-	int logical_mouse_x, logical_mouse_y;
-	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
+	int logical_mouse_x = mouse_x;
 
 	if(logical_mouse_x - (handle_.w / 2) < container_.x - (handle_.w / 2))
 	{
@@ -58,14 +71,14 @@ void Slider::handle_movement()
 	delta_mouse_handle_x_ = logical_mouse_x - handle_.x;
 }
 
-void Slider::on_pointer_down_hook_end()
+void Slider::on_pointer_down_hook_end(PointerEventData pointer_event_data)
 {
-	handle_movement();
+	handle_movement(pointer_event_data.mouse_x);
 }
 
-void Slider::on_drag()
+void Slider::on_drag(PointerEventData pointer_event_data)
 {
-	handle_movement();
+	handle_movement(pointer_event_data.mouse_x);
 }
 
 void Slider::on_up_pressed()
@@ -178,7 +191,7 @@ void Slider::update()
 }
 
 //TODO : pas ouf et ne fonctionne plus
-void Slider::handle_events_hook_end(const SDL_Event& e)
+/*void Slider::handle_events_hook_end(const SDL_Event& e)
 {
 	//Code that allow to move the handle by clicking on it even if it go beyond the container of the slider
 	int logical_mouse_x, logical_mouse_y;
@@ -190,7 +203,7 @@ void Slider::handle_events_hook_end(const SDL_Event& e)
 			on_drag();
 		}
 	}
-}
+}*/
 
 SDL_Rect Slider::get_rect() const
 {

@@ -21,26 +21,26 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
 	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
 
-	ui_elements_.reserve(10);
+	ui_manager_.add_element(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
+	x_textbutton += dynamic_cast<TextButton*>(ui_manager_.ui_elements_[0].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_manager_.add_element(std::make_unique<TextToggle>("Skip", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
+	x_textbutton += dynamic_cast<TextToggle*>(ui_manager_.ui_elements_[1].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_manager_.add_element(std::make_unique<TextToggle>("Auto", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::auto_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
+	x_textbutton += dynamic_cast<TextToggle*>(ui_manager_.ui_elements_[2].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_manager_.add_element(std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
+	x_textbutton += dynamic_cast<TextButton*>(ui_manager_.ui_elements_[3].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_manager_.add_element(std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
+	x_textbutton += dynamic_cast<TextButton*>(ui_manager_.ui_elements_[4].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_manager_.add_element(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::settings_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 
-	ui_elements_.push_back(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements_[0].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_elements_.push_back(std::make_unique<TextToggle>("Skip", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextToggle*>(ui_elements_[1].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_elements_.push_back(std::make_unique<TextToggle>("Auto", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::auto_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextToggle*>(ui_elements_[2].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_elements_.push_back(std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements_[3].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_elements_.push_back(std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextButton*>(ui_elements_[4].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_elements_.push_back(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::settings_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
+	ui_manager_.set_elements();
 }
 
 TextToggle* InGame::get_texttoggle(const std::string_view text)
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_)
+	for(Ui* ui : ui_manager_.navigation_list_)
 	{
-		TextToggle* texttoggle = dynamic_cast<TextToggle*>(ui.get());
+		TextToggle* texttoggle = dynamic_cast<TextToggle*>(ui);
 		if(texttoggle != nullptr && texttoggle->text_.text_ == text)
 		{
 			return texttoggle;
@@ -163,7 +163,7 @@ void InGame::settings_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Settings!" << std::endl;
-	game_.push_state(game_.settings_menu_.get());
+	game_.request_push_state(game_.settings_menu_.get());
 }
 
 void InGame::temp_function(Ui* ui)
@@ -176,14 +176,10 @@ void InGame::handle_events(const SDL_Event& e)
 {
 	if(!hide_ui_textbox_)
 	{
-		for(const std::unique_ptr<Ui>& ui : ui_elements_)
+		ui_manager_.handle_events(e);
+		if(ui_manager_.is_mouse_on_ui_)
 		{
-			//ui->handle_events(e);
-
-			if(ui->is_mouse_on_ui()) //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
-			{
-				return;
-			}
+			return; //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
 		}
 
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
@@ -228,10 +224,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	if(!hide_ui_textbox_)
 	{
 		textbox_.draw(renderer);
-		for(const std::unique_ptr<Ui>& ui : ui_elements_)
-		{
-			ui->draw(renderer);
-		}
+		ui_manager_.draw(renderer);
 	}
 }
 
@@ -265,7 +258,6 @@ void InGame::update()
 		current_unique_id_ += 1;
 	}
 
-	//TODO : les dialogues doivent être affichés en entier directement
 	if(get_texttoggle("Skip")->is_checked_)
 	{
 		show_next_dialogue();
@@ -292,9 +284,6 @@ void InGame::update()
 	if(!hide_ui_textbox_)
 	{
 		textbox_.update();
-		for(const std::unique_ptr<Ui>& ui : ui_elements_)
-		{
-			ui->update();
-		}
+		ui_manager_.update();
 	}
 }

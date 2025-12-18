@@ -6,24 +6,15 @@ GameState::GameState(Game& game)
 
 void GameState::handle_events(const SDL_Event& e)
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_)
-	{
-		ui->handle_events(e);
-	}
+	ui_manager_.handle_events(e);
 }
 
 void GameState::draw(sdl::Renderer& renderer)
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_)
-	{
-		ui->draw(renderer);
-	}
+	ui_manager_.draw(renderer);
 }
 
 void GameState::update()
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_)
-	{
-		ui->update();
-	}
+	ui_manager_.update();
 }

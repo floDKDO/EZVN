@@ -6,28 +6,28 @@
 const unsigned int Inputfield::index_rect_inputfield_ = 0;
 
 Inputfield::Inputfield(const std::string_view text_placeholder, const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), 
+	: Ui(text_placeholder, renderer), 
 	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y, renderer),
 	  container_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
 	  container_outline_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
 	  character_limit_(character_limit),
 	  text_caret_("|", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
 	  text_placeholder_(text_placeholder, constants::inputfield_placeholder_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
-	  is_writing_(false), index_caret_(0), offset_caret_(0)
+	  index_caret_(0), offset_caret_(0), last_input_time(0), last_blink_time_(0), is_caret_visible_(true)
 {
 	callback_function_ = callback_function;
 	SDL_SetTextInputRect(&(container_));
 
+	wants_text_input_ = true;
 	pointer_on_ui_when_pointer_up_ = true;
 }
 
 void Inputfield::quit_editing()
 {
 	has_keyboard_focus_ = false;
-	is_writing_ = false;
 }
 
-void Inputfield::on_pointer_up_hook_end()
+void Inputfield::on_pointer_up_hook_end(PointerEventData pointer_event_data)
 {
 	has_keyboard_focus_ = !has_keyboard_focus_;
 }
@@ -36,6 +36,7 @@ void Inputfield::on_left_pressed()
 {
 	if(has_keyboard_focus_)
 	{
+		last_input_time = SDL_GetTicks64();
 		if(index_caret_ > 0)
 		{
 			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_ - 1]);
@@ -53,6 +54,7 @@ void Inputfield::on_right_pressed()
 {
 	if(has_keyboard_focus_)
 	{
+		last_input_time = SDL_GetTicks64();
 		if(index_caret_ < character_limit_ && index_caret_ < text_.text_.length())
 		{
 			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
@@ -73,6 +75,7 @@ void Inputfield::on_enter_pressed_hook_end()
 
 void Inputfield::on_backspace_pressed()
 {
+	last_input_time = SDL_GetTicks64();
 	if(has_keyboard_focus_ && !text_.text_.empty())
 	{
 		if(index_caret_ > 0)
@@ -85,6 +88,7 @@ void Inputfield::on_backspace_pressed()
 
 void Inputfield::on_delete_pressed()
 {
+	last_input_time = SDL_GetTicks64();
 	if(has_keyboard_focus_ && !text_.text_.empty())
 	{
 		if(index_caret_ < text_.text_.length())
@@ -93,37 +97,6 @@ void Inputfield::on_delete_pressed()
 			offset_caret_ += current_char_width;
 			text_.text_.erase(index_caret_, 1);
 		}
-	}
-}
-
-void Inputfield::on_input_pressed_hook_end(const SDL_Event& e)
-{
-	if(has_keyboard_focus_)
-	{
-		is_writing_ = true;
-	}
-
-	if(e.key.keysym.sym == SDLK_BACKSPACE)
-	{
-		on_backspace_pressed();
-	}
-	else if(e.key.keysym.sym == SDLK_DELETE)
-	{
-		on_delete_pressed();
-	}
-}
-
-void Inputfield::on_input_released_hook_end(const SDL_Event& e)
-{
-	(void)e;
-	is_writing_ = false;
-}
-
-void Inputfield::handle_events_hook_end(const SDL_Event& e)
-{
-	if(e.type == SDL_TEXTINPUT)
-	{
-		on_typing(e);
 	}
 }
 
@@ -172,23 +145,38 @@ void Inputfield::update()
 	text_.update();
 
 	Uint64 now = SDL_GetTicks64();
-	if(now - last_time_ > 500)
+	Uint64 idle_time = now - last_input_time;
+
+	if(idle_time >= constants::inputfield_idle_time_)
+	{
+		if(now - last_blink_time_ >= constants::inputfield_caret_blink_time_)
+		{
+			is_caret_visible_ = !is_caret_visible_;
+			last_blink_time_ = now;
+		}
+	}
+	else //do not hide the caret when writing/deleting
+	{
+		is_caret_visible_ = true;
+	}
+
+	if(is_caret_visible_)
 	{
 		text_caret_.show();
 	}
-	if(now - last_time_ > 1000 && !is_writing_) //do not hide the caret when writing/deleting
+	else 
 	{
 		text_caret_.hide();
-		last_time_ = SDL_GetTicks64();
 	}
 }
 
-void Inputfield::on_typing(const SDL_Event& e)
+void Inputfield::on_typing(const std::string_view text)
 {
+	last_input_time = SDL_GetTicks64();
 	if(has_keyboard_focus_ && text_.text_.length() < character_limit_)
 	{
-		text_.text_.insert(text_.text_.begin() + index_caret_, e.text.text[0]);
-		index_caret_ += 1;
+		text_.text_.insert(index_caret_, text);
+		index_caret_ += text.length();
 	}
 }
 

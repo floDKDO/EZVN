@@ -20,9 +20,22 @@ class Game
 
 		void run();
 
-		void push_state(GameState* state);
-		void pop_state(); 
-		GameState* get_state() const;
+		void request_push_state(GameState* state);
+		void request_pop_state();
+
+		enum class Action
+		{
+			push,
+			pop
+		};
+
+		struct RequestedAction
+		{
+			Action action;
+			GameState* game_state;
+		};
+
+		std::stack<RequestedAction> requested_actions_;
 
 		void handle_events();
 		void draw();
@@ -42,6 +55,12 @@ class Game
 	private:
 		//void create_main_menu();
 		//void create_settings_menu();
+
+		void push_state(GameState* state);
+		void pop_state();
+		GameState* get_state() const;
+
+		void handle_requests();
 
 		void play_function(Ui* ui);
 		void settings_function(Ui* ui);
@@ -70,8 +89,6 @@ class Game
 		sdl::GameController game_controller_;
 
 		sdl::Surface window_icon_;
-
-		UiManager ui_manager_;
 
 	public:
 		std::unique_ptr<GameState> main_menu_;

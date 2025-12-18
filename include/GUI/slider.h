@@ -7,15 +7,16 @@
 class Slider : public Ui
 {
 	public:
-		Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+	Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Slider(const unsigned int min_value, const unsigned int max_value, const unsigned int current_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		bool is_mouse_on_handle(const int mouse_x, const int mouse_y) const;
 		void disable_keyboard_focus();
-		void handle_movement();
+		void handle_movement(int mouse_x);
 
-		void on_pointer_down_hook_end() override;
+		void on_pointer_down_hook_end(PointerEventData pointer_event_data) override;
 
-		void on_drag() override;
+		void on_drag(PointerEventData pointer_event_data) override;
 
 		void on_up_pressed() override;
 		void on_down_pressed() override;
@@ -25,7 +26,7 @@ class Slider : public Ui
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		void handle_events_hook_end(const SDL_Event& e) override;
+		//void handle_events_hook_end(const SDL_Event& e) override;
 		SDL_Rect get_rect() const override;
 
 	private:

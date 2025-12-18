@@ -20,6 +20,8 @@
 
 //TODO : utilité des vector.reserve(10) ??
 
+//TODO : le full screen doit également maximiser la fenêtre dans le cas où celle-ci avait été redimensionnée ??
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
