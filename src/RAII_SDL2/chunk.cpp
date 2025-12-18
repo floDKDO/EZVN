@@ -8,7 +8,6 @@ namespace sdl
 
 Chunk::Chunk(const std::string_view file) //Mix_LoadWAV
 {
-	std::cout << "CHUNK " << file << std::endl;
 	if((chunk_ = Mix_LoadWAV(file.data())) == nullptr)
 	{
 		SDL_Log("(Mix_LoadWAV) %s\n", Mix_GetError());
@@ -42,7 +41,6 @@ Chunk::~Chunk() //Mix_FreeChunk
 {
 	if(chunk_ != nullptr)
 	{
-		std::cout << "DESTRUCTEUR CHUNK\n";
 		Mix_FreeChunk(chunk_);
 	}
 }

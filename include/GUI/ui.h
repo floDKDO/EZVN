@@ -8,12 +8,11 @@
 #include <vector>
 #include <iostream>
 
-//TODO : ordre => NORMAL, SELECTED, CLICKED
 enum class State
 {
 	NORMAL, 
-	CLICKED, 
-	SELECTED
+	SELECTED,
+	CLICKED
 };
 
 class Ui
@@ -25,25 +24,22 @@ class Ui
 		Ui& operator=(const Ui& ui) = delete;
 		Ui& operator=(Ui&& ui) = default;
 
-		virtual ~Ui() //TODO : remettre = default
-		{
-			std::cout << "DESTRUCTEUR UI\n";
-		}
+		virtual ~Ui() = default;
 
 		//TODO : en paramètre, PointerEventData qui contient le button (gauche ou droite) de la souris qui a été cliqué, is_dragging et la position du curseur 
 		virtual void on_pointer_up(PointerEventData pointer_event_data); //<=> on click (l'action se lance quand le clic est relaché)
-		virtual void on_pointer_up_hook_end(PointerEventData pointer_event_data) {}
+		virtual void on_pointer_up_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
 
 		virtual void on_pointer_down(PointerEventData pointer_event_data);
-		virtual void on_pointer_down_hook_end(PointerEventData pointer_event_data) {}
+		virtual void on_pointer_down_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
 
 		virtual void on_pointer_enter(PointerEventData pointer_event_data);
-		virtual void on_pointer_enter_hook_end(PointerEventData pointer_event_data) {}
+		virtual void on_pointer_enter_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
 
 		virtual void on_pointer_exit(PointerEventData pointer_event_data);
-		virtual void on_pointer_exit_hook_end(PointerEventData pointer_event_data) {}
+		virtual void on_pointer_exit_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
 
-		virtual void on_drag(PointerEventData pointer_event_data){}
+		virtual void on_drag(PointerEventData pointer_event_data){ (void)pointer_event_data; }
 		/* Fin du TODO*****************************************/
 
 		virtual void on_up_pressed();
@@ -64,10 +60,6 @@ class Ui
 		virtual void on_backspace_pressed() {}
 		virtual void on_delete_pressed() {}
 
-		//TODO : à sûrement retirer
-		virtual void on_input_pressed(const SDL_Event& e);
-		virtual void on_input_pressed_hook_end(const SDL_Event& e) { (void)e; }
-
 
 		virtual void on_up_released();
 		virtual void on_up_released_hook_end() {}
@@ -84,22 +76,11 @@ class Ui
 		virtual void on_enter_released();
 		virtual void on_enter_released_hook_end() {}
 
-		//TODO : à sûrement retirer
-		virtual void on_input_released(const SDL_Event& e);
-		virtual void on_input_released_hook_end(const SDL_Event& e) { (void)e; }
-
-
 		virtual void on_typing(const std::string_view text) { (void)text; }
 
-		//TODO : à sûrement retirer
-		virtual void handle_events(const SDL_Event& e);
-		virtual void handle_events_hook_end(const SDL_Event& e) { (void)e; }
 
 		virtual void draw(sdl::Renderer& renderer) = 0;
 		virtual void update() = 0; //TODO : obligé ou juste virtual ??
-
-		//void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
-		//bool is_mouse_on_ui();
 
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
@@ -112,15 +93,13 @@ class Ui
 		State state_;
 
 		bool has_keyboard_focus_;
-		bool mouse_entered_; //TODO : vérifier ces deux champs dans uimanager
+		bool mouse_entered_; 
 		bool mouse_was_on_ui_before_drag_;
 		bool wants_text_input_;
 		bool pointer_on_ui_when_pointer_up_;
 
-		std::string unique_id_;
-
 	protected:
-		Ui(const std::string_view text, sdl::Renderer& renderer);
+		Ui(sdl::Renderer& renderer);
 
 		Uint64 last_time_;
 

@@ -7,7 +7,7 @@
 #include <iostream>
 
 MainMenu::MainMenu(Game& game, const std::string_view background_path, sdl::Renderer& renderer)
-	: GameState(game), background_(background_path, 0, 0, renderer), last_selected_before_changing_menu_("Play")
+	: GameState(game), background_(background_path, 0, 0, renderer)
 {
 	build_ui_elements(renderer);
 }
@@ -22,12 +22,6 @@ MainMenu::MainMenu(Game& game, const std::string_view background_path, sdl::Rend
 void MainMenu::build_ui_elements(sdl::Renderer& renderer)
 {
 	//ici, std::placeholders::_1 est nécessaire car l'appel à la fonction de callback (ce qui est retourné par std::bind) est de la forme : f(this) => on spécifie l'argument lors de l'appel au callable et pas directement sa valeur dans std::bind
-
-	//std::unique_ptr<Ui> settings = std::make_unique<TextButton>("Settings", 600, 350, renderer, std::bind(&MainMenu::settings_function, this, std::placeholders::_1));
-
-	/*if(last_selected_before_changing_menu_ == "Settings")
-		settings->state_ = State::SELECTED;*/
-
 	ui_manager_.add_element(std::make_unique<TextButton>("Play", 600, 200, renderer, std::bind(&MainMenu::play_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<TextButton>("Settings", 600, 350, renderer, std::bind(&MainMenu::settings_function, this, std::placeholders::_1)));
 	//ui_elements_.push_back(std::make_unique<TextButton>("Quit", 600, 500, renderer, "Are you sure you want to quit?", std::bind(&MainMenu::confirmationpopup_quit_function, this, std::placeholders::_1)));
@@ -54,7 +48,6 @@ void MainMenu::play_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Play!" << std::endl;
-	last_selected_before_changing_menu_ = "Play";
 	game_.request_push_state(game_.in_game_.get()); //TODO : simplifier avec un truc plus générique (ex : game_.request_change_state("Ingame"))
 }
 
@@ -62,7 +55,6 @@ void MainMenu::settings_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Settings!" << std::endl;
-	last_selected_before_changing_menu_ = "Settings";
 	game_.request_push_state(game_.settings_menu_.get());
 }
 

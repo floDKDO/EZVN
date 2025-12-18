@@ -4,7 +4,7 @@
 #include <iostream>
 
 ConfirmationPopUp::ConfirmationPopUp(const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(text, renderer), is_confirmationpopup_visible_(false),
+	: Ui(renderer), is_confirmationpopup_visible_(false),
 	yes_("Yes", 200, 500, renderer_, callback_function, TextButtonKind::ON_FRAME), //TODO : hardcodé
 	no_("No", 500, 500, renderer_, 
 	[&](Ui* ui)

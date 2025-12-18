@@ -6,7 +6,7 @@
 const unsigned int Slider::index_rect_container_ = 0;
 
 Slider::Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(text, renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
+	: Ui(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}), 
 	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
@@ -20,7 +20,7 @@ Slider::Slider(const unsigned int min_value, const unsigned int max_value, const
 }
 
 Slider::Slider(const unsigned int min_value, const unsigned int max_value, const unsigned int current_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(text, renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
+	: Ui(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
@@ -101,15 +101,12 @@ void Slider::on_left_pressed()
 {
 	if(has_keyboard_focus_)
 	{
-		if(state_ == State::SELECTED)
+		handle_.x -= container_.w / constants::slider_step_count_;
+		handle_outline_.x = handle_.x;
+		if(handle_.x + (handle_.w / 2) < container_.x)
 		{
-			handle_.x -= container_.w / constants::slider_step_count_;
+			handle_.x = container_.x - (handle_.w / 2);
 			handle_outline_.x = handle_.x;
-			if(handle_.x + (handle_.w / 2) < container_.x)
-			{
-				handle_.x = container_.x - (handle_.w / 2);
-				handle_outline_.x = handle_.x;
-			}
 		}
 	}
 	else
@@ -122,15 +119,12 @@ void Slider::on_right_pressed()
 {
 	if(has_keyboard_focus_)
 	{
-		if(state_ == State::SELECTED)
+		handle_.x += container_.w / constants::slider_step_count_;
+		handle_outline_.x = handle_.x;
+		if(handle_.x + (handle_.w / 2) > container_.x + container_.w)
 		{
-			handle_.x += container_.w / constants::slider_step_count_;
+			handle_.x = container_.x + container_.w - (handle_.w / 2);
 			handle_outline_.x = handle_.x;
-			if(handle_.x + (handle_.w / 2) > container_.x + container_.w)
-			{
-				handle_.x = container_.x + container_.w - (handle_.w / 2);
-				handle_outline_.x = handle_.x;
-			}
 		}
 	}
 	else

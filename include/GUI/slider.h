@@ -26,7 +26,6 @@ class Slider : public Ui
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		//void handle_events_hook_end(const SDL_Event& e) override;
 		SDL_Rect get_rect() const override;
 
 	private:

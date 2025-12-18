@@ -22,6 +22,8 @@
 
 //TODO : le full screen doit également maximiser la fenêtre dans le cas où celle-ci avait été redimensionnée ??
 
+//TODO : vérifier que je n'ai pas oublié un "override"
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;

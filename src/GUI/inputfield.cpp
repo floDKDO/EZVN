@@ -6,7 +6,7 @@
 const unsigned int Inputfield::index_rect_inputfield_ = 0;
 
 Inputfield::Inputfield(const std::string_view text_placeholder, const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(text_placeholder, renderer), 
+	: Ui(renderer), 
 	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y, renderer),
 	  container_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
 	  container_outline_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
@@ -29,6 +29,7 @@ void Inputfield::quit_editing()
 
 void Inputfield::on_pointer_up_hook_end(PointerEventData pointer_event_data)
 {
+	(void)pointer_event_data;
 	has_keyboard_focus_ = !has_keyboard_focus_;
 }
 

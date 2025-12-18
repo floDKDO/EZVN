@@ -102,19 +102,12 @@ void Game::handle_requests()
 
 void Game::push_state(GameState* state)
 {
-	std::cout << "PUSH STATE\n";
-	//ui_manager_.clear_elements();
 	states_.push(state);
-	//states_.top()->build_ui_elements(renderer_);
-	//ui_manager_.set_elements();
 }
 
 void Game::pop_state()
 {
-	//ui_manager_.clear_elements();
 	states_.pop();
-	//states_.top()->build_ui_elements(renderer_);
-	//ui_manager_.set_elements();
 }
 
 GameState* Game::get_state() const

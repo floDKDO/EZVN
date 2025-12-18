@@ -23,8 +23,6 @@ class UiManager
 	public:
 
 		void add_element(std::unique_ptr<Ui>&& ui);
-
-		void clear_elements();
 		void set_elements();
 		bool is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode) const;
 		bool is_candidate_closer(const Ui* const ui, const Ui* const candidate, const Ui* const current_best, const Axis mode) const;
@@ -33,7 +31,6 @@ class UiManager
 		void select_new(Ui* ui);
 		void unselect_previous(Ui* ui, PointerEventData pointer_event_data);
 
-		//void get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const;
 		bool is_mouse_on_ui(PointerEventData pointer_event_data);
 		bool is_mouse_on_specific_ui(Ui* ui, PointerEventData pointer_event_data);
 

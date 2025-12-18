@@ -18,6 +18,5 @@ class MainMenu : public GameState
 
 	private:
 		Image background_;
-		std::string last_selected_before_changing_menu_;
 };
 

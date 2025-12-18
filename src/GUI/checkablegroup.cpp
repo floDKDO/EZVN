@@ -4,7 +4,7 @@
 #include <iostream>
 
 CheckableGroup::CheckableGroup(const size_t number_of_checkables, const bool only_one_has_to_be_checked, const std::string_view top_text, const int x, const int y, sdl::Renderer& renderer)
-	: Ui(top_text, renderer), 
+	: Ui(renderer), 
 	top_text_(top_text, constants::checkablegroup_text_color_, constants::checkablegroup_font_, constants::checkablegroup_text_size_, x, y + constants::checkablegroup_top_text_y_delta_, renderer),
     number_of_checkables_(number_of_checkables), selected_checkable_(nullptr), 
 	only_one_has_to_be_checked_(only_one_has_to_be_checked)
@@ -47,6 +47,7 @@ void CheckableGroup::draw(sdl::Renderer& renderer)
 	top_text_.draw(renderer);
 }
 
+//TODO : utile ??
 void CheckableGroup::update()
 {
 	for(const std::unique_ptr<Checkable>& c : checkables_)
@@ -69,13 +70,14 @@ void CheckableGroup::update()
 	top_text_.update();
 }
 
-void CheckableGroup::handle_events(const SDL_Event& e)
+//TODO : utile ??
+/*void CheckableGroup::handle_events(const SDL_Event& e)
 {
 	for(const std::unique_ptr<Checkable>& c : checkables_)
 	{
 		c->handle_events(e);
 	}
-}
+}*/
 
 std::vector<Ui*> CheckableGroup::get_navigation_nodes()
 {

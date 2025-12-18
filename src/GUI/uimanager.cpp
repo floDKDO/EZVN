@@ -1,4 +1,6 @@
 #include "GUI/uimanager.h"
+#include "GUI/checkablegroup.h"
+#include "GUI/texttoggle.h"
 #include "GUI/slider.h"
 #include "GUI/inputfield.h"
 #include "GUI/confirmationpopup.h"
@@ -15,14 +17,6 @@ UiManager::UiManager()
 void UiManager::add_element(std::unique_ptr<Ui>&& ui)
 {
 	ui_elements_.push_back(std::move(ui));
-}
-
-void UiManager::clear_elements()
-{
-	ui_elements_.clear();
-	navigation_list_.clear();
-	current_selected_ = nullptr;
-	previous_selected_ = nullptr;
 }
 
 void UiManager::set_elements()
@@ -43,7 +37,6 @@ void UiManager::set_elements()
 
 	assign_ui_on_moving();
 
-	//TODO : toujours utile ??
 	for(Ui* ui : navigation_list_)
 	{
 		if(ui->state_ == State::SELECTED)
@@ -54,14 +47,6 @@ void UiManager::set_elements()
 	}
 	current_selected_ = navigation_list_[0];
 	current_selected_->state_ = State::SELECTED;
-
-	/*std::cout << "Adresses dans navigation_list: ";
-	for(Ui* ui : navigation_list_)
-	{
-		std::cout << ui << ", ";
-	}
-	std::cout << std::endl;
-	std::cout << "Adresse de current_selected: " << current_selected_ << std::endl;*/
 }
 
 bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode) const
@@ -182,13 +167,13 @@ void UiManager::assign_ui_on_moving() const
 
 void UiManager::select_new(Ui* ui)
 {
+	select_sound_.play_sound();
+	
 	previous_selected_ = current_selected_;
 	previous_selected_->state_ = State::NORMAL;
 
 	current_selected_ = ui;
 	current_selected_->state_ = State::SELECTED;
-
-	select_sound_.play_sound();
 }
 
 void UiManager::unselect_previous(Ui* ui, PointerEventData pointer_event_data)
@@ -212,25 +197,15 @@ void UiManager::unselect_previous(Ui* ui, PointerEventData pointer_event_data)
 	}
 }
 
-//void UiManager::get_logical_mouse_position(int* logical_mouse_x, int* logical_mouse_y) const
-//{
-//	int real_mouse_x = 0, real_mouse_y = 0;
-//	SDL_GetMouseState(&real_mouse_x, &real_mouse_y);
-//
-//	float temp_logical_mouse_x = 0, temp_logical_mouse_y = 0;
-//	SDL_RenderWindowToLogical(renderer_.fetch(), real_mouse_x, real_mouse_y, &temp_logical_mouse_x, &temp_logical_mouse_y);
-//	*logical_mouse_x = int(temp_logical_mouse_x);
-//	*logical_mouse_y = int(temp_logical_mouse_y);
-//}
-
 bool UiManager::is_mouse_on_ui(PointerEventData pointer_event_data)
 {
+	bool result = false;
 	for(Ui* ui_element : navigation_list_)
 	{
-		return is_mouse_on_specific_ui(ui_element, pointer_event_data);
+		result = is_mouse_on_specific_ui(ui_element, pointer_event_data);
 	}
 	is_mouse_on_ui_ = false;
-	return false;
+	return result;
 }
 
 bool UiManager::is_mouse_on_specific_ui(Ui* ui, PointerEventData pointer_event_data)
@@ -305,7 +280,6 @@ void UiManager::on_input_pressed(const SDL_Event& e)
 	{
 		current_selected_->on_delete_pressed();
 	}
-	//current_selected_->on_input_pressed_hook_end(e);
 }
 
 void UiManager::on_input_released(const SDL_Event& e)
@@ -336,7 +310,6 @@ void UiManager::on_input_released(const SDL_Event& e)
 		click_sound_.play_sound();
 		current_selected_->on_enter_released();
 	}
-	//current_selected_->on_input_released_hook_end(e);
 }
 
 void UiManager::handle_events(const SDL_Event& e)
@@ -369,6 +342,7 @@ void UiManager::handle_events(const SDL_Event& e)
 				if(is_mouse_on_specific_ui(current_selected_, pointer_event_data) && !is_mouse_left_button_held_down_)
 				{
 					is_mouse_left_button_held_down_ = true;
+					current_selected_->mouse_was_on_ui_before_drag_ = true;
 					current_selected_->on_pointer_down(pointer_event_data);
 				}
 			}
@@ -378,49 +352,47 @@ void UiManager::handle_events(const SDL_Event& e)
 			if(e.button.button == SDL_BUTTON_LEFT)
 			{
 				PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
-				if(is_mouse_left_button_held_down_ 
-				&& (current_selected_->state_ == State::SELECTED || current_selected_->state_ == State::CLICKED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
+
+				if(is_mouse_left_button_held_down_ && (current_selected_->state_ == State::SELECTED || current_selected_->state_ == State::CLICKED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
 				{
+					is_mouse_left_button_held_down_ = false;
 					if((current_selected_->pointer_on_ui_when_pointer_up_ && is_mouse_on_specific_ui(current_selected_, pointer_event_data)) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
 					|| !current_selected_->pointer_on_ui_when_pointer_up_) //second conditon: the callback function is called even if the pointer is not on the UI when it is released/up
 					{
-						std::cout << "Adresse dans handle_events(): " << current_selected_ << std::endl;
-						current_selected_->on_pointer_up(pointer_event_data);
-						is_mouse_left_button_held_down_ = false;
 						click_sound_.play_sound();
-						std::cout << "Adresse à la sortie: " << current_selected_ << std::endl;
+						current_selected_->on_pointer_up(pointer_event_data);
+						current_selected_->mouse_was_on_ui_before_drag_ = false;
 					}
 				}
 			}
 			break;
 
 		case SDL_MOUSEMOTION:
-		{
-			PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
-			if(is_mouse_on_specific_ui(current_selected_, pointer_event_data))
 			{
-				if(!current_selected_->mouse_entered_ && !is_mouse_left_button_held_down_)
+				PointerEventData pointer_event_data = {0, e.motion.x, e.motion.y};
+				if(is_mouse_on_specific_ui(current_selected_, pointer_event_data))
 				{
-					if(current_selected_->state_ == State::NORMAL)
+					current_selected_->mouse_entered_ = true;
+					if(!is_mouse_left_button_held_down_ && current_selected_->state_ == State::NORMAL)
 					{
 						select_sound_.play_sound();
 						current_selected_->on_pointer_enter(pointer_event_data);
 					}
 				}
-			}
-			else
-			{
-				if(current_selected_->mouse_entered_)
+				else
 				{
-					current_selected_->on_pointer_exit(pointer_event_data);
+					if(current_selected_->mouse_entered_)
+					{
+						current_selected_->mouse_entered_ = false;
+						current_selected_->on_pointer_exit(pointer_event_data);
+					}
+				}
+
+				if(is_mouse_left_button_held_down_ && current_selected_->mouse_was_on_ui_before_drag_)
+				{
+					current_selected_->on_drag(pointer_event_data);
 				}
 			}
-
-			if(is_mouse_left_button_held_down_ && current_selected_->mouse_was_on_ui_before_drag_)
-			{
-				current_selected_->on_drag(pointer_event_data);
-			}
-		}
 			break;
 
 		case SDL_TEXTINPUT:
@@ -433,7 +405,6 @@ void UiManager::handle_events(const SDL_Event& e)
 		default:
 			break;
 	}
-	//current_selected_->handle_events_hook_end(e);
 }
 
 void UiManager::draw(sdl::Renderer& renderer)
@@ -446,7 +417,7 @@ void UiManager::draw(sdl::Renderer& renderer)
 
 void UiManager::update()
 {
-	for(Ui* ui_element : navigation_list_) //TODO : fonctionne ou remettre ui_elements_ ?
+	for(const std::unique_ptr<Ui>& ui_element : ui_elements_)  
 	{
 		ui_element->update();
 	}
