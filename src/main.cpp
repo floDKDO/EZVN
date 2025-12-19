@@ -24,6 +24,7 @@
 
 //TODO : vérifier que je n'ai pas oublié un "override"
 
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
@@ -46,13 +47,15 @@ int main(int argc, char* argv[])
 	game.hide_character("Sayori"); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Elle est chiante...");
 	game.hide_background();
-	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue("Sayori", "How are you MC?");
+	game.show_background(129, 0, 255, 255);
+	game.show_character("Yuri", TransformName::f41); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Yuri", "How are you MC?");
+	game.show_character("Yuri", TransformName::t41); //TODO : texte converti en l'enum dans la méthode
 	game.show_background("img/backgrounds/night.png");
 	//game.show_character("Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Sayori", TransformName::f42, 10); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue("Sayori", "HEYYYYYY!");
-	game.show_character("Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Monika", TransformName::f43, 10); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Monika", "HEYYYYYY!");
+	game.show_character("Monika", TransformName::t43); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("...");
 	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Sayori", "How are you MC?");

@@ -242,10 +242,15 @@ void Game::show_background(const std::string_view background_path)
 	dynamic_cast<InGame*>(in_game_.get())->insert_background(background_path);
 }
 
+void Game::show_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_background(r, g, b, a);
+}
+
 void Game::hide_background()
 {
 	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	in_game_ptr->backgrounds_.insert({line_number, ""});//TODO : créer une fonction qui insert et incrémente le compteur*/
 
-	dynamic_cast<InGame*>(in_game_.get())->insert_background("");
+	dynamic_cast<InGame*>(in_game_.get())->insert_background(0, 0, 0, 255);
 }

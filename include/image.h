@@ -17,6 +17,7 @@ class Image : public Drawable
 		void draw(sdl::Renderer& renderer) override;
 
 		int zorder_;
+		std::string_view path_;
 
 	private:
 		enum class ImageType
@@ -37,7 +38,6 @@ class Image : public Drawable
 		std::optional<sdl::Animation> create_animation(const std::string_view path);
 
 		std::optional<sdl::Animation> animated_image_; 
-		std::string_view path_;
 		ImageType image_type_;
 		int frame_index_;
 };

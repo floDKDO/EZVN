@@ -11,7 +11,7 @@
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) //TODO : ne rien afficher si pas de background
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
-	last_time_(0), textbox_(renderer), hide_ui_textbox_(false), renderer_(renderer)
+	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer);
 }
@@ -74,7 +74,13 @@ void InGame::insert_dialogue(const std::string_view character_name, const std::s
 
 void InGame::insert_background(const std::string_view background_path)
 {
-	backgrounds_.insert({unique_id_, background_path});
+	backgrounds_.insert({unique_id_, new Background(background_path, renderer_)});
+	unique_id_ += 1;
+}
+
+void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
+{
+	backgrounds_.insert({unique_id_, new Background(r, g, b, a)});
 	unique_id_ += 1;
 }
 
@@ -84,22 +90,23 @@ void InGame::insert_character(const std::string_view character_name, const Trans
 	unique_id_ += 1;
 }
 
-void InGame::change_background(const std::string_view background_path)
+void InGame::change_background(Background* b)
 {
-	if(background_path.empty())
+	if(b->image_ != nullptr)
 	{
-		background_.reset(); 
-	}
-	else
-	{
-		if(background_ == nullptr)
+		if(background_.image_ != nullptr)
 		{
-			background_ = std::make_unique<Image>(background_path, 0, 0, renderer_);
+			background_.image_->init_image(b->image_->path_, 0, 0, renderer_);
 		}
 		else
 		{
-			background_->init_image(background_path, 0, 0, renderer_);
+			background_ = Background(b->image_->path_, renderer_);
 		}
+	}
+	else
+	{
+		background_.image_.reset();
+		background_.color_ = {b->color_.r, b->color_.g, b->color_.b, b->color_.a};
 	}
 }
 
@@ -176,28 +183,30 @@ void InGame::handle_events(const SDL_Event& e)
 {
 	if(!hide_ui_textbox_)
 	{
+		//condition placée en premier pour que le scroll de la mouse wheel sur un textbutton fonctionne
+		if(e.type == SDL_MOUSEWHEEL)
+		{
+			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
+			{
+				get_texttoggle("Skip")->is_checked_ = false;
+				show_dialogue_mouse_wheel(WhichDialogue::previous);
+			}
+			else //scroll vers l'arrière => avancer d'un dialogue
+			{
+				show_dialogue_mouse_wheel(WhichDialogue::next);
+			}
+		}
+
 		ui_manager_.handle_events(e);
 		if(ui_manager_.is_mouse_on_ui_)
 		{
-			return; //si collision avec un textbutton, ne pas gérer les événements de la Textbox (= ne pas passer au prochain dialogue)
+			return; //si collision avec un textbutton, ne pas gérer les événements "clic" et "espace" de la Textbox (= ne pas passer au prochain dialogue)
 		}
 
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
 			show_next_dialogue();
-		}
-		else if(e.type == SDL_MOUSEWHEEL) 
-		{
-			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
-			{
-				get_texttoggle("Skip")->is_checked_ = false;
-				show_dialogue_mouse_wheel(WhichDialogue::previous); 
-			}
-			else //scroll vers l'arrière => avancer d'un dialogue
-			{
-				show_dialogue_mouse_wheel(WhichDialogue::next);
-			}
 		}
 	}
 
@@ -209,10 +218,7 @@ void InGame::handle_events(const SDL_Event& e)
 
 void InGame::draw(sdl::Renderer& renderer)
 {
-	if(background_ != nullptr)
-	{
-		background_->draw(renderer);
-	}
+	background_.draw(renderer);
 
 	//TODO : coûteux car réalisé à chaque tour de boucle...
 	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::unique_ptr<Character>& a, const std::unique_ptr<Character>& b) -> bool { return a->character_.zorder_ < b->character_.zorder_; });
@@ -230,6 +236,27 @@ void InGame::draw(sdl::Renderer& renderer)
 
 void InGame::update()
 {
+	//Pour l'autofocus
+	//TODO : pourquoi ça cause un problème pour le premer dialogue ???
+	if(dialogues_[current_unique_id_].second != nullptr)
+	{
+		for(const std::unique_ptr<Character>& c : characters_)
+		{
+			if(c->name_ == dialogues_[current_unique_id_].second->name_)
+			{
+				c->is_speaking_ = true;
+			}
+			else c->is_speaking_ = false;
+		}
+	}
+	else //Narrator
+	{
+		for(const std::unique_ptr<Character>& c : characters_)
+		{
+			c->is_speaking_ = false;
+		}
+	}
+
 	for(const std::unique_ptr<Character>& c : characters_)
 	{
 		for(unsigned int i = current_unique_id_; i != -1; --i)

@@ -3,6 +3,7 @@
 #include "gamestate.h"
 #include "textbox.h"
 #include "character.h"
+#include "background.h"
 #include "GUI/texttoggle.h"
 #include <vector>
 #include <memory>
@@ -25,9 +26,10 @@ class InGame : public GameState
 
 		void insert_dialogue(const std::string_view character_name, const std::string_view dialogue);
 		void insert_background(const std::string_view background_path);
+		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
 		void insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder);
 
-		void change_background(const std::string_view background_path);
+		void change_background(Background* b);
 
 		void show_next_dialogue(); 
 
@@ -46,7 +48,7 @@ class InGame : public GameState
 
 		std::map<unsigned int, std::tuple<Character*, const TransformName, int>> characters_transforms_; 
 		std::map<unsigned int, std::pair<const std::string_view, Character*>> dialogues_;
-		std::map<unsigned int, const std::string_view> backgrounds_;
+		std::map<unsigned int, Background*> backgrounds_;
 
 		mutable unsigned int unique_id_;
 		unsigned int current_unique_id_;
@@ -59,7 +61,7 @@ class InGame : public GameState
 		Textbox textbox_; //TODO : remettre private
 
 	private:
-		std::unique_ptr<Image> background_; //TODO : utiliser un pointeur pour que l'image puisse être vide ??
+		Background background_; //TODO : utiliser un pointeur pour que l'image puisse être vide ??
 		bool hide_ui_textbox_;
 		sdl::Renderer &renderer_;
 };
