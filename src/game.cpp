@@ -11,7 +11,7 @@
 
 Game::Game()
 	: sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
-	window_("EZVN", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
+	window_(constants::game_name_, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
 	window_icon_(constants::window_icon_), 
@@ -110,6 +110,7 @@ void Game::pop_state()
 	states_.pop();
 }
 
+//TODO : inutile car pas utilisée
 GameState* Game::get_state() const
 {
 	return states_.top();
@@ -173,26 +174,11 @@ void Game::create_character(const std::string_view character_name, const std::st
 
 void Game::show_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
 {
-	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	Character* character = in_game_ptr->get_character(character_name);
-	//character->is_visible_ = true;
-	//character->set_transform(transform_name);
-	//TODO : créer une fonction qui insert et incrémente le compteur
-	in_game_ptr->characters_transforms_.insert({line_number, {character, transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??*/
-
 	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, transform_name, zorder);
 }
 
 void Game::show_character(const std::string_view character_name, const int zorder)
 {
-	//garder la même transfo = ne pas déplacer le personnage
-	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	Character* character = in_game_ptr->get_character(character_name);
-	//character->is_visible_ = true;
-	//character->set_transform(transform_name);
-	//TODO : créer une fonction qui insert et incrémente le compteur
-	in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::none, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??*/
-
 	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::none, zorder);
 }
 
@@ -201,37 +187,21 @@ void Game::hide_character(const std::string_view character_name)
 	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	Character* character = in_game_ptr->get_character(character_name);
 
-	//in_game_ptr->characters_transforms_.insert({line_number, {character, TransformName::hide, character->character_.zorder_}}); //TODO : créer une fonction qui insert et incrémente le compteur*/
-
-	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::hide, character->character_.zorder_); 
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::hide, character->character_.zorder_); //TODO : pas ouf...
 }
 
 void Game::add_new_dialogue(const std::string_view character_name, const std::string_view dialogue)
 {
-	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-
-	Character* character = in_game_ptr->get_character(character_name);
-	if(character != nullptr)
-	{
-		in_game_ptr->dialogues_.insert({line_number, {dialogue, character}}); //TODO : créer une fonction qui insert et incrémente le compteur
-	}*/
-
 	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue(character_name, dialogue);
 }
 
 void Game::add_new_dialogue(const std::string_view dialogue)
 {
-	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	in_game_ptr->dialogues_.insert({line_number, {dialogue, nullptr}});//TODO : créer une fonction qui insert et incrémente le compteur*/
-
 	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("", dialogue); //TODO : mettre nullptr car j'utiliserai Character* à la place d'une std::string_view
 }
 
 void Game::show_background(const std::string_view background_path)
 {
-	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	in_game_ptr->backgrounds_.insert({line_number, background_path});//TODO : créer une fonction qui insert et incrémente le compteur*/
-
 	dynamic_cast<InGame*>(in_game_.get())->insert_background(background_path);
 }
 
@@ -242,8 +212,5 @@ void Game::show_background(const Uint8 r, const Uint8 g, const Uint8 b, const Ui
 
 void Game::hide_background()
 {
-	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	in_game_ptr->backgrounds_.insert({line_number, ""});//TODO : créer une fonction qui insert et incrémente le compteur*/
-
 	dynamic_cast<InGame*>(in_game_.get())->insert_background(0, 0, 0, 255);
 }

@@ -6,7 +6,6 @@
 
 #include <functional>
 #include <vector>
-#include <iostream>
 
 enum class State
 {
@@ -102,7 +101,6 @@ class Ui
 		Ui(sdl::Renderer& renderer);
 
 		Uint64 last_time_;
-
 
 		sdl::Renderer& renderer_; //do not own it !!
 

@@ -40,6 +40,7 @@ class Drawable
 
 		Uint64 last_time_;
 		SDL_Rect position_;
+		SDL_Color color_; //TODO : remettre en protected
 
 	protected:
 		Drawable(sdl::Renderer& renderer, SDL_Color color = {255, 255, 255, 255});
@@ -48,7 +49,7 @@ class Drawable
 		SDL_Rect initial_rect_;
 		double angle_;
 		SDL_RendererFlip flip_;
-		SDL_Color color_;
+		
 
 		sdl::Renderer& renderer_; //do not own it !!
 		

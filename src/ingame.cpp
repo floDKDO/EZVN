@@ -7,7 +7,7 @@
 #include <iostream>
 #include <algorithm>
 
-//TODO : bizarre qu'un background "vide" soit parfois noir et parfois blanc... => sûrement à cause de SDL_SetRenderDrawColor()
+//TODO : petit problème avec les SDL_SetRenderDrawColor précédents qui restent quand on lance le jeu, idem quand on redimensionne la fenêtre
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
@@ -68,25 +68,25 @@ Character* InGame::get_character(const std::string_view name)
 
 void InGame::insert_dialogue(const std::string_view character_name, const std::string_view dialogue)
 {
-	dialogues_.insert({unique_id_, {dialogue, get_character(character_name)}});
+	dialogues_.insert({unique_id_, {dialogue, get_character(character_name)}}); //TODO : make_pair ou accolades (= initializer list) ??
 	unique_id_ += 1;
 }
 
 void InGame::insert_background(const std::string_view background_path)
 {
-	backgrounds_.insert({unique_id_, Background(background_path, renderer_)}); //TODO : pas de new
+	backgrounds_.insert({unique_id_, Background(background_path, renderer_)}); 
 	unique_id_ += 1;
 }
 
 void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
 {
-	backgrounds_.insert({unique_id_, Background(r, g, b, a)}); //TODO : pas de new
+	backgrounds_.insert({unique_id_, Background(r, g, b, a)}); 
 	unique_id_ += 1;
 }
 
 void InGame::insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
 {
-	characters_transforms_.insert({unique_id_, {get_character(character_name), transform_name, zorder}});
+	characters_transforms_.insert({unique_id_, {get_character(character_name), transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
 	unique_id_ += 1;
 }
 
@@ -234,6 +234,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	}
 }
 
+//TODO : créer des fonctions pour chaque bloc
 void InGame::update()
 {
 	//Pour l'autofocus
@@ -277,7 +278,7 @@ void InGame::update()
 	{
 		if(backgrounds_.count(i))
 		{
-			change_background(backgrounds_.at(i)); //TODO : ici le problème si j'utilise Background à la place de Background*
+			change_background(backgrounds_.at(i)); 
 			break;
 		}
 	}

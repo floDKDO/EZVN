@@ -14,20 +14,27 @@
 
 //TODO : supprimer les .cpp inutiles où tout le code est dans le header à cause des templates ?
 
-//TODO : r, g, b, a ou SDL_Color ?? x, y ou {x, h} dans un Vec2 ?? Prendre aussi en charge la notation #FF00FFFF ??
+//TODO : r, g, b, a ou SDL_Color ?? x, y ou {x, h} dans un Vec2 ?? Prendre aussi en charge la notation hex #FF00FFFF ??
 
 //TODO:  être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
 
 //TODO : utilité des vector.reserve(10) ??
 
-//TODO : le full screen doit également maximiser la fenêtre dans le cas où celle-ci avait été redimensionnée ??
+//TODO : le full screen doit également maximiser la fenêtre dans le cas où celle-ci avait été redimensionnée 
 
 //TODO : vérifier que je n'ai pas oublié un "override"
+
+//TODO : nettoyer le code => retirer les includes inutiles, "_" final après le nom des membres, retirer les membres inutiles etc.
+
+//TODO : problème de couleur pour la couleur du premier UI de chaque menu => pas d'outline ??
+//Le problème viendrait de ces deux lignes dans UiManager : current_selected_ = navigation_list_[0]; current_selected_->state_ = State::SELECTED;
 
 
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
+
+	//TODO : inputfield qui demande le nom du joueur au premier lancement du jeu 
 
 	//TODO : pause et window hide
 
