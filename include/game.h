@@ -44,7 +44,8 @@ class Game
 		void update_fps_count(const std::string_view fps) const;
 
 		void create_character(const std::string_view character_name, const std::string_view character_path, const std::string_view textbox_path="", const std::string_view namebox_path = "");
-		void show_character(const std::string_view character_name, const TransformName transform_name, const int zorder = 0);
+		void show_character(const std::string_view character_name, const TransformName transform_name, const int zorder);
+		void show_character(const std::string_view character_name, const TransformName transform_name);
 		void show_character(const std::string_view character_name, const int zorder = 0);
 		void hide_character(const std::string_view character_name);
 		void add_new_dialogue(const std::string_view character_name, const std::string_view dialogue);

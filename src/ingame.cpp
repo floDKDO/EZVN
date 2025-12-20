@@ -97,7 +97,17 @@ void InGame::insert_character(const std::string_view character_name, const Trans
 void InGame::insert_character(const std::string_view character_name, const TransformName transform_name)
 {
 	Character* character = get_character(character_name);
-	characters_transforms_.insert({unique_id_, {character, transform_name, character->character_.zorder_}}); //TODO : make_tuple ou accolades (= initializer list) ??
+
+	int zorder = 0;
+	for(unsigned int i = unique_id_; i != -1; --i)
+	{
+		if(characters_transforms_.count(i) && std::get<0>(characters_transforms_[i])->name_ == character_name)
+		{
+			zorder = std::get<2>(characters_transforms_[i]);
+			break;
+		}
+	}
+	characters_transforms_.insert({unique_id_, {character, transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
 	unique_id_ += 1;
 }
 

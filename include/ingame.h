@@ -53,6 +53,7 @@ class InGame : public GameState
 		std::map<unsigned int, std::pair<const std::string_view, Character*>> dialogues_;
 		std::map<unsigned int, Background> backgrounds_;
 
+		//TODO : utilité de mutable ??
 		mutable unsigned int unique_id_;
 		unsigned int current_unique_id_;
 

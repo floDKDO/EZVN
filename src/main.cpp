@@ -24,6 +24,8 @@
 
 //TODO : nettoyer le code => retirer les includes inutiles, "_" final après le nom des membres, retirer les membres inutiles etc.
 
+//TODO : peu de lisibilité avec tous les paramètres par défaut
+
 //TODO : problème de couleur pour la couleur du premier UI de chaque menu => pas d'outline ??
 //Le problème viendrait de ces deux lignes dans UiManager : current_selected_ = navigation_list_[0]; current_selected_->state_ = State::SELECTED;
 
@@ -39,7 +41,7 @@ int main(int argc, char* argv[])
 	Game game;
 	game.create_character("Sayori", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
 	game.create_character("Monika", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
-	game.create_character("Yuri", "img/characters/yuri.png", "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");
+	game.create_character("Yuri", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 	game.show_character("Yuri", TransformName::t41, 1); //TODO : texte converti en l'enum dans la méthode
 	game.show_character("Sayori", TransformName::f42, 0); //TODO : texte converti en l'enum dans la méthode
@@ -58,9 +60,9 @@ int main(int argc, char* argv[])
 	game.show_character("Yuri", TransformName::t41); //TODO : texte converti en l'enum dans la méthode
 	game.show_background("img/backgrounds/night.png");
 	//game.show_character("Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Monika", TransformName::f43, 10); //TODO : texte converti en l'enum dans la méthode
-	game.add_new_dialogue("Monika", "HEYYYYYY!");
-	game.show_character("Monika", TransformName::t43); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Natsuki", TransformName::f44, 10); //TODO : texte converti en l'enum dans la méthode
+	game.add_new_dialogue("Natsuki", "HEYYYYYY!");
+	game.show_character("Natsuki", TransformName::t44); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("...");
 	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Sayori", "How are you MC?");

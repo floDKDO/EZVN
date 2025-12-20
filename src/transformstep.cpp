@@ -37,8 +37,6 @@ void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_mo
 	SDL_assert(std::is_invocable_v<Factory>);
 	if(!transform_step_finished_ && time != 0)
 	{
-		//reset(image);
-
 		if(!is_init_)
 		{
 			step_ = step_object();
@@ -50,7 +48,7 @@ void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_mo
 
 		if(each_frame_modif_fonc(t)) 
 		{
-			std::cout << "FINISHED!\n";
+			//std::cout << "FINISHED!\n";
 			transform_step_finished_ = true;
 		}
 	}

@@ -6,37 +6,161 @@
 //TODO : "6" obligatoire ??
 
 Transform::Transform(const TransformName transform_name)
-	: is_character_visible_(false), transform_name_(transform_name), previous_transform_name_(transform_name_)
+	: is_character_visible_(false), transform_name_(transform_name), previous_transform_name_(transform_name_), transform_({transform_name, TransformAllSteps(6)})
+{}
+
+void Transform::create_transform(const TransformName transform_name, bool is_visible)
 {
-	transforms_.insert({TransformName::t11, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t21, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t22, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t31, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t32, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t33, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t41, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t42, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t43, TransformAllSteps(6)});
-	transforms_.insert({TransformName::t44, TransformAllSteps(6)});
-
-	transforms_.insert({TransformName::f11, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f21, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f22, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f31, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f32, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f33, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f41, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f42, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f43, TransformAllSteps(6)});
-	transforms_.insert({TransformName::f44, TransformAllSteps(6)});
-
-	transforms_.insert({TransformName::test, TransformAllSteps(2)});
-	transforms_.insert({TransformName::hide, TransformAllSteps(1)});
-	transforms_.insert({TransformName::none, TransformAllSteps(0)});
+	transform_name_ = transform_name;
+	is_character_visible_ = is_visible; //to choose between on show and on replace
+	transform_ = {transform_name, TransformAllSteps(6)};
 }
 
-void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSteps& transform_t) 
+void Transform::show_transform(const TransformName transform_name, Image& image)
 {
+	switch(transform_name)
+	{
+		case TransformName::t11:
+			t11(image);
+			break;
+
+		case TransformName::t21:
+			t21(image);
+			break;
+
+		case TransformName::t22:
+			t22(image);
+			break;
+
+		case TransformName::t31:
+			t31(image);
+			break;
+
+		case TransformName::t32:
+			t32(image);
+			break;
+
+		case TransformName::t33:
+			t33(image);
+			break;
+
+		case TransformName::t41:
+			t41(image);
+			break;
+
+		case TransformName::t42:
+			t42(image);
+			break;
+
+		case TransformName::t43:
+			t43(image);
+			break;
+
+		case TransformName::t44:
+			t44(image);
+			break;
+
+		case TransformName::t51:
+			t51(image);
+			break;
+
+		case TransformName::t52:
+			t52(image);
+			break;
+
+		case TransformName::t53:
+			t53(image);
+			break;
+
+		case TransformName::t54:
+			t54(image);
+			break;
+
+		case TransformName::t55:
+			t55(image);
+			break;
+
+		case TransformName::f11:
+			f11(image);
+			break;
+
+		case TransformName::f21:
+			f21(image);
+			break;
+
+		case TransformName::f22:
+			f22(image);
+			break;
+
+		case TransformName::f31:
+			f31(image);
+			break;
+
+		case TransformName::f32:
+			f32(image);
+			break;
+
+		case TransformName::f33:
+			f33(image);
+			break;
+
+		case TransformName::f41:
+			f41(image);
+			break;
+
+		case TransformName::f42:
+			f42(image);
+			break;
+
+		case TransformName::f43:
+			f43(image);
+			break;
+
+		case TransformName::f44:
+			f44(image);
+			break;
+
+		case TransformName::f51:
+			f51(image);
+			break;
+
+		case TransformName::f52:
+			f52(image);
+			break;
+
+		case TransformName::f53:
+			f53(image);
+			break;
+
+		case TransformName::f54:
+			f54(image);
+			break;
+
+		case TransformName::f55:
+			f55(image);
+			break;
+
+		case TransformName::test:
+			test(image);
+			break;
+
+		case TransformName::hide:
+			hide(image);
+			break;
+
+		case TransformName::none:
+			break;
+
+		default:
+			std::cerr << "TRANSFORMATION NOT FOUND...\n";
+			break;
+	}
+}
+
+void Transform::tcommon(const int xpos, Image& image) 
+{
+	Transform::TransformAllSteps& transform_t = transform_.second;
+
 	//TODO : mettre ce if pour chaque transform ??
 	if(!transform_t.transform_finished_)
 	{
@@ -103,66 +227,83 @@ void Transform::tcommon(const int xpos, Image& image, Transform::TransformAllSte
 
 void Transform::t11(Image& image)
 {
-	Transform::TransformAllSteps& transform_t11 = transforms_.find(TransformName::t11)->second;
-	tcommon(640, image, transform_t11);
+	tcommon(640, image);
 }
 
 void Transform::t21(Image& image)
 {
-	Transform::TransformAllSteps& transform_t21 = transforms_.find(TransformName::t21)->second;
-	tcommon(400, image, transform_t21);
+	tcommon(400, image);
 }
 
 void Transform::t22(Image& image)
 {
-	Transform::TransformAllSteps& transform_t22 = transforms_.find(TransformName::t22)->second;
-	tcommon(880, image, transform_t22);
+	tcommon(880, image);
 }
 
 void Transform::t31(Image& image)
 {
-	Transform::TransformAllSteps& transform_t31 = transforms_.find(TransformName::t31)->second;
-	tcommon(240, image, transform_t31);
+	tcommon(240, image);
 }
 
 void Transform::t32(Image& image)
 {
-	Transform::TransformAllSteps& transform_t32 = transforms_.find(TransformName::t32)->second;
-	tcommon(640, image, transform_t32);
+	tcommon(640, image);
 }
 
 void Transform::t33(Image& image)
 {
-	Transform::TransformAllSteps& transform_t33 = transforms_.find(TransformName::t33)->second;
-	tcommon(1040, image, transform_t33);
+	tcommon(1040, image);
 }
 
 void Transform::t41(Image& image)
 {
-	Transform::TransformAllSteps& transform_t41 = transforms_.find(TransformName::t41)->second;
-	tcommon(200, image, transform_t41);
+	tcommon(200, image);
 }
 
 void Transform::t42(Image& image)
 {
-	Transform::TransformAllSteps& transform_t42 = transforms_.find(TransformName::t42)->second;
-	tcommon(493, image, transform_t42);
+	tcommon(493, image);
 }
 
 void Transform::t43(Image& image)
 {
-	Transform::TransformAllSteps& transform_t43 = transforms_.find(TransformName::t43)->second;
-	tcommon(786, image, transform_t43);
+	tcommon(786, image);
 }
 
 void Transform::t44(Image& image)
 {
-	Transform::TransformAllSteps& transform_t44 = transforms_.find(TransformName::t44)->second;
-	tcommon(1080, image, transform_t44);
+	tcommon(1080, image);
 }
 
-void Transform::focus_common(const int xpos, Image& image, Transform::TransformAllSteps& transform_f) 
+void Transform::t51(Image& image)
 {
+	tcommon(140, image);
+}
+
+void Transform::t52(Image& image)
+{
+	tcommon(390, image);
+}
+
+void Transform::t53(Image& image)
+{
+	tcommon(640, image);
+}
+
+void Transform::t54(Image& image)
+{
+	tcommon(890, image);
+}
+
+void Transform::t55(Image& image)
+{
+	tcommon(1140, image);
+}
+
+void Transform::focus_common(const int xpos, Image& image) 
+{
+	Transform::TransformAllSteps& transform_f = transform_.second;
+
 	//TODO : mettre ce if pour chaque transform ??
 	if(!transform_f.transform_finished_)
 	{
@@ -229,67 +370,82 @@ void Transform::focus_common(const int xpos, Image& image, Transform::TransformA
 
 void Transform::f11(Image& image)
 {
-	Transform::TransformAllSteps& transform_f11 = transforms_.find(TransformName::f11)->second;
-	focus_common(640, image, transform_f11);
+	focus_common(640, image);
 }
 
 void Transform::f21(Image& image)
 {
-	Transform::TransformAllSteps& transform_f21 = transforms_.find(TransformName::f21)->second;
-	focus_common(400, image, transform_f21);
+	focus_common(400, image);
 }
 
 void Transform::f22(Image& image)
 {
-	Transform::TransformAllSteps& transform_f22 = transforms_.find(TransformName::f22)->second;
-	focus_common(880, image, transform_f22);
+	focus_common(880, image);
 }
 
 void Transform::f31(Image& image)
 {
-	Transform::TransformAllSteps& transform_f31 = transforms_.find(TransformName::f31)->second;
-	focus_common(240, image, transform_f31);
+	focus_common(240, image);
 }
 
 void Transform::f32(Image& image)
 {
-	Transform::TransformAllSteps& transform_f32 = transforms_.find(TransformName::f32)->second;
-	focus_common(640, image, transform_f32);
+	focus_common(640, image);
 }
 
 void Transform::f33(Image& image)
 {
-	Transform::TransformAllSteps& transform_f33 = transforms_.find(TransformName::f33)->second;
-	focus_common(1040, image, transform_f33);
+	focus_common(1040, image);
 }
 
 void Transform::f41(Image& image)
 {
-	Transform::TransformAllSteps& transform_f41 = transforms_.find(TransformName::f41)->second;
-	focus_common(200, image, transform_f41);
+	focus_common(200, image);
 }
 
 void Transform::f42(Image& image)
 {
-	Transform::TransformAllSteps& transform_f42 = transforms_.find(TransformName::f42)->second;
-	focus_common(493, image, transform_f42);
+	focus_common(493, image);
 }
 
 void Transform::f43(Image& image)
 {
-	Transform::TransformAllSteps& transform_f43 = transforms_.find(TransformName::f43)->second;
-	focus_common(786, image, transform_f43);
+	focus_common(786, image);
 }
 
 void Transform::f44(Image& image)
 {
-	Transform::TransformAllSteps& transform_f44 = transforms_.find(TransformName::f44)->second;
-	focus_common(1080, image, transform_f44);
+	focus_common(1080, image);
+}
+
+void Transform::f51(Image& image)
+{
+	focus_common(140, image);
+}
+
+void Transform::f52(Image& image)
+{
+	focus_common(390, image);
+}
+
+void Transform::f53(Image& image)
+{
+	focus_common(640, image);
+}
+
+void Transform::f54(Image& image)
+{
+	focus_common(890, image);
+}
+
+void Transform::f55(Image& image)
+{
+	focus_common(1140, image);
 }
 
 void Transform::test(Image& image) 
 {
-	Transform::TransformAllSteps& transform_t = transforms_.find(TransformName::test)->second;
+	Transform::TransformAllSteps& transform_t = transform_.second;
 	switch(transform_t.current_step_number_)
 	{
 		case 0:
@@ -310,7 +466,7 @@ void Transform::test(Image& image)
 
 void Transform::hide(Image& image) //TODO : paramètre optionnel time
 {
-	Transform::TransformAllSteps& transform_t = transforms_.find(TransformName::hide)->second;
+	Transform::TransformAllSteps& transform_t = transform_.second;
 	switch(transform_t.current_step_number_)
 	{
 		case 0:
@@ -323,114 +479,6 @@ void Transform::hide(Image& image) //TODO : paramètre optionnel time
 			break;
 
 		default:
-			break;
-	}
-}
-
-void Transform::create_transform(const TransformName transform_name, bool is_visible)
-{
-	transform_name_ = transform_name;
-	is_character_visible_ = is_visible; //to choose between on show and on replace
-	transforms_.at(transform_name) = TransformAllSteps(transforms_.at(transform_name).number_of_transform_steps_); //recreate the TransformAllSteps object associated with transform_name
-}
-
-void Transform::show_transform(const TransformName transform_name, Image& image)
-{
-	switch(transform_name)
-	{
-		case TransformName::t11:
-			t11(image);
-			break;
-
-		case TransformName::t21: 
-			t21(image);
-			break;
-
-		case TransformName::t22: 
-			t22(image);
-			break;
-
-		case TransformName::t31: 
-			t31(image);
-			break;
-
-		case TransformName::t32: 
-			t32(image);
-			break;
-
-		case TransformName::t33: 
-			t33(image);
-			break;
-
-		case TransformName::t41: 
-			t41(image);
-			break;
-
-		case TransformName::t42: 
-			t42(image);
-			break;
-
-		case TransformName::t43:
-			t43(image);
-			break;
-
-		case TransformName::t44:
-			t44(image);
-			break;
-
-		case TransformName::f11:
-			f11(image);
-			break;
-
-		case TransformName::f21: 
-			f21(image);
-			break;
-
-		case TransformName::f22: 
-			f22(image);
-			break;
-
-		case TransformName::f31: 
-			f31(image);
-			break;
-
-		case TransformName::f32: 
-			f32(image);
-			break;
-
-		case TransformName::f33: 
-			f33(image);
-			break;
-
-		case TransformName::f41:
-			f41(image);
-			break;
-
-		case TransformName::f42: 
-			f42(image);
-			break;
-
-		case TransformName::f43:
-			f43(image);
-			break;
-
-		case TransformName::f44: 
-			f44(image);
-			break;
-
-		case TransformName::test:
-			test(image);
-			break;
-
-		case TransformName::hide:
-			hide(image);
-			break;
-
-		case TransformName::none:
-			break;
-
-		default:
-			std::cerr << "TRANSFORMATION NOT FOUND...\n";
 			break;
 	}
 }

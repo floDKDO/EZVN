@@ -178,6 +178,11 @@ void Game::show_character(const std::string_view character_name, const Transform
 	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, transform_name, zorder);
 }
 
+void Game::show_character(const std::string_view character_name, const TransformName transform_name)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, transform_name);
+}
+
 void Game::show_character(const std::string_view character_name, const int zorder)
 {
 	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::none, zorder);

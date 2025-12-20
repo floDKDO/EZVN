@@ -33,7 +33,10 @@ Textbox::Textbox(sdl::Renderer& renderer)
 void Textbox::change_textbox(const std::string_view new_textbox_path, const std::string_view new_namebox_path, sdl::Renderer& renderer)
 {
 	textbox_.init_image(new_textbox_path, textbox_.position_.x, textbox_.position_.y, renderer);
-	namebox_.init_image(new_namebox_path, namebox_.position_.x, namebox_.position_.y, renderer);
+	if(!new_namebox_path.empty())
+	{
+		namebox_.init_image(new_namebox_path, namebox_.position_.x, namebox_.position_.y, renderer);
+	}
 }
 
 void Textbox::set_initial_dialogue(const std::string_view new_dialogue, Character* speaker)
