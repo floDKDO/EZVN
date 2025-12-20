@@ -61,12 +61,12 @@ void Game::run()
 		end_current_frame = SDL_GetTicks64();
 
 		Uint64 elapsed = end_current_frame - begin_current_frame;
-		//Uint64 delay = FRAME_TIME - elapsed;
+		Uint64 delay = FRAME_TIME - elapsed;
 
 		if(FRAME_TIME > elapsed)
 		{
 			//SDL_Delay(delay); //TODO : utiliser SDL_Delay ??
-			std::this_thread::sleep_for(std::chrono::milliseconds(FRAME_TIME - (end_current_frame - begin_current_frame)));
+			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
 		}
 	}
 }
@@ -112,8 +112,6 @@ void Game::pop_state()
 
 GameState* Game::get_state() const
 {
-	if(states_.empty())
-		std::cerr << "VIDE!\n";
 	return states_.top();
 }
 
@@ -147,9 +145,6 @@ void Game::handle_events()
 				break;
 		}
 		get_state()->handle_events(e);
-
-		//TODO important : utile ???
-		//ui_manager_.handle_events(e);
 	}
 }
 
@@ -157,7 +152,6 @@ void Game::draw()
 {
 	renderer_.clear();
 	get_state()->draw(renderer_);
-	//ui_manager_.draw(renderer_);
 	renderer_.present();
 }
 
@@ -165,7 +159,6 @@ void Game::update()
 {
 	handle_requests();
 	get_state()->update();
-	//ui_manager_.update();
 }
 
 void Game::update_fps_count(const std::string_view fps) const
@@ -231,7 +224,7 @@ void Game::add_new_dialogue(const std::string_view dialogue)
 	/*InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
 	in_game_ptr->dialogues_.insert({line_number, {dialogue, nullptr}});//TODO : créer une fonction qui insert et incrémente le compteur*/
 
-	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("", dialogue); 
+	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("", dialogue); //TODO : mettre nullptr car j'utiliserai Character* à la place d'une std::string_view
 }
 
 void Game::show_background(const std::string_view background_path)

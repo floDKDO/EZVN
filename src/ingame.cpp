@@ -9,7 +9,7 @@
 
 //TODO : bizarre qu'un background "vide" soit parfois noir et parfois blanc... => sûrement à cause de SDL_SetRenderDrawColor()
 
-InGame::InGame(Game& game, sdl::Renderer& renderer) //TODO : ne rien afficher si pas de background
+InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
 	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer)
 {
@@ -74,13 +74,13 @@ void InGame::insert_dialogue(const std::string_view character_name, const std::s
 
 void InGame::insert_background(const std::string_view background_path)
 {
-	backgrounds_.insert({unique_id_, new Background(background_path, renderer_)});
+	backgrounds_.insert({unique_id_, Background(background_path, renderer_)}); //TODO : pas de new
 	unique_id_ += 1;
 }
 
 void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
 {
-	backgrounds_.insert({unique_id_, new Background(r, g, b, a)});
+	backgrounds_.insert({unique_id_, Background(r, g, b, a)}); //TODO : pas de new
 	unique_id_ += 1;
 }
 
@@ -90,23 +90,23 @@ void InGame::insert_character(const std::string_view character_name, const Trans
 	unique_id_ += 1;
 }
 
-void InGame::change_background(Background* b)
+void InGame::change_background(const Background& b)
 {
-	if(b->image_ != nullptr)
+	if(b.image_ != nullptr)
 	{
 		if(background_.image_ != nullptr)
 		{
-			background_.image_->init_image(b->image_->path_, 0, 0, renderer_);
+			background_.image_->init_image(b.image_->path_, 0, 0, renderer_);
 		}
 		else
 		{
-			background_ = Background(b->image_->path_, renderer_);
+			background_ = Background(b.image_->path_, renderer_);
 		}
 	}
 	else
 	{
 		background_.image_.reset();
-		background_.color_ = {b->color_.r, b->color_.g, b->color_.b, b->color_.a};
+		background_.color_ = {b.color_.r, b.color_.g, b.color_.b, b.color_.a};
 	}
 }
 
@@ -153,7 +153,7 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 				current_unique_id_ = std::prev(dialogues_.find(current_unique_id_), 1)->first;
 			}
 		}
-		textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second, false);
+		textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second, false, false);
 	}
 }
 
@@ -237,23 +237,25 @@ void InGame::draw(sdl::Renderer& renderer)
 void InGame::update()
 {
 	//Pour l'autofocus
-	//TODO : pourquoi ça cause un problème pour le premer dialogue ???
-	if(dialogues_[current_unique_id_].second != nullptr)
+	if(dialogues_.count(current_unique_id_))
 	{
-		for(const std::unique_ptr<Character>& c : characters_)
+		if(dialogues_[current_unique_id_].second != nullptr)
 		{
-			if(c->name_ == dialogues_[current_unique_id_].second->name_)
+			for(const std::unique_ptr<Character>& c : characters_)
 			{
-				c->is_speaking_ = true;
+				if(c->name_ == dialogues_[current_unique_id_].second->name_)
+				{
+					c->is_speaking_ = true;
+				}
+				else c->is_speaking_ = false;
 			}
-			else c->is_speaking_ = false;
 		}
-	}
-	else //Narrator
-	{
-		for(const std::unique_ptr<Character>& c : characters_)
+		else //Narrator
 		{
-			c->is_speaking_ = false;
+			for(const std::unique_ptr<Character>& c : characters_)
+			{
+				c->is_speaking_ = false;
+			}
 		}
 	}
 
@@ -275,7 +277,7 @@ void InGame::update()
 	{
 		if(backgrounds_.count(i))
 		{
-			change_background(backgrounds_[i]);
+			change_background(backgrounds_.at(i)); //TODO : ici le problème si j'utilise Background à la place de Background*
 			break;
 		}
 	}

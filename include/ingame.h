@@ -29,7 +29,7 @@ class InGame : public GameState
 		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
 		void insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder);
 
-		void change_background(Background* b);
+		void change_background(const Background& b);
 
 		void show_next_dialogue(); 
 
@@ -46,9 +46,10 @@ class InGame : public GameState
 
 		std::vector<std::unique_ptr<Character>> characters_; //unique_ptr pour que stable_sort fonctionne
 
+		//TODO : obligé d'utiliser Character* ??
 		std::map<unsigned int, std::tuple<Character*, const TransformName, int>> characters_transforms_; 
 		std::map<unsigned int, std::pair<const std::string_view, Character*>> dialogues_;
-		std::map<unsigned int, Background*> backgrounds_;
+		std::map<unsigned int, Background> backgrounds_;
 
 		mutable unsigned int unique_id_;
 		unsigned int current_unique_id_;
@@ -61,7 +62,7 @@ class InGame : public GameState
 		Textbox textbox_; //TODO : remettre private
 
 	private:
-		Background background_; //TODO : utiliser un pointeur pour que l'image puisse être vide ??
+		Background background_; 
 		bool hide_ui_textbox_;
 		sdl::Renderer &renderer_;
 };
