@@ -22,12 +22,14 @@ class InGame : public GameState
 		TextToggle* get_texttoggle(const std::string_view text);
 
 		void add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer);
+		void add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path="");
 		Character* get_character(const std::string_view name);
 
 		void insert_dialogue(const std::string_view character_name, const std::string_view dialogue);
 		void insert_background(const std::string_view background_path);
 		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
 		void insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder);
+		void insert_character(const std::string_view character_name, const TransformName transform_name);
 
 		void change_background(const Background& b);
 

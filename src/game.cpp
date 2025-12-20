@@ -151,6 +151,7 @@ void Game::handle_events()
 
 void Game::draw()
 {
+	renderer_.set_draw_color(0, 0, 0, 255);
 	renderer_.clear();
 	get_state()->draw(renderer_);
 	renderer_.present();
@@ -167,9 +168,9 @@ void Game::update_fps_count(const std::string_view fps) const
 	window_.set_title(std::string(constants::game_name_) + std::string(fps));
 }
 
-void Game::create_character(const std::string_view character_name, const std::string_view character_path)
+void Game::create_character(const std::string_view character_name, const std::string_view character_path, const std::string_view textbox_path, const std::string_view namebox_path)
 {
-	dynamic_cast<InGame*>(in_game_.get())->add_character(character_name, character_path, renderer_);
+	dynamic_cast<InGame*>(in_game_.get())->add_character(character_name, character_path, renderer_, textbox_path, namebox_path);
 }
 
 void Game::show_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
@@ -184,10 +185,7 @@ void Game::show_character(const std::string_view character_name, const int zorde
 
 void Game::hide_character(const std::string_view character_name)
 {
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	Character* character = in_game_ptr->get_character(character_name);
-
-	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::hide, character->character_.zorder_); //TODO : pas ouf...
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::hide);
 }
 
 void Game::add_new_dialogue(const std::string_view character_name, const std::string_view dialogue)

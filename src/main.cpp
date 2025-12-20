@@ -20,8 +20,6 @@
 
 //TODO : utilité des vector.reserve(10) ??
 
-//TODO : le full screen doit également maximiser la fenêtre dans le cas où celle-ci avait été redimensionnée 
-
 //TODO : vérifier que je n'ai pas oublié un "override"
 
 //TODO : nettoyer le code => retirer les includes inutiles, "_" final après le nom des membres, retirer les membres inutiles etc.
@@ -39,10 +37,10 @@ int main(int argc, char* argv[])
 	//TODO : pause et window hide
 
 	Game game;
-	game.create_character("Sayori", "img/characters/sayori.png");
-	game.create_character("Monika", "img/characters/monika.png");
-	game.create_character("Yuri", "img/characters/yuri.png");
-	game.create_character("Natsuki", "img/characters/natsuki.png");
+	game.create_character("Sayori", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
+	game.create_character("Monika", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
+	game.create_character("Yuri", "img/characters/yuri.png", "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");
+	game.create_character("Natsuki", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 	game.show_character("Yuri", TransformName::t41, 1); //TODO : texte converti en l'enum dans la méthode
 	game.show_character("Sayori", TransformName::f42, 0); //TODO : texte converti en l'enum dans la méthode
 	game.show_character("Monika", TransformName::t43, 1); //TODO : texte converti en l'enum dans la méthode
@@ -53,7 +51,7 @@ int main(int argc, char* argv[])
 	game.show_background("img/backgrounds/class.png");
 	game.hide_character("Sayori"); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Elle est chiante...");
-	game.hide_background();
+	//game.hide_background();
 	game.show_background(129, 0, 255, 255);
 	game.show_character("Yuri", TransformName::f41); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Yuri", "How are you MC?");

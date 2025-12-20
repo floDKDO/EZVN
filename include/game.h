@@ -43,7 +43,7 @@ class Game
 
 		void update_fps_count(const std::string_view fps) const;
 
-		void create_character(const std::string_view character_name, const std::string_view character_path);
+		void create_character(const std::string_view character_name, const std::string_view character_path, const std::string_view textbox_path="", const std::string_view namebox_path = "");
 		void show_character(const std::string_view character_name, const TransformName transform_name, const int zorder = 0);
 		void show_character(const std::string_view character_name, const int zorder = 0);
 		void hide_character(const std::string_view character_name);
@@ -54,9 +54,6 @@ class Game
 		void hide_background();
 
 	private:
-		//void create_main_menu();
-		//void create_settings_menu();
-
 		void push_state(GameState* state);
 		void pop_state();
 		GameState* get_state() const;

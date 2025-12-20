@@ -7,8 +7,6 @@
 #include <iostream>
 #include <algorithm>
 
-//TODO : petit problème avec les SDL_SetRenderDrawColor précédents qui restent quand on lance le jeu, idem quand on redimensionne la fenêtre
-
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
 	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer)
@@ -49,9 +47,15 @@ TextToggle* InGame::get_texttoggle(const std::string_view text)
 	return nullptr;
 }
 
+//TODO : inutile car inutilisée ??
 void InGame::add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer)
 {
 	characters_.push_back(std::make_unique<Character>(name, character_path, renderer)); 
+}
+
+void InGame::add_character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path)
+{
+	characters_.push_back(std::make_unique<Character>(name, character_path, renderer, textbox_path, namebox_path));
 }
 
 Character* InGame::get_character(const std::string_view name)
@@ -87,6 +91,13 @@ void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, cons
 void InGame::insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
 {
 	characters_transforms_.insert({unique_id_, {get_character(character_name), transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
+	unique_id_ += 1;
+}
+
+void InGame::insert_character(const std::string_view character_name, const TransformName transform_name)
+{
+	Character* character = get_character(character_name);
+	characters_transforms_.insert({unique_id_, {character, transform_name, character->character_.zorder_}}); //TODO : make_tuple ou accolades (= initializer list) ??
 	unique_id_ += 1;
 }
 
@@ -247,6 +258,10 @@ void InGame::update()
 				if(c->name_ == dialogues_[current_unique_id_].second->name_)
 				{
 					c->is_speaking_ = true;
+					if(!c->textbox_path_.empty())
+					{
+						textbox_.change_textbox(c->textbox_path_, c->namebox_path_, renderer_);
+					}
 				}
 				else c->is_speaking_ = false;
 			}
@@ -257,6 +272,7 @@ void InGame::update()
 			{
 				c->is_speaking_ = false;
 			}
+			textbox_.change_textbox(constants::textbox_image_, constants::namebox_image_, renderer_);
 		}
 	}
 

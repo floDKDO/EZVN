@@ -5,7 +5,12 @@
 
 Character::Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const int zorder)
 	: character_(character_path, 0, 0, renderer, zorder)
-	, name_(name), is_speaking_(false), is_visible_(false), t_(TransformName::none)//, initial_rect_(character_.position_)
+	, name_(name), textbox_path_(""), namebox_path_(""), is_speaking_(false), is_visible_(false), t_(TransformName::none)//, initial_rect_(character_.position_)
+{}
+
+Character::Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path, const int zorder)
+	: character_(character_path, 0, 0, renderer, zorder)
+	, name_(name), textbox_path_(textbox_path), namebox_path_(namebox_path), is_speaking_(false), is_visible_(false), t_(TransformName::none)//, initial_rect_(character_.position_)
 {}
 
 void Character::set_transform(const TransformName transform_name)
