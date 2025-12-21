@@ -88,13 +88,30 @@ void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, cons
 	unique_id_ += 1;
 }
 
-void InGame::insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
+void InGame::insert_character(const std::string_view character_name, const std::string transform_name, const int zorder)
 {
 	characters_transforms_.insert({unique_id_, {get_character(character_name), transform_name, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
 	unique_id_ += 1;
 }
 
-void InGame::insert_character(const std::string_view character_name, const TransformName transform_name)
+void InGame::insert_character(const std::string_view character_name, const int zorder)
+{
+	Character* character = get_character(character_name);
+
+	std::string transfo = "none";
+	for(unsigned int i = unique_id_; i != -1; --i)
+	{
+		if(characters_transforms_.count(i) && std::get<0>(characters_transforms_[i])->name_ == character_name)
+		{
+			transfo = std::get<1>(characters_transforms_[i]);
+			break;
+		}
+	}
+	characters_transforms_.insert({unique_id_, {character, transfo, zorder}}); //TODO : make_tuple ou accolades (= initializer list) ??
+	unique_id_ += 1;
+}
+
+void InGame::insert_character(const std::string_view character_name, const std::string transform_name)
 {
 	Character* character = get_character(character_name);
 
@@ -258,6 +275,15 @@ void InGame::draw(sdl::Renderer& renderer)
 //TODO : créer des fonctions pour chaque bloc
 void InGame::update()
 {
+	//TODO : pour debug
+	/*for(unsigned int i = current_unique_id_; i != -1; --i)
+	{
+		if(dialogues_.count(current_unique_id_) && dialogues_[current_unique_id_].second != nullptr)
+		{
+			std::cout << current_unique_id_ <<  ", Nom: " << dialogues_[current_unique_id_].second->name_ << ", transfo: " << dialogues_[current_unique_id_].second->transform_.transform_name_ << ", is_speaking_: " << std::boolalpha << dialogues_[current_unique_id_].second->is_speaking_ << std::endl;
+		}
+	}*/
+
 	//Pour l'autofocus
 	if(dialogues_.count(current_unique_id_))
 	{
@@ -273,7 +299,10 @@ void InGame::update()
 						textbox_.change_textbox(c->textbox_path_, c->namebox_path_, renderer_);
 					}
 				}
-				else c->is_speaking_ = false;
+				else
+				{
+					c->is_speaking_ = false;
+				}
 			}
 		}
 		else //Narrator

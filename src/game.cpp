@@ -173,24 +173,24 @@ void Game::create_character(const std::string_view character_name, const std::st
 	dynamic_cast<InGame*>(in_game_.get())->add_character(character_name, character_path, renderer_, textbox_path, namebox_path);
 }
 
-void Game::show_character(const std::string_view character_name, const TransformName transform_name, const int zorder)
+void Game::show_character(const std::string_view character_name, const std::string transform_name, const int zorder)
 {
 	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, transform_name, zorder);
 }
 
-void Game::show_character(const std::string_view character_name, const TransformName transform_name)
+void Game::show_character(const std::string_view character_name, const std::string transform_name)
 {
 	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, transform_name);
 }
 
 void Game::show_character(const std::string_view character_name, const int zorder)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::none, zorder);
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, zorder);
 }
 
 void Game::hide_character(const std::string_view character_name)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, TransformName::hide);
+	dynamic_cast<InGame*>(in_game_.get())->insert_character(character_name, "hide");
 }
 
 void Game::add_new_dialogue(const std::string_view character_name, const std::string_view dialogue)

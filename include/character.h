@@ -8,7 +8,7 @@ class Character
 		Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const int zorder = 0);
 		Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path, const int zorder = 0);
 
-		void set_transform(const TransformName transform_name);
+		void set_transform(const std::string transform_name);
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 		void update();
@@ -23,7 +23,7 @@ class Character
 		bool is_visible_;
 
 		//TODO : focus automatique
-		Transform t_;
+		Transform transform_;
 
 	private:
 		//SDL_Rect initial_rect_;

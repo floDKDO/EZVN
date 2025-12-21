@@ -29,6 +29,14 @@
 //TODO : problème de couleur pour la couleur du premier UI de chaque menu => pas d'outline ??
 //Le problème viendrait de ces deux lignes dans UiManager : current_selected_ = navigation_list_[0]; current_selected_->state_ = State::SELECTED;
 
+//TODO : Pour l'autofocus : 
+//autofocus_coloring = True
+//autofocus_filter = True
+//autofocus_zoom = True
+//autofocus_zoom_zorder_minimum_char_requirement = 2
+//autofocus_zorder = True
+//autofocus_mouth = True
+
 
 int main(int argc, char* argv[])
 {
@@ -43,28 +51,23 @@ int main(int argc, char* argv[])
 	game.create_character("Monika", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
 	game.create_character("Yuri", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
-	game.show_character("Yuri", TransformName::t41, 1); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Sayori", TransformName::f42, 0); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Monika", TransformName::t43, 1); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Natsuki", TransformName::t44, 1); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Yuri", "t41", 1);
+	game.show_character("Sayori", "t42", 0);
+	game.show_character("Monika", "t43", 1); 
+	game.show_character("Natsuki", "t44", 1); 
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
-	game.show_character("Sayori", TransformName::t42); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
-	game.hide_character("Sayori"); //TODO : texte converti en l'enum dans la méthode
+	game.hide_character("Sayori"); 
 	game.add_new_dialogue("Elle est chiante...");
 	//game.hide_background();
 	game.show_background(129, 0, 255, 255);
-	game.show_character("Yuri", TransformName::f41); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Yuri", "How are you MC?");
-	game.show_character("Yuri", TransformName::t41); //TODO : texte converti en l'enum dans la méthode
 	game.show_background("img/backgrounds/night.png");
-	//game.show_character("Sayori", TransformName::f31); //TODO : texte converti en l'enum dans la méthode
-	game.show_character("Natsuki", TransformName::f44, 10); //TODO : texte converti en l'enum dans la méthode
+	game.show_character("Sayori", "t42"); 
+	game.show_character("Natsuki", 10);
 	game.add_new_dialogue("Natsuki", "HEYYYYYY!");
-	game.show_character("Natsuki", TransformName::t44); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("...");
-	game.show_character("Sayori", TransformName::f42); //TODO : texte converti en l'enum dans la méthode
 	game.add_new_dialogue("Sayori", "How are you MC?");
 
 	game.run();

@@ -5,155 +5,180 @@
 
 //TODO : "6" obligatoire ??
 
-Transform::Transform(const TransformName transform_name)
-	: is_character_visible_(false), transform_name_(transform_name), previous_transform_name_(transform_name_), transform_({transform_name, TransformAllSteps(6)})
+Transform::Transform(const std::string transform_name)
+	: is_character_visible_(false), transform_name_(transform_name), /*previous_transform_name_(transform_name_),*/ transform_({transform_name, TransformAllSteps(6)})
 {}
 
-void Transform::create_transform(const TransformName transform_name, bool is_visible)
+std::string Transform::transform_to_focus()
+{
+	if(transform_name_[0] == 't')
+	{
+		return std::string("f") + transform_name_[1] + transform_name_[2];
+	}
+	else
+	{
+		//it was already a focus transform
+		return transform_name_;
+	}
+}
+
+std::string Transform::transform_to_unfocus()
+{
+	if(transform_name_[0] == 'f')
+	{
+		return std::string("t") + transform_name_[1] + transform_name_[2];;
+	}
+	else
+	{
+		//it was already a non focus transform
+		return transform_name_;
+	}
+}
+
+void Transform::create_transform(const std::string transform_name, bool is_visible)
 {
 	transform_name_ = transform_name;
 	is_character_visible_ = is_visible; //to choose between on show and on replace
 	transform_ = {transform_name, TransformAllSteps(6)};
 }
 
-void Transform::show_transform(const TransformName transform_name, Image& image)
+void Transform::show_transform(const std::string transform_name, Image& image)
 {
-	switch(transform_name)
+	if(transform_name == "t11")
 	{
-		case TransformName::t11:
-			t11(image);
-			break;
-
-		case TransformName::t21:
-			t21(image);
-			break;
-
-		case TransformName::t22:
-			t22(image);
-			break;
-
-		case TransformName::t31:
-			t31(image);
-			break;
-
-		case TransformName::t32:
-			t32(image);
-			break;
-
-		case TransformName::t33:
-			t33(image);
-			break;
-
-		case TransformName::t41:
-			t41(image);
-			break;
-
-		case TransformName::t42:
-			t42(image);
-			break;
-
-		case TransformName::t43:
-			t43(image);
-			break;
-
-		case TransformName::t44:
-			t44(image);
-			break;
-
-		case TransformName::t51:
-			t51(image);
-			break;
-
-		case TransformName::t52:
-			t52(image);
-			break;
-
-		case TransformName::t53:
-			t53(image);
-			break;
-
-		case TransformName::t54:
-			t54(image);
-			break;
-
-		case TransformName::t55:
-			t55(image);
-			break;
-
-		case TransformName::f11:
-			f11(image);
-			break;
-
-		case TransformName::f21:
-			f21(image);
-			break;
-
-		case TransformName::f22:
-			f22(image);
-			break;
-
-		case TransformName::f31:
-			f31(image);
-			break;
-
-		case TransformName::f32:
-			f32(image);
-			break;
-
-		case TransformName::f33:
-			f33(image);
-			break;
-
-		case TransformName::f41:
-			f41(image);
-			break;
-
-		case TransformName::f42:
-			f42(image);
-			break;
-
-		case TransformName::f43:
-			f43(image);
-			break;
-
-		case TransformName::f44:
-			f44(image);
-			break;
-
-		case TransformName::f51:
-			f51(image);
-			break;
-
-		case TransformName::f52:
-			f52(image);
-			break;
-
-		case TransformName::f53:
-			f53(image);
-			break;
-
-		case TransformName::f54:
-			f54(image);
-			break;
-
-		case TransformName::f55:
-			f55(image);
-			break;
-
-		case TransformName::test:
-			test(image);
-			break;
-
-		case TransformName::hide:
-			hide(image);
-			break;
-
-		case TransformName::none:
-			break;
-
-		default:
-			std::cerr << "TRANSFORMATION NOT FOUND...\n";
-			break;
+		t11(image);
+	}
+	else if(transform_name == "t21")
+	{
+		t21(image);
+	}
+	else if(transform_name == "t22")
+	{
+		t22(image);
+	}
+	else if(transform_name == "t31")
+	{
+		t31(image);
+	}
+	else if(transform_name == "t32")
+	{
+		t32(image);
+	}
+	else if(transform_name == "t33")
+	{
+		t33(image);
+	}
+	else if(transform_name == "t41")
+	{
+		t41(image);
+	}
+	else if(transform_name == "t42")
+	{
+		t42(image);
+	}
+	else if(transform_name == "t43")
+	{
+		t43(image);
+	}
+	else if(transform_name == "t44")
+	{
+		t44(image);
+	}
+	else if(transform_name == "t51")
+	{
+		t51(image);
+	}
+	else if(transform_name == "t52")
+	{
+		t52(image);
+	}
+	else if(transform_name == "t53")
+	{
+		t53(image);
+	}
+	else if(transform_name == "t54")
+	{
+		t54(image);
+	}
+	else if(transform_name == "t55")
+	{
+		t55(image);
+	}
+	else if(transform_name == "f11")
+	{
+		f11(image);
+	}
+	else if(transform_name == "f21")
+	{
+		f21(image);
+	}
+	else if(transform_name == "f22")
+	{
+		f22(image);
+	}
+	else if(transform_name == "f31")
+	{
+		f31(image);
+	}
+	else if(transform_name == "f32")
+	{
+		f32(image);
+	}
+	else if(transform_name == "f33")
+	{
+		f33(image);
+	}
+	else if(transform_name == "f41")
+	{
+		f41(image);
+	}
+	else if(transform_name == "f42")
+	{
+		f42(image);
+	}
+	else if(transform_name == "f43")
+	{
+		f43(image);
+	}
+	else if(transform_name == "f44")
+	{
+		f44(image);
+	}
+	else if(transform_name == "f51")
+	{
+		f51(image);
+	}
+	else if(transform_name == "f52")
+	{
+		f52(image);
+	}
+	else if(transform_name == "f53")
+	{
+		f53(image);
+	}
+	else if(transform_name == "f54")
+	{
+		f54(image);
+	}
+	else if(transform_name == "f55")
+	{
+		f55(image);
+	}
+	else if(transform_name == "test")
+	{
+		test(image);
+	}
+	else if(transform_name == "hide")
+	{
+		hide(image);
+	}
+	else if(transform_name == "none")
+	{
+		//do nothing!
+	}
+	else
+	{
+		std::cerr << "TRANSFORMATION NOT FOUND...\n";
 	}
 }
 

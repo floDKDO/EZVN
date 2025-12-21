@@ -28,8 +28,9 @@ class InGame : public GameState
 		void insert_dialogue(const std::string_view character_name, const std::string_view dialogue);
 		void insert_background(const std::string_view background_path);
 		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
-		void insert_character(const std::string_view character_name, const TransformName transform_name, const int zorder);
-		void insert_character(const std::string_view character_name, const TransformName transform_name);
+		void insert_character(const std::string_view character_name, const std::string transform_name, const int zorder);
+		void insert_character(const std::string_view character_name, const int zorder);
+		void insert_character(const std::string_view character_name, const std::string transform_name);
 
 		void change_background(const Background& b);
 
@@ -49,7 +50,7 @@ class InGame : public GameState
 		std::vector<std::unique_ptr<Character>> characters_; //unique_ptr pour que stable_sort fonctionne
 
 		//TODO : obligé d'utiliser Character* ??
-		std::map<unsigned int, std::tuple<Character*, const TransformName, int>> characters_transforms_; 
+		std::map<unsigned int, std::tuple<Character*, const std::string, int>> characters_transforms_;
 		std::map<unsigned int, std::pair<const std::string_view, Character*>> dialogues_;
 		std::map<unsigned int, Background> backgrounds_;
 
