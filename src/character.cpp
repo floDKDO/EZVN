@@ -5,16 +5,22 @@
 
 Character::Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const int zorder)
 	: character_(character_path, 0, 0, renderer, zorder)
-	, name_(name), textbox_path_(""), namebox_path_(""), is_speaking_(false), is_visible_(false), transform_("none")//, initial_rect_(character_.position_)
+	, name_(name), textbox_path_(""), namebox_path_(""), is_speaking_(false), is_visible_(false), transform_("")//, initial_rect_(character_.position_)
 {}
 
 Character::Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path, const int zorder)
 	: character_(character_path, 0, 0, renderer, zorder)
-	, name_(name), textbox_path_(textbox_path), namebox_path_(namebox_path), is_speaking_(false), is_visible_(false), transform_("none")//, initial_rect_(character_.position_)
+	, name_(name), textbox_path_(textbox_path), namebox_path_(namebox_path), is_speaking_(false), is_visible_(false), transform_("")//, initial_rect_(character_.position_)
 {}
 
 void Character::set_transform(const std::string transform_name)
 {
+	//std::cout << transform_.transform_name_ << " et " << transform_name << std::endl;
+	//if(transform_name == "none")
+	//{
+	//	is_visible_ = true;
+	//}
+
 	if(transform_.transform_name_ != transform_name)
 	{
 		transform_.create_transform(transform_name, is_visible_);

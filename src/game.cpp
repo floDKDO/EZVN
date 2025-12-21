@@ -151,7 +151,7 @@ void Game::handle_events()
 
 void Game::draw()
 {
-	renderer_.set_draw_color(0, 0, 0, 255);
+	renderer_.set_draw_color(0, 0, 0, 255); //TODO : à la place, une fonction de callback qui est appelée quand la fenêtre est redimensionnée ??
 	renderer_.clear();
 	get_state()->draw(renderer_);
 	renderer_.present();

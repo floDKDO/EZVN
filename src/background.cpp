@@ -20,5 +20,6 @@ void Background::draw(sdl::Renderer& renderer)
 	else
 	{
 		renderer.set_draw_color(color_.r, color_.g, color_.b, color_.a);
+		renderer.clear();
 	}
 }

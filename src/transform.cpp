@@ -11,26 +11,26 @@ Transform::Transform(const std::string transform_name)
 
 std::string Transform::transform_to_focus()
 {
-	if(transform_name_[0] == 't')
+	if(transform_name_.length() == 3 && transform_name_[0] == 't' && isdigit(transform_name_[1]) && isdigit(transform_name_[2]))
 	{
 		return std::string("f") + transform_name_[1] + transform_name_[2];
 	}
 	else
 	{
-		//it was already a focus transform
+		//it was already a focus transform or it is a non defaut DDLC transform
 		return transform_name_;
 	}
 }
 
 std::string Transform::transform_to_unfocus()
 {
-	if(transform_name_[0] == 'f')
+	if(transform_name_.length() == 3 && transform_name_[0] == 'f' && isdigit(transform_name_[1]) && isdigit(transform_name_[2]))
 	{
 		return std::string("t") + transform_name_[1] + transform_name_[2];;
 	}
 	else
 	{
-		//it was already a non focus transform
+		//it was already a non focus transform or it is a non defaut DDLC transform
 		return transform_name_;
 	}
 }
@@ -172,13 +172,13 @@ void Transform::show_transform(const std::string transform_name, Image& image)
 	{
 		hide(image);
 	}
-	else if(transform_name == "none")
+	else if(transform_name.empty() || transform_name == "none")
 	{
 		//do nothing!
 	}
 	else
 	{
-		std::cerr << "TRANSFORMATION NOT FOUND...\n";
+		std::cerr << "TRANSFORMATION " << transform_name << " NOT FOUND...\n";
 	}
 }
 

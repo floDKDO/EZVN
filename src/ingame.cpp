@@ -7,6 +7,9 @@
 #include <iostream>
 #include <algorithm>
 
+//TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
+
+
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
 	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer)
@@ -143,6 +146,7 @@ void InGame::change_background(const Background& b)
 	}
 	else
 	{
+		std::cout << "COLOR BACKGROUND : " << int(b.color_.r) << ", " << int(b.color_.g) << ", " << int(b.color_.b) << ", " << int(b.color_.a) << std::endl;
 		background_.image_.reset();
 		background_.color_ = {b.color_.r, b.color_.g, b.color_.b, b.color_.a};
 	}

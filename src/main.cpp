@@ -52,7 +52,8 @@ int main(int argc, char* argv[])
 	game.create_character("Yuri", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 	game.show_character("Yuri", "t41", 1);
-	game.show_character("Sayori", "t42", 0);
+	game.show_character("Sayori", 0); 
+	//game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 1); 
 	game.show_character("Natsuki", "t44", 1); 
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
@@ -61,9 +62,11 @@ int main(int argc, char* argv[])
 	game.hide_character("Sayori"); 
 	game.add_new_dialogue("Elle est chiante...");
 	//game.hide_background();
-	game.show_background(129, 0, 255, 255);
+	game.show_background(129, 0, 255, 255); 
 	game.add_new_dialogue("Yuri", "How are you MC?");
-	game.show_background("img/backgrounds/night.png");
+	game.hide_background();
+	game.add_new_dialogue("Yuri", "...");
+	game.show_background("img/backgrounds/corridor.png");
 	game.show_character("Sayori", "t42"); 
 	game.show_character("Natsuki", 10);
 	game.add_new_dialogue("Natsuki", "HEYYYYYY!");
