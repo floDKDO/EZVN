@@ -11,8 +11,8 @@ class Textbox
 
 		void change_textbox(const std::string_view new_textbox_path, const std::string_view new_namebox_path, sdl::Renderer& renderer);
 
-		void set_initial_dialogue(const std::string_view new_dialogue, Character* speaker);
-		void show_new_dialogue(const std::string_view new_dialogue, Character* speaker, bool in_skip_mode=false, bool wait_for_end_of_dialogue = true);
+		void set_initial_dialogue(const std::string_view new_dialogue, std::string speaker);
+		void show_new_dialogue(const std::string_view new_dialogue, std::string speaker, bool in_skip_mode=false, bool wait_for_end_of_dialogue = true);
 		void show_new_dialogue(const std::string_view new_dialogue);
 
 		Uint64 get_text_delay();

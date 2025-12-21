@@ -6,7 +6,7 @@
 
 //TODO : lambdas à la place des std::bind ??
 
-//TODO : utiliser les bons types (ex : unsigned int)
+//TODO : utiliser les bons types (ex : unsigned int, std::string_view...)
 
 //TODO : const pour les références/pointeurs en paramètre
 
@@ -46,14 +46,16 @@ int main(int argc, char* argv[])
 
 	//TODO : pause et window hide
 
+	//TODO : confusion => utilisation du nom comme dans Ren'Py. S'il y a une modification du nom, c'est pas grave => on continue d'écrire l'ancien nom dans les méthodes
+	//Solution : ajouter un paramètre dans create_character => le premier = nom de la "variable" associée au personnage, la deuxième est son nom
+
 	Game game;
-	game.create_character("Sayori", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
-	game.create_character("Monika", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
-	game.create_character("Yuri", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
-	game.create_character("Natsuki", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
+	game.create_character("Sayori", "Sayori", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
+	game.create_character("Monika", "???", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
+	game.create_character("Yuri", "???", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
+	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 	game.show_character("Yuri", "t41", 1);
-	game.show_character("Sayori", 0); 
-	//game.show_character("Sayori", "t42", 0);
+	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 1); 
 	game.show_character("Natsuki", "t44", 1); 
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
@@ -61,9 +63,9 @@ int main(int argc, char* argv[])
 	game.show_background("img/backgrounds/class.png");
 	game.hide_character("Sayori"); 
 	game.add_new_dialogue("Elle est chiante...");
-	//game.hide_background();
 	game.show_background(129, 0, 255, 255); 
 	game.add_new_dialogue("Yuri", "How are you MC?");
+	game.rename_character("Yuri", "Yuri beta");
 	game.hide_background();
 	game.add_new_dialogue("Yuri", "...");
 	game.show_background("img/backgrounds/corridor.png");

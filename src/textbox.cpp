@@ -39,23 +39,23 @@ void Textbox::change_textbox(const std::string_view new_textbox_path, const std:
 	}
 }
 
-void Textbox::set_initial_dialogue(const std::string_view new_dialogue, Character* speaker)
+void Textbox::set_initial_dialogue(const std::string_view new_dialogue, std::string speaker)
 {
 	text_.is_finished_ = true;
 	show_new_dialogue(new_dialogue, speaker);
 }
 
-void Textbox::show_new_dialogue(const std::string_view new_dialogue, Character* speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)
+void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)
 {
 	if((text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
 	{
-		if(speaker == nullptr)
+		if(speaker.empty())
 		{
 			current_speaker_.clear();
 		}
 		else
 		{
-			current_speaker_ = speaker->name_;
+			current_speaker_ = speaker;
 			text_name_box_.text_ = current_speaker_;
 			text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
 		}

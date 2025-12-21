@@ -43,12 +43,13 @@ class Game
 
 		void update_fps_count(const std::string_view fps) const;
 
-		void create_character(const std::string_view character_name, const std::string_view character_path, const std::string_view textbox_path="", const std::string_view namebox_path = "");
-		void show_character(const std::string_view character_name, const std::string transform_name, const int zorder);
-		void show_character(const std::string_view character_name, const std::string transform_name);
-		void show_character(const std::string_view character_name, const int zorder = 0);
-		void hide_character(const std::string_view character_name);
-		void add_new_dialogue(const std::string_view character_name, const std::string_view dialogue);
+		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const std::string_view textbox_path="", const std::string_view namebox_path = "");
+		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
+		void show_character(const std::string_view character_variable, const std::string transform_name, const int zorder);
+		void show_character(const std::string_view character_variable, const std::string transform_name);
+		void show_character(const std::string_view character_variable, const int zorder = 0);
+		void hide_character(const std::string_view character_variable);
+		void add_new_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 		void add_new_dialogue(const std::string_view dialogue);
 		void show_background(const std::string_view background_path);
 		void show_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);

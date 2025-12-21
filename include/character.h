@@ -13,17 +13,22 @@ class Character
 		void draw(sdl::Renderer& renderer);
 		void update();
 
-		Image character_; //TODO : juste pour tester => truc similaire à MPT par la suite
-		std::string name_; //garder le type std::string pour permettre au joueur de taper son nom au clavier
+		struct Editableproperties
+		{
+			std::string name_; //garder le type std::string pour permettre au joueur de taper son nom au clavier
+			int zorder_;
+			std::string textbox_path_;
+			std::string namebox_path_;
+			Transform transform_;
+		};
 
-		std::string textbox_path_; 
-		std::string namebox_path_;
+		static int counter_;
+		Image character_; //TODO : juste pour tester => truc similaire à MPT par la suite
+		Editableproperties properties_;
+		std::string unique_id_;
 
 		bool is_speaking_;
 		bool is_visible_;
-
-		//TODO : focus automatique
-		Transform transform_;
 
 	private:
 		//SDL_Rect initial_rect_;
