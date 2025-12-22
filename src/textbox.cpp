@@ -37,6 +37,10 @@ void Textbox::change_textbox(const std::string_view new_textbox_path, const std:
 	{
 		namebox_.init_image(new_namebox_path, namebox_.position_.x, namebox_.position_.y, renderer);
 	}
+	else
+	{
+		namebox_.init_image(constants::namebox_image_, namebox_.position_.x, namebox_.position_.y, renderer);
+	}
 }
 
 void Textbox::set_initial_dialogue(const std::string_view new_dialogue, std::string speaker)

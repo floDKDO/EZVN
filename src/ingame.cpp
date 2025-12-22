@@ -311,7 +311,14 @@ void InGame::handle_events(const SDL_Event& e)
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
-			show_next_dialogue();
+			if(textbox_.text_.is_finished_)
+			{
+				show_next_dialogue();
+			}
+			else
+			{
+				textbox_.text_.is_animated_ = false; //afficher le dialogue en entier après un clic / touche espace sur un dialogue en train de s'afficher
+			}
 		}
 	}
 

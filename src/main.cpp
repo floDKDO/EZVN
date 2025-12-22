@@ -46,8 +46,9 @@ int main(int argc, char* argv[])
 
 	//TODO : pause et window hide
 
-	//TODO : confusion => utilisation du nom comme dans Ren'Py. S'il y a une modification du nom, c'est pas grave => on continue d'écrire l'ancien nom dans les méthodes
-	//Solution : ajouter un paramètre dans create_character => le premier = nom de la "variable" associée au personnage, la deuxième est son nom
+	//TODO : rejouer les sons / relancer la musique quand je scroll vers l'arrière 
+
+	//TODO : appuyer sur espace / cliquer alors qu'un dialogue est en train de défiler va l'afficher en entier
 
 	Game game;
 	game.create_character("Sayori", "Sayori", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
