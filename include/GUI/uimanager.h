@@ -18,8 +18,6 @@ class UiManager
 			Y_AXIS
 		};
 
-		//TODO : créer un champ "bool has_keyboard_focus" dans chaque UI
-
 	public:
 
 		void add_element(std::unique_ptr<Ui>&& ui);

@@ -7,12 +7,12 @@ const unsigned int Inputfield::index_rect_inputfield_ = 0;
 
 Inputfield::Inputfield(const std::string_view text_placeholder, const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), 
-	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y, renderer),
+	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),
 	  container_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
 	  container_outline_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
 	  character_limit_(character_limit),
-	  text_caret_("|", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
-	  text_placeholder_(text_placeholder, constants::inputfield_placeholder_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x, y, renderer),
+	  text_caret_("|", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),
+	  text_placeholder_(text_placeholder, constants::inputfield_placeholder_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),
 	  index_caret_(0), offset_caret_(0), last_input_time(0), last_blink_time_(0), is_caret_visible_(true)
 {
 	callback_function_ = callback_function;

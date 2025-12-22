@@ -8,8 +8,7 @@
 #include <algorithm>
 
 //TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
-
-//TODO : le zorder des personnages est sûrement mal géré
+//TODO : créer une fonction d'insertion qui incrémente unique_id_
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
@@ -51,10 +50,10 @@ TextToggle* InGame::get_texttoggle(const std::string_view text)
 	return nullptr;
 }
 
-//TODO : inutile car inutilisée ??
-void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer)
+void InGame::set_initial_dialogue()
 {
-	characters_.push_back({std::string(character_variable), std::make_unique<Character>(character_name, character_path, renderer)});
+	//std::cout << "Initial dialogue: " << dialogues_.begin()->second.second << ",+ " << get_last_character_name(dialogues_.begin()->second.second) << ",/ " << unique_id_ << ",* " << current_unique_id_ << std::endl;
+	textbox_.show_initial_dialogue(dialogues_.begin()->second.first, get_last_character_name(dialogues_.begin()->second.second, true)); //TODO: ici, il faudrait utiliser current_unique_id_ mais pas possible pour l'instant...
 }
 
 void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path)
@@ -62,20 +61,19 @@ void InGame::add_character(const std::string_view character_variable, const std:
 	characters_.push_back({std::string(character_variable), std::make_unique<Character>(character_name, character_path, renderer, textbox_path, namebox_path)});
 }
 
-Character* InGame::get_character(const std::string_view character_variable)
+Character::Editableproperties InGame::get_last_character_properties(const std::string_view character_variable)
 {
-	for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
+	//TODO : que faire quand character_variable = "" ??
+
+	for(unsigned int i = unique_id_; i != -1; --i) //il faut bien utiliser unique_id_ ici à la place de current_unique_id_, ce dernier valant toujours 0 pour les méthodes insert_* car le jeu n'a pas encore réellement commencé (= on est encore sur la toute première ligne du script du joueur)
 	{
-		if(pair.first == character_variable)
+		if(characters_transforms_.count(i) && characters_transforms_.at(i).first == character_variable)
 		{
-			return pair.second.get();
+			return characters_transforms_.at(i).second;
 		}
 	}
-	return nullptr;
-}
 
-Character::Editableproperties InGame::get_character_properties(const std::string_view character_variable)
-{
+	//not found yet, get the one inside the "characters_" vector
 	for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 	{
 		if(pair.first == character_variable)
@@ -84,27 +82,57 @@ Character::Editableproperties InGame::get_character_properties(const std::string
 		}
 	}
 	//TODO : quid de ce cas ???
+	std::cout << "CAS NON GERE !!!\n";
+}
+
+std::string InGame::get_last_character_name(const std::string_view character_variable, const bool is_first_dialogue)
+{
+	if(character_variable.empty())
+	{
+		return "";
+	}
+
+	unsigned int initial_index_value;
+	if(current_unique_id_ == 0 && !is_first_dialogue)
+	{
+		initial_index_value = unique_id_; //il faut bien utiliser unique_id_ ici à la place de current_unique_id_, ce dernier valant toujours 0 pour les méthodes insert_* car le jeu n'a pas encore réellement commencé (= on est encore sur la toute première ligne du script du joueur)
+	}
+	else
+	{
+		initial_index_value = current_unique_id_;
+	}
+
+	//std::cout << "get_last_character_name: " << character_variable << ", " << initial_index_value << ", " << unique_id_ << ", " << current_unique_id_ << std::endl;
+
+	for(unsigned int i = initial_index_value; i != -1; --i)
+	{
+		if(characters_transforms_.count(i) && characters_transforms_.at(i).first == character_variable)
+		{
+			return characters_transforms_.at(i).second.name_;
+		}
+	}
+
+	//not found yet, get the one inside the "characters_" vector
+	for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
+	{
+		if(pair.first == character_variable)
+		{
+			return pair.second->properties_.name_;
+		}
+	}
+	//TODO : quid de ce cas ???
+	std::cout << "CAS NON GERE !!!\n";
 }
 
 void InGame::insert_dialogue(const std::string_view character_variable, const std::string_view dialogue)
 {
 	if(character_variable == "")
 	{
-		dialogues_.insert({unique_id_, {dialogue, {std::string(character_variable), ""}}}); //TODO : make_pair ou accolades (= initializer list) ??
+		dialogues_.insert({unique_id_, {dialogue, std::string(character_variable)}}); 
 	}
 	else
 	{
-		std::string character_name = "";
-		for(unsigned int i = unique_id_; i != -1; --i)
-		{
-			if(characters_transforms_.count(i) && characters_transforms_.at(i).first == character_variable)
-			{
-				character_name = characters_transforms_.at(i).second.name_;
-				break;
-			}
-		}
-
-		dialogues_.insert({unique_id_, {dialogue, {std::string(character_variable), character_name}}}); //TODO : make_pair ou accolades (= initializer list) ??
+		dialogues_.insert({unique_id_, {dialogue, std::string(character_variable)}});
 	}
 	unique_id_ += 1;
 }
@@ -121,76 +149,23 @@ void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, cons
 	unique_id_ += 1;
 }
 
-void InGame::insert_character(const std::string_view character_variable, const std::string transform_name, const int zorder)
+void InGame::insert_character(const std::string_view character_variable, const std::optional<std::string> new_character_name, const std::optional<std::string> transform_name, const std::optional<int> zorder)
 {
-	Character::Editableproperties character_properties = get_character_properties(character_variable);
-	character_properties.transform_.transform_name_ = transform_name;
-	character_properties.zorder_ = zorder;
-	characters_transforms_.insert({unique_id_, {std::string(character_variable), character_properties}}); //TODO : make_tuple ou accolades (= initializer list) ??
-	unique_id_ += 1;
-}
-
-void InGame::insert_character(const std::string_view character_variable, const int zorder)
-{
-	Character::Editableproperties character_properties = get_character_properties(character_variable);
-	character_properties.zorder_ = zorder;
-
-	std::string transfo = "none";
-	for(unsigned int i = unique_id_; i != -1; --i)
+	Character::Editableproperties character_properties = get_last_character_properties(character_variable);
+	if(new_character_name.has_value())
 	{
-		if(characters_transforms_.count(i) && characters_transforms_.at(i).first == character_variable)
-		{
-			transfo = characters_transforms_.at(i).second.transform_.transform_name_;
-			break;
-		}
+		character_properties.name_ = new_character_name.value();
 	}
-	character_properties.transform_ = transfo;
-
-	characters_transforms_.insert({unique_id_, {std::string(character_variable), character_properties}}); //TODO : make_tuple ou accolades (= initializer list) ??
-	unique_id_ += 1;
-}
-
-void InGame::insert_character(const std::string_view character_variable, const std::string transform_name)
-{
-	Character::Editableproperties character_properties = get_character_properties(character_variable);
-	character_properties.transform_.transform_name_ = transform_name;
-
-	int zorder = 0;
-	for(unsigned int i = unique_id_; i != -1; --i)
+	if(transform_name.has_value())
 	{
-		if(characters_transforms_.count(i) && characters_transforms_.at(i).first == character_variable)
-		{
-			zorder = characters_transforms_.at(i).second.zorder_;
-			break;
-		}
+		character_properties.transform_.transform_name_ = transform_name.value();
 	}
-	character_properties.zorder_ = zorder;
-
-	characters_transforms_.insert({unique_id_, {std::string(character_variable), character_properties}}); //TODO : make_tuple ou accolades (= initializer list) ??
-	unique_id_ += 1;
-}
-
-void InGame::insert_renamed_character(const std::string_view character_variable, const std::string_view new_character_name)
-{
-	Character::Editableproperties character_properties = get_character_properties(character_variable);
-
-	std::string transfo = "none";
-	int zorder = 0;
-	for(unsigned int i = unique_id_; i != -1; --i)
+	if(zorder.has_value())
 	{
-		if(characters_transforms_.count(i) && characters_transforms_.at(i).first == character_variable)
-		{
-			transfo = characters_transforms_.at(i).second.transform_.transform_name_;
-			zorder = characters_transforms_.at(i).second.zorder_;
-			break;
-		}
+		character_properties.zorder_ = zorder.value();
 	}
 
-	character_properties.name_ = new_character_name;
-	character_properties.transform_.transform_name_ = transfo;
-	character_properties.zorder_ = zorder;
-
-	characters_transforms_.insert({unique_id_, {std::string(character_variable), character_properties}}); //TODO : make_tuple ou accolades (= initializer list) ??
+	characters_transforms_.insert({unique_id_, {std::string(character_variable), character_properties}});
 	unique_id_ += 1;
 }
 
@@ -209,7 +184,6 @@ void InGame::change_background(const Background& b)
 	}
 	else
 	{
-		//std::cout << "COLOR BACKGROUND : " << int(b.color_.r) << ", " << int(b.color_.g) << ", " << int(b.color_.b) << ", " << int(b.color_.a) << std::endl;
 		background_.image_.reset();
 		background_.color_ = {b.color_.r, b.color_.g, b.color_.b, b.color_.a};
 	}
@@ -226,7 +200,29 @@ void InGame::show_next_dialogue()
 				current_unique_id_ = std::next(dialogues_.find(current_unique_id_), 1)->first;
 				is_current_unique_id_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
 			}
-			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second.second, get_texttoggle("Skip")->is_checked_, true);
+
+			//std::cout << "DANS NEXT DIALOGUE: " << current_unique_id_ << std::endl;
+			//for(unsigned int i = current_unique_id_; i != -1; --i)
+			//{
+			//	if(characters_transforms_.count(i) && dialogues_[current_unique_id_].second.first == characters_transforms_.at(i).first)
+			//	{
+			//		std::cout << "i: " << i << ", " << characters_transforms_.at(i).second.name_ << ", " << dialogues_[current_unique_id_].second.second << std::endl;
+			//		break;
+			//	}
+			//}
+
+			//TODO : affiche "" (= Narrator), ce qui n'est pas logique => vérifier que dialogues_[current_unique_id_].second.first != "" ??
+			//if(dialogues_[current_unique_id_].second.first.empty())
+
+			//for(unsigned int i = current_unique_id_; i != -1; --i)
+			//{
+			//	if(dialogues_.count(i))
+			//	{
+			//		std::cout << "Nom: " << dialogues_[i].first << std::endl;
+			//	}
+			//}
+
+			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, get_last_character_name(dialogues_[current_unique_id_].second), get_texttoggle("Skip")->is_checked_, true);
 		}
 	}
 }
@@ -258,7 +254,7 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 				current_unique_id_ = std::prev(dialogues_.find(current_unique_id_), 1)->first;
 			}
 		}
-		textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, dialogues_[current_unique_id_].second.second, false, false);
+		textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, get_last_character_name(dialogues_[current_unique_id_].second), get_texttoggle("Skip")->is_checked_, false);
 	}
 }
 
@@ -333,7 +329,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	background_.draw(renderer);
 
 	//TODO : coûteux car réalisé à chaque tour de boucle...
-	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::pair<std::string, std::unique_ptr<Character>>& a, const std::pair<std::string, std::unique_ptr<Character>>& b) -> bool { return a.second->character_.zorder_ < b.second->character_.zorder_; });
+	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::pair<std::string, std::unique_ptr<Character>>& a, const std::pair<std::string, std::unique_ptr<Character>>& b) -> bool { return a.second->properties_.zorder_ < b.second->properties_.zorder_; });
 	for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 	{
 		pair.second->draw(renderer); 
@@ -363,17 +359,17 @@ void InGame::update()
 	}*/
 
 	//TODO : pour transform et zorder de l'autofocus, utiliser characters_transforms_
-	//TODO : utilité donc d'avoir des Character* dans les autres vectors que characters_transforms_ ??
 	//TODO : positionner is_speaking_ dans show_new_dialogue() ?? Si non, aucun intérêt de passer un Character* => une string suffirait
 
-	//Pour l'autofocus
+	//Pour l'autofocus (et changement de textbox/namebox)
 	if(dialogues_.count(current_unique_id_))
 	{
-		if(!dialogues_[current_unique_id_].second.second.empty())
+		if(!(get_last_character_name(dialogues_[current_unique_id_].second).empty()))
 		{
 			for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 			{
-				if(pair.first == dialogues_[current_unique_id_].second.first)
+				//std::cout << pair.first << ", " << dialogues_[current_unique_id_].second.first << ", " << dialogues_[current_unique_id_].second.second << std::endl;
+				if(pair.first == dialogues_[current_unique_id_].second)
 				{
 					pair.second->is_speaking_ = true;
 					if(!pair.second->properties_.textbox_path_.empty())
@@ -407,7 +403,7 @@ void InGame::update()
 			if(characters_transforms_.count(i) && characters_transforms_.at(i).first == pair.first)
 			{
 				pair.second->set_transform(characters_transforms_.at(i).second.transform_.transform_name_);
-				pair.second->character_.zorder_ = characters_transforms_.at(i).second.zorder_;
+				pair.second->properties_.zorder_ = characters_transforms_.at(i).second.zorder_;
 				//std::cout << pair.second->properties_.name_ << ", " << characters_transforms_.at(i).second.name_ << std::endl;
 				pair.second->properties_.name_ = characters_transforms_.at(i).second.name_;
 				break;
@@ -427,6 +423,7 @@ void InGame::update()
 
 	if(!dialogues_.count(current_unique_id_) && current_unique_id_ <= std::prev(dialogues_.end())->first) //ne pas incrémenter au-delà la clef max
 	{
+		//std::cout << current_unique_id_ << std::endl;
 		current_unique_id_ += 1;
 	}
 

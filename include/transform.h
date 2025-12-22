@@ -6,8 +6,6 @@
 #include <unordered_map>
 #include <functional>
 
-//TODO : fonction qui converti t** en f** et inversement
-
 //TODO : ajouter les autres transfos (hop etc.)
 
 class Transform

@@ -40,9 +40,10 @@ void Ui::on_pointer_exit(PointerEventData pointer_event_data)
 	(void)pointer_event_data;
 	if(state_ == State::CLICKED && pointer_on_ui_when_pointer_up_)
 	{
-		state_ = State::SELECTED; 
+		state_ = State::SELECTED;
 	}
-	on_pointer_exit_hook_end(pointer_event_data); //TODO : dans le if ??
+
+	on_pointer_exit_hook_end(pointer_event_data); 
 }
 
 void Ui::on_up_pressed()

@@ -5,35 +5,29 @@
 
 int Character::counter_ = 0;
 
-Character::Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const int zorder)
-	: character_(character_path, 0, 0, renderer, zorder)
-	, properties_{std::string(name), zorder, "", "", Transform("")}
-	, unique_id_(std::string(name) + std::to_string(counter_)), is_speaking_(false), is_visible_(false) //, initial_rect_(character_.position_)
+//TODO : valeur par défaut du zorder = 0 ??
+
+Character::Character(const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer)
+	: character_(character_path, 0, 0, renderer)
+	, properties_{std::string(character_name), 0, "", "", Transform("")}
+	, unique_id_(std::string(character_name) + std::to_string(counter_)), is_speaking_(false), is_visible_(false) //, initial_rect_(character_.position_)
 {
 	counter_ += 1;
 }
 
-Character::Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path, const int zorder)
-	: character_(character_path, 0, 0, renderer, zorder)
-	, properties_{std::string(name), zorder, std::string(textbox_path), std::string(namebox_path), Transform("")}
-	, unique_id_(std::string(name) + std::to_string(counter_)), is_speaking_(false), is_visible_(false) //, initial_rect_(character_.position_)
+Character::Character(const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path)
+	: character_(character_path, 0, 0, renderer)
+	, properties_{std::string(character_name), 0, std::string(textbox_path), std::string(namebox_path), Transform("")}
+	, unique_id_(std::string(character_name) + std::to_string(counter_)), is_speaking_(false), is_visible_(false) //, initial_rect_(character_.position_)
 {
 	counter_ += 1;
 }
 
 void Character::set_transform(const std::string transform_name)
 {
-	//std::cout << transform_.transform_name_ << " et " << transform_name << std::endl;
-	//if(transform_name == "none")
-	//{
-	//	is_visible_ = true;
-	//}
-
 	if(properties_.transform_.transform_name_ != transform_name)
 	{
 		properties_.transform_.create_transform(transform_name, is_visible_);
-		//transform_.transform_name_ = transform_name;
-		//std::cout << int(transform_.transform_name_) << std::endl;
 
 		//TODO : si hide, mettre is_visible_ à false ??
 		if(transform_name == "hide")
@@ -44,9 +38,6 @@ void Character::set_transform(const std::string transform_name)
 		{
 			is_visible_ = true;
 		}
-		//std::cout << std::boolalpha << is_visible_ << std::endl;
-
-		//transform_.show_transform(transform_name, character_);
 	}
 }
 

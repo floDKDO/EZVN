@@ -5,6 +5,8 @@
 
 #include <SDL2/SDL.h>
 
+//TODO : enum qui contient des couleurs (ex : black, white, red etc.) ??
+
 class Background
 {
 	public:

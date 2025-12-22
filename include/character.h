@@ -5,8 +5,8 @@
 class Character
 {
 	public:
-		Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const int zorder = 0);
-		Character(const std::string_view name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path, const int zorder = 0);
+		Character(const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer);
+		Character(const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path);
 
 		void set_transform(const std::string transform_name);
 		void handle_events(const SDL_Event& e);

@@ -42,7 +42,6 @@ class Text : public Drawable
 		Uint32 wrap_length_;
 		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps
 
-		//TODO : remettre en private
 		bool is_animated_; //TODO : préciser une wrap_length mais que le texte ne soit pas animé (pour pop-up et skip des dialogues) ??
 
 	private:

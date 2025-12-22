@@ -62,5 +62,5 @@ void MainMenu::confirmationpopup_quit_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Yes!" << std::endl;
-	game_.game_running_ = false;
+	game_.quit_game();
 }

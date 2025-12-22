@@ -43,7 +43,7 @@ void Textbox::change_textbox(const std::string_view new_textbox_path, const std:
 	}
 }
 
-void Textbox::set_initial_dialogue(const std::string_view new_dialogue, std::string speaker)
+void Textbox::show_initial_dialogue(const std::string_view new_dialogue, std::string speaker)
 {
 	text_.is_finished_ = true;
 	show_new_dialogue(new_dialogue, speaker);
@@ -53,7 +53,7 @@ void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string
 {
 	if((text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
 	{
-		if(speaker.empty())
+		if(speaker.empty()) //Narrator
 		{
 			current_speaker_.clear();
 		}
@@ -77,27 +77,6 @@ void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string
 			text_.text_.append("\"");
 		}
 	}
-}
-
-//TODO : inutile ??
-void Textbox::show_new_dialogue(const std::string_view new_dialogue) //Narrator
-{
-	/*if(text_.is_finished_)
-	{
-		current_speaker_.clear();
-
-		text_.is_finished_ = false;
-		text_.index_dialogue_ = 0;
-		text_.text_ = "";
-		text_.text_dialogue_ = "";
-		text_.text_ = new_dialogue;
-
-		if(!current_speaker_.empty())
-		{
-			text_.text_.insert(0, "\"");
-			text_.text_.append("\"");
-		}
-	}*/
 }
 
 Uint64 Textbox::get_text_delay()

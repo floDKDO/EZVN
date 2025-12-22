@@ -25,7 +25,6 @@ class Ui
 
 		virtual ~Ui() = default;
 
-		//TODO : en paramètre, PointerEventData qui contient le button (gauche ou droite) de la souris qui a été cliqué, is_dragging et la position du curseur 
 		virtual void on_pointer_up(PointerEventData pointer_event_data); //<=> on click (l'action se lance quand le clic est relaché)
 		virtual void on_pointer_up_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
 
@@ -39,7 +38,6 @@ class Ui
 		virtual void on_pointer_exit_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
 
 		virtual void on_drag(PointerEventData pointer_event_data){ (void)pointer_event_data; }
-		/* Fin du TODO*****************************************/
 
 		virtual void on_up_pressed();
 		virtual void on_up_pressed_hook_end() {}

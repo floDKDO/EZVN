@@ -1,6 +1,4 @@
 #include "game.h"
-#include "character.h"
-#include "transform.h"
 
 #include <iostream>
 
@@ -22,7 +20,7 @@
 
 //TODO : vérifier que je n'ai pas oublié un "override"
 
-//TODO : nettoyer le code => retirer les includes inutiles, "_" final après le nom des membres, retirer les membres inutiles etc.
+//TODO : nettoyer le code => retirer les includes inutiles, "_" final après le nom des membres, retirer les membres inutiles, convention pour les valeurs des enums etc.
 
 //TODO : peu de lisibilité avec tous les paramètres par défaut
 
@@ -48,18 +46,25 @@ int main(int argc, char* argv[])
 
 	//TODO : rejouer les sons / relancer la musique quand je scroll vers l'arrière 
 
-	//TODO : appuyer sur espace / cliquer alors qu'un dialogue est en train de défiler va l'afficher en entier
+	//TODO : la textbox noire apparaît brièvement pour le premier dialogue
 
 	Game game;
-	game.create_character("Sayori", "Sayori", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
+
+	//TODO : il faudrait qu'il y ait une erreur si : 
+	//- plusieurs personnages ont la même character_variable
+	//- un personnage possède une character_variable vide (= "")
+
+	game.create_character("Sayori", "Sayo", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
 	game.create_character("Monika", "???", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
 	game.create_character("Yuri", "???", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 	game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
-	game.show_character("Monika", "t43", 1); 
+	game.show_character("Monika", "t43", 2); 
 	game.show_character("Natsuki", "t44", 1); 
+	//game.rename_character("Sayori", "Yuri"); //TODO => problème : pas appliqué... 
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
+	game.rename_character("Sayori", "Yuri"); //TODO => problème : appliqué trop tôt... 
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
 	game.hide_character("Sayori"); 

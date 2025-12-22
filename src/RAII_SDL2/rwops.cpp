@@ -55,7 +55,7 @@ SDL_RWops* RWops::fetch() const
 	return rwops_;
 }
 
-int RWops::is_gif() const
+bool RWops::is_gif() const
 {
 	if(rwops_ != nullptr)
 	{
@@ -64,13 +64,18 @@ int RWops::is_gif() const
 	return 0;
 }
 
-int RWops::is_webp() const
+bool RWops::is_webp() const
 {
 	if(rwops_ != nullptr)
 	{
 		return IMG_isWEBP(rwops_);
 	}
 	return 0;
+}
+
+bool RWops::is_animation() const
+{
+	return is_gif() || is_webp();
 }
 
 }

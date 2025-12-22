@@ -17,8 +17,9 @@ class RWops
 		~RWops(); //SDL_RWclose
 
 		SDL_RWops* fetch() const;
-		int is_gif() const;
-		int is_webp() const;
+		bool is_gif() const;
+		bool is_webp() const;
+		bool is_animation() const;
 
 	private:
 		SDL_RWops* rwops_;

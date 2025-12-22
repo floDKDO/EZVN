@@ -14,8 +14,7 @@ std::optional<sdl::Animation> Image::create_animation(const std::string_view pat
 {
 	sdl::RWops rwops(path, "rb");
 
-	//TODO : redondant avec la vérification dans la classe Animation ??
-	if(rwops.is_gif() || rwops.is_webp())
+	if(rwops.is_animation())
 	{
 		return sdl::Animation(path);
 	}

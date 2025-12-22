@@ -3,10 +3,7 @@
 #include <SDL2/SDL.h>
 #include <string_view>
 
-//TODO : normaliser la taille des textes
 //TODO : centrer les boutons du menu principal
-//TODO : couleurs et couleur CLICKED ?? => normal = gris, selected = gris clair, clicked = blanc
-//TODO : montrer que l'handle du slider est NORMAL, SELECTED ou CLICKED
 //TODO : text_.update() partout
 
 namespace constants
@@ -26,11 +23,11 @@ inline constexpr int button_text_size_ = 30;
 inline constexpr SDL_Color button_text_color_ = {255, 255, 255, 255};
 
 inline constexpr int checkboxgroup_y_spacing_ = 150;
-inline constexpr int texttogglegroup_y_spacing_ = 100;
+inline constexpr int texttogglegroup_y_spacing_ = 60;
 
-inline constexpr int checkablegroup_top_text_y_delta_ = -100;
+inline constexpr int checkablegroup_top_text_y_delta_ = -70;
 inline constexpr std::string_view checkablegroup_font_ = "fonts/Aller_Rg.ttf";
-inline constexpr int checkablegroup_text_size_ = 50;
+inline constexpr int checkablegroup_text_size_ = 40;
 inline constexpr SDL_Color checkablegroup_text_color_ = {255, 255, 255, 255};
 
 inline constexpr std::string_view checkbox_normal_ = "img/gui/checkbox_normal.png";
@@ -50,6 +47,7 @@ inline constexpr SDL_Color inputfield_outline_selected_color_ = {221, 108, 172, 
 inline constexpr SDL_Color inputfield_outline_clicked_color_ = {255, 124, 198, 255};
 inline constexpr std::string_view inputfield_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int inputfield_text_x_delta_ = 7;
+inline constexpr int inputfield_text_y_delta_ = 5;
 inline constexpr int inputfield_text_size_ = 30;
 inline constexpr SDL_Color inputfield_text_color_ = {0, 0, 0, 255};
 inline constexpr SDL_Color inputfield_placeholder_text_color_ = {204, 204, 204, 255};
@@ -65,18 +63,18 @@ inline constexpr int confirmationpopup_text_x_delta_ = 30;
 inline constexpr SDL_Color confirmationpopup_text_color_ = {255, 255, 255, 255};
 
 inline constexpr int slider_container_width_ = 300;
-inline constexpr int slider_container_height_ = 20;
+inline constexpr int slider_container_height_ = 18;
 inline constexpr SDL_Color slider_container_color_ = {255, 255, 255, 255};
 inline constexpr SDL_Color slider_container_outline_color_ = {174, 84, 135, 255};
 inline constexpr int slider_handle_size_ = 30;
 inline constexpr SDL_Color slider_handle_normal_color_ = {174, 84, 135, 255};
 inline constexpr SDL_Color slider_handle_selected_color_ = {221, 108, 172, 255};
 inline constexpr SDL_Color slider_handle_clicked_color_ = {255, 124, 198, 255};
-inline constexpr int slider_handle_y_delta_ = -5;
+inline constexpr int slider_handle_y_delta_ = -(slider_handle_size_ - slider_container_height_) / 2;
 inline constexpr SDL_Color slider_handle_outline_color_ = {255, 255, 255, 255};
 inline constexpr std::string_view slider_font_ = "fonts/Aller_Rg.ttf";
-inline constexpr int slider_text_y_delta_ = -70;
-inline constexpr int slider_text_size_ = 50;
+inline constexpr int slider_text_y_delta_ = -60;
+inline constexpr int slider_text_size_ = 40;
 inline constexpr SDL_Color slider_text_color_ = {174, 84, 135, 255};
 inline constexpr int slider_step_count_ = 10;
 
@@ -94,7 +92,7 @@ inline constexpr SDL_Color texttoggle_clicked_checked_color_ = {255, 255, 255, 2
 inline constexpr SDL_Color texttoggle_clicked_unchecked_color_ = {255, 255, 255, 255};
 
 inline constexpr std::string_view texttoggle_font_ = "fonts/Aller_Rg.ttf";
-inline constexpr int texttoggle_text_size_ = 50;
+inline constexpr int texttoggle_text_size_ = 30;
 
 inline constexpr int textbox_y_delta_ = -6;
 inline constexpr std::string_view textbox_image_ = "img/gui/textbox.png";
