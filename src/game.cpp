@@ -38,10 +38,6 @@ void Game::run()
 	Uint64 end_current_frame = 0;
 	unsigned int frame_count = 0;
 
-	//mettre le premier dialogue dans la Textbox => plus petite clef
-	InGame* in_game_ptr = dynamic_cast<InGame*>(in_game_.get());
-	in_game_ptr->set_initial_dialogue(); 
-
 	while(game_running_)
 	{
 		begin_current_frame = SDL_GetTicks64();

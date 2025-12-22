@@ -25,7 +25,7 @@ class InGame : public GameState
 
 		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
 		Character::Editableproperties get_last_character_properties(const std::string_view character_variable);
-		std::string get_last_character_name(const std::string_view character_variable, const bool is_first_dialogue=false);
+		std::string get_last_character_name(const std::string_view character_variable);
 
 		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 
@@ -52,6 +52,8 @@ class InGame : public GameState
 		std::vector<std::pair<std::string /*character_variable*/, std::unique_ptr<Character>>> characters_; //unique_ptr pour que stable_sort fonctionne
 
 		std::map<unsigned int, std::pair<std::string /*character_variable*/, Character::Editableproperties>> characters_transforms_;
+
+		//TODO : pour cohérence, mettre la std::string /*character_variable*/ en premier dans dialogues_
 		std::map<unsigned int, std::pair<const std::string_view /* dialogue */, std::string /*character_variable*/>> dialogues_;
 		std::map<unsigned int, Background> backgrounds_;
 

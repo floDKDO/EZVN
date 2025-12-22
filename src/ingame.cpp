@@ -9,6 +9,7 @@
 
 //TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
 //TODO : créer une fonction d'insertion qui incrémente unique_id_
+//TODO : unique_id_ partagé entre les std::map a l'air de poser problème (propre à dialogues_ ??)
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
@@ -52,8 +53,7 @@ TextToggle* InGame::get_texttoggle(const std::string_view text)
 
 void InGame::set_initial_dialogue()
 {
-	//std::cout << "Initial dialogue: " << dialogues_.begin()->second.second << ",+ " << get_last_character_name(dialogues_.begin()->second.second) << ",/ " << unique_id_ << ",* " << current_unique_id_ << std::endl;
-	textbox_.show_initial_dialogue(dialogues_.begin()->second.first, get_last_character_name(dialogues_.begin()->second.second, true)); //TODO: ici, il faudrait utiliser current_unique_id_ mais pas possible pour l'instant...
+	textbox_.show_initial_dialogue(dialogues_.begin()->second.first, get_last_character_name(dialogues_.begin()->second.second)); 
 }
 
 void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path, const std::string_view namebox_path)
@@ -85,7 +85,7 @@ Character::Editableproperties InGame::get_last_character_properties(const std::s
 	std::cout << "CAS NON GERE !!!\n";
 }
 
-std::string InGame::get_last_character_name(const std::string_view character_variable, const bool is_first_dialogue)
+std::string InGame::get_last_character_name(const std::string_view character_variable)
 {
 	if(character_variable.empty())
 	{
@@ -93,7 +93,7 @@ std::string InGame::get_last_character_name(const std::string_view character_var
 	}
 
 	unsigned int initial_index_value;
-	if(current_unique_id_ == 0 && !is_first_dialogue)
+	if(current_unique_id_ == 0)
 	{
 		initial_index_value = unique_id_; //il faut bien utiliser unique_id_ ici à la place de current_unique_id_, ce dernier valant toujours 0 pour les méthodes insert_* car le jeu n'a pas encore réellement commencé (= on est encore sur la toute première ligne du script du joueur)
 	}
@@ -134,6 +134,14 @@ void InGame::insert_dialogue(const std::string_view character_variable, const st
 	{
 		dialogues_.insert({unique_id_, {dialogue, std::string(character_variable)}});
 	}
+
+	static bool first_dialogue = true;
+	if(first_dialogue)
+	{
+		set_initial_dialogue();
+		first_dialogue = false;
+	}
+
 	unique_id_ += 1;
 }
 
@@ -346,6 +354,32 @@ void InGame::draw(sdl::Renderer& renderer)
 void InGame::update()
 {
 	//TODO : pour debug
+	//std::cout << current_unique_id_ << std::endl;
+
+	//std::cout << "DEBUT\n";
+	/*for(auto it = dialogues_.begin(); it != dialogues_.end(); ++it)
+	{
+		if(dialogues_.count(it->first))
+		{
+			std::cout << it->first << std::endl;
+		}
+	}*/
+	/*for(auto it = backgrounds_.begin(); it != backgrounds_.end(); ++it)
+	{
+		if(backgrounds_.count(it->first))
+		{
+			std::cout << it->first << std::endl;
+		}
+	}*/
+	/*for(auto it = characters_transforms_.begin(); it != characters_transforms_.end(); ++it)
+	{
+		if(characters_transforms_.count(it->first))
+		{
+			std::cout << it->first << std::endl;
+		}
+	}*/
+	//std::cout << "FIN\n\n";
+
 	/*for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		if(dialogues_.count(current_unique_id_) && dialogues_[current_unique_id_].second != nullptr)

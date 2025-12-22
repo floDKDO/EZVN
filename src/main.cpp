@@ -58,13 +58,14 @@ int main(int argc, char* argv[])
 	game.create_character("Monika", "???", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
 	game.create_character("Yuri", "???", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
+
 	game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2); 
 	game.show_character("Natsuki", "t44", 1); 
-	//game.rename_character("Sayori", "Yuri"); //TODO => problème : pas appliqué... 
+	//game.rename_character("Sayori", "xxxxx");
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
-	game.rename_character("Sayori", "Yuri"); //TODO => problème : appliqué trop tôt... 
+	//game.rename_character("Sayori", "yyyyy"); 
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
 	game.hide_character("Sayori"); 
