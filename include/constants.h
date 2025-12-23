@@ -127,4 +127,6 @@ inline constexpr std::string_view game_name_ = "EZVN";
 inline constexpr std::string_view sound_hover_ = "sounds/hover.ogg";
 inline constexpr std::string_view sound_click_ = "sounds/click.ogg";
 
+inline constexpr int fadeout_length_scroll_back_ = 1500; //ms
+
 }

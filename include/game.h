@@ -60,6 +60,9 @@ class Game
 
 		void hide_background();
 
+		void play_music(const std::string_view music_path, int fadein_length=0, int fadeout_length=0, int volume=128); //TODO : fadeout
+		void stop_music(int fadeout_length=0);
+
 	private:
 		void push_state(GameState* state);
 		void pop_state();

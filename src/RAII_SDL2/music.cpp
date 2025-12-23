@@ -1,6 +1,7 @@
 #include "RAII_SDL2/music.h"
 
 #include <SDL2/SDL.h>
+#include <iostream>
 
 namespace sdl
 {
@@ -49,6 +50,11 @@ Mix_Music* Music::fetch() const
 	return music_;
 }
 
+bool Music::playing()
+{
+	return Mix_PlayingMusic();
+}
+
 void Music::fade_in(const int loops, const int ms) const
 {
 	if(Mix_FadeInMusic(music_, loops, ms) == -1)
@@ -57,27 +63,33 @@ void Music::fade_in(const int loops, const int ms) const
 	}
 }
 
-void Music::fade_out(const int ms) const
+void Music::fade_out(const int ms) 
 {
+	std::cout << "MS: " << ms << std::endl;
 	Mix_FadeOutMusic(ms);
 }
 
-void Music::pause() const
+void Music::halt()
+{
+	Mix_HaltMusic();
+}
+
+void Music::pause() 
 {
 	Mix_PauseMusic();
 }
 
-void Music::resume() const
+void Music::resume() 
 {
 	Mix_ResumeMusic();
 }
 
-void Music::volume(const int volume) const
+void Music::volume(const int volume) 
 {
 	Mix_VolumeMusic(volume);
 }
 
-void Music::set_position(const double position) const
+void Music::set_position(const double position) 
 {
 	if(Mix_SetMusicPosition(position) == -1)
 	{

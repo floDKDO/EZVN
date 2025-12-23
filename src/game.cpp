@@ -200,7 +200,7 @@ void Game::add_new_dialogue(const std::string_view character_variable, const std
 
 void Game::add_new_dialogue(const std::string_view dialogue)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("", dialogue); //TODO : mettre nullptr car j'utiliserai Character* à la place d'une std::string_view
+	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("", dialogue); //TODO : mettre nullptr car j'utiliserai Character* à la place d'une std::string_view ???
 }
 
 void Game::show_background(const std::string_view background_path)
@@ -216,4 +216,15 @@ void Game::show_background(const Uint8 r, const Uint8 g, const Uint8 b, const Ui
 void Game::hide_background()
 {
 	dynamic_cast<InGame*>(in_game_.get())->insert_background(0, 0, 0, 255);
+}
+
+void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_music(music_path, fadein_length, fadeout_length, volume);
+}
+
+void Game::stop_music(int fadeout_length)
+{
+	//TODO
+	dynamic_cast<InGame*>(in_game_.get())->insert_music("", 0, fadeout_length, 128);
 }

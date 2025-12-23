@@ -176,6 +176,19 @@ void InGame::insert_character(const std::string_view character_variable, const s
 	unique_id_ += 1;
 }
 
+void InGame::insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume)
+{
+	if(music_path.empty()) //stop music
+	{
+		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
+	}
+	else //play music
+	{
+		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume}, Music(music_path))});
+	}
+	unique_id_ += 1;
+}
+
 void InGame::change_background(const Background& b)
 {
 	if(b.image_ != nullptr)
@@ -343,7 +356,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	{
 		if(characters_transforms_.count(i) && !(characters_transforms_.at(i).first.empty()))
 		{
-			std::cout << characters_transforms_.at(i).first << std::endl;
+			//std::cout << characters_transforms_.at(i).first << std::endl;
 			for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 			{
 				if(pair.first == characters_transforms_.at(i).first)
@@ -469,6 +482,51 @@ void InGame::update()
 		{
 			change_background(backgrounds_.at(i)); 
 			break;
+		}
+	}
+
+	for(unsigned int i = current_unique_id_; i != -1; --i)
+	{
+		if(musics_.count(i))
+		{
+			if(musics_.at(i).second.has_value()) //play music
+			{
+				if(music_ == &musics_.at(i).second.value())
+				{
+					musics_.at(i).second.value().change_volume(musics_.at(i).first.volume);
+					musics_.at(i).second.value().play_music(false, musics_.at(i).first.fadein_length);
+					break;
+				}
+				else
+				{
+					//si une musique est déjà en train de se jouer, il faut la stopper
+					//deux musiques consécutives => stopper (avec ou sans fadeout) la musique courante
+					if(sdl::Music::playing())
+					{
+						sdl::Music::fade_out(musics_.at(i).first.fadeout_length);
+					}
+					music_ = &musics_.at(i).second.value();
+					break;
+				}
+			}
+			else // stop music
+			{
+				if(sdl::Music::playing())
+				{
+					sdl::Music::fade_out(musics_.at(i).first.fadeout_length);
+					break;
+				}
+			}
+		}
+
+		//aucune musique trouvée => stopper l'éventuelle musique qui était en train de se jouer
+		if(i == 0)
+		{
+			//si scroll en arrière et aucune musique => fadeout de 1.5 secondes
+			if(sdl::Music::playing())
+			{
+				sdl::Music::fade_out(constants::fadeout_length_scroll_back_);
+			}
 		}
 	}
 

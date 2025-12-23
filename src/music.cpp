@@ -1,5 +1,7 @@
 #include "music.h"
 
+#include <iostream>
+
 int Music::global_music_volume_ = MIX_MAX_VOLUME / 2;
 
 Music::Music(const std::string_view path)
@@ -8,26 +10,29 @@ Music::Music(const std::string_view path)
 
 void Music::play_music(const bool loop, const int fadein_length)
 {
-	int loops;
-	if(loop)
+	if(!music_.playing())
 	{
-		loops = -1;
-		loop_ = true;
+		int loops;
+		if(loop)
+		{
+			loops = -1;
+			loop_ = true;
+		}
+		else
+		{
+			loops = 0;
+			loop_ = false;
+		}
+		/*if(local_music_volume != global_music_volume) //Priority for the local music volume
+		{
+			change_volume(local_music_volume);
+		}
+		else*/
+		{
+			change_volume(global_music_volume_);
+		}
+		music_.fade_in(loops, fadein_length * 1000);
 	}
-	else
-	{
-		loops = 0;
-		loop_ = false;
-	}
-	/*if(local_music_volume != global_music_volume) //Priority for the local music volume
-	{
-		change_volume(local_music_volume);
-	}
-	else*/
-	{
-		change_volume(global_music_volume_);
-	}
-	music_.fade_in(loops, fadein_length * 1000);
 }
 
 void Music::pause_music() const

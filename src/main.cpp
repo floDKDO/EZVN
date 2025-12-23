@@ -54,18 +54,23 @@ int main(int argc, char* argv[])
 	//- plusieurs personnages ont la même character_variable
 	//- un personnage possède une character_variable vide (= "") car il serait considéré à tort comme le narrateur
 
+	//play music => Fadeout gives the fadeout time for currently playing music, in seconds, while fadein gives the time it takes to fade in the new music.
+	//stop music => fadeout
+
 	game.create_character("Sayori", "Sayo", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
 	game.create_character("Monika", "???", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
 	game.create_character("Yuri", "???", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
 	game.add_new_dialogue("Y a personne ??");
+	game.play_music("sounds/2.ogg", 0, 1, 64); //TODO : volume hardcodé
 	game.show_character("Sayori", "t11");
 	//game.rename_character("Sayori", "xxxxx");
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
 	//game.rename_character("Sayori", "yyyyy"); 
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
+	game.play_music("sounds/3.ogg", 2, 1000); //TODO : bizarre qu'il y ait des secondes ici alors que dans tout le reste du moteur, j'utilise des ms
 	game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
@@ -73,6 +78,7 @@ int main(int argc, char* argv[])
 	game.add_new_dialogue("Elle est chiante...");
 	game.show_background(129, 0, 255, 255); 
 	game.add_new_dialogue("Yuri", "How are you MC?");
+	game.stop_music(2000); //TODO : attention, ici il faut mettre des ms car fade_out est une méthode statique => le * 1000 effectué par stop_music n'est pas réalisé car stop_music n'est donc pas appelé
 	game.rename_character("Yuri", "Yuri beta");
 	game.hide_background();
 	game.add_new_dialogue("Yuri", "...");

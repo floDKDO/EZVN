@@ -5,6 +5,7 @@
 #include "character.h"
 #include "background.h"
 #include "GUI/texttoggle.h"
+#include "music.h"
 #include <vector>
 #include <memory>
 #include <map>
@@ -36,6 +37,8 @@ class InGame : public GameState
 
 		void change_background(const Background& b);
 
+		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume);
+
 		void show_next_dialogue(); 
 
 		enum class WhichDialogue
@@ -58,6 +61,16 @@ class InGame : public GameState
 		std::map<unsigned int, std::pair<const std::string_view /* dialogue */, std::string /*character_variable*/>> dialogues_;
 		std::map<unsigned int, Background> backgrounds_;
 
+		struct MusicProperties
+		{
+			int fadein_length;
+			int fadeout_length;
+			int volume;
+		};
+
+		//TODO : fadein => préciser dans le std::map ou dans le constructeur de Music ??
+		std::map<unsigned int, std::pair<MusicProperties, std::optional<Music>>> musics_;
+
 		unsigned int unique_id_;
 		unsigned int current_unique_id_;
 
@@ -69,6 +82,7 @@ class InGame : public GameState
 		Textbox textbox_; 
 
 	private:
+		Music* music_;
 		Background background_; 
 		bool hide_ui_textbox_;
 		sdl::Renderer &renderer_;
