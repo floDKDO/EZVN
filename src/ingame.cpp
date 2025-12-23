@@ -8,8 +8,7 @@
 #include <algorithm>
 
 //TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
-//TODO : créer une fonction d'insertion qui incrémente unique_id_
-//TODO : unique_id_ partagé entre les std::map a l'air de poser problème (propre à dialogues_ ??)
+//TODO : créer une fonction d'insertion qui incrémente unique_id_ ?? => poserait sûrement problème dans le cas du premier dialogue dans insert_dialogue
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
@@ -338,10 +337,28 @@ void InGame::draw(sdl::Renderer& renderer)
 
 	//TODO : coûteux car réalisé à chaque tour de boucle...
 	std::stable_sort(characters_.begin(), characters_.end(), [&](const std::pair<std::string, std::unique_ptr<Character>>& a, const std::pair<std::string, std::unique_ptr<Character>>& b) -> bool { return a.second->properties_.zorder_ < b.second->properties_.zorder_; });
-	for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
+
+	//TODO : coûteux
+	for(unsigned int i = current_unique_id_; i != -1; --i)
+	{
+		if(characters_transforms_.count(i) && !(characters_transforms_.at(i).first.empty()))
+		{
+			std::cout << characters_transforms_.at(i).first << std::endl;
+			for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
+			{
+				if(pair.first == characters_transforms_.at(i).first)
+				{
+					pair.second->draw(renderer);
+				}
+			}
+		}
+	}
+
+	//pas le bon truc à faire car ne permet pas un retour arrière sur les dialogues
+	/*for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 	{
 		pair.second->draw(renderer); 
-	}
+	}*/
 
 	if(!hide_ui_textbox_)
 	{

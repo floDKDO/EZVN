@@ -49,6 +49,7 @@ class InGame : public GameState
 		void settings_function(Ui* ui);
 		void temp_function(Ui* ui);
 
+		//TODO : utiliser une map ??
 		std::vector<std::pair<std::string /*character_variable*/, std::unique_ptr<Character>>> characters_; //unique_ptr pour que stable_sort fonctionne
 
 		std::map<unsigned int, std::pair<std::string /*character_variable*/, Character::Editableproperties>> characters_transforms_;
