@@ -6,6 +6,7 @@
 #include "background.h"
 #include "GUI/texttoggle.h"
 #include "music.h"
+#include "sound.h"
 #include <vector>
 #include <memory>
 #include <map>
@@ -37,7 +38,8 @@ class InGame : public GameState
 
 		void change_background(const Background& b);
 
-		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume);
+		void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop);
+		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop);
 
 		void show_next_dialogue(); 
 
@@ -66,10 +68,22 @@ class InGame : public GameState
 			int fadein_length;
 			int fadeout_length;
 			int volume;
+			bool loop;
 		};
 
-		//TODO : fadein => préciser dans le std::map ou dans le constructeur de Music ??
 		std::map<unsigned int, std::pair<MusicProperties, std::optional<Music>>> musics_;
+
+
+		struct SoundProperties
+		{
+			int fadein_length;
+			int fadeout_length;
+			int volume;
+			bool loop;
+			int channel;
+		};
+
+		std::map<unsigned int, std::pair<SoundProperties, std::optional<Sound>>> sounds_;
 
 		unsigned int unique_id_;
 		unsigned int current_unique_id_;
@@ -83,6 +97,10 @@ class InGame : public GameState
 
 	private:
 		Music* music_;
+
+		Sound* sound_;
+		int current_i_of_sound_;
+
 		Background background_; 
 		bool hide_ui_textbox_;
 		sdl::Renderer &renderer_;

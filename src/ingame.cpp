@@ -9,10 +9,11 @@
 
 //TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
 //TODO : créer une fonction d'insertion qui incrémente unique_id_ ?? => poserait sûrement problème dans le cas du premier dialogue dans insert_dialogue
+//TODO : utiliser des variables à la place de map.first.second. ... pour rendre le code plus lisible
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
-	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer)
+	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), music_(nullptr), sound_(nullptr)
 {
 	build_ui_elements(renderer);
 }
@@ -176,15 +177,28 @@ void InGame::insert_character(const std::string_view character_variable, const s
 	unique_id_ += 1;
 }
 
-void InGame::insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume)
+void InGame::insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop)
 {
-	if(music_path.empty()) //stop music
+	if(sound_path.empty()) //stop music
 	{
-		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
+		sounds_.insert({unique_id_, std::make_pair(SoundProperties{fadein_length, fadeout_length, volume, loop, channel}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
 	}
 	else //play music
 	{
-		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume}, Music(music_path))});
+		sounds_.insert({unique_id_, std::make_pair(SoundProperties{fadein_length, fadeout_length, volume, loop, channel}, Sound(sound_path, channel))});
+	}
+	unique_id_ += 1;
+}
+
+void InGame::insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop)
+{
+	if(music_path.empty()) //stop music
+	{
+		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume, loop}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
+	}
+	else //play music
+	{
+		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume, loop}, Music(music_path))});
 	}
 	unique_id_ += 1;
 }
@@ -485,16 +499,18 @@ void InGame::update()
 		}
 	}
 
+	//TODO : regarder s'il faut modifier des choses par rapport à la boucle des sons en-dessous
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		if(musics_.count(i))
 		{
+			//TODO : comme il y a que des break, possible de mettre un seul break à la fin du if ci-dessus ??
 			if(musics_.at(i).second.has_value()) //play music
 			{
 				if(music_ == &musics_.at(i).second.value())
 				{
 					musics_.at(i).second.value().change_volume(musics_.at(i).first.volume);
-					musics_.at(i).second.value().play_music(false, musics_.at(i).first.fadein_length);
+					musics_.at(i).second.value().play_music(musics_.at(i).first.loop, musics_.at(i).first.fadein_length);
 					break;
 				}
 				else
@@ -522,10 +538,78 @@ void InGame::update()
 		//aucune musique trouvée => stopper l'éventuelle musique qui était en train de se jouer
 		if(i == 0)
 		{
-			//si scroll en arrière et aucune musique => fadeout de 1.5 secondes
+			//si scroll en arrière et aucune musique => fadeout de 1.5 secondes (valeur constante)
 			if(sdl::Music::playing())
 			{
 				sdl::Music::fade_out(constants::fadeout_length_scroll_back_);
+			}
+		}
+	}
+
+	//TODO : pose problème quand on appuie sur Play => le son n'est pas joué entièrement !!
+	//TODO : tester fadein/fadeout sur le même channel et sur des channels différents
+	//TODO : éventuellement utiliser Mix_ReserveChannels pour réserver des channels aux éléments d'UI ??
+	for(unsigned int i = current_unique_id_; i != -1; --i)
+	{
+		if(sounds_.count(i))
+		{
+			//TODO : comme il y a que des break, possible de mettre un seul break à la fin du if ci-dessus ??
+			if(sounds_.at(i).second.has_value()) //play sound
+			{
+				if(sound_ == &sounds_.at(i).second.value())
+				{
+					std::cout << "SOUND OK1\n";
+					sounds_.at(i).second.value().change_volume(sounds_.at(i).first.volume);
+					if(!sdl::Chunk::playing(sounds_.at(i).first.channel))
+					{
+						sounds_.at(i).second.value().play_sound(sounds_.at(i).first.loop, sounds_.at(i).first.fadein_length);
+					}
+					break;
+				}
+				else
+				{
+					std::cout << "SOUND OK2\n";
+
+					/*if(sound_)
+					{
+						std::cout << sound_->channel_ << " et " << sounds_.at(i).first.channel << std::endl;
+					}*/
+
+					//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
+					if(sound_ && i < current_i_of_sound_)
+					{
+						if(sdl::Chunk::playing(sound_->channel_))
+						{
+							sdl::Chunk::halt_channel(sound_->channel_);
+						}
+					}
+
+					if(sdl::Chunk::playing(sounds_.at(i).first.channel))
+					{
+						sdl::Chunk::fade_out(sounds_.at(i).first.channel, sounds_.at(i).first.fadeout_length);
+					}
+					sound_ = &sounds_.at(i).second.value();
+					current_i_of_sound_ = i;
+					break;
+				}
+			}
+			else // stop sound
+			{
+				if(sdl::Chunk::playing(sounds_.at(i).first.channel))
+				{
+					sdl::Chunk::fade_out(sounds_.at(i).first.channel, sounds_.at(i).first.fadeout_length);
+					break;
+				}
+			}
+		}
+
+		//TODO : peut-être ajouter la condition current_unique_id_ > 0 ??
+		//TODO : cette condition est fausse/inutile pour les sons ??
+		if(i == 0)
+		{
+			if(sdl::Chunk::playing(-1))
+			{
+				sdl::Chunk::halt_channel(-1);
 			}
 		}
 	}

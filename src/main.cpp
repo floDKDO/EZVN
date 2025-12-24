@@ -35,6 +35,8 @@
 //autofocus_zorder = True
 //autofocus_mouth = True
 
+//TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
+
 
 int main(int argc, char* argv[])
 {
@@ -54,6 +56,11 @@ int main(int argc, char* argv[])
 	//- plusieurs personnages ont la même character_variable
 	//- un personnage possède une character_variable vide (= "") car il serait considéré à tort comme le narrateur
 
+	//si un son sur le même channel est lancé alors qu'un autre son était en train de se jouer, il faut stopper ce dernier
+	//deux sons sur un channel différent ne s'interfèrent pas
+	//fadein = facile
+	//fadeout => fadeout un précédent son uniquement s'il est sur le même channel
+
 	//play music => Fadeout gives the fadeout time for currently playing music, in seconds, while fadein gives the time it takes to fade in the new music.
 	//stop music => fadeout
 
@@ -62,7 +69,11 @@ int main(int argc, char* argv[])
 	game.create_character("Yuri", "???", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
+	game.add_new_dialogue("...");
+	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 30, true);
 	game.add_new_dialogue("Y a personne ??");
+	game.play_sound("sounds/new_hour.ogg", 0, 5000, 3000);
+	game.add_new_dialogue("...");
 	game.play_music("sounds/2.ogg", 0, 1, 64); //TODO : volume hardcodé
 	game.show_character("Sayori", "t11");
 	//game.rename_character("Sayori", "xxxxx");

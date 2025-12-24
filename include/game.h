@@ -60,7 +60,10 @@ class Game
 
 		void hide_background();
 
-		void play_music(const std::string_view music_path, int fadein_length=0, int fadeout_length=0, int volume=128); //TODO : fadeout
+		void play_sound(const std::string_view sound_path, int channel = 0, int fadein_length = 0, int fadeout_length = 0, int volume = 128, bool loop = false);
+		void stop_sound(int fadeout_length = 0);
+
+		void play_music(const std::string_view music_path, int fadein_length=0, int fadeout_length=0, int volume=128, bool loop = true);
 		void stop_music(int fadeout_length=0);
 
 	private:

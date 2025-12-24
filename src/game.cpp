@@ -218,13 +218,22 @@ void Game::hide_background()
 	dynamic_cast<InGame*>(in_game_.get())->insert_background(0, 0, 0, 255);
 }
 
-void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume)
+void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, int volume, bool loop)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_music(music_path, fadein_length, fadeout_length, volume);
+	dynamic_cast<InGame*>(in_game_.get())->insert_sound(sound_path, fadein_length, fadeout_length, volume, channel, loop);
+}
+
+void Game::stop_sound(int fadeout_length)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_sound("", 0, fadeout_length, 128, 0, false); //TODO : volume, channel et loop hardcodés
+}
+
+void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_music(music_path, fadein_length, fadeout_length, volume, loop);
 }
 
 void Game::stop_music(int fadeout_length)
 {
-	//TODO
-	dynamic_cast<InGame*>(in_game_.get())->insert_music("", 0, fadeout_length, 128);
+	dynamic_cast<InGame*>(in_game_.get())->insert_music("", 0, fadeout_length, 128, true); //TODO : volume et loop hardcodés
 }
