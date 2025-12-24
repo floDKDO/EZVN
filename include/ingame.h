@@ -51,6 +51,7 @@ class InGame : public GameState
 		void show_dialogue_mouse_wheel(WhichDialogue which_dialogue);
 
 		void auto_function(Ui* ui);
+		void skip_function(Ui* ui);
 		void settings_function(Ui* ui);
 		void temp_function(Ui* ui);
 
@@ -96,10 +97,13 @@ class InGame : public GameState
 		Textbox textbox_; 
 
 	private:
+		bool skip_mode_;
+		bool auto_mode_;
+
 		Music* music_;
 
 		Sound* sound_;
-		int current_i_of_sound_;
+		unsigned int current_i_of_sound_;
 
 		Background background_; 
 		bool hide_ui_textbox_;

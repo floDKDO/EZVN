@@ -13,7 +13,7 @@
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
-	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), music_(nullptr), sound_(nullptr)
+	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), music_(nullptr), sound_(nullptr)
 {
 	build_ui_elements(renderer);
 }
@@ -25,7 +25,7 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 
 	ui_manager_.add_element(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextButton*>(ui_manager_.ui_elements_[0].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_manager_.add_element(std::make_unique<TextToggle>("Skip", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
+	ui_manager_.add_element(std::make_unique<TextToggle>("Skip", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::skip_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextToggle*>(ui_manager_.ui_elements_[1].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 	ui_manager_.add_element(std::make_unique<TextToggle>("Auto", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::auto_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
 	x_textbutton += dynamic_cast<TextToggle*>(ui_manager_.ui_elements_[2].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
@@ -49,6 +49,35 @@ TextToggle* InGame::get_texttoggle(const std::string_view text)
 		}
 	}
 	return nullptr;
+}
+
+void InGame::auto_function(Ui* ui)
+{
+	(void)ui;
+	auto_mode_ = !auto_mode_;
+	if(textbox_.text_.is_finished_)
+	{
+		show_next_dialogue();
+	}
+}
+
+void InGame::skip_function(Ui* ui)
+{
+	(void)ui;
+	skip_mode_ = !skip_mode_;
+}
+
+void InGame::settings_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Clicked Settings!" << std::endl;
+	game_.request_push_state(game_.settings_menu_.get());
+}
+
+void InGame::temp_function(Ui* ui)
+{
+	(void)ui;
+	std::cout << "Pressed!\n";
 }
 
 void InGame::set_initial_dialogue()
@@ -245,9 +274,6 @@ void InGame::show_next_dialogue()
 			//	}
 			//}
 
-			//TODO : affiche "" (= Narrator), ce qui n'est pas logique => vérifier que dialogues_[current_unique_id_].second.first != "" ??
-			//if(dialogues_[current_unique_id_].second.first.empty())
-
 			//for(unsigned int i = current_unique_id_; i != -1; --i)
 			//{
 			//	if(dialogues_.count(i))
@@ -256,7 +282,7 @@ void InGame::show_next_dialogue()
 			//	}
 			//}
 
-			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, get_last_character_name(dialogues_[current_unique_id_].second), get_texttoggle("Skip")->is_checked_, true);
+			textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, get_last_character_name(dialogues_[current_unique_id_].second), skip_mode_, true);
 		}
 	}
 }
@@ -288,30 +314,8 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 				current_unique_id_ = std::prev(dialogues_.find(current_unique_id_), 1)->first;
 			}
 		}
-		textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, get_last_character_name(dialogues_[current_unique_id_].second), get_texttoggle("Skip")->is_checked_, false);
+		textbox_.show_new_dialogue(dialogues_[current_unique_id_].first, get_last_character_name(dialogues_[current_unique_id_].second), skip_mode_, false);
 	}
-}
-
-void InGame::auto_function(Ui* ui)
-{
-	(void)ui;
-	if(textbox_.text_.is_finished_)
-	{
-		show_next_dialogue();
-	}
-}
-
-void InGame::settings_function(Ui* ui)
-{
-	(void)ui;
-	std::cout << "Clicked Settings!" << std::endl;
-	game_.request_push_state(game_.settings_menu_.get());
-}
-
-void InGame::temp_function(Ui* ui)
-{
-	(void)ui;
-	std::cout << "Pressed!\n";
 }
 
 void InGame::handle_events(const SDL_Event& e)
@@ -323,7 +327,7 @@ void InGame::handle_events(const SDL_Event& e)
 		{
 			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
 			{
-				get_texttoggle("Skip")->is_checked_ = false;
+				get_texttoggle("Skip")->change_checked(false);
 				show_dialogue_mouse_wheel(WhichDialogue::previous);
 			}
 			else //scroll vers l'arrière => avancer d'un dialogue
@@ -381,12 +385,6 @@ void InGame::draw(sdl::Renderer& renderer)
 		}
 	}
 
-	//pas le bon truc à faire car ne permet pas un retour arrière sur les dialogues
-	/*for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
-	{
-		pair.second->draw(renderer); 
-	}*/
-
 	if(!hide_ui_textbox_)
 	{
 		textbox_.draw(renderer);
@@ -424,13 +422,6 @@ void InGame::update()
 	}*/
 	//std::cout << "FIN\n\n";
 
-	/*for(unsigned int i = current_unique_id_; i != -1; --i)
-	{
-		if(dialogues_.count(current_unique_id_) && dialogues_[current_unique_id_].second != nullptr)
-		{
-			std::cout << current_unique_id_ <<  ", Nom: " << dialogues_[current_unique_id_].second->properties_.name_ << ", transfo: " << dialogues_[current_unique_id_].second->properties_.transform_.transform_name_ << ", is_speaking_: " << std::boolalpha << dialogues_[current_unique_id_].second->is_speaking_ << ", zorder_: " << dialogues_[current_unique_id_].second->properties_.zorder_ << std::endl;
-		}
-	}*/
 	/*for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 	{
 		std::cout << "Nom: " << pair.second->properties_.name_ << ", transfo: " << pair.second->properties_.transform_.transform_name_ << ", is_speaking_: " << std::boolalpha << pair.second->is_speaking_ << ", zorder_: " << pair.second->character_.zorder_ << std::endl;
@@ -450,6 +441,7 @@ void InGame::update()
 				if(pair.first == dialogues_[current_unique_id_].second)
 				{
 					pair.second->is_speaking_ = true;
+					//pair.second->properties_.zorder_ = 10;
 					if(!pair.second->properties_.textbox_path_.empty())
 					{
 						textbox_.change_textbox(pair.second->properties_.textbox_path_, pair.second->properties_.namebox_path_, renderer_);
@@ -458,6 +450,7 @@ void InGame::update()
 				else
 				{
 					pair.second->is_speaking_ = false;
+					//pair.second->properties_.zorder_ = 5;
 				}
 			}
 		}
@@ -466,11 +459,14 @@ void InGame::update()
 			for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 			{
 				pair.second->is_speaking_ = false;
+				//pair.second->properties_.zorder_ = 5;
 			}
 			textbox_.change_textbox(constants::textbox_image_, constants::namebox_image_, renderer_);
 		}
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//Personnages
 	for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
 	{
 		for(unsigned int i = current_unique_id_; i != -1; --i)
@@ -489,7 +485,9 @@ void InGame::update()
 		}
 		pair.second->update();
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//Backgrounds
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		if(backgrounds_.count(i))
@@ -498,7 +496,9 @@ void InGame::update()
 			break;
 		}
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//Musiques
 	//TODO : regarder s'il faut modifier des choses par rapport à la boucle des sons en-dessous
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
@@ -545,7 +545,9 @@ void InGame::update()
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//Sons
 	//TODO : pose problème quand on appuie sur Play => le son n'est pas joué entièrement !!
 	//TODO : tester fadein/fadeout sur le même channel et sur des channels différents
 	//TODO : éventuellement utiliser Mix_ReserveChannels pour réserver des channels aux éléments d'UI ??
@@ -613,19 +615,20 @@ void InGame::update()
 			}
 		}
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 
 	if(!dialogues_.count(current_unique_id_) && current_unique_id_ <= std::prev(dialogues_.end())->first) //ne pas incrémenter au-delà la clef max
 	{
 		//std::cout << current_unique_id_ << std::endl;
-		current_unique_id_ += 1;
+		//current_unique_id_ += 1; //TODO : toujours utile ??
 	}
 
-	if(get_texttoggle("Skip")->is_checked_)
+	if(skip_mode_)
 	{
 		show_next_dialogue();
 	}
 
-	if(get_texttoggle("Auto")->is_checked_)
+	if(auto_mode_)
 	{
 		if(textbox_.text_.is_finished_)
 		{

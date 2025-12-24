@@ -65,7 +65,6 @@ void Music::fade_in(const int loops, const int ms) const
 
 void Music::fade_out(const int ms) 
 {
-	std::cout << "MS: " << ms << std::endl;
 	Mix_FadeOutMusic(ms);
 }
 
