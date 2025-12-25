@@ -55,13 +55,26 @@ class InGame : public GameState
 		void settings_function(Ui* ui);
 		void temp_function(Ui* ui);
 
+		void draw_characters(sdl::Renderer& renderer);
+
+		void update_backgrounds();
+		void update_characters();
+		void update_autofocus();
+		void update_skip_auto_modes();
+		void update_music();
+		void update_sounds();
+
+		template <typename T>
+		struct MyPair
+		{
+			std::string character_variable_;
+			T t_;
+		};
+
 		//TODO : utiliser une map ??
-		std::vector<std::pair<std::string /*character_variable*/, std::unique_ptr<Character>>> characters_; //unique_ptr pour que stable_sort fonctionne
-
-		std::map<unsigned int, std::pair<std::string /*character_variable*/, Character::Editableproperties>> characters_transforms_;
-
-		//TODO : pour cohérence, mettre la std::string /*character_variable*/ en premier dans dialogues_
-		std::map<unsigned int, std::pair<const std::string_view /* dialogue */, std::string /*character_variable*/>> dialogues_;
+		std::vector<MyPair<std::unique_ptr<Character>>> characters_; //unique_ptr pour que stable_sort fonctionne
+		std::map<unsigned int, MyPair<Character::Editableproperties>> characters_transforms_;
+		std::map<unsigned int, MyPair<const std::string_view /* dialogue */>> dialogues_;
 		std::map<unsigned int, Background> backgrounds_;
 
 		struct MusicProperties
@@ -73,7 +86,6 @@ class InGame : public GameState
 		};
 
 		std::map<unsigned int, std::pair<MusicProperties, std::optional<Music>>> musics_;
-
 
 		struct SoundProperties
 		{
