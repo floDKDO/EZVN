@@ -71,32 +71,22 @@ class InGame : public GameState
 			T t_;
 		};
 
-		//TODO : utiliser une map ??
 		std::vector<MyPair<std::unique_ptr<Character>>> characters_; //unique_ptr pour que stable_sort fonctionne
+
+		struct AudioProperties
+		{
+			int fadein_length;
+			int fadeout_length;
+			int volume;
+			bool loop;
+			int channel; //not used for musics
+		};
+
 		std::map<unsigned int, MyPair<Character::Editableproperties>> characters_transforms_;
-		std::map<unsigned int, MyPair<const std::string_view /* dialogue */>> dialogues_;
+		std::map<unsigned int, MyPair<const std::string_view>> dialogues_;
 		std::map<unsigned int, Background> backgrounds_;
-
-		struct MusicProperties
-		{
-			int fadein_length;
-			int fadeout_length;
-			int volume;
-			bool loop;
-		};
-
-		std::map<unsigned int, std::pair<MusicProperties, std::optional<Music>>> musics_;
-
-		struct SoundProperties
-		{
-			int fadein_length;
-			int fadeout_length;
-			int volume;
-			bool loop;
-			int channel;
-		};
-
-		std::map<unsigned int, std::pair<SoundProperties, std::optional<Sound>>> sounds_;
+		std::map<unsigned int, std::pair<AudioProperties, std::optional<Music>>> musics_;
+		std::map<unsigned int, std::pair<AudioProperties, std::optional<Sound>>> sounds_;
 
 		unsigned int unique_id_;
 		unsigned int current_unique_id_;
@@ -112,10 +102,15 @@ class InGame : public GameState
 		bool skip_mode_;
 		bool auto_mode_;
 
-		Music* music_;
+		Music* currently_playing_music_;
 
-		Sound* sound_;
-		unsigned int current_i_of_sound_;
+		struct CurrentSound
+		{
+			unsigned int key_;
+			bool played_;
+			Sound* sound_;
+		};
+		CurrentSound currently_playing_sound_;
 
 		Background background_; 
 		bool hide_ui_textbox_;

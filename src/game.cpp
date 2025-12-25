@@ -223,9 +223,9 @@ void Game::play_sound(const std::string_view sound_path, int channel, int fadein
 	dynamic_cast<InGame*>(in_game_.get())->insert_sound(sound_path, fadein_length, fadeout_length, volume, channel, loop);
 }
 
-void Game::stop_sound(int fadeout_length)
+void Game::stop_sound(int channel, int fadeout_length)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_sound("", 0, fadeout_length, 128, 0, false); //TODO : volume, channel et loop hardcodés
+	dynamic_cast<InGame*>(in_game_.get())->insert_sound("", 0, fadeout_length, 128, channel, false); //TODO : volume, channel et loop hardcodés
 }
 
 void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop)

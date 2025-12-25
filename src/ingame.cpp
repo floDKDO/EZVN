@@ -12,7 +12,7 @@
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
-	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), music_(nullptr), sound_(nullptr)
+	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), currently_playing_music_(nullptr), currently_playing_sound_({0, false, nullptr})
 {
 	build_ui_elements(renderer);
 }
@@ -135,15 +135,7 @@ std::string InGame::get_last_character_name(const std::string_view character_var
 //Dialogues
 void InGame::insert_dialogue(const std::string_view character_variable, const std::string_view dialogue)
 {
-	//TODO : code identique ?!
-	if(character_variable.empty())
-	{
-		dialogues_.insert({unique_id_, {std::string(character_variable), dialogue}});
-	}
-	else
-	{
-		dialogues_.insert({unique_id_, {std::string(character_variable), dialogue}});
-	}
+	dialogues_.insert({unique_id_, {std::string(character_variable), dialogue}});
 
 	static bool first_dialogue = true;
 	if(first_dialogue)
@@ -167,7 +159,7 @@ void InGame::show_next_dialogue()
 				current_unique_id_ = std::next(dialogues_.find(current_unique_id_), 1)->first;
 				is_current_unique_id_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
 			}
-			textbox_.show_new_dialogue(dialogues_[current_unique_id_].t_, get_last_character_name(dialogues_[current_unique_id_].character_variable_), skip_mode_, true);
+			textbox_.show_new_dialogue(dialogues_.at(current_unique_id_).t_, get_last_character_name(dialogues_.at(current_unique_id_).character_variable_), skip_mode_, true);
 		}
 	}
 }
@@ -200,7 +192,7 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 				current_unique_id_ = std::prev(dialogues_.find(current_unique_id_), 1)->first;
 			}
 		}
-		textbox_.show_new_dialogue(dialogues_[current_unique_id_].t_, get_last_character_name(dialogues_[current_unique_id_].character_variable_), skip_mode_, false);
+		textbox_.show_new_dialogue(dialogues_.at(current_unique_id_).t_, get_last_character_name(dialogues_.at(current_unique_id_).character_variable_), skip_mode_, false);
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////
@@ -306,11 +298,11 @@ void InGame::insert_sound(const std::string_view sound_path, int fadein_length, 
 {
 	if(sound_path.empty()) //stop music
 	{
-		sounds_.insert({unique_id_, std::make_pair(SoundProperties{fadein_length, fadeout_length, volume, loop, channel}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
+		sounds_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
 	}
 	else //play music
 	{
-		sounds_.insert({unique_id_, std::make_pair(SoundProperties{fadein_length, fadeout_length, volume, loop, channel}, Sound(sound_path, channel))});
+		sounds_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, Sound(sound_path, channel))});
 	}
 	unique_id_ += 1;
 }
@@ -322,11 +314,11 @@ void InGame::insert_music(const std::string_view music_path, int fadein_length, 
 {
 	if(music_path.empty()) //stop music
 	{
-		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume, loop}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
+		musics_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
 	}
 	else //play music
 	{
-		musics_.insert({unique_id_, std::make_pair(MusicProperties{fadein_length, fadeout_length, volume, loop}, Music(music_path))});
+		musics_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, Music(music_path))});
 	}
 	unique_id_ += 1;
 }
@@ -385,6 +377,7 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 	//Characters
 	//TODO : coûteux car réalisé à chaque tour de boucle...
 	std::stable_sort(characters_.begin(), characters_.end(), [&](const MyPair<std::unique_ptr<Character>>& a, const MyPair<std::unique_ptr<Character>>& b) -> bool { return a.t_->properties_.zorder_ < b.t_->properties_.zorder_; });
+	
 	//TODO : coûteux
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
@@ -450,7 +443,6 @@ void InGame::update_characters()
 				{
 					p.t_->set_transform(p_character.t_.transform_.transform_name_);
 					p.t_->properties_.zorder_ = p_character.t_.zorder_;
-					//std::cout << p.t_->properties_.name_ << ", " << p_character.t_.name_ << std::endl;
 					p.t_->properties_.name_ = p_character.t_.name_;
 					break;
 				}
@@ -469,12 +461,12 @@ void InGame::update_autofocus()
 	//Pour l'autofocus (et changement de textbox/namebox)
 	if(dialogues_.count(current_unique_id_))
 	{
-		if(!(get_last_character_name(dialogues_[current_unique_id_].character_variable_).empty()))
+		if(!(get_last_character_name(dialogues_.at(current_unique_id_).character_variable_).empty()))
 		{
 			for(const MyPair<std::unique_ptr<Character>>& p : characters_)
 			{
-				//std::cout << pair.first << ", " << dialogues_[current_unique_id_].second.second << ", " << dialogues_[current_unique_id_].second.first << std::endl;
-				if(p.character_variable_ == dialogues_[current_unique_id_].character_variable_)
+				//std::cout << pair.first << ", " << dialogues_.at(current_unique_id_).second.second << ", " << dialogues_.at(current_unique_id_).second.first << std::endl;
+				if(p.character_variable_ == dialogues_.at(current_unique_id_).character_variable_)
 				{
 					p.t_->is_speaking_ = true;
 					//pair.second->properties_.zorder_ = 10;
@@ -506,13 +498,6 @@ void InGame::update_autofocus()
 void InGame::update_skip_auto_modes()
 {
 	//Dialogues//////////////////////////////////////////////////////////////////////////////////////
-	//if(!dialogues_.count(current_unique_id_) && current_unique_id_ <= std::prev(dialogues_.end())->first) //ne pas incrémenter au-delà la clef max
-	//{
-	//	//std::cout << current_unique_id_ << std::endl;
-	//	//current_unique_id_ += 1; //TODO : toujours utile ??
-	//}
-
-	//Dialogues
 	if(skip_mode_)
 	{
 		show_next_dialogue();
@@ -546,38 +531,35 @@ void InGame::update_music()
 	{
 		if(musics_.count(i))
 		{
-			std::pair<MusicProperties, std::optional<Music>>& music_pair = musics_.at(i);
-			InGame::MusicProperties& music_properties = music_pair.first;
+			std::pair<AudioProperties, std::optional<Music>>& music_pair = musics_.at(i);
+			InGame::AudioProperties& music_properties = music_pair.first;
 
 			if(music_pair.second.has_value()) //play music
 			{
 				Music& music = music_pair.second.value();
 
-				if(music_ == &music)
+				if(currently_playing_music_ == &music)
 				{
-					music.change_volume(music_properties.volume);
-					music.play_music(music_properties.loop, music_properties.fadein_length);
-				}
-				else
-				{
-					//si une musique est déjà en train de se jouer, il faut la stopper
-					//deux musiques consécutives => stopper (avec ou sans fadeout) la musique courante
-					if(sdl::Music::playing())
+					if(!sdl::Music::playing())
 					{
-						sdl::Music::fade_out(music_properties.fadeout_length);
+						music.change_volume(music_properties.volume);
+						music.play_music(music_properties.loop, music_properties.fadein_length);
 					}
-					music_ = &music;
 				}
-				break;
+				else //si une musique est déjà en train de se jouer, il faut stopper (avec ou sans fadeout) la musique courante avant de jouer la nouvelle
+				{
+					sdl::Music::fade_out(music_properties.fadeout_length); 
+					currently_playing_music_ = &music; 
+				}
 			}
 			else // stop music
 			{
 				if(sdl::Music::playing())
 				{
 					sdl::Music::fade_out(music_properties.fadeout_length);
-					break;
 				}
 			}
+			break;
 		}
 
 		//aucune musique trouvée => stopper l'éventuelle musique qui était en train de se jouer
@@ -596,65 +578,103 @@ void InGame::update_music()
 void InGame::update_sounds()
 {
 	//Sounds
-	//TODO : pose problème quand on appuie sur Play => le son n'est pas joué entièrement !! De même que les sons des TextButtons de la Textbox
+	//TODO : pose problème quand on appuie sur Play => le son n'est pas joué entièrement !! De même que les sons des TextButtons de la Textbox => à cause du code dans le "if (i == 0)"
 	//TODO : éventuellement utiliser Mix_ReserveChannels pour réserver des channels aux éléments d'UI ??
+
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
+		//jouer un son uniquement s'il est directement avant ce dialogue (<=> ne pas jouer un son s'il est à plus de d'un dialogue d'écart du dialogue courant)
+		if(dialogues_.find(current_unique_id_) != dialogues_.begin() && i <= std::prev(dialogues_.find(current_unique_id_))->first)
+		{
+			if(sounds_.count(i))
+			{
+				std::cout << "1111111111111111111111\n";
+			}
+			else std::cout << "2222222222222222222222\n";
+
+			std::cout << "DANS BREAK: " << i << std::endl;
+			if(currently_playing_sound_.sound_ && currently_playing_sound_.key_ > i)
+			{
+				if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
+				{
+					sdl::Chunk::halt_channel(currently_playing_sound_.sound_->channel_);
+				}
+			}
+			else
+			{
+				std::cout << "QUEL CAS ??\n";
+			}
+
+			//TODO : mettre ça dans le premier if ??
+			currently_playing_sound_ = {i, false, nullptr};
+			break;
+		}
+
+		std::cout << std::boolalpha << currently_playing_sound_.played_ << std::endl;
+
+		std::cout << "CURRENT: " << i << std::endl;
 		if(sounds_.count(i))
 		{
-			std::pair<SoundProperties, std::optional<Sound>>& sound_pair = sounds_.at(i);
-			InGame::SoundProperties& sound_properties = sound_pair.first;
+			std::cout << "DANS COUNT\n";
+
+			std::pair<AudioProperties, std::optional<Sound>>& sound_pair = sounds_.at(i);
+			InGame::AudioProperties& sound_properties = sound_pair.first;
 
 			if(sound_pair.second.has_value()) //play sound
 			{
 				Sound& sound = sound_pair.second.value();
 
-				if(sound_ == &sound)
+				if(currently_playing_sound_.sound_ == &sound)
 				{
-					sound.change_volume(sound_properties.volume);
-					if(!sdl::Chunk::playing(sound_properties.channel))
+					std::cout << "PLAY DEHORS\n";
+					if(!sdl::Chunk::playing(sound_properties.channel)
+					&& ((!sound_properties.loop && !currently_playing_sound_.played_) || sound_properties.loop)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
 					{
+						sound.change_volume(sound_properties.volume);
 						sound.play_sound(sound_properties.loop, sound_properties.fadein_length);
+						currently_playing_sound_.played_ = true;
+						std::cout << "PLAY DEDANS\n";
 					}
 				}
 				else
 				{
+					std::cout << "SCROLL ARRIERE\n";
 					//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
-					if(sound_ && i < current_i_of_sound_)
+					if(currently_playing_sound_.sound_ && currently_playing_sound_.key_ > i)
 					{
-						if(sdl::Chunk::playing(sound_->channel_))
+						if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
 						{
-							sdl::Chunk::halt_channel(sound_->channel_);
+							sdl::Chunk::halt_channel(currently_playing_sound_.sound_->channel_);
 						}
 					}
-
-					if(sdl::Chunk::playing(sound_properties.channel))
+					else
 					{
-						sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
+						if(sdl::Chunk::playing(sound_properties.channel))
+						{
+							sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
+						}
 					}
-					sound_ = &sound;
-					current_i_of_sound_ = i;
+					currently_playing_sound_ = {i, false, &sound};
 				}
-				break;
 			}
 			else // stop sound
 			{
 				if(sdl::Chunk::playing(sound_properties.channel))
 				{
 					sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
-					break;
 				}
 			}
+			break;
 		}
 
-		//TODO : peut-être ajouter la condition current_unique_id_ > 0 ??
-		//TODO : cette condition est fausse/inutile pour les sons ??
 		if(i == 0)
 		{
 			if(sdl::Chunk::playing(-1))
 			{
+				std::cout << "HALT\n";
 				sdl::Chunk::halt_channel(-1);
 			}
+			currently_playing_sound_ = {i, false, nullptr};
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -662,38 +682,6 @@ void InGame::update_sounds()
 
 void InGame::update()
 {
-	//TODO : pour debug
-	//std::cout << current_unique_id_ << std::endl;
-
-	//std::cout << "DEBUT\n";
-	/*for(auto it = dialogues_.begin(); it != dialogues_.end(); ++it)
-	{
-		if(dialogues_.count(it->first))
-		{
-			std::cout << it->first << std::endl;
-		}
-	}*/
-	/*for(auto it = backgrounds_.begin(); it != backgrounds_.end(); ++it)
-	{
-		if(backgrounds_.count(it->first))
-		{
-			std::cout << it->first << std::endl;
-		}
-	}*/
-	/*for(auto it = characters_transforms_.begin(); it != characters_transforms_.end(); ++it)
-	{
-		if(characters_transforms_.count(it->first))
-		{
-			std::cout << it->first << std::endl;
-		}
-	}*/
-	//std::cout << "FIN\n\n";
-
-	/*for(const std::pair<std::string, std::unique_ptr<Character>>& pair : characters_)
-	{
-		std::cout << "Nom: " << pair.second->properties_.name_ << ", transfo: " << pair.second->properties_.transform_.transform_name_ << ", is_speaking_: " << std::boolalpha << pair.second->is_speaking_ << ", zorder_: " << pair.second->character_.zorder_ << std::endl;
-	}*/
-
 	update_backgrounds();
 
 	update_characters();

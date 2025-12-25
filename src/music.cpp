@@ -10,7 +10,7 @@ Music::Music(const std::string_view path)
 
 void Music::play_music(const bool loop, const int fadein_length)
 {
-	if(!music_.playing())
+	//if(!music_.playing())
 	{
 		int loops;
 		if(loop)
