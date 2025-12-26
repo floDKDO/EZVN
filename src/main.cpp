@@ -70,14 +70,11 @@ int main(int argc, char* argv[])
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
 	game.add_new_dialogue("...");
-	game.show_character("Yuri", "t41", 1);
-	game.show_character("Sayori", "t42", 0);
-	game.show_character("Monika", "t43", 2);
-	game.show_character("Natsuki", "t44", 1);
 	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 30);
 	game.add_new_dialogue("...");
+	game.add_new_dialogue("...");
 	game.add_new_dialogue("Y a personne ??");
-	game.play_sound("sounds/new_hour.ogg", 0, 5000, 3000);
+	game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");
 	game.play_music("sounds/2.ogg", 0, 1000, 64); //TODO : volume hardcodé
 	game.show_character("Sayori", "t11");

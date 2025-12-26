@@ -9,6 +9,7 @@
 
 //TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
 //TODO : créer une fonction d'insertion qui incrémente unique_id_ ?? => poserait sûrement problème dans le cas du premier dialogue dans insert_dialogue
+//TODO : éviter de répéter plein de fois les mêmes boucles for
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
@@ -190,6 +191,12 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 			if(dialogues_.find(current_unique_id_) != dialogues_.begin())
 			{
 				current_unique_id_ = std::prev(dialogues_.find(current_unique_id_), 1)->first;
+			}
+
+			//si on arrive sur le dialogue dont est associé un son, il faut le rejouer
+			if(current_unique_id_ == dialogues_.upper_bound(currently_playing_sound_.key_)->first)
+			{
+				currently_playing_sound_.played_ = false;
 			}
 		}
 		textbox_.show_new_dialogue(dialogues_.at(current_unique_id_).t_, get_last_character_name(dialogues_.at(current_unique_id_).character_variable_), skip_mode_, false);
@@ -579,44 +586,12 @@ void InGame::update_sounds()
 {
 	//Sounds
 	//TODO : pose problème quand on appuie sur Play => le son n'est pas joué entièrement !! De même que les sons des TextButtons de la Textbox => à cause du code dans le "if (i == 0)"
-	//TODO : éventuellement utiliser Mix_ReserveChannels pour réserver des channels aux éléments d'UI ??
+	//=> éventuellement utiliser Mix_ReserveChannels pour réserver des channels aux éléments d'UI ??
 
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
-		//jouer un son uniquement s'il est directement avant ce dialogue (<=> ne pas jouer un son s'il est à plus de d'un dialogue d'écart du dialogue courant)
-		if(dialogues_.find(current_unique_id_) != dialogues_.begin() && i <= std::prev(dialogues_.find(current_unique_id_))->first)
-		{
-			if(sounds_.count(i))
-			{
-				std::cout << "1111111111111111111111\n";
-			}
-			else std::cout << "2222222222222222222222\n";
-
-			std::cout << "DANS BREAK: " << i << std::endl;
-			if(currently_playing_sound_.sound_ && currently_playing_sound_.key_ > i)
-			{
-				if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
-				{
-					sdl::Chunk::halt_channel(currently_playing_sound_.sound_->channel_);
-				}
-			}
-			else
-			{
-				std::cout << "QUEL CAS ??\n";
-			}
-
-			//TODO : mettre ça dans le premier if ??
-			currently_playing_sound_ = {i, false, nullptr};
-			break;
-		}
-
-		std::cout << std::boolalpha << currently_playing_sound_.played_ << std::endl;
-
-		std::cout << "CURRENT: " << i << std::endl;
 		if(sounds_.count(i))
 		{
-			std::cout << "DANS COUNT\n";
-
 			std::pair<AudioProperties, std::optional<Sound>>& sound_pair = sounds_.at(i);
 			InGame::AudioProperties& sound_properties = sound_pair.first;
 
@@ -626,19 +601,18 @@ void InGame::update_sounds()
 
 				if(currently_playing_sound_.sound_ == &sound)
 				{
-					std::cout << "PLAY DEHORS\n";
 					if(!sdl::Chunk::playing(sound_properties.channel)
 					&& ((!sound_properties.loop && !currently_playing_sound_.played_) || sound_properties.loop)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
 					{
-						sound.change_volume(sound_properties.volume);
+						//sound.change_volume(sound_properties.volume); //TODO
 						sound.play_sound(sound_properties.loop, sound_properties.fadein_length);
-						currently_playing_sound_.played_ = true;
-						std::cout << "PLAY DEDANS\n";
+						currently_playing_sound_ = {i, true, &sound};
 					}
 				}
 				else
 				{
-					std::cout << "SCROLL ARRIERE\n";
+					//nouveau son à jouer
+
 					//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
 					if(currently_playing_sound_.sound_ && currently_playing_sound_.key_ > i)
 					{
@@ -654,7 +628,16 @@ void InGame::update_sounds()
 							sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
 						}
 					}
-					currently_playing_sound_ = {i, false, &sound};
+
+					if(dialogues_.find(current_unique_id_) != dialogues_.begin()
+					&& i <= std::prev(dialogues_.find(current_unique_id_))->first) //on est au moins un dialogue avant le dialogue courant
+					{
+						currently_playing_sound_ = {i, false, nullptr};
+					}
+					else
+					{
+						currently_playing_sound_ = {i, false, &sound};
+					}
 				}
 			}
 			else // stop sound
@@ -669,7 +652,7 @@ void InGame::update_sounds()
 
 		if(i == 0)
 		{
-			if(sdl::Chunk::playing(-1))
+			if(sdl::Chunk::playing(-1)) //TODO : pas -1
 			{
 				std::cout << "HALT\n";
 				sdl::Chunk::halt_channel(-1);
