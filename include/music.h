@@ -14,6 +14,8 @@ class Music
 		void change_volume(const int volume); //unité = pourcentage
 		void set_position(const double position) const; //unité = seconde
 
+		void update();
+
 		static int global_music_volume_;
 
 	private:

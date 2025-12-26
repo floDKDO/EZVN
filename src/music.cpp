@@ -23,13 +23,13 @@ void Music::play_music(const bool loop, const int fadein_length)
 			loops = 0;
 			loop_ = false;
 		}
-		/*if(local_music_volume != global_music_volume) //Priority for the local music volume
+		/*if(local_music_volume_ != global_music_volume_) //Priority for the local music volume
 		{
-			change_volume(local_music_volume);
+			change_volume(local_music_volume_);
 		}
 		else*/
 		{
-			change_volume(global_music_volume_);
+			//change_volume(local_music_volume_);
 		}
 		music_.fade_in(loops, fadein_length * 1000);
 	}
@@ -60,4 +60,14 @@ void Music::change_volume(const int volume) //[0; MIX_MAX_VOLUME(=128)]
 void Music::set_position(const double position) const
 {
 	music_.set_position(position);
+}
+
+void Music::update()
+{
+	if(local_music_volume_ != global_music_volume_)
+	{
+		std::cout << "CHANGEMENT de VOLUME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+		local_music_volume_ = global_music_volume_;
+		change_volume(local_music_volume_);
+	}
 }

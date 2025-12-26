@@ -309,7 +309,7 @@ void InGame::insert_sound(const std::string_view sound_path, int fadein_length, 
 	}
 	else //play music
 	{
-		sounds_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, Sound(sound_path, channel))});
+		sounds_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, Sound(sound_path, channel, volume))});
 	}
 	unique_id_ += 1;
 }
@@ -331,6 +331,12 @@ void InGame::insert_music(const std::string_view music_path, int fadein_length, 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+void InGame::insert_autofocus(bool autofocus)
+{
+	autofocus_.insert({unique_id_, autofocus});
+	unique_id_ += 1;
+}
 
 void InGame::handle_events(const SDL_Event& e)
 {
@@ -382,9 +388,22 @@ void InGame::handle_events(const SDL_Event& e)
 void InGame::draw_characters(sdl::Renderer& renderer)
 {
 	//Characters
+	
+	/*std::cout << "AVANT TRI\n";
+	for(const MyPair<std::unique_ptr<Character>>& p : characters_)
+	{
+		std::cout << p.t_->properties_.name_ << ", zorder: " << p.t_->properties_.zorder_ << std::endl;
+	}*/
+
 	//TODO : coûteux car réalisé à chaque tour de boucle...
 	std::stable_sort(characters_.begin(), characters_.end(), [&](const MyPair<std::unique_ptr<Character>>& a, const MyPair<std::unique_ptr<Character>>& b) -> bool { return a.t_->properties_.zorder_ < b.t_->properties_.zorder_; });
 	
+	/*std::cout << "\nAPRES TRI\n";
+	for(const MyPair<std::unique_ptr<Character>>& p : characters_)
+	{
+		std::cout << p.t_->properties_.name_ << ", zorder: " << p.t_->properties_.zorder_ << std::endl;
+	}*/
+
 	//TODO : coûteux
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
@@ -393,13 +412,17 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 			MyPair<Character::Editableproperties>& p_character = characters_transforms_.at(i);
 			if(!(p_character.character_variable_.empty()))
 			{
+				//std::cout << "\n";
 				for(const MyPair<std::unique_ptr<Character>>& p : characters_)
 				{
-					if(p.character_variable_ == p_character.character_variable_)
+					//std::cout << p.character_variable_ << " et " << p_character.character_variable_ << std::endl;
+					if(p.character_variable_ == p_character.character_variable_) //TODO : il faut commenter cette ligne pour que l'autozorder fonctionne...
 					{
+						//std::cout << p.character_variable_ << std::endl;
 						p.t_->draw(renderer);
 					}
 				}
+				//std::cout << "\n";
 			}
 		}
 	}
@@ -449,12 +472,13 @@ void InGame::update_characters()
 				if(p_character.character_variable_ == p.character_variable_)
 				{
 					p.t_->set_transform(p_character.t_.transform_.transform_name_);
-					p.t_->properties_.zorder_ = p_character.t_.zorder_;
+					//p.t_->properties_.zorder_ = p_character.t_.zorder_;
 					p.t_->properties_.name_ = p_character.t_.name_;
 					break;
 				}
 			}
 		}
+		//std::cout << p.t_->properties_.name_ << ", zorder: " << p.t_->properties_.zorder_ << std::endl;
 		p.t_->update();
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -465,7 +489,30 @@ void InGame::update_autofocus()
 	//TODO : pour transform et zorder de l'autofocus, utiliser characters_transforms_
 	//TODO : positionner is_speaking_ dans show_new_dialogue() ?? Si non, aucun intérêt de passer un Character* => une string suffirait
 
-	//Pour l'autofocus (et changement de textbox/namebox)
+	//Pour l'autofocus
+	bool autofocus = false;
+	for(unsigned int i = current_unique_id_; i != -1; --i)
+	{
+		if(autofocus_.count(i))
+		{
+			if(autofocus_.at(i))
+			{
+				autofocus = true;
+				break;
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+
+	//Ne marche que si autofocus vaut par défaut false (constructeur et variable "autofocus")
+	if(autofocus == false)
+	{
+		return;
+	}
+
 	if(dialogues_.count(current_unique_id_))
 	{
 		if(!(get_last_character_name(dialogues_.at(current_unique_id_).character_variable_).empty()))
@@ -476,16 +523,12 @@ void InGame::update_autofocus()
 				if(p.character_variable_ == dialogues_.at(current_unique_id_).character_variable_)
 				{
 					p.t_->is_speaking_ = true;
-					//pair.second->properties_.zorder_ = 10;
-					if(!p.t_->properties_.textbox_path_.empty())
-					{
-						textbox_.change_textbox(p.t_->properties_.textbox_path_, p.t_->properties_.namebox_path_, renderer_);
-					}
+					p.t_->properties_.zorder_ = 10;
 				}
 				else
 				{
 					p.t_->is_speaking_ = false;
-					//pair.second->properties_.zorder_ = 5;
+					p.t_->properties_.zorder_ = 5;
 				}
 			}
 		}
@@ -494,9 +537,8 @@ void InGame::update_autofocus()
 			for(const MyPair<std::unique_ptr<Character>>& p : characters_)
 			{
 				p.t_->is_speaking_ = false;
-				//p.t_->properties_.zorder_ = 5;
+				p.t_->properties_.zorder_ = 5;
 			}
-			textbox_.change_textbox(constants::textbox_image_, constants::namebox_image_, renderer_);
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -669,6 +711,31 @@ void InGame::update_sounds()
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
+void InGame::update_textbox()
+{
+	if(dialogues_.count(current_unique_id_))
+	{
+		if(!(get_last_character_name(dialogues_.at(current_unique_id_).character_variable_).empty()))
+		{
+			for(const MyPair<std::unique_ptr<Character>>& p : characters_)
+			{
+				if(p.character_variable_ == dialogues_.at(current_unique_id_).character_variable_)
+				{
+					if(!p.t_->properties_.textbox_path_.empty())
+					{
+						textbox_.change_textbox(p.t_->properties_.textbox_path_, p.t_->properties_.namebox_path_, renderer_);
+					}
+				}
+			}
+		}
+		else //Narrator
+		{
+			textbox_.change_textbox(constants::textbox_image_, constants::namebox_image_, renderer_);
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
 void InGame::update()
 {
 	update_backgrounds();
@@ -682,6 +749,13 @@ void InGame::update()
 	update_sounds();
 
 	update_skip_auto_modes();
+
+	update_textbox();
+
+	if(currently_playing_music_ != nullptr)
+	{
+		currently_playing_music_->update();
+	}
 
 	if(!hide_ui_textbox_)
 	{

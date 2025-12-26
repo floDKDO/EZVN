@@ -41,6 +41,8 @@ class InGame : public GameState
 		void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop);
 		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop);
 
+		void insert_autofocus(bool autofocus);
+
 		void show_next_dialogue(); 
 
 		enum class WhichDialogue
@@ -63,6 +65,7 @@ class InGame : public GameState
 		void update_skip_auto_modes();
 		void update_music();
 		void update_sounds();
+		void update_textbox();
 
 		template <typename T>
 		struct MyPair
@@ -87,6 +90,7 @@ class InGame : public GameState
 		std::map<unsigned int, Background> backgrounds_;
 		std::map<unsigned int, std::pair<AudioProperties, std::optional<Music>>> musics_;
 		std::map<unsigned int, std::pair<AudioProperties, std::optional<Sound>>> sounds_;
+		std::map<unsigned int, bool> autofocus_;
 
 		unsigned int unique_id_;
 		unsigned int current_unique_id_;

@@ -46,8 +46,6 @@ int main(int argc, char* argv[])
 
 	//TODO : pause et window hide
 
-	//TODO : rejouer les sons / relancer la musique quand je scroll vers l'arrière 
-
 	//TODO : la textbox noire apparaît brièvement pour le premier dialogue
 
 	Game game;
@@ -70,7 +68,7 @@ int main(int argc, char* argv[])
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
 	game.add_new_dialogue("...");
-	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 30);
+	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...");
 	game.add_new_dialogue("...");
 	game.add_new_dialogue("Y a personne ??");
@@ -83,6 +81,7 @@ int main(int argc, char* argv[])
 	//game.rename_character("Sayori", "yyyyy"); 
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
+	game.autofocus_enable();
 	game.play_music("sounds/3.ogg", 2, 1000); //TODO : bizarre qu'il y ait des secondes ici alors que dans tout le reste du moteur, j'utilise des ms
 	game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);

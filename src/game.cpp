@@ -237,3 +237,13 @@ void Game::stop_music(int fadeout_length)
 {
 	dynamic_cast<InGame*>(in_game_.get())->insert_music("", 0, fadeout_length, 128, true); //TODO : volume et loop hardcodés
 }
+
+void Game::autofocus_enable()
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_autofocus(true);
+}
+
+void Game::autofocus_disable()
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_autofocus(false);
+}

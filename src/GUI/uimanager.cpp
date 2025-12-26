@@ -421,4 +421,7 @@ void UiManager::update()
 	{
 		ui_element->update();
 	}
+
+	click_sound_.update();
+	select_sound_.update();
 }
