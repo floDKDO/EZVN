@@ -585,9 +585,6 @@ void InGame::update_music()
 void InGame::update_sounds()
 {
 	//Sounds
-	//TODO : pose problème quand on appuie sur Play => le son n'est pas joué entièrement !! De même que les sons des TextButtons de la Textbox => à cause du code dans le "if (i == 0)"
-	//=> éventuellement utiliser Mix_ReserveChannels pour réserver des channels aux éléments d'UI ??
-
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		if(sounds_.count(i))
@@ -652,12 +649,21 @@ void InGame::update_sounds()
 
 		if(i == 0)
 		{
-			if(sdl::Chunk::playing(-1)) //TODO : pas -1
+			for(auto& p : sounds_)
 			{
-				std::cout << "HALT\n";
-				sdl::Chunk::halt_channel(-1);
+				std::pair<AudioProperties, std::optional<Sound>>& sound_pair = p.second;
+				if(sound_pair.second.has_value())
+				{
+					Sound& sound = p.second.second.value();
+
+					if(sdl::Chunk::playing(sound.channel_))
+					{
+						std::cout << "HALT\n";
+						sdl::Chunk::halt_channel(sound.channel_);
+					}
+				}
 			}
-			currently_playing_sound_ = {i, false, nullptr};
+			currently_playing_sound_ = {0, false, nullptr};
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
