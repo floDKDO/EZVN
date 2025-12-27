@@ -205,17 +205,17 @@ void Game::add_new_dialogue(const std::string_view dialogue)
 
 void Game::show_background(const std::string_view background_path)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_background(background_path);
+	dynamic_cast<InGame*>(in_game_.get())->background_manager_.insert_background(background_path);
 }
 
 void Game::show_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_background(r, g, b, a);
+	dynamic_cast<InGame*>(in_game_.get())->background_manager_.insert_background(r, g, b, a);
 }
 
 void Game::hide_background()
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_background(0, 0, 0, 255);
+	dynamic_cast<InGame*>(in_game_.get())->background_manager_.insert_background(0, 0, 0, 255);
 }
 
 void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, int volume, bool loop)

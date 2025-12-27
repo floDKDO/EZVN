@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\backgroundmanager.cpp" />
     <ClCompile Include="src\background.cpp" />
     <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\GUI\button.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="src\transition.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\backgroundmanager.h" />
     <ClInclude Include="include\background.h" />
     <ClInclude Include="include\constants.h" />
     <ClInclude Include="include\drawable.h" />

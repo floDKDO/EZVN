@@ -1,4 +1,4 @@
-#include "ingame.h"
+ï»¿#include "ingame.h"
 #include "GUI/textbutton.h"
 #include "transform.h"
 #include "constants.h"
@@ -8,12 +8,12 @@
 #include <algorithm>
 
 //TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
-//TODO : créer une fonction d'insertion qui incrémente unique_id_ ?? => poserait sûrement problème dans le cas du premier dialogue dans insert_dialogue
-//TODO : éviter de répéter plein de fois les mêmes boucles for
+//TODO : crï¿½er une fonction d'insertion qui incrï¿½mente unique_id_ ?? => poserait sï¿½rement problï¿½me dans le cas du premier dialogue dans insert_dialogue
+//TODO : ï¿½viter de rï¿½pï¿½ter plein de fois les mï¿½mes boucles for
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
-	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), currently_playing_music_(nullptr), currently_playing_sound_({0, false, nullptr})
+	last_time_(0), textbox_(renderer), background_manager_(unique_id_, current_unique_id_, renderer), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), currently_playing_music_(nullptr), currently_playing_sound_({0, false, nullptr})
 {
 	build_ui_elements(renderer);
 }
@@ -100,7 +100,7 @@ std::string InGame::get_last_character_name(const std::string_view character_var
 	unsigned int initial_index_value;
 	if(current_unique_id_ == 0)
 	{
-		initial_index_value = unique_id_; //il faut bien utiliser unique_id_ ici à la place de current_unique_id_, ce dernier valant toujours 0 pour les méthodes insert_* car le jeu n'a pas encore réellement commencé (= on est encore sur la toute première ligne du script du joueur)
+		initial_index_value = unique_id_; //il faut bien utiliser unique_id_ ici ï¿½ la place de current_unique_id_, ce dernier valant toujours 0 pour les mï¿½thodes insert_* car le jeu n'a pas encore rï¿½ellement commencï¿½ (= on est encore sur la toute premiï¿½re ligne du script du joueur)
 	}
 	else
 	{
@@ -153,7 +153,7 @@ void InGame::show_next_dialogue()
 {
 	if(dialogues_.count(current_unique_id_))
 	{
-		if(textbox_.text_.is_finished_) //empêcher le spam d'espace
+		if(textbox_.text_.is_finished_) //empï¿½cher le spam d'espace
 		{
 			if((std::next(dialogues_.find(current_unique_id_), 1) != dialogues_.end()))
 			{
@@ -193,7 +193,7 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 				current_unique_id_ = std::prev(dialogues_.find(current_unique_id_), 1)->first;
 			}
 
-			//si on arrive sur le dialogue dont est associé un son, il faut le rejouer
+			//si on arrive sur le dialogue dont est associï¿½ un son, il faut le rejouer
 			if(current_unique_id_ == dialogues_.upper_bound(currently_playing_sound_.key_)->first)
 			{
 				currently_playing_sound_.played_ = false;
@@ -216,7 +216,7 @@ Character::Editableproperties InGame::get_last_character_properties(const std::s
 {
 	//TODO : que faire quand character_variable = "" ?? => erreur
 
-	for(unsigned int i = unique_id_; i != -1; --i) //il faut bien utiliser unique_id_ ici à la place de current_unique_id_, ce dernier valant toujours 0 pour les méthodes insert_* car le jeu n'a pas encore réellement commencé (= on est encore sur la toute première ligne du script du joueur)
+	for(unsigned int i = unique_id_; i != -1; --i) //il faut bien utiliser unique_id_ ici ï¿½ la place de current_unique_id_, ce dernier valant toujours 0 pour les mï¿½thodes insert_* car le jeu n'a pas encore rï¿½ellement commencï¿½ (= on est encore sur la toute premiï¿½re ligne du script du joueur)
 	{
 		if(characters_transforms_.count(i))
 		{
@@ -262,44 +262,6 @@ void InGame::insert_character(const std::string_view character_variable, const s
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-//Background/////////////////////////////////////////////////////////////////////////////////// 
-void InGame::insert_background(const std::string_view background_path)
-{
-	backgrounds_.insert({unique_id_, Background(background_path, renderer_)});
-	unique_id_ += 1;
-}
-
-//Background
-void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
-{
-	backgrounds_.insert({unique_id_, Background(r, g, b, a)});
-	unique_id_ += 1;
-}
-
-//Background
-void InGame::change_background(const Background& b)
-{
-	if(b.image_ != nullptr)
-	{
-		if(background_.image_ != nullptr)
-		{
-			background_.image_->init_image(b.image_->path_, 0, 0, renderer_);
-		}
-		else
-		{
-			background_ = Background(b.image_->path_, renderer_);
-		}
-	}
-	else
-	{
-		background_.image_.reset();
-		background_.color_ = {b.color_.r, b.color_.g, b.color_.b, b.color_.a};
-	}
-}
-////////////////////////////////////////////////////////////////////////////////////////////
-
-
 //Sounds////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void InGame::insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop)
 {
@@ -343,7 +305,7 @@ void InGame::handle_events(const SDL_Event& e)
 	if(!hide_ui_textbox_)
 	{
 		//Dialogues
-		//condition placée en premier pour que le scroll de la mouse wheel sur un textbutton fonctionne
+		//condition placï¿½e en premier pour que le scroll de la mouse wheel sur un textbutton fonctionne
 		if(e.type == SDL_MOUSEWHEEL)
 		{
 			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
@@ -351,7 +313,7 @@ void InGame::handle_events(const SDL_Event& e)
 				get_texttoggle("Skip")->change_checked(false);
 				show_dialogue_mouse_wheel(WhichDialogue::previous);
 			}
-			else //scroll vers l'arrière => avancer d'un dialogue
+			else //scroll vers l'arriï¿½re => avancer d'un dialogue
 			{
 				show_dialogue_mouse_wheel(WhichDialogue::next);
 			}
@@ -360,7 +322,7 @@ void InGame::handle_events(const SDL_Event& e)
 		ui_manager_.handle_events(e);
 		if(ui_manager_.is_mouse_on_ui_)
 		{
-			return; //si collision avec un textbutton, ne pas gérer les événements "clic" et "espace" de la Textbox (= ne pas passer au prochain dialogue)
+			return; //si collision avec un textbutton, ne pas gï¿½rer les ï¿½vï¿½nements "clic" et "espace" de la Textbox (= ne pas passer au prochain dialogue)
 		}
 
 		//Dialogues
@@ -373,7 +335,7 @@ void InGame::handle_events(const SDL_Event& e)
 			}
 			else
 			{
-				textbox_.text_.is_animated_ = false; //afficher le dialogue en entier après un clic / touche espace sur un dialogue en train de s'afficher
+				textbox_.text_.is_animated_ = false; //afficher le dialogue en entier aprï¿½s un clic / touche espace sur un dialogue en train de s'afficher
 			}
 		}
 	}
@@ -395,7 +357,7 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 		std::cout << p.t_->properties_.name_ << ", zorder: " << p.t_->properties_.zorder_ << std::endl;
 	}*/
 
-	//TODO : coûteux car réalisé à chaque tour de boucle...
+	//TODO : coï¿½teux car rï¿½alisï¿½ ï¿½ chaque tour de boucle...
 	std::stable_sort(characters_.begin(), characters_.end(), [&](const MyPair<std::unique_ptr<Character>>& a, const MyPair<std::unique_ptr<Character>>& b) -> bool { return a.t_->properties_.zorder_ < b.t_->properties_.zorder_; });
 	
 	/*std::cout << "\nAPRES TRI\n";
@@ -404,7 +366,7 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 		std::cout << p.t_->properties_.name_ << ", zorder: " << p.t_->properties_.zorder_ << std::endl;
 	}*/
 
-	//TODO : coûteux
+	//TODO : coï¿½teux
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		if(characters_transforms_.count(i))
@@ -431,9 +393,7 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 
 void InGame::draw(sdl::Renderer& renderer)
 {
-	//Backgrounds
-	background_.draw(renderer);
-	///////////////////////////
+	background_manager_.draw(); //TODO : cohÃ©rence => paramÃ¨tre renderer
 
 	draw_characters(renderer);
 
@@ -442,21 +402,6 @@ void InGame::draw(sdl::Renderer& renderer)
 		textbox_.draw(renderer);
 		ui_manager_.draw(renderer);
 	}
-}
-
-
-void InGame::update_backgrounds()
-{
-	//Backgrounds
-	for(unsigned int i = current_unique_id_; i != -1; --i)
-	{
-		if(backgrounds_.count(i))
-		{
-			change_background(backgrounds_.at(i));
-			break;
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void InGame::update_characters()
@@ -487,7 +432,7 @@ void InGame::update_characters()
 void InGame::update_autofocus()
 {
 	//TODO : pour transform et zorder de l'autofocus, utiliser characters_transforms_
-	//TODO : positionner is_speaking_ dans show_new_dialogue() ?? Si non, aucun intérêt de passer un Character* => une string suffirait
+	//TODO : positionner is_speaking_ dans show_new_dialogue() ?? Si non, aucun intï¿½rï¿½t de passer un Character* => une string suffirait
 
 	//Pour l'autofocus
 	bool autofocus = false;
@@ -507,7 +452,7 @@ void InGame::update_autofocus()
 		}
 	}
 
-	//Ne marche que si autofocus vaut par défaut false (constructeur et variable "autofocus")
+	//Ne marche que si autofocus vaut par dï¿½faut false (constructeur et variable "autofocus")
 	if(autofocus == false)
 	{
 		return;
@@ -575,7 +520,7 @@ void InGame::update_skip_auto_modes()
 void InGame::update_music()
 {
 	//Musics
-	//TODO : regarder s'il faut modifier des choses par rapport à la boucle des sons en-dessous
+	//TODO : regarder s'il faut modifier des choses par rapport ï¿½ la boucle des sons en-dessous
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		if(musics_.count(i))
@@ -595,7 +540,7 @@ void InGame::update_music()
 						music.play_music(music_properties.loop, music_properties.fadein_length);
 					}
 				}
-				else //si une musique est déjà en train de se jouer, il faut stopper (avec ou sans fadeout) la musique courante avant de jouer la nouvelle
+				else //si une musique est dï¿½jï¿½ en train de se jouer, il faut stopper (avec ou sans fadeout) la musique courante avant de jouer la nouvelle
 				{
 					sdl::Music::fade_out(music_properties.fadeout_length); 
 					currently_playing_music_ = &music; 
@@ -611,10 +556,10 @@ void InGame::update_music()
 			break;
 		}
 
-		//aucune musique trouvée => stopper l'éventuelle musique qui était en train de se jouer
+		//aucune musique trouvï¿½e => stopper l'ï¿½ventuelle musique qui ï¿½tait en train de se jouer
 		if(i == 0)
 		{
-			//si scroll en arrière et aucune musique => fadeout de 1.5 secondes (valeur constante)
+			//si scroll en arriï¿½re et aucune musique => fadeout de 1.5 secondes (valeur constante)
 			if(sdl::Music::playing())
 			{
 				sdl::Music::fade_out(constants::fadeout_length_scroll_back_);
@@ -641,7 +586,7 @@ void InGame::update_sounds()
 				if(currently_playing_sound_.sound_ == &sound)
 				{
 					if(!sdl::Chunk::playing(sound_properties.channel)
-					&& ((!sound_properties.loop && !currently_playing_sound_.played_) || sound_properties.loop)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
+					&& ((!sound_properties.loop && !currently_playing_sound_.played_) || sound_properties.loop)) //ne pas rejouer un son qui a dï¿½jï¿½ ï¿½tï¿½ jouï¿½ s'il ne doit pas ï¿½tre jouï¿½ en boucle
 					{
 						//sound.change_volume(sound_properties.volume); //TODO
 						sound.play_sound(sound_properties.loop, sound_properties.fadein_length);
@@ -650,9 +595,9 @@ void InGame::update_sounds()
 				}
 				else
 				{
-					//nouveau son à jouer
+					//nouveau son ï¿½ jouer
 
-					//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
+					//cas d'un scroll arriï¿½re et un son ï¿½tait en train de se jouer => l'arrï¿½ter
 					if(currently_playing_sound_.sound_ && currently_playing_sound_.key_ > i)
 					{
 						if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
@@ -738,7 +683,7 @@ void InGame::update_textbox()
 
 void InGame::update()
 {
-	update_backgrounds();
+	background_manager_.update();
 
 	update_characters();
 
