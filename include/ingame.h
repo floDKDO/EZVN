@@ -4,8 +4,8 @@
 #include "textbox.h"
 #include "character.h"
 #include "backgroundmanager.h"
+#include "musicmanager.h"
 #include "GUI/texttoggle.h"
-#include "music.h"
 #include "sound.h"
 #include <vector>
 #include <memory>
@@ -34,7 +34,6 @@ class InGame : public GameState
 	void insert_character(const std::string_view character_variable, const std::optional<std::string> new_character_name = std::nullopt, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
 
 	void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop);
-	void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop);
 
 	void insert_autofocus(bool autofocus);
 
@@ -57,11 +56,11 @@ class InGame : public GameState
 	void update_characters();
 	void update_autofocus();
 	void update_skip_auto_modes();
-	void update_music();
 	void update_sounds();
 	void update_textbox();
 
 	BackgroundManager background_manager_;
+	MusicManager music_manager_;
 
 	template <typename T>
 	struct MyPair
@@ -83,7 +82,6 @@ class InGame : public GameState
 
 	std::map<unsigned int, MyPair<Character::Editableproperties>> characters_transforms_;
 	std::map<unsigned int, MyPair<const std::string_view>> dialogues_;
-	std::map<unsigned int, std::pair<AudioProperties, std::optional<Music>>> musics_;
 	std::map<unsigned int, std::pair<AudioProperties, std::optional<Sound>>> sounds_;
 	std::map<unsigned int, bool> autofocus_;
 
@@ -98,19 +96,17 @@ class InGame : public GameState
 	Textbox textbox_;
 
 	private:
-	bool skip_mode_;
-	bool auto_mode_;
+		bool skip_mode_;
+		bool auto_mode_;
 
-	Music* currently_playing_music_;
+		struct CurrentSound
+		{
+			unsigned int key_;
+			bool played_;
+			Sound* sound_;
+		};
+		CurrentSound currently_playing_sound_;
 
-	struct CurrentSound
-	{
-		unsigned int key_;
-		bool played_;
-		Sound* sound_;
-	};
-	CurrentSound currently_playing_sound_;
-
-	bool hide_ui_textbox_;
-	sdl::Renderer& renderer_;
+		bool hide_ui_textbox_;
+		sdl::Renderer& renderer_;
 };

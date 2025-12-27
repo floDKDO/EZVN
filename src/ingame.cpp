@@ -13,7 +13,7 @@
 
 InGame::InGame(Game& game, sdl::Renderer& renderer) 
 	: GameState(game), unique_id_(0), current_unique_id_(unique_id_), current_unique_id_when_previous_(unique_id_), is_current_unique_id_saved_(false), 
-	last_time_(0), textbox_(renderer), background_manager_(unique_id_, current_unique_id_, renderer), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), currently_playing_music_(nullptr), currently_playing_sound_({0, false, nullptr})
+	last_time_(0), textbox_(renderer), background_manager_(unique_id_, current_unique_id_, renderer), music_manager_(unique_id_, current_unique_id_), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), currently_playing_sound_({0, false, nullptr})
 {
 	build_ui_elements(renderer);
 }
@@ -265,29 +265,13 @@ void InGame::insert_character(const std::string_view character_variable, const s
 //Sounds////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void InGame::insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop)
 {
-	if(sound_path.empty()) //stop music
+	if(sound_path.empty()) //stop sound
 	{
 		sounds_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
 	}
-	else //play music
+	else //play sound
 	{
 		sounds_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, Sound(sound_path, channel, volume))});
-	}
-	unique_id_ += 1;
-}
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//Musics/////////////////////////////////////////////////////////////////////////////////////////////
-void InGame::insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop)
-{
-	if(music_path.empty()) //stop music
-	{
-		musics_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, std::nullopt)}); //TODO : std::make_pair a l'air obligatoire ici
-	}
-	else //play music
-	{
-		musics_.insert({unique_id_, std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, Music(music_path))});
 	}
 	unique_id_ += 1;
 }
@@ -517,58 +501,6 @@ void InGame::update_skip_auto_modes()
 	}
 }
 
-void InGame::update_music()
-{
-	//Musics
-	//TODO : regarder s'il faut modifier des choses par rapport � la boucle des sons en-dessous
-	for(unsigned int i = current_unique_id_; i != -1; --i)
-	{
-		if(musics_.count(i))
-		{
-			std::pair<AudioProperties, std::optional<Music>>& music_pair = musics_.at(i);
-			InGame::AudioProperties& music_properties = music_pair.first;
-
-			if(music_pair.second.has_value()) //play music
-			{
-				Music& music = music_pair.second.value();
-
-				if(currently_playing_music_ == &music)
-				{
-					if(!sdl::Music::playing())
-					{
-						music.change_volume(music_properties.volume);
-						music.play_music(music_properties.loop, music_properties.fadein_length);
-					}
-				}
-				else //si une musique est d�j� en train de se jouer, il faut stopper (avec ou sans fadeout) la musique courante avant de jouer la nouvelle
-				{
-					sdl::Music::fade_out(music_properties.fadeout_length); 
-					currently_playing_music_ = &music; 
-				}
-			}
-			else // stop music
-			{
-				if(sdl::Music::playing())
-				{
-					sdl::Music::fade_out(music_properties.fadeout_length);
-				}
-			}
-			break;
-		}
-
-		//aucune musique trouv�e => stopper l'�ventuelle musique qui �tait en train de se jouer
-		if(i == 0)
-		{
-			//si scroll en arri�re et aucune musique => fadeout de 1.5 secondes (valeur constante)
-			if(sdl::Music::playing())
-			{
-				sdl::Music::fade_out(constants::fadeout_length_scroll_back_);
-			}
-		}
-	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-}
-
 void InGame::update_sounds()
 {
 	//Sounds
@@ -689,18 +621,13 @@ void InGame::update()
 
 	update_autofocus();
 
-	update_music();
+	music_manager_.update();
 
 	update_sounds();
 
 	update_skip_auto_modes();
 
 	update_textbox();
-
-	if(currently_playing_music_ != nullptr)
-	{
-		currently_playing_music_->update();
-	}
 
 	if(!hide_ui_textbox_)
 	{

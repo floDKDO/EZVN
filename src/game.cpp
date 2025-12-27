@@ -230,12 +230,12 @@ void Game::stop_sound(int channel, int fadeout_length)
 
 void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_music(music_path, fadein_length, fadeout_length, volume, loop);
+	dynamic_cast<InGame*>(in_game_.get())->music_manager_.insert_music(music_path, fadein_length, fadeout_length, volume, loop);
 }
 
 void Game::stop_music(int fadeout_length)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_music("", 0, fadeout_length, 128, true); //TODO : volume et loop hardcodés
+	dynamic_cast<InGame*>(in_game_.get())->music_manager_.insert_music("", 0, fadeout_length, 128, true); //TODO : volume et loop hardcodés
 }
 
 void Game::autofocus_enable()
