@@ -3,9 +3,9 @@
 #include "gamestate.h"
 #include "textbox.h"
 #include "character.h"
-#include "backgroundmanager.h"
-#include "musicmanager.h"
+#include "background.h"
 #include "GUI/texttoggle.h"
+#include "music.h"
 #include "sound.h"
 #include <vector>
 #include <memory>
@@ -31,9 +31,15 @@ class InGame : public GameState
 
 	void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 
+	void insert_background(const std::string_view background_path);
+	void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
+
 	void insert_character(const std::string_view character_variable, const std::optional<std::string> new_character_name = std::nullopt, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
 
+	void change_background(const Background& b); //TODO : prendre un InfoBackground ??
+
 	void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop);
+	void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop);
 
 	void insert_autofocus(bool autofocus);
 
@@ -53,14 +59,13 @@ class InGame : public GameState
 
 	void draw_characters(sdl::Renderer& renderer);
 
+	void update_backgrounds();
 	void update_characters();
 	void update_autofocus();
 	void update_skip_auto_modes();
+	void update_music();
 	void update_sounds();
 	void update_textbox();
-
-	BackgroundManager background_manager_;
-	MusicManager music_manager_;
 
 	template <typename T>
 	struct MyPair
@@ -80,14 +85,23 @@ class InGame : public GameState
 		int channel; //not used for musics
 	};
 
-	std::map<unsigned int, MyPair<Character::Editableproperties>> characters_transforms_;
-	std::map<unsigned int, MyPair<const std::string_view>> dialogues_;
-	std::map<unsigned int, std::pair<AudioProperties, std::optional<Sound>>> sounds_;
-	std::map<unsigned int, bool> autofocus_;
+	using InfoCharacter = MyPair<Character::Editableproperties>;
+	using InfoDialogue = MyPair<const std::string_view>;
+	using InfoBackground = Background;
+	using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
+	using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
+	using InfoAutofocus = bool;
+	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
+	std::vector<ScriptInformation> script_information_;
 
-	unsigned int unique_id_;
+	InGame::InfoDialogue* get_first_dialogue();
+	InGame::InfoDialogue* get_dialogue(unsigned int current_unique_id);
+	InGame::InfoDialogue* get_next_dialogue(unsigned int current_unique_id);
+	unsigned int get_id_next_dialogue(unsigned int current_unique_id);
+	InGame::InfoDialogue* get_prev_dialogue(unsigned int current_unique_id);
+	unsigned int get_id_prev_dialogue(unsigned int current_unique_id);
+
 	unsigned int current_unique_id_;
-
 	unsigned int current_unique_id_when_previous_;
 	bool is_current_unique_id_saved_;
 
@@ -96,17 +110,20 @@ class InGame : public GameState
 	Textbox textbox_;
 
 	private:
-		bool skip_mode_;
-		bool auto_mode_;
+	bool skip_mode_;
+	bool auto_mode_;
 
-		struct CurrentSound
-		{
-			unsigned int key_;
-			bool played_;
-			Sound* sound_;
-		};
-		CurrentSound currently_playing_sound_;
+	Music* currently_playing_music_;
 
-		bool hide_ui_textbox_;
-		sdl::Renderer& renderer_;
+	struct CurrentSound
+	{
+		unsigned int key_;
+		bool played_;
+		Sound* sound_;
+	};
+	CurrentSound currently_playing_sound_;
+
+	Background background_;
+	bool hide_ui_textbox_;
+	sdl::Renderer& renderer_;
 };
