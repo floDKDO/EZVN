@@ -26,8 +26,8 @@ class InGame : public GameState
 	TextToggle* get_texttoggle(const std::string_view text);
 
 	void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, sdl::Renderer& renderer, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
-	Character::Editableproperties get_last_character_properties(const std::string_view character_variable);
-	std::string get_last_character_name(const std::string_view character_variable);
+	std::optional<Character::Editableproperties> get_last_character_properties(const std::string_view character_variable);
+	std::optional<std::string> get_last_character_name(const std::string_view character_variable);
 
 	void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 
@@ -97,9 +97,9 @@ class InGame : public GameState
 	InGame::InfoDialogue* get_first_dialogue();
 	InGame::InfoDialogue* get_dialogue(unsigned int current_unique_id);
 	InGame::InfoDialogue* get_next_dialogue(unsigned int current_unique_id);
-	unsigned int get_id_next_dialogue(unsigned int current_unique_id);
+	std::optional<unsigned int> get_id_next_dialogue(unsigned int current_unique_id);
 	InGame::InfoDialogue* get_prev_dialogue(unsigned int current_unique_id);
-	unsigned int get_id_prev_dialogue(unsigned int current_unique_id);
+	std::optional<unsigned int> get_id_prev_dialogue(unsigned int current_unique_id);
 
 	unsigned int current_unique_id_;
 	unsigned int current_unique_id_when_previous_;
