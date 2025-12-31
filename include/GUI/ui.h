@@ -7,6 +7,7 @@
 #include <functional>
 #include <vector>
 
+//TODO : remplacer CLICKED par PRESSED pour être cohérent avec le clavier ??
 enum class State
 {
 	NORMAL, 

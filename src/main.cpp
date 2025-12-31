@@ -37,6 +37,8 @@
 
 //TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
 
+//TODO : crash si aucun dialogue
+
 
 int main(int argc, char* argv[])
 {
@@ -67,6 +69,10 @@ int main(int argc, char* argv[])
 	game.create_character("Yuri", "???", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
+	game.show_character("Yuri", "t41", 1);
+	game.show_character("Sayori", "t42", 0);
+	game.show_character("Monika", "t43", 2);
+	game.show_character("Natsuki", "t44", 1);
 	game.add_new_dialogue("...");
 	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...");
