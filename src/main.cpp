@@ -37,7 +37,7 @@
 
 //TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
 
-//TODO : crash si aucun dialogue
+//TODO : crash si aucun dialogue => current_unique_id_ a la valeur initiale -1 ??
 
 
 int main(int argc, char* argv[])

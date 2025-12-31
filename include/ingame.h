@@ -9,7 +9,6 @@
 #include "sound.h"
 #include <vector>
 #include <memory>
-#include <map>
 
 class InGame : public GameState
 {
@@ -20,6 +19,7 @@ class InGame : public GameState
 		void handle_events(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
+		void update2();
 
 		void set_initial_dialogue();
 
@@ -95,7 +95,6 @@ class InGame : public GameState
 		std::vector<ScriptInformation> script_information_;
 
 		InGame::InfoDialogue* get_current_dialogue(); 
-		std::optional<unsigned int> get_id_next_dialogue(unsigned int current_unique_id);
 
 		//bool one_time_; //avant d'exécuter le script
 		std::vector<unsigned int> dialogues_indices_;
@@ -108,11 +107,18 @@ class InGame : public GameState
 		void set_prev_dialogue_index();
 		unsigned int get_prev_dialogue_pos();
 		unsigned int get_current_dialogue_pos();
+		unsigned int get_next_dialogue_pos();
 
 		//TODO : renommer en current_script_index_
 		unsigned int current_unique_id_;
-		unsigned int current_unique_id_when_previous_;
-		bool is_current_unique_id_saved_;
+
+		//TODO : renommer les deux
+		struct SavedCurrentUniqueIDWhenPrevious
+		{
+			bool is_saved_;
+			unsigned int saved_value_;
+		};
+		SavedCurrentUniqueIDWhenPrevious saved_when_prev_;
 
 		Uint64 last_time_;
 
@@ -126,7 +132,7 @@ class InGame : public GameState
 
 		struct CurrentSound
 		{
-			unsigned int key_;
+			unsigned int associated_dialogue_pos_;
 			bool played_;
 			Sound* sound_;
 		};

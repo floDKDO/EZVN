@@ -7,12 +7,12 @@
 #include <iostream>
 #include <algorithm>
 
-//TODO : is_speaking etc. : modifier les characters dans characters_ ou modifier les Character* dans dialogues_ ??
 //TODO : éviter de répéter plein de fois les mêmes boucles for
 //TODO : "InGame::" devant les types pas nécessaire ?? (ex : InGame::AudioProperties <=> AudioProperties ??)
+//TODO : ne pas stocker les editableProperties dans les Characters crées par create_character => ne doit contenir que des trucs fixes
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), current_dialogue_index_(-1), current_unique_id_(0), current_unique_id_when_previous_(current_unique_id_), is_current_unique_id_saved_(false),
+	: GameState(game), current_dialogue_index_(-1), current_unique_id_(0), saved_when_prev_({false, current_unique_id_}),
 	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), currently_playing_music_(nullptr), currently_playing_sound_({0, false, nullptr})
 {
 	build_ui_elements(renderer);
@@ -177,19 +177,6 @@ InGame::InfoDialogue* InGame::get_current_dialogue()
 	return std::get_if<InfoDialogue>(&script_information_[index]);
 }
 
-//TODO : à supprimer à terme
-std::optional<unsigned int> InGame::get_id_next_dialogue(unsigned int current_unique_id)
-{
-	for(unsigned int i = current_unique_id + 1; i < script_information_.size(); ++i)
-	{
-		if(std::holds_alternative<InfoDialogue>(script_information_[i]))
-		{
-			return i;
-		}
-	}
-	return std::nullopt;
-}
-
 //Dialogues
 void InGame::set_initial_dialogue()
 {
@@ -206,10 +193,8 @@ void InGame::set_initial_dialogue()
 //Dialogues
 std::optional<std::string> InGame::get_last_character_name(const std::string_view character_variable)
 {
-	//TODO : narrateur ou erreur car character_variable vide => est-ce que le narrateur a une character_variable vide ??
 	if(character_variable.empty())
 	{
-		//std::cout << "CAS character_variable vide !\n";
 		return std::string(); //empty string
 	}
 
@@ -250,7 +235,7 @@ bool InGame::try_prev_dialogue()
 //Dialogues
 void InGame::set_next_dialogue_index()
 {
-	if(try_next_dialogue()) //TODO : garder ce test ou partir du principe que le test doit être réalisé avant l'appel à cette méthode
+	if(try_next_dialogue()) //TODO : garder ce test ou partir du principe que le test doit être réalisé avant l'appel à cette méthode => si je ne le garde pas, l'incrémentation pourra être réalisée directement sans cette méthode
 	{
 		current_dialogue_index_ += 1;
 	}
@@ -277,6 +262,12 @@ unsigned int InGame::get_prev_dialogue_pos()
 	return dialogues_indices_[current_dialogue_index_ - 1];
 }
 
+//Dialogues //TODO : pas utilisée
+unsigned int InGame::get_next_dialogue_pos()
+{
+	return dialogues_indices_[current_dialogue_index_ + 1];
+}
+
 //Dialogues
 void InGame::show_next_dialogue()
 {
@@ -287,9 +278,8 @@ void InGame::show_next_dialogue()
 		{
 			set_next_dialogue_index();
 			current_unique_id_ = get_current_dialogue_pos();
-			is_current_unique_id_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
+			saved_when_prev_.is_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
 		}
-
 		textbox_.show_new_dialogue(get_current_dialogue()->t_, get_last_character_name(get_current_dialogue()->character_variable_).value_or(""), skip_mode_, true);
 	}
 }
@@ -301,7 +291,7 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 
 	if(which_dialogue == WhichDialogue::next)
 	{
-		if((is_current_unique_id_saved_ && current_unique_id_ < current_unique_id_when_previous_) && try_next_dialogue()) 
+		if(try_next_dialogue() && current_unique_id_ < saved_when_prev_.saved_value_)
 		{
 			set_next_dialogue_index();
 			current_unique_id_ = get_current_dialogue_pos();
@@ -309,10 +299,10 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 	}
 	else if(which_dialogue == WhichDialogue::previous)
 	{
-		if(!is_current_unique_id_saved_)
+		if(!saved_when_prev_.is_saved_) //sauvegarder une seule fois 
 		{
-			current_unique_id_when_previous_ = current_unique_id_;
-			is_current_unique_id_saved_ = true;
+			saved_when_prev_.saved_value_ = get_current_dialogue_pos();
+			saved_when_prev_.is_saved_ = true;
 		}
 
 		if(try_prev_dialogue())
@@ -321,11 +311,14 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 			current_unique_id_ = get_current_dialogue_pos();
 		}
 
-		//TODO : à remplacer à terme
 		//si on arrive sur un dialogue dont est associé un son, il faut le rejouer
-		if(get_id_next_dialogue(currently_playing_sound_.key_).has_value() && current_unique_id_ == get_id_next_dialogue(currently_playing_sound_.key_).value())
+		if(get_current_dialogue_pos() == currently_playing_sound_.associated_dialogue_pos_)
 		{
-			currently_playing_sound_.played_ = false;
+			//faire cela uniquement si le son n'est pas en train de se jouer si on est sur le dialogue sinon il sera rejoué une fois sur le dialogue
+			if(!sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
+			{
+				currently_playing_sound_.played_ = false;
+			}
 		}
 	}
 	textbox_.show_new_dialogue(get_current_dialogue()->t_, get_last_character_name(get_current_dialogue()->character_variable_).value_or(""), skip_mode_, false);
@@ -351,10 +344,13 @@ std::optional<Character::Editableproperties> InGame::get_last_character_properti
 			InfoCharacter& info_character = std::get<InfoCharacter>(script_information_[i]);
 			if(info_character.character_variable_ == character_variable)
 			{
+				std::cout << "OK!! " << i << std::endl;
 				return info_character.t_;
 			}
 		}
 	}
+
+	std::cout << "NOT FOUND YET " << script_information_.size() << std::endl;
 
 	//not found yet, get the one inside the "characters_" vector
 	for(const MyPair<std::unique_ptr<Character>>& p : characters_)
@@ -532,8 +528,7 @@ void InGame::update_characters()
 
 void InGame::update_autofocus()
 {
-	//TODO : pour transform et zorder de l'autofocus, utiliser characters_transforms_
-	//TODO : positionner is_speaking_ dans show_new_dialogue() ?? Si non, aucun intérêt de passer un Character* => une string suffirait
+	//TODO : positionner is_speaking_ dans show_new_dialogue() ??
 
 	//Pour l'autofocus
 	bool autofocus = false;
@@ -688,7 +683,7 @@ void InGame::update_sounds()
 					{
 						//sound.change_volume(sound_properties.volume); //TODO
 						sound.play_sound(sound_properties.loop, sound_properties.fadein_length);
-						currently_playing_sound_ = {i, true, &sound};
+						currently_playing_sound_ = {get_current_dialogue_pos(), true, &sound}; 
 					}
 				}
 				else
@@ -696,7 +691,7 @@ void InGame::update_sounds()
 					//nouveau son à jouer
 
 					//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
-					if(currently_playing_sound_.sound_ && currently_playing_sound_.key_ > i)
+					if(currently_playing_sound_.sound_ && currently_playing_sound_.associated_dialogue_pos_ > i)
 					{
 						if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
 						{
@@ -713,11 +708,11 @@ void InGame::update_sounds()
 
 					if(current_dialogue_index_ > 0 && i <= get_prev_dialogue_pos()) //on est au moins un dialogue avant le dialogue courant
 					{
-						currently_playing_sound_ = {i, false, nullptr};
+						currently_playing_sound_ = {get_current_dialogue_pos(), false, nullptr};
 					}
 					else
 					{
-						currently_playing_sound_ = {i, false, &sound};
+						currently_playing_sound_ = {get_current_dialogue_pos(), false, &sound};
 					}
 				}
 			}
@@ -733,11 +728,11 @@ void InGame::update_sounds()
 
 		if(i == 0)
 		{
-			for(auto& e : script_information_)
+			for(auto& s : script_information_)
 			{
-				if(std::holds_alternative<InfoSound>(e))
+				if(std::holds_alternative<InfoSound>(s))
 				{
-					InfoSound& sound_pair = std::get<InfoSound>(e);
+					InfoSound& sound_pair = std::get<InfoSound>(s);
 					if(sound_pair.second.has_value())
 					{
 						Sound& sound = sound_pair.second.value();
@@ -789,6 +784,8 @@ void InGame::update()
 
 	if(script_information_.size() > 0)
 	{
+		//update2();
+
 		update_backgrounds();
 
 		update_characters();
@@ -818,131 +815,154 @@ void InGame::update()
 
 //TODO : utiliser std::visit ??
 //TODO : ne pas oublier les cas "i = 0" pour les sons et la musique
-//void InGame::update()
-//{
-//	for(unsigned int i = current_unique_id_; i != -1; --i)
-//	{
-//		if(std::holds_alternative<InfoBackground>(script_information_[i]))
-//		{
-//			InfoBackground& info_background = std::get<InfoBackground>(script_information_[i]);
-//			change_background(info_background);
-//			break; //TODO : nécessaire pour tous les cas ??
-//		}
-//		else if(std::holds_alternative<InfoAutofocus>(script_information_[i]))
-//		{
-//			InfoAutofocus& info_autofocus = std::get<InfoAutofocus>(script_information_[i]);
-//			if(info_autofocus)
-//			{
-//				update_autofocus();
-//			}
-//			break;
-//		}
-//		else if(std::holds_alternative<InfoMusic>(script_information_[i]))
-//		{
-//			InfoMusic& info_music = std::get<InfoMusic>(script_information_[i]);
-//			InGame::AudioProperties& music_properties = info_music.first;
-//
-//			if(info_music.second.has_value()) //play music
-//			{
-//				Music& music = info_music.second.value();
-//				if(currently_playing_music_ == &music)
-//				{
-//					if(!sdl::Music::playing())
-//					{
-//						music.change_volume(music_properties.volume);
-//						music.play_music(music_properties.loop, music_properties.fadein_length);
-//					}
-//				}
-//				else //si une musique est déjà en train de se jouer, il faut stopper (avec ou sans fadeout) la musique courante avant de jouer la nouvelle
-//				{
-//					sdl::Music::fade_out(music_properties.fadeout_length);
-//					currently_playing_music_ = &music;
-//				}
-//			}
-//			else //stop music
-//			{
-//				if(sdl::Music::playing())
-//				{
-//					sdl::Music::fade_out(music_properties.fadeout_length);
-//				}
-//			}
-//		}
-//		else if(std::holds_alternative<InfoSound>(script_information_[i]))
-//		{
-//			InfoSound& info_sound = std::get<InfoSound>(script_information_[i]);
-//			InGame::AudioProperties& sound_properties = info_sound.first;
-//
-//			if(info_sound.second.has_value()) //play sound
-//			{
-//				Sound& sound = info_sound.second.value();
-//
-//				if(currently_playing_sound_.sound_ == &sound)
-//				{
-//					if(!sdl::Chunk::playing(sound_properties.channel)
-//					&& ((!sound_properties.loop && !currently_playing_sound_.played_) || sound_properties.loop)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
-//					{
-//						//sound.change_volume(sound_properties.volume); //TODO
-//						sound.play_sound(sound_properties.loop, sound_properties.fadein_length);
-//						currently_playing_sound_ = {i, true, &sound};
-//					}
-//				}
-//				else
-//				{
-//					//nouveau son à jouer
-//
-//					//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
-//					if(currently_playing_sound_.sound_ && currently_playing_sound_.key_ > i)
-//					{
-//						if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
-//						{
-//							sdl::Chunk::halt_channel(currently_playing_sound_.sound_->channel_);
-//						}
-//					}
-//					else
-//					{
-//						if(sdl::Chunk::playing(sound_properties.channel))
-//						{
-//							sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
-//						}
-//					}
-//
-//					if(/*dialogues_.find(current_unique_id_) != dialogues_.begin()
-//					&&*/ i <= get_id_prev_dialogue(current_unique_id_)) //on est au moins un dialogue avant le dialogue courant
-//					{
-//						currently_playing_sound_ = {i, false, nullptr};
-//					}
-//					else
-//					{
-//						currently_playing_sound_ = {i, false, &sound};
-//					}
-//				}
-//			}
-//			else //stop sound
-//			{
-//				if(sdl::Chunk::playing(sound_properties.channel))
-//				{
-//					sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
-//				}
-//			}
-//		}
-//		else if(std::holds_alternative<InfoCharacter>(script_information_[i]))
-//		{
-//			InfoCharacter& info_character = std::get<InfoCharacter>(script_information_[i]);
-//
-//			for(const MyPair<std::unique_ptr<Character>>& p : characters_)
-//			{
-//				if(info_character.character_variable_ == p.character_variable_)
-//				{
-//					p.t_->set_transform(info_character.t_.transform_.transform_name_);
-//					//p.t_->properties_.zorder_ = info_character.t_.zorder_;
-//					p.t_->properties_.name_ = info_character.t_.name_;
-//				}
-//				p.t_->update();
-//			}
-//		}
-//		else if(std::holds_alternative<InfoDialogue>(script_information_[i]))
-//		{
-//			InfoDialogue& info_dialogue = std::get<InfoDialogue>(script_information_[i]);
-//		}
-//	}
-//}
+void InGame::update2()
+{
+	for(unsigned int i = current_unique_id_; i != -1; --i)
+	{
+		if(std::holds_alternative<InfoBackground>(script_information_[i]))
+		{
+			InfoBackground& info_background = std::get<InfoBackground>(script_information_[i]);
+			change_background(info_background);
+			break; //TODO : nécessaire pour tous les cas ??
+		}
+		else if(std::holds_alternative<InfoAutofocus>(script_information_[i]))
+		{
+			InfoAutofocus& info_autofocus = std::get<InfoAutofocus>(script_information_[i]);
+			if(info_autofocus)
+			{
+				std::optional<std::string> last_character_name = get_last_character_name(get_current_dialogue()->character_variable_);
+				if(last_character_name.has_value() && !last_character_name.value().empty())
+				{
+					for(const MyPair<std::unique_ptr<Character>>& p : characters_)
+					{
+						if(p.character_variable_ == get_current_dialogue()->character_variable_)
+						{
+							p.t_->is_speaking_ = true;
+							p.t_->properties_.zorder_ = 10;
+						}
+						else
+						{
+							p.t_->is_speaking_ = false;
+							p.t_->properties_.zorder_ = 5;
+						}
+					}
+				}
+				else //Narrator
+				{
+					for(const MyPair<std::unique_ptr<Character>>& p : characters_)
+					{
+						p.t_->is_speaking_ = false;
+						p.t_->properties_.zorder_ = 5;
+					}
+				}
+			}
+			break;
+		}
+		else if(std::holds_alternative<InfoMusic>(script_information_[i]))
+		{
+			InfoMusic& info_music = std::get<InfoMusic>(script_information_[i]);
+			InGame::AudioProperties& music_properties = info_music.first;
+
+			if(info_music.second.has_value()) //play music
+			{
+				Music& music = info_music.second.value();
+				if(currently_playing_music_ == &music)
+				{
+					if(!sdl::Music::playing())
+					{
+						music.change_volume(music_properties.volume);
+						music.play_music(music_properties.loop, music_properties.fadein_length);
+					}
+				}
+				else //si une musique est déjà en train de se jouer, il faut stopper (avec ou sans fadeout) la musique courante avant de jouer la nouvelle
+				{
+					sdl::Music::fade_out(music_properties.fadeout_length);
+					currently_playing_music_ = &music;
+				}
+			}
+			else //stop music
+			{
+				if(sdl::Music::playing())
+				{
+					sdl::Music::fade_out(music_properties.fadeout_length);
+				}
+			}
+		}
+		else if(std::holds_alternative<InfoSound>(script_information_[i]))
+		{
+			InfoSound& info_sound = std::get<InfoSound>(script_information_[i]);
+			InGame::AudioProperties& sound_properties = info_sound.first;
+
+			if(info_sound.second.has_value()) //play sound
+			{
+				Sound& sound = info_sound.second.value();
+
+				if(currently_playing_sound_.sound_ == &sound)
+				{
+					if(!sdl::Chunk::playing(sound_properties.channel)
+					&& ((!sound_properties.loop && !currently_playing_sound_.played_) || sound_properties.loop)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
+					{
+						//sound.change_volume(sound_properties.volume); //TODO
+						sound.play_sound(sound_properties.loop, sound_properties.fadein_length);
+						currently_playing_sound_ = {get_current_dialogue_pos(), true, &sound};
+					}
+				}
+				else
+				{
+					//nouveau son à jouer
+
+					//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
+					if(currently_playing_sound_.sound_ && currently_playing_sound_.associated_dialogue_pos_ > i)
+					{
+						if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
+						{
+							sdl::Chunk::halt_channel(currently_playing_sound_.sound_->channel_);
+						}
+					}
+					else
+					{
+						if(sdl::Chunk::playing(sound_properties.channel))
+						{
+							sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
+						}
+					}
+
+					if(current_dialogue_index_ > 0 && i <= get_prev_dialogue_pos()) //on est au moins un dialogue avant le dialogue courant
+					{
+						currently_playing_sound_ = {get_current_dialogue_pos(), false, nullptr};
+					}
+					else
+					{
+						currently_playing_sound_ = {get_current_dialogue_pos(), false, &sound};
+					}
+				}
+			}
+			else //stop sound
+			{
+				if(sdl::Chunk::playing(sound_properties.channel))
+				{
+					sdl::Chunk::fade_out(sound_properties.channel, sound_properties.fadeout_length);
+				}
+			}
+		}
+		else if(std::holds_alternative<InfoCharacter>(script_information_[i]))
+		{
+			/*InfoCharacter& info_character = std::get<InfoCharacter>(script_information_[i]);
+
+			for(const MyPair<std::unique_ptr<Character>>& p : characters_)
+			{
+				if(info_character.character_variable_ == p.character_variable_)
+				{
+					p.t_->set_transform(info_character.t_.transform_.transform_name_);
+					//p.t_->properties_.zorder_ = info_character.t_.zorder_;
+					p.t_->properties_.name_ = info_character.t_.name_;
+				}
+				p.t_->update();
+			}*/
+		}
+		else if(std::holds_alternative<InfoDialogue>(script_information_[i]))
+		{
+			InfoDialogue& info_dialogue = std::get<InfoDialogue>(script_information_[i]);
+		}
+	}
+}
