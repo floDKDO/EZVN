@@ -1,5 +1,6 @@
 #pragma once
 
+#include "constants.h"
 #include "gamestate.h"
 #include "GUI/uimanager.h"
 #include "RAII_SDL2/window.h"
@@ -44,7 +45,7 @@ class Game
 
 		void update_fps_count(const std::string_view fps) const;
 
-		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const std::string_view textbox_path="", const std::string_view namebox_path = "");
+		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path="", const std::string_view namebox_path = "");
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
 
 		void show_character(const std::string_view character_variable, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);

@@ -153,10 +153,7 @@
     <ClCompile Include="src\background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\backgroundmanager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\musicmanager.cpp">
+    <ClCompile Include="src\character_definition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,10 +296,7 @@
     <ClInclude Include="include\background.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\backgroundmanager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\musicmanager.h">
+    <ClInclude Include="include\character_definition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\background.cpp" />
+    <ClCompile Include="src\character_definition.cpp" />
     <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\GUI\button.cpp" />
     <ClCompile Include="src\character.cpp" />
@@ -187,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\background.h" />
+    <ClInclude Include="include\character_definition.h" />
     <ClInclude Include="include\constants.h" />
     <ClInclude Include="include\drawable.h" />
     <ClInclude Include="include\GUI\button.h" />

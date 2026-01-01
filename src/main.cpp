@@ -64,15 +64,15 @@ int main(int argc, char* argv[])
 	//play music => Fadeout gives the fadeout time for currently playing music, in seconds, while fadein gives the time it takes to fade in the new music.
 	//stop music => fadeout
 
-	game.create_character("Sayori", "Sayo", "img/characters/sayori.png", "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
-	game.create_character("Monika", "???", "img/characters/monika.png", "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
-	game.create_character("Yuri", "???", "img/characters/yuri.png", "img/gui/yuri_textbox.png");
-	game.create_character("Natsuki", "???", "img/characters/natsuki.png", "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
+	game.create_character("Sayori", "Sayo", "img/characters/sayori.png", {168, 224, 255, 255}, "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
+	game.create_character("Monika", "???", "img/characters/monika.png", {168, 255, 169, 255}, "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
+	game.create_character("Yuri", "???", "img/characters/yuri.png", {184, 168, 255, 255}, "img/gui/yuri_textbox.png");
+	game.create_character("Natsuki", "???", "img/characters/natsuki.png", {255, 203, 228, 255}, "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
-	game.show_character("Yuri", "t41", 1);
+	/*game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
-	game.show_character("Natsuki", "t44", 1);
+	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...");
 	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...");

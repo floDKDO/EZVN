@@ -1,0 +1,29 @@
+#pragma once
+
+#include "constants.h"
+
+#include <string>
+#include <SDL2/SDL.h>
+
+class CharacterDefinition
+{
+	public:
+		CharacterDefinition(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path = constants::textbox_image_, const std::string_view namebox_path = constants::namebox_image_);
+
+		std::string character_variable_;
+		std::string initial_name_;
+
+		std::string character_path_;
+
+		SDL_Color initial_namebox_font_color_;
+
+		std::string initial_textbox_path_;
+		std::string initial_namebox_path_;
+
+	protected:
+
+
+	private:
+
+};
+
