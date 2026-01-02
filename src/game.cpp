@@ -169,7 +169,7 @@ void Game::update_fps_count(const std::string_view fps) const
 
 void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color, const std::string_view textbox_path, const std::string_view namebox_path)
 {
-	dynamic_cast<InGame*>(in_game_.get())->add_character(character_variable, character_name, character_path, renderer_, namebox_font_color, textbox_path, namebox_path);
+	dynamic_cast<InGame*>(in_game_.get())->add_character(character_variable, character_name, character_path, namebox_font_color, textbox_path, namebox_path);
 }
 
 void Game::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
