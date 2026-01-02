@@ -533,18 +533,25 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 		return active_characters_.at(a).properties_.zorder_ < active_characters_.at(b).properties_.zorder_;
 	});
 
+	/*std::cout << "\n";
+	for(std::string s : draw_characters_order_)
+	{
+		std::cout << s << std::endl;
+	}
+	std::cout << "\n";*/
+
 	//std::cout << "\n";
-	for(std::pair<const std::string, Character>& p : active_characters_)
+	for(const std::string& s : draw_characters_order_)
 	{
 		for(unsigned int i = current_unique_id_; i != -1; --i)
 		{
 			if(std::holds_alternative<InfoCharacter>(script_information_[i]))
 			{
 				InfoCharacter& p_character = std::get<InfoCharacter>(script_information_[i]);
-				if(!(p_character.character_variable_.empty()) && p.first == p_character.character_variable_)
+				if(!(p_character.character_variable_.empty()) && s == p_character.character_variable_)
 				{
-					p.second.draw(renderer);
-					//std::cout << p_character.character_variable_ << ", " << std::boolalpha << p.second.properties_.is_visible_ << std::endl;
+					active_characters_.at(s).draw(renderer);
+					//std::cout << p_character.character_variable_ << ", " << std::boolalpha << value_character.properties_.is_visible_ << std::endl;
 					break;
 				}
 			}
@@ -589,39 +596,39 @@ void InGame::update_backgrounds()
 void InGame::update_characters()
 {
 	//Characters
-	for(std::pair<const std::string, Character>& p : active_characters_)
+	for(auto& [key_character_variable, value_character] : active_characters_)
 	{
 		for(unsigned int i = current_unique_id_; i != -1; --i)
 		{
 			if(std::holds_alternative<InfoRenameCharacter>(script_information_[i]))
 			{
 				InfoRenameCharacter& p_character = std::get<InfoRenameCharacter>(script_information_[i]);
-				if(p.first == p_character.character_variable_)
+				if(key_character_variable == p_character.character_variable_)
 				{
 					//std::cout << "Rename: " << p.second.properties_.name_ << ", " << p_character.t_ << std::endl;
 
-					p.second.properties_.name_ = p_character.t_;
+					value_character.properties_.name_ = p_character.t_;
 				}
 			}
 			else if(std::holds_alternative<InfoCharacter>(script_information_[i]))
 			{
 				InfoCharacter& p_character = std::get<InfoCharacter>(script_information_[i]);
-				if(p.first == p_character.character_variable_)
+				if(key_character_variable == p_character.character_variable_)
 				{
 					if(!p_character.t_.transform_.transform_name_.empty())
 					{
-						p.second.set_transform(p_character.t_.transform_.transform_name_);
+						value_character.set_transform(p_character.t_.transform_.transform_name_);
 					}
 
 					//std::cout << "Name: " << p.second.properties_.name_ << ", " << p.second.properties_.transform_.transform_name_ << ", " << p_character.t_.transform_.transform_name_ << std::endl;
 
-					p.second.properties_.zorder_ = p_character.t_.zorder_;
+					value_character.properties_.zorder_ = p_character.t_.zorder_;
 					//p.second.properties_.name_ = p_character.t_.name_;
 					break;
 				}
 			}
 		}
-		p.second.update();
+		value_character.update();
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 }
@@ -657,26 +664,26 @@ void InGame::update_autofocus()
 	std::optional<std::string> last_character_name = get_last_character_name(get_current_dialogue()->character_variable_);
 	if(last_character_name.has_value() && !last_character_name.value().empty())
 	{
-		for(std::pair<const std::string, Character>& p : active_characters_)
+		for(auto& [key_character_variable, value_character] : active_characters_)
 		{
-			if(p.second.character_definition_->character_variable_ == get_current_dialogue()->character_variable_)
+			if(value_character.character_definition_->character_variable_ == get_current_dialogue()->character_variable_)
 			{
-				p.second.properties_.is_speaking_ = true;
-				p.second.properties_.zorder_ = 10;
+				value_character.properties_.is_speaking_ = true;
+				value_character.properties_.zorder_ = 10;
 			}
 			else
 			{
-				p.second.properties_.is_speaking_ = false;
-				p.second.properties_.zorder_ = 5;
+				value_character.properties_.is_speaking_ = false;
+				value_character.properties_.zorder_ = 5;
 			}
 		}
 	}
 	else //Narrator
 	{
-		for(std::pair<const std::string, Character>& p : active_characters_)
+		for(auto& [key_character_variable, value_character] : active_characters_)
 		{
-			p.second.properties_.is_speaking_ = false;
-			p.second.properties_.zorder_ = 5;
+			value_character.properties_.is_speaking_ = false;
+			value_character.properties_.zorder_ = 5;
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -855,13 +862,13 @@ void InGame::update_textbox()
 	std::optional<std::string> last_character_name = get_last_character_name(get_current_dialogue()->character_variable_);
 	if(last_character_name.has_value() && !last_character_name.value().empty())
 	{
-		for(std::pair<const std::string, Character>& p : active_characters_)
+		for(auto& [key_character_variable, value_character] : active_characters_)
 		{
-			if(p.second.character_definition_->character_variable_ == get_current_dialogue()->character_variable_)
+			if(value_character.character_definition_->character_variable_ == get_current_dialogue()->character_variable_)
 			{
-				if(!p.second.properties_.textbox_path_.empty()) //TODO : tester aussi la namebox ??
+				if(!(value_character.properties_.textbox_path_.empty())) //TODO : tester aussi la namebox ??
 				{
-					textbox_.change_textbox(p.second.properties_.textbox_path_, p.second.properties_.namebox_path_, renderer_);
+					textbox_.change_textbox(value_character.properties_.textbox_path_, value_character.properties_.namebox_path_, renderer_);
 				}
 			}
 		}
@@ -885,10 +892,12 @@ void InGame::update()
 	{
 		//update2();
 
-		/*for(std::string s : draw_characters_order_)
+		/*std::cout << "\n";
+		for(std::string s : draw_characters_order_)
 		{
 			std::cout << s << std::endl;
-		}*/
+		}
+		std::cout << "\n";*/
 
 		/*for(int i = 0; i < script_information_.size(); ++i)
 		{
@@ -898,11 +907,11 @@ void InGame::update()
 			}
 		}*/
 
-		/*for(std::pair<const std::string, Character>& p : active_characters_)
+		for(auto& [key_character_variable, value_character] : active_characters_)
 		{
-			std::cout << p.second.properties_.name_ << ", " << p.second.properties_.zorder_ << std::endl;
-			std::cout << p.second.properties_.name_ << ", " << std::boolalpha << p.second.properties_.is_visible_ << std::endl;
-		}*/
+			//std::cout << value_character.character_definition_->character_variable_ << ", " << value_character.properties_.zorder_ << std::endl;
+			//std::cout << value_character.properties_.name_ << ", " << std::boolalpha << value_character.properties_.is_visible_ << std::endl;
+		}
 
 		update_backgrounds();
 
