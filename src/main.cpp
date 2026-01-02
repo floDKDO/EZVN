@@ -74,16 +74,16 @@ int main(int argc, char* argv[])
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...");
-	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
+	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...");
 	game.add_new_dialogue("...");
 	game.add_new_dialogue("Y a personne ??");
-	game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
+	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");
-	game.play_music("sounds/2.ogg", 0, 1000, 64); //TODO : volume hardcodé
-	game.show_character("Sayori", "t11");
+	//game.play_music("sounds/2.ogg", 0, 1000, 64); //TODO : volume hardcodé
+	//game.show_character("Sayori", "t11");
 	//game.rename_character("Sayori", "xxxxx");
-	game.add_new_dialogue("Sayori", "HEYYYYYY!");
+	//game.add_new_dialogue("Sayori", "HEYYYYYY!");
 	//game.rename_character("Sayori", "yyyyy"); 
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
