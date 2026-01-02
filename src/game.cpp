@@ -174,25 +174,21 @@ void Game::create_character(const std::string_view character_variable, const std
 
 void Game::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
 {
-	//dynamic_cast<InGame*>(in_game_.get())->insert_character(character_variable, std::string(new_character_name), std::nullopt, std::nullopt);
 	dynamic_cast<InGame*>(in_game_.get())->rename_character(character_variable, new_character_name);
 }
 
 void Game::show_character(const std::string_view character_variable, const std::optional<std::string> transform_name, const std::optional<int> zorder)
 {
-	//dynamic_cast<InGame*>(in_game_.get())->insert_character(character_variable, std::nullopt, transform_name, zorder);
 	dynamic_cast<InGame*>(in_game_.get())->show_character(character_variable, transform_name, zorder);
 }
 
 void Game::show_character(const std::string_view character_variable, const std::optional<int> zorder)
 {
-	//dynamic_cast<InGame*>(in_game_.get())->insert_character(character_variable, std::nullopt, std::nullopt, zorder);
 	dynamic_cast<InGame*>(in_game_.get())->show_character(character_variable, zorder);
 }
 
 void Game::hide_character(const std::string_view character_variable)
 {
-	//dynamic_cast<InGame*>(in_game_.get())->insert_character(character_variable, std::nullopt, "hide", std::nullopt);
 	dynamic_cast<InGame*>(in_game_.get())->hide_character(character_variable);
 }
 

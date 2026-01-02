@@ -39,6 +39,8 @@
 
 //TODO : crash si aucun dialogue => current_unique_id_ a la valeur initiale -1 ??
 
+//TODO : créer une méthode pour changer la textbox/namebox d'un personnage
+
 
 int main(int argc, char* argv[])
 {
@@ -81,10 +83,11 @@ int main(int argc, char* argv[])
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");
 	//game.play_music("sounds/2.ogg", 0, 1000, 64); //TODO : volume hardcodé
-	//game.show_character("Sayori", "t11");
-	//game.rename_character("Sayori", "xxxxx");
-	//game.add_new_dialogue("Sayori", "HEYYYYYY!");
-	//game.rename_character("Sayori", "yyyyy"); 
+	game.show_character("Sayori", "t11");
+	game.rename_character("Sayori", "xxxxx");
+	game.add_new_dialogue("Sayori", "HEYYYYYY!");
+	game.rename_character("Sayori", "yyyyy"); 
+	game.add_new_dialogue("Sayori", "Hihihi!");
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
 	game.autofocus_enable();
