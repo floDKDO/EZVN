@@ -24,7 +24,7 @@ class InGame : public GameState
 		TextToggle* get_texttoggle(const std::string_view text);
 
 		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
-		Character::Editableproperties get_last_character_properties(const std::string_view character_variable);
+		std::optional<Character::Editableproperties> get_last_character_properties(const std::string_view character_variable);
 		std::string get_last_character_name();
 		CharacterDefinition* get_character_definition(const std::string_view character_variable);
 
@@ -34,6 +34,7 @@ class InGame : public GameState
 		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
 
 		Character* is_character_active(const std::string_view character_variable);
+		Character::Editableproperties show_character_prologue(const std::string_view character_variable);
 		void show_character(const std::string_view character_variable, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
 		void show_character(const std::string_view character_variable, const std::optional<int> zorder = std::nullopt);
 		void hide_character(const std::string_view character_variable);

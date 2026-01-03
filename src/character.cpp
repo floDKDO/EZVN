@@ -7,7 +7,7 @@
 
 Character::Character(const CharacterDefinition& character_definition, sdl::Renderer& renderer, const std::string transform_name, const int zorder)
 	: character_definition_(&character_definition)
-	, properties_{character_definition.initial_name_, zorder, character_definition.initial_textbox_path_, character_definition.initial_namebox_path_, Transform(transform_name), false, false}, character_(character_definition.character_path_, 0, 0, renderer)
+	, properties_{character_definition.initial_name_, zorder, character_definition.initial_textbox_path_, character_definition.initial_namebox_path_, transform_name, false, false}, character_(character_definition.character_path_, 0, 0, renderer)
 {}
 
 void Character::set_transform(const std::string transform_name)

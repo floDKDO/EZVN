@@ -17,6 +17,14 @@ class Character
 
 		struct Editableproperties
 		{
+			Editableproperties()
+				: name_(""), zorder_(0), textbox_path_(""), namebox_path_(""), transform_(), is_speaking_(false), is_visible_(false)
+			{}
+
+			Editableproperties(std::string name, int zorder, std::string textbox_path, std::string namebox_path, std::string transform_name, bool is_speaking, bool is_visible)
+				: name_(name), zorder_(zorder), textbox_path_(textbox_path), namebox_path_(namebox_path), transform_(Transform(transform_name)), is_speaking_(is_speaking), is_visible_(is_visible)
+			{}
+
 			std::string name_; //garder le type std::string pour permettre au joueur de taper son nom au clavier
 			int zorder_;
 			std::string textbox_path_;

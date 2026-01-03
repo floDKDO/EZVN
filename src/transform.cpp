@@ -5,6 +5,11 @@
 
 //TODO : "6" obligatoire ??
 
+//Ce constructeur permet à Character::Editableproperties de disposer d'un constructeur par défaut
+Transform::Transform()
+	: is_character_visible_(false), transform_name_(""), /*previous_transform_name_(transform_name_),*/ transform_({"", TransformAllSteps(0)})
+{}
+
 Transform::Transform(const std::string transform_name)
 	: is_character_visible_(false), transform_name_(transform_name), /*previous_transform_name_(transform_name_),*/ transform_({transform_name, TransformAllSteps(6)})
 {}
@@ -26,7 +31,7 @@ std::string Transform::transform_to_unfocus()
 {
 	if(transform_name_.length() == 3 && transform_name_[0] == 'f' && isdigit(transform_name_[1]) && isdigit(transform_name_[2]))
 	{
-		return std::string("t") + transform_name_[1] + transform_name_[2];;
+		return std::string("t") + transform_name_[1] + transform_name_[2];
 	}
 	else
 	{

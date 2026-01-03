@@ -95,34 +95,42 @@ Character* InGame::is_character_active(const std::string_view character_variable
 {
 	if(active_characters_.count(std::string(character_variable))) //déjà dans active_characters_
 	{
+		//std::cout << "(is_character_active) " << character_variable << " is already in active_characters_\n";
 		return &(active_characters_.at(std::string(character_variable)));
 	}
 	else
 	{
+		//std::cout << "(is_character_active) " << character_variable << " is not in active_characters_\n";
 		return nullptr;
 	}
 }
 
-void InGame::show_character(const std::string_view character_variable, const std::optional<std::string> transform_name, const std::optional<int> zorder)
+Character::Editableproperties InGame::show_character_prologue(const std::string_view character_variable)
 {
 	CharacterDefinition* character_definition = get_character_definition(character_variable); //TODO : tester si différent de nullptr
-
 	Character* character = is_character_active(character_variable);
+	Character::Editableproperties character_properties;
+
 	if(character == nullptr)
 	{
 		active_characters_.insert(std::make_pair(character_variable, Character(*character_definition, renderer_)));
 		draw_characters_order_.push_back(std::string(character_variable));
 		character = &active_characters_.at(std::string(character_variable));
+		character_properties = active_characters_.at(std::string(character_variable)).properties_; //=> n'est pas encore dans script_information_
 	}
 	else
 	{
-		std::cout << character->character_definition_->character_variable_ << " IS ALREADY IN THE VECTOR!" << std::endl;
+		//std::cout << character->character_definition_->character_variable_ << " IS ALREADY IN THE VECTOR!" << std::endl;
+		character_properties = get_last_character_properties(character_variable).value();
 	}
-
-	//std::cout << get_last_character_properties(character_variable).name_ << ", " << active_characters_.at(std::string(character_variable)).properties_.name_ << std::endl;
-
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable);
 	character_properties.is_visible_ = true;
+
+	return character_properties;
+}
+
+void InGame::show_character(const std::string_view character_variable, const std::optional<std::string> transform_name, const std::optional<int> zorder)
+{
+	Character::Editableproperties character_properties = show_character_prologue(character_variable);
 
 	if(zorder.has_value())
 	{
@@ -139,22 +147,7 @@ void InGame::show_character(const std::string_view character_variable, const std
 
 void InGame::show_character(const std::string_view character_variable, const std::optional<int> zorder)
 {
-	CharacterDefinition* character_definition = get_character_definition(character_variable); //TODO : tester si différent de nullptr
-	
-	Character* character = is_character_active(character_variable);
-	if(character == nullptr)
-	{
-		active_characters_.insert(std::make_pair(character_variable, Character(*character_definition, renderer_)));
-		draw_characters_order_.push_back(std::string(character_variable));
-		character = &active_characters_.at(std::string(character_variable));
-	}
-	else
-	{
-		std::cout << character->character_definition_->character_variable_ << " IS ALREADY IN THE VECTOR!" << std::endl;
-	}
-
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable);
-	character_properties.is_visible_ = true;
+	Character::Editableproperties character_properties = show_character_prologue(character_variable);
 
 	if(zorder.has_value())
 	{
@@ -175,7 +168,7 @@ void InGame::hide_character(const std::string_view character_variable)
 		exit(1);
 	}
 
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable);
+	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
 	character_properties.is_visible_ = false;
 
 	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
@@ -183,7 +176,7 @@ void InGame::hide_character(const std::string_view character_variable)
 
 void InGame::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
 {
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable);
+	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
 	character_properties.name_ = new_character_name;
 
 	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
@@ -244,7 +237,7 @@ InGame::InfoDialogue* InGame::get_current_dialogue()
 	return std::get_if<InfoDialogue>(&script_information_[index]);
 }
 
-Character::Editableproperties InGame::get_last_character_properties(const std::string_view character_variable)
+std::optional<Character::Editableproperties> InGame::get_last_character_properties(const std::string_view character_variable)
 {
 	for(size_t i = script_information_.size() - 1; i != -1; --i) //si script_information_.size() == 0, on n'entre pas dans cette boucle
 	{
@@ -257,14 +250,7 @@ Character::Editableproperties InGame::get_last_character_properties(const std::s
 			}
 		}
 	}
-
-	std::cout << "NOT FOUND YET*****************************************************************\n";
-
-	//not found yet, get the one inside the "active_characters_" vector
-	if(active_characters_.count(std::string(character_variable))) //déjà dans active_characters_
-	{
-		return active_characters_.at(std::string(character_variable)).properties_;
-	}
+	return std::nullopt;
 }
 
 std::string InGame::get_last_character_name()
@@ -427,9 +413,7 @@ void InGame::handle_events(const SDL_Event& e)
 	if(!hide_ui_textbox_)
 	{
 		//Dialogues
-		// 
-		//condition placée en premier pour que le scroll de la mouse wheel sur un textbutton fonctionne
-		if(e.type == SDL_MOUSEWHEEL)
+		if(e.type == SDL_MOUSEWHEEL) //condition placée en premier pour que le scroll de la mouse wheel sur un textbutton fonctionne
 		{
 			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
 			{
