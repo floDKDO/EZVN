@@ -10,8 +10,6 @@ class Textbox
 		Textbox(sdl::Renderer& renderer);
 
 		void change_textbox(const std::string_view new_textbox_path, const std::string_view new_namebox_path, sdl::Renderer& renderer);
-
-		void show_initial_dialogue(const std::string_view new_dialogue, std::string speaker);
 		void show_new_dialogue(const std::string_view new_dialogue, std::string speaker, bool in_skip_mode=false, bool wait_for_end_of_dialogue = true);
 
 		Uint64 get_text_delay();
@@ -33,5 +31,7 @@ class Textbox
 		Image namebox_;
 		Text text_name_box_;
 		Image triangle_;
+
+		bool is_first_dialogue_;
 };
 

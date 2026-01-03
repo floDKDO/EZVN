@@ -13,7 +13,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""), 
 	namebox_(constants::namebox_image_, 0, 0, renderer),
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
-	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
+	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer), is_first_dialogue_(true)
 {
 	textbox_.set_position((constants::window_width_ - textbox_.position_.w) / 2, constants::window_height_ - textbox_.position_.h + constants::textbox_y_delta_); 
 	namebox_.set_position(textbox_.position_.x + constants::namebox_textbox_x_delta_, textbox_.position_.y - namebox_.position_.h);
@@ -43,15 +43,9 @@ void Textbox::change_textbox(const std::string_view new_textbox_path, const std:
 	}
 }
 
-void Textbox::show_initial_dialogue(const std::string_view new_dialogue, std::string speaker)
-{
-	text_.is_finished_ = true;
-	show_new_dialogue(new_dialogue, speaker);
-}
-
 void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)
 {
-	if((text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
+	if(is_first_dialogue_ || (text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
 	{
 		if(speaker.empty()) //Narrator
 		{
@@ -76,6 +70,8 @@ void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string
 			text_.text_.insert(0, "\"");
 			text_.text_.append("\"");
 		}
+
+		is_first_dialogue_ = false;
 	}
 }
 

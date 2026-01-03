@@ -21,13 +21,11 @@ class InGame : public GameState
 		void update() override;
 		void update2();
 
-		void set_initial_dialogue();
-
 		TextToggle* get_texttoggle(const std::string_view text);
 
 		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
 		Character::Editableproperties get_last_character_properties(const std::string_view character_variable);
-		std::optional<std::string> get_last_character_name(const std::string_view character_variable);
+		std::string get_last_character_name();
 		CharacterDefinition* get_character_definition(const std::string_view character_variable);
 
 		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
@@ -48,14 +46,24 @@ class InGame : public GameState
 
 		void insert_autofocus(bool autofocus);
 
-		void show_next_dialogue();
-
 		enum class WhichDialogue
 		{
+			none,
 			next,
-			previous
+			previous //TODO : renommer en prev ??
 		};
-		void show_dialogue_mouse_wheel(WhichDialogue which_dialogue);
+
+		struct WhichDialogueFromWhere
+		{
+			WhichDialogue which_dialogue_;
+			bool is_from_mouse_wheel_;
+			bool wait_for_end_of_dialogue_;
+		};
+
+		WhichDialogueFromWhere which_dialogue_from_where_;
+
+		void show_next_dialogue();
+		void show_dialogue_mouse_wheel();
 
 		void auto_function(Ui* ui);
 		void skip_function(Ui* ui);
@@ -64,6 +72,7 @@ class InGame : public GameState
 
 		void draw_characters(sdl::Renderer& renderer);
 
+		void update_current_unique_id_dialogue();
 		void update_backgrounds();
 		void update_characters();
 		void update_autofocus();
@@ -71,6 +80,7 @@ class InGame : public GameState
 		void update_music();
 		void update_sounds();
 		void update_textbox();
+		void update_dialogue();
 
 		template <typename T>
 		struct MyPair

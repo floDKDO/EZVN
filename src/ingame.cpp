@@ -10,10 +10,9 @@
 //TODO : éviter de répéter plein de fois les mêmes boucles for
 //TODO : "InGame::" devant les types pas nécessaire ?? (ex : InGame::AudioProperties <=> AudioProperties ??)
 //TODO : ne pas stocker les editableProperties dans les Characters crées par create_character => ne doit contenir que des trucs fixes
-//TODO : value_or("") ??
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), current_dialogue_index_(-1), current_unique_id_(0), saved_when_prev_({false, current_unique_id_}),
+	: GameState(game), which_dialogue_from_where_({WhichDialogue::none, false, false}), current_dialogue_index_(-1), current_unique_id_(0), saved_when_prev_({false, current_unique_id_}),
 	last_time_(0), textbox_(renderer), background_(0, 0, 0, 255), hide_ui_textbox_(false), renderer_(renderer), skip_mode_(false), auto_mode_(false), currently_playing_music_(nullptr), currently_playing_sound_({0, false, nullptr})
 {
 	build_ui_elements(renderer);
@@ -57,10 +56,6 @@ void InGame::auto_function(Ui* ui)
 {
 	(void)ui;
 	auto_mode_ = !auto_mode_;
-	if(textbox_.text_.is_finished_)
-	{
-		show_next_dialogue();
-	}
 }
 
 void InGame::skip_function(Ui* ui)
@@ -92,12 +87,8 @@ void InGame::insert_dialogue(const std::string_view character_variable, const st
 	script_information_.push_back(InfoDialogue({std::string(character_variable), dialogue}));
 	dialogues_indices_.push_back(script_information_.size() - 1); //= indice du dialogue inséré
 
-	static bool first_dialogue = true;
-	if(first_dialogue)
-	{
-		set_initial_dialogue();
-		first_dialogue = false;
-	}
+	current_dialogue_index_ = 0; //un dialogue a été inséré donc l'indice 0 contient forcément un dialogue
+	which_dialogue_from_where_ = {WhichDialogue::next, false, false};
 }
 
 Character* InGame::is_character_active(const std::string_view character_variable)
@@ -127,6 +118,8 @@ void InGame::show_character(const std::string_view character_variable, const std
 	{
 		std::cout << character->character_definition_->character_variable_ << " IS ALREADY IN THE VECTOR!" << std::endl;
 	}
+
+	//std::cout << get_last_character_properties(character_variable).name_ << ", " << active_characters_.at(std::string(character_variable)).properties_.name_ << std::endl;
 
 	Character::Editableproperties character_properties = get_last_character_properties(character_variable);
 	character_properties.is_visible_ = true;
@@ -247,20 +240,8 @@ void InGame::insert_autofocus(bool autofocus)
 InGame::InfoDialogue* InGame::get_current_dialogue()
 {
 	unsigned int index = dialogues_indices_[current_dialogue_index_];
+	//std::cout << "Index: " << index << ", current unique id: " << current_unique_id_ << std::endl;
 	return std::get_if<InfoDialogue>(&script_information_[index]);
-}
-
-//Dialogues
-void InGame::set_initial_dialogue()
-{
-	//ici, script_information_ n'a pas sa taille finale
-	std::cout << "Initial dialogue\n";
-
-	if(dialogues_indices_.size() > 0)
-	{
-		current_dialogue_index_ = 0;
-		textbox_.show_initial_dialogue(get_current_dialogue()->t_, get_last_character_name(get_current_dialogue()->character_variable_).value());
-	}
 }
 
 Character::Editableproperties InGame::get_last_character_properties(const std::string_view character_variable)
@@ -286,36 +267,17 @@ Character::Editableproperties InGame::get_last_character_properties(const std::s
 	}
 }
 
-//Dialogues
-std::optional<std::string> InGame::get_last_character_name(const std::string_view character_variable)
+std::string InGame::get_last_character_name()
 {
+	std::string character_variable = get_current_dialogue()->character_variable_;
 	if(character_variable.empty())
 	{
 		return std::string(); //empty string
 	}
-
-	for(size_t i = current_unique_id_; i != -1; --i) 
+	else
 	{
-		if(std::holds_alternative<InfoCharacter>(script_information_[i]))
-		{
-			InfoCharacter& info_character = std::get<InfoCharacter>(script_information_[i]);
-			if(info_character.character_variable_ == character_variable)
-			{
-				std::cout << "RETURNS: " << info_character.t_.name_ << std::endl;
-				return info_character.t_.name_;
-			}
-		}
+		return active_characters_.at(get_current_dialogue()->character_variable_).properties_.name_;
 	}
-
-	std::cout << "NOT FOUND YET*****************************************************************\n";
-
-	//not found yet, get the one inside the "active_characters_" vector
-	if(active_characters_.count(std::string(character_variable))) //déjà dans active_characters_
-	{
-		return active_characters_.at(std::string(character_variable)).properties_.name_;
-	}
-
-	return std::nullopt;
 }
 
 bool InGame::try_next_dialogue()
@@ -367,26 +329,21 @@ unsigned int InGame::get_next_dialogue_pos()
 //Dialogues
 void InGame::show_next_dialogue()
 {
-	//ici, script_information_ a sa taille finale
-	if(textbox_.text_.is_finished_) //empêcher le spam d'espace
+	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next)
 	{
-		if(try_next_dialogue())
+		if(textbox_.text_.is_finished_ && try_next_dialogue()) //empêcher le spam d'espace
 		{
 			set_next_dialogue_index();
 			current_unique_id_ = get_current_dialogue_pos();
 			saved_when_prev_.is_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
 		}
-
-		textbox_.show_new_dialogue(get_current_dialogue()->t_, get_last_character_name(get_current_dialogue()->character_variable_).value_or(""), skip_mode_, true);
 	}
 }
 
 //Dialogues
-void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
+void InGame::show_dialogue_mouse_wheel()
 {
-	SDL_assert(which_dialogue == WhichDialogue::next || which_dialogue == WhichDialogue::previous);
-
-	if(which_dialogue == WhichDialogue::next)
+	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next)
 	{
 		if(try_next_dialogue() && current_unique_id_ < saved_when_prev_.saved_value_)
 		{
@@ -394,7 +351,7 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 			current_unique_id_ = get_current_dialogue_pos();
 		}
 	}
-	else if(which_dialogue == WhichDialogue::previous)
+	else if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::previous)
 	{
 		if(!saved_when_prev_.is_saved_) //sauvegarder une seule fois 
 		{
@@ -418,7 +375,6 @@ void InGame::show_dialogue_mouse_wheel(WhichDialogue which_dialogue)
 			}
 		}
 	}
-	textbox_.show_new_dialogue(get_current_dialogue()->t_, get_last_character_name(get_current_dialogue()->character_variable_).value_or(""), skip_mode_, false);
 }
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -477,12 +433,15 @@ void InGame::handle_events(const SDL_Event& e)
 		{
 			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
 			{
+				//annuler le mode skip
 				get_texttoggle("Skip")->change_checked(false);
-				show_dialogue_mouse_wheel(WhichDialogue::previous);
+				skip_mode_ = false;
+
+				which_dialogue_from_where_ = {WhichDialogue::previous, true, false};
 			}
 			else //scroll vers l'arrière => avancer d'un dialogue
 			{
-				show_dialogue_mouse_wheel(WhichDialogue::next);
+				which_dialogue_from_where_ = {WhichDialogue::next, true, false};
 			}
 		}
 
@@ -496,9 +455,13 @@ void InGame::handle_events(const SDL_Event& e)
 		if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
+			//annuler le mode auto
+			get_texttoggle("Auto")->change_checked(false);
+			auto_mode_ = false;
+
 			if(textbox_.text_.is_finished_)
 			{
-				show_next_dialogue();
+				which_dialogue_from_where_ = {WhichDialogue::next, false, true};
 			}
 			else
 			{
@@ -523,12 +486,12 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 		return active_characters_.at(a).properties_.zorder_ < active_characters_.at(b).properties_.zorder_;
 	});
 
-	std::cout << "\n";
+	/*std::cout << "\n";
 	for(std::string s : draw_characters_order_)
 	{
 		std::cout << s << std::endl;
 	}
-	std::cout << "\n";
+	std::cout << "\n";*/
 
 	//std::cout << "\n";
 	for(const std::string& s : draw_characters_order_)
@@ -613,6 +576,23 @@ void InGame::update_characters()
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
+void InGame::update_current_unique_id_dialogue()
+{
+	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
+	{
+		return;
+	}
+
+	if(!which_dialogue_from_where_.is_from_mouse_wheel_)
+	{
+		show_next_dialogue();
+	}
+	else
+	{
+		show_dialogue_mouse_wheel();
+	}
+}
+
 void InGame::update_autofocus()
 {
 	//TODO : positionner is_speaking_ dans show_new_dialogue() ??
@@ -641,8 +621,8 @@ void InGame::update_autofocus()
 		return;
 	}
 
-	std::optional<std::string> last_character_name = get_last_character_name(get_current_dialogue()->character_variable_);
-	if(last_character_name.has_value() && !last_character_name.value().empty())
+	std::string last_character_name = get_last_character_name();
+	if(!last_character_name.empty())
 	{
 		for(auto& [key_character_variable, value_character] : active_characters_)
 		{
@@ -674,7 +654,8 @@ void InGame::update_skip_auto_modes()
 	//Dialogues//////////////////////////////////////////////////////////////////////////////////////
 	if(skip_mode_)
 	{
-		show_next_dialogue();
+		which_dialogue_from_where_ = {WhichDialogue::next, false, false};
+		show_next_dialogue(); 
 	}
 
 	//Dialogues
@@ -690,7 +671,9 @@ void InGame::update_skip_auto_modes()
 
 			if(now > last_time_ + textbox_.get_text_delay())
 			{
+				which_dialogue_from_where_ = {WhichDialogue::next, false, true};
 				show_next_dialogue();
+
 				last_time_ = SDL_GetTicks64();
 			}
 		}
@@ -839,8 +822,8 @@ void InGame::update_sounds()
 
 void InGame::update_textbox()
 {
-	std::optional<std::string> last_character_name = get_last_character_name(get_current_dialogue()->character_variable_);
-	if(last_character_name.has_value() && !last_character_name.value().empty())
+	std::string last_character_name = get_last_character_name();
+	if(!last_character_name.empty())
 	{
 		for(auto& [key_character_variable, value_character] : active_characters_)
 		{
@@ -858,6 +841,17 @@ void InGame::update_textbox()
 		textbox_.change_textbox(constants::textbox_image_, constants::namebox_image_, renderer_);
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+void InGame::update_dialogue()
+{
+	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
+	{
+		return;
+	}
+
+	textbox_.show_new_dialogue(get_current_dialogue()->t_, get_last_character_name(), skip_mode_, which_dialogue_from_where_.wait_for_end_of_dialogue_);
+	which_dialogue_from_where_ = {WhichDialogue::none, false, false}; 
 }
 
 void InGame::update()
@@ -887,11 +881,13 @@ void InGame::update()
 			}
 		}*/
 
-		for(auto& [key_character_variable, value_character] : active_characters_)
+		/*for(auto& [key_character_variable, value_character] : active_characters_)
 		{
 			//std::cout << value_character.character_definition_->character_variable_ << ", " << value_character.properties_.zorder_ << std::endl;
-			std::cout << value_character.properties_.name_ << ", " << std::boolalpha << value_character.properties_.is_visible_ << std::endl;
-		}
+			//std::cout << value_character.properties_.name_ << ", " << std::boolalpha << value_character.properties_.is_visible_ << std::endl;
+		}*/
+
+		update_current_unique_id_dialogue();
 
 		update_backgrounds();
 
@@ -906,6 +902,8 @@ void InGame::update()
 		update_skip_auto_modes();
 
 		update_textbox();
+
+		update_dialogue(); 
 	}
 
 	if(currently_playing_music_ != nullptr)

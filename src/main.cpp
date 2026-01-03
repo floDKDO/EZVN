@@ -79,7 +79,6 @@ int main(int argc, char* argv[])
 	game.add_new_dialogue("...");
 	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...");
-	game.add_new_dialogue("...");
 	game.add_new_dialogue("Y a personne ??");
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");
@@ -110,17 +109,7 @@ int main(int argc, char* argv[])
 	game.add_new_dialogue("Natsuki", "HEYYYYYY!");
 	game.add_new_dialogue("...");
 	game.add_new_dialogue("Sayori", "How are you MC?");
-	/*
-	Natsuki
-	Sayori
-	Yuri
-	Monika
 
-	Sayori
-	Yuri
-	Monika
-	Natsuki
-	*/
 	game.run();
 
 	return 0;
