@@ -4,6 +4,7 @@
 #include "RAII_SDL2/animation.h"
 #include "RAII_SDL2/renderer.h"
 #include "drawable.h"
+#include "constants.h"
 
 #include <memory>
 #include <optional>
@@ -11,7 +12,7 @@
 class Image : public Drawable
 {
 	public:
-		Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder=0);
+		Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder = constants::default_zorder_);
 
 		void init_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;

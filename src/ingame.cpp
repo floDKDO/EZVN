@@ -10,6 +10,7 @@
 //TODO : éviter de répéter plein de fois les mêmes boucles for
 //TODO : "InGame::" devant les types pas nécessaire ?? (ex : InGame::AudioProperties <=> AudioProperties ??)
 //TODO : ne pas stocker les editableProperties dans les Characters crées par create_character => ne doit contenir que des trucs fixes
+//TODO : gestion explicite du narrateur
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
 	: GameState(game), which_dialogue_from_where_({WhichDialogue::none, false, false}), current_dialogue_index_(-1), current_unique_id_(0), saved_when_prev_({false, current_unique_id_}),
@@ -84,7 +85,7 @@ void InGame::temp_function(Ui* ui)
 //Dialogues
 void InGame::insert_dialogue(const std::string_view character_variable, const std::string_view dialogue)
 {
-	script_information_.push_back(InfoDialogue({std::string(character_variable), dialogue}));
+	script_information_.push_back(InfoDialogue({character_variable, dialogue}));
 	dialogues_indices_.push_back(script_information_.size() - 1); //= indice du dialogue inséré
 
 	current_dialogue_index_ = 0; //un dialogue a été inséré donc l'indice 0 contient forcément un dialogue
@@ -93,10 +94,10 @@ void InGame::insert_dialogue(const std::string_view character_variable, const st
 
 Character* InGame::is_character_active(const std::string_view character_variable)
 {
-	if(active_characters_.count(std::string(character_variable))) //déjà dans active_characters_
+	if(active_characters_.count(character_variable)) //déjà dans active_characters_
 	{
 		//std::cout << "(is_character_active) " << character_variable << " is already in active_characters_\n";
-		return &(active_characters_.at(std::string(character_variable)));
+		return &(active_characters_.at(character_variable));
 	}
 	else
 	{
@@ -107,16 +108,16 @@ Character* InGame::is_character_active(const std::string_view character_variable
 
 Character::Editableproperties InGame::show_character_prologue(const std::string_view character_variable)
 {
-	CharacterDefinition* character_definition = get_character_definition(character_variable); //TODO : tester si différent de nullptr
+	CharacterDefinition& character_definition = get_character_definition(character_variable); 
 	Character* character = is_character_active(character_variable);
 	Character::Editableproperties character_properties;
 
 	if(character == nullptr)
 	{
-		active_characters_.insert(std::make_pair(character_variable, Character(*character_definition, renderer_)));
-		draw_characters_order_.push_back(std::string(character_variable));
-		character = &active_characters_.at(std::string(character_variable));
-		character_properties = active_characters_.at(std::string(character_variable)).properties_; //=> n'est pas encore dans script_information_
+		active_characters_.insert(std::make_pair(character_variable, Character(character_definition, renderer_)));
+		draw_characters_order_.push_back(character_variable);
+		character = &active_characters_.at(character_variable);
+		character_properties = active_characters_.at(character_variable).properties_; //=> n'est pas encore dans script_information_
 	}
 	else
 	{
@@ -139,27 +140,15 @@ void InGame::show_character(const std::string_view character_variable, const std
 
 	if(transform_name.has_value())
 	{
-		character_properties.transform_ = Transform(transform_name.value());
+		character_properties.transform_name_ = transform_name.value();
 	}
 
-	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
-}
-
-void InGame::show_character(const std::string_view character_variable, const std::optional<int> zorder)
-{
-	Character::Editableproperties character_properties = show_character_prologue(character_variable);
-
-	if(zorder.has_value())
-	{
-		character_properties.zorder_ = zorder.value();
-	}
-
-	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
+	script_information_.push_back(InfoCharacter({character_variable, character_properties}));
 }
 
 void InGame::hide_character(const std::string_view character_variable)
 {
-	//CharacterDefinition* character_definition = get_character_definition(character_variable); //TODO : tester si différent de nullptr
+	//CharacterDefinition& character_definition = get_character_definition(character_variable); 
 
 	Character* character = is_character_active(character_variable);
 	if(character == nullptr)
@@ -171,7 +160,7 @@ void InGame::hide_character(const std::string_view character_variable)
 	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
 	character_properties.is_visible_ = false;
 
-	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
+	script_information_.push_back(InfoCharacter({character_variable, character_properties}));
 }
 
 void InGame::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
@@ -179,7 +168,7 @@ void InGame::rename_character(const std::string_view character_variable, const s
 	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
 	character_properties.name_ = new_character_name;
 
-	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
+	script_information_.push_back(InfoCharacter({character_variable, character_properties}));
 }
 
 //Background
@@ -255,14 +244,14 @@ std::optional<Character::Editableproperties> InGame::get_last_character_properti
 
 std::string InGame::get_last_character_name()
 {
-	std::string character_variable = get_current_dialogue()->character_variable_;
+	std::string_view character_variable = get_current_dialogue()->character_variable_;
 	if(character_variable.empty())
 	{
 		return std::string(); //empty string
 	}
 	else
 	{
-		return active_characters_.at(get_current_dialogue()->character_variable_).properties_.name_;
+		return std::string(active_characters_.at(get_current_dialogue()->character_variable_).properties_.name_);
 	}
 }
 
@@ -371,16 +360,15 @@ void InGame::add_character(const std::string_view character_variable, const std:
 	character_definitions_.push_back({character_variable, character_name, character_path, namebox_font_color, textbox_path, namebox_path});
 }
 
-CharacterDefinition* InGame::get_character_definition(const std::string_view character_variable)
+CharacterDefinition& InGame::get_character_definition(const std::string_view character_variable)
 {
 	for(CharacterDefinition& c : character_definitions_)
 	{
 		if(c.character_variable_ == character_variable)
 		{
-			return &c;
+			return c;
 		}
 	}
-	return nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -465,20 +453,20 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 {
 	//Characters
 	std::stable_sort(draw_characters_order_.begin(), draw_characters_order_.end(), 
-		[&](const std::string& a, const std::string& b) -> bool 
+		[&](const std::string_view a, const std::string_view b) -> bool 
 	{ 
 		return active_characters_.at(a).properties_.zorder_ < active_characters_.at(b).properties_.zorder_;
 	});
 
 	/*std::cout << "\n";
-	for(std::string s : draw_characters_order_)
+	for(const std::string_view s : draw_characters_order_)
 	{
 		std::cout << s << std::endl;
 	}
 	std::cout << "\n";*/
 
 	//std::cout << "\n";
-	for(const std::string& s : draw_characters_order_)
+	for(const std::string_view s : draw_characters_order_)
 	{
 		for(unsigned int i = current_unique_id_; i != -1; --i)
 		{
@@ -542,13 +530,8 @@ void InGame::update_characters()
 				InfoCharacter& p_character = std::get<InfoCharacter>(script_information_[i]);
 				if(key_character_variable == p_character.character_variable_)
 				{
-					if(!p_character.t_.transform_.transform_name_.empty())
-					{
-						value_character.set_transform(p_character.t_.transform_.transform_name_);
-					}
-
 					//std::cout << "Name: " << p.second.properties_.name_ << ", " << p.second.properties_.transform_.transform_name_ << ", " << p_character.t_.transform_.transform_name_ << std::endl;
-
+					value_character.set_transform(p_character.t_.transform_name_);
 					value_character.properties_.zorder_ = p_character.t_.zorder_;
 					value_character.properties_.name_ = p_character.t_.name_;
 					break;
@@ -582,35 +565,23 @@ void InGame::update_autofocus()
 	//TODO : positionner is_speaking_ dans show_new_dialogue() ??
 
 	//Pour l'autofocus
-	bool autofocus = false;
+	bool autofocus = constants::default_autofocus;
 	for(unsigned int i = current_unique_id_; i != -1; --i)
 	{
 		if(std::holds_alternative<InfoAutofocus>(script_information_[i]))
 		{
-			if(std::get<InfoAutofocus>(script_information_[i]))
-			{
-				autofocus = true;
-				break;
-			}
-			else
-			{
-				return;
-			}
+			autofocus = std::get<InfoAutofocus>(script_information_[i]);
+			break;
 		}
 	}
 
-	//Ne marche que si autofocus vaut par défaut false (constructeur et variable "autofocus")
-	if(autofocus == false)
+	if(autofocus)
 	{
-		return;
-	}
+		std::string last_character_name = get_last_character_name();
 
-	std::string last_character_name = get_last_character_name();
-	if(!last_character_name.empty())
-	{
 		for(auto& [key_character_variable, value_character] : active_characters_)
 		{
-			if(value_character.character_definition_->character_variable_ == get_current_dialogue()->character_variable_)
+			if(!last_character_name.empty() && value_character.character_definition_->character_variable_ == get_current_dialogue()->character_variable_)
 			{
 				value_character.properties_.is_speaking_ = true;
 				value_character.properties_.zorder_ = 10;
@@ -620,14 +591,6 @@ void InGame::update_autofocus()
 				value_character.properties_.is_speaking_ = false;
 				value_character.properties_.zorder_ = 5;
 			}
-		}
-	}
-	else //Narrator
-	{
-		for(auto& [key_character_variable, value_character] : active_characters_)
-		{
-			value_character.properties_.is_speaking_ = false;
-			value_character.properties_.zorder_ = 5;
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
@@ -813,16 +776,15 @@ void InGame::update_textbox()
 		{
 			if(value_character.character_definition_->character_variable_ == get_current_dialogue()->character_variable_)
 			{
-				if(!(value_character.properties_.textbox_path_.empty())) //TODO : tester aussi la namebox ??
-				{
-					textbox_.change_textbox(value_character.properties_.textbox_path_, value_character.properties_.namebox_path_, renderer_);
-				}
+				textbox_.change_textbox(value_character.properties_.textbox_path_, renderer_);
+				textbox_.change_namebox(value_character.properties_.namebox_path_, renderer_);
 			}
 		}
 	}
 	else //Narrator
 	{
-		textbox_.change_textbox(constants::textbox_image_, constants::namebox_image_, renderer_);
+		textbox_.change_textbox(constants::textbox_image_, renderer_);
+		textbox_.change_namebox(constants::namebox_image_, renderer_);
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 }

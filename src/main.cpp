@@ -41,6 +41,8 @@
 
 //TODO : créer une méthode pour changer la textbox/namebox d'un personnage
 
+//TODO : dans la member initialization list, ne pas écrire : transform_(Transform(transform_name)) mais transform_(transform_name)
+
 
 int main(int argc, char* argv[])
 {

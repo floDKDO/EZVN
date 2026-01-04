@@ -7,7 +7,7 @@
 
 //Ce constructeur permet à Character::Editableproperties de disposer d'un constructeur par défaut
 Transform::Transform()
-	: is_character_visible_(false), transform_name_(""), /*previous_transform_name_(transform_name_),*/ transform_({"", TransformAllSteps(0)})
+	: is_character_visible_(false), transform_name_("none"), /*previous_transform_name_(transform_name_),*/ transform_({"none", TransformAllSteps(0)})
 {}
 
 Transform::Transform(const std::string transform_name)
@@ -177,7 +177,7 @@ void Transform::show_transform(const std::string transform_name, Image& image)
 	{
 		hide(image);
 	}
-	else if(transform_name.empty() || transform_name == "none")
+	else if(transform_name == "none")
 	{
 		//do nothing!
 	}

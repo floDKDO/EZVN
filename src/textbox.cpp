@@ -30,17 +30,22 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_; 
 }
 
-void Textbox::change_textbox(const std::string_view new_textbox_path, const std::string_view new_namebox_path, sdl::Renderer& renderer)
+void Textbox::change_textbox(std::string_view new_textbox_path, sdl::Renderer& renderer)
 {
+	if(new_textbox_path.empty())
+	{
+		new_textbox_path = constants::textbox_image_;
+	}
 	textbox_.init_image(new_textbox_path, textbox_.position_.x, textbox_.position_.y, renderer);
-	if(!new_namebox_path.empty())
+}
+
+void Textbox::change_namebox(std::string_view new_namebox_path, sdl::Renderer& renderer)
+{
+	if(new_namebox_path.empty())
 	{
-		namebox_.init_image(new_namebox_path, namebox_.position_.x, namebox_.position_.y, renderer);
+		new_namebox_path = constants::namebox_image_;
 	}
-	else
-	{
-		namebox_.init_image(constants::namebox_image_, namebox_.position_.x, namebox_.position_.y, renderer);
-	}
+	namebox_.init_image(new_namebox_path, namebox_.position_.x, namebox_.position_.y, renderer);
 }
 
 void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)

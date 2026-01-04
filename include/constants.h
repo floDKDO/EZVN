@@ -12,6 +12,9 @@ namespace constants
 inline constexpr int window_width_ = 1280;
 inline constexpr int window_height_ = 720;
 
+inline constexpr int default_zorder_ = 0;
+inline constexpr bool default_autofocus = false;
+
 inline constexpr int text_outline_size_ = 1;
 inline constexpr SDL_Color text_outline_color_ = {255, 205, 230, 255};
 
