@@ -7,7 +7,9 @@
 #include "GUI/texttoggle.h"
 #include "music.h"
 #include "sound.h"
+
 #include <vector>
+#include <unordered_set>
 
 class InGame : public GameState
 {
@@ -128,6 +130,7 @@ class InGame : public GameState
 	private:
 		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
 		std::unordered_map<std::string, Character> active_characters_;
+		std::unordered_set<std::string> character_variables_seen_; //for update_characters()
 		std::vector<std::string> draw_characters_order_;
 		std::vector<size_t> dialogues_indices_;
 		std::vector<ScriptInformation> script_information_;
