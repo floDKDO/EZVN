@@ -43,6 +43,8 @@
 
 //TODO : dans la member initialization list, ne pas écrire : transform_(Transform(transform_name)) mais transform_(transform_name)
 
+//TODO : il ne faudrait pas utiliser std::string_view en tant que clef dans une std::map ou std::unordered_map
+
 
 int main(int argc, char* argv[])
 {
@@ -77,7 +79,6 @@ int main(int argc, char* argv[])
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);*/
-
 	game.add_new_dialogue("...");
 	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...");

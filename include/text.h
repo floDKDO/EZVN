@@ -53,7 +53,7 @@ class Text : public Drawable
 		int font_size_;
 		int font_style_;
 		int previous_font_style_;
-		std::string_view font_path_;
+		std::string font_path_;
 		sdl::Font font_;
 
 		int outline_size_; 

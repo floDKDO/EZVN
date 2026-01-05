@@ -34,9 +34,8 @@ class Character
 			bool is_visible_;
 		};
 		Editableproperties properties_;
-
 		Transform transform_;
-		Image character_; //TODO : juste pour tester => truc similaire à MPT par la suite
+		std::unique_ptr<Image> character_; //TODO : juste pour tester => truc similaire à MPT par la suite
 
 	private:
 		//SDL_Rect initial_rect_;

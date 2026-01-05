@@ -23,10 +23,11 @@ class InGame : public GameState
 
 		TextToggle* get_texttoggle(const std::string_view text);
 
+		void create_narrator();
 		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
 		std::optional<Character::Editableproperties> get_last_character_properties(const std::string_view character_variable);
 		std::string get_last_character_name();
-		CharacterDefinition& get_character_definition(const std::string_view character_variable); 
+		//CharacterDefinition& get_character_definition(const std::string_view character_variable); 
 
 		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 
@@ -85,13 +86,13 @@ class InGame : public GameState
 		template <typename T>
 		struct MyPair
 		{
-			std::string_view character_variable_;
+			std::string character_variable_;
 			T t_;
 		};
 
-		std::vector<CharacterDefinition> character_definitions_; 
-		std::unordered_map<std::string_view, Character> active_characters_;
-		std::vector<std::string_view> draw_characters_order_;
+		std::unordered_map<std::string, CharacterDefinition> character_definitions_; 
+		std::unordered_map<std::string, Character> active_characters_;
+		std::vector<std::string> draw_characters_order_;
 
 		struct AudioProperties
 		{
@@ -103,7 +104,7 @@ class InGame : public GameState
 		};
 
 		using InfoCharacter = MyPair<Character::Editableproperties>;
-		using InfoDialogue = MyPair<const std::string_view>;
+		using InfoDialogue = MyPair<const std::string>;
 		using InfoBackground = Background;
 		using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
 		using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;

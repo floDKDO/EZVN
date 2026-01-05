@@ -209,7 +209,7 @@ void Game::add_new_dialogue(const std::string_view character_variable, const std
 
 void Game::add_new_dialogue(const std::string_view dialogue)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("", dialogue); //TODO : mettre nullptr car j'utiliserai Character* à la place d'une std::string_view ???
+	dynamic_cast<InGame*>(in_game_.get())->insert_dialogue("Narrator", dialogue); //TODO : mettre nullptr car j'utiliserai Character* à la place d'une std::string_view ???
 }
 
 void Game::show_background(const std::string_view background_path)

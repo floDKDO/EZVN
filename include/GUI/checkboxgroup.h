@@ -9,12 +9,12 @@ template<size_t N>
 class CheckboxGroup : public CheckableGroup
 {
 	public:
-		CheckboxGroup(const std::string_view top_text, const std::vector<std::string_view> texts, const int x, const int y, const bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
+		CheckboxGroup(const std::string_view top_text, const std::vector<std::string> texts, const int x, const int y, const bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
 };
 
 
 template<size_t N>
-CheckboxGroup<N>::CheckboxGroup(const std::string_view top_text, const std::vector<std::string_view> texts, const int x, const int y, const bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
+CheckboxGroup<N>::CheckboxGroup(const std::string_view top_text, const std::vector<std::string> texts, const int x, const int y, const bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
 	: CheckableGroup(N, only_one_has_to_be_checked, top_text, x, y, renderer)
 {
 	SDL_assert(callback_functions.size() == N);

@@ -52,16 +52,9 @@ void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string
 {
 	if(is_first_dialogue_ || (text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
 	{
-		if(speaker.empty()) //Narrator
-		{
-			current_speaker_.clear();
-		}
-		else
-		{
-			current_speaker_ = speaker;
-			text_name_box_.text_ = current_speaker_;
-			text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
-		}
+		current_speaker_ = speaker;
+		text_name_box_.text_ = current_speaker_;
+		text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
 		
 		text_.is_finished_ = false;
 		text_.index_dialogue_ = 0;

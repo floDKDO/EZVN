@@ -18,7 +18,7 @@ class Image : public Drawable
 		void draw(sdl::Renderer& renderer) override;
 
 		int zorder_;
-		std::string_view path_;
+		std::string path_;
 
 	private:
 		enum class ImageType
