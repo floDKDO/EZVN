@@ -37,13 +37,15 @@
 
 //TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
 
-//TODO : crash si aucun dialogue => current_unique_id_ a la valeur initiale -1 ??
+//TODO : crash si aucun dialogue => current_script_index_ a la valeur initiale -1 ??
 
 //TODO : créer une méthode pour changer la textbox/namebox d'un personnage
 
 //TODO : dans la member initialization list, ne pas écrire : transform_(Transform(transform_name)) mais transform_(transform_name)
 
 //TODO : il ne faudrait pas utiliser std::string_view en tant que clef dans une std::map ou std::unordered_map
+
+//TODO : mettre des constructeurs par défaut dans les structs pour simplifier l'initialisation de leurs membres 
 
 
 int main(int argc, char* argv[])

@@ -8,10 +8,60 @@
 #include "music.h"
 #include "sound.h"
 #include <vector>
-#include <memory>
 
 class InGame : public GameState
 {
+	enum class WhichDialogue
+	{
+		none,
+		next,
+		prev 
+	};
+
+	struct WhichDialogueFromWhere
+	{
+		WhichDialogue which_dialogue_;
+		bool is_from_mouse_wheel_;
+		bool wait_for_end_of_dialogue_;
+	};
+
+	struct ScriptIndexWhenPrev
+	{
+		bool is_saved_;
+		size_t saved_script_index_;
+	};
+
+	struct CurrentSound
+	{
+		size_t associated_script_index_;
+		bool played_;
+		Sound* sound_;
+	};
+
+	template <typename T>
+	struct MyPair
+	{
+		std::string character_variable_;
+		T t_;
+	};
+
+	struct AudioProperties
+	{
+		int fadein_length_;
+		int fadeout_length_;
+		int volume_;
+		bool loop_;
+		int channel_; //not used for musics
+	};
+
+	using InfoCharacter = MyPair<Character::Editableproperties>;
+	using InfoDialogue = MyPair<const std::string>;
+	using InfoBackground = Background;
+	using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
+	using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
+	using InfoAutofocus = bool;
+	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
+
 	public:
 		InGame(Game& game, sdl::Renderer& renderer);
 
@@ -23,140 +73,82 @@ class InGame : public GameState
 
 		TextToggle* get_texttoggle(const std::string_view text);
 
-		void create_narrator();
-		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
-		std::optional<Character::Editableproperties> get_last_character_properties(const std::string_view character_variable);
-		std::string get_last_character_name();
-		//CharacterDefinition& get_character_definition(const std::string_view character_variable); 
+		void auto_function(Ui* ui);
+		void skip_function(Ui* ui);
+		void settings_function(Ui* ui);
+		void temp_function(Ui* ui);
+
 
 		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 
-		void insert_background(const std::string_view background_path);
-		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
-
-		Character* is_character_active(const std::string_view character_variable);
 		Character::Editableproperties show_character_prologue(const std::string_view character_variable);
 		void show_character(const std::string_view character_variable, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
 		void hide_character(const std::string_view character_variable);
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
 
-		void change_background(const Background& b); //TODO : prendre un InfoBackground ??
+		void insert_background(const std::string_view background_path);
+		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
 
 		void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop);
 		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop);
 
 		void insert_autofocus(bool autofocus);
 
-		enum class WhichDialogue
-		{
-			none,
-			next,
-			previous //TODO : renommer en prev ??
-		};
-
-		struct WhichDialogueFromWhere
-		{
-			WhichDialogue which_dialogue_;
-			bool is_from_mouse_wheel_;
-			bool wait_for_end_of_dialogue_;
-		};
-
-		WhichDialogueFromWhere which_dialogue_from_where_;
-
+		InGame::InfoDialogue* get_current_dialogue();
+		std::string get_last_character_name();
+		bool does_next_dialogue_exist(); 
+		bool does_prev_dialogue_exist();
+		size_t get_prev_script_index();
+		size_t get_current_script_index();
+		size_t get_next_script_index();
 		void show_next_dialogue();
 		void show_dialogue_mouse_wheel();
 
-		void auto_function(Ui* ui);
-		void skip_function(Ui* ui);
-		void settings_function(Ui* ui);
-		void temp_function(Ui* ui);
-
+		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
+		void create_narrator();
+		Character* is_character_active(const std::string_view character_variable);
+		std::optional<Character::Editableproperties> get_last_character_properties(const std::string_view character_variable);
 		void draw_characters(sdl::Renderer& renderer);
 
-		void update_current_unique_id_dialogue();
+		void change_background(const InfoBackground& b); 
+
+		void update_current_script_index_dialogue();
 		void update_backgrounds();
 		void update_characters();
 		void update_autofocus();
 		void update_skip_auto_modes();
 		void update_music();
+
+		void halt_all_sounds();
 		void update_sounds();
+
 		void update_textbox();
 		void update_dialogue();
 
-		template <typename T>
-		struct MyPair
-		{
-			std::string character_variable_;
-			T t_;
-		};
-
-		std::unordered_map<std::string, CharacterDefinition> character_definitions_; 
+	private:
+		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
 		std::unordered_map<std::string, Character> active_characters_;
 		std::vector<std::string> draw_characters_order_;
-
-		struct AudioProperties
-		{
-			int fadein_length;
-			int fadeout_length;
-			int volume;
-			bool loop;
-			int channel; //not used for musics
-		};
-
-		using InfoCharacter = MyPair<Character::Editableproperties>;
-		using InfoDialogue = MyPair<const std::string>;
-		using InfoBackground = Background;
-		using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
-		using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
-		using InfoAutofocus = bool;
-		using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
+		std::vector<size_t> dialogues_indices_;
 		std::vector<ScriptInformation> script_information_;
 
-		InGame::InfoDialogue* get_current_dialogue(); 
+		size_t current_dialogue_index_; 
+		size_t current_script_index_;
 
-		//bool one_time_; //avant d'exécuter le script
-		std::vector<unsigned int> dialogues_indices_;
-		unsigned int current_dialogue_index_; //TODO : utiliser size_t
+		ScriptIndexWhenPrev script_index_when_prev_;
+		WhichDialogueFromWhere which_dialogue_from_where_;
 
-		//TODO : éventuellement renommer
-		bool try_next_dialogue();
-		bool try_prev_dialogue();
-		void set_next_dialogue_index();
-		void set_prev_dialogue_index();
-		unsigned int get_prev_dialogue_pos();
-		unsigned int get_current_dialogue_pos();
-		unsigned int get_next_dialogue_pos();
-
-		//TODO : renommer en current_script_index_
-		unsigned int current_unique_id_;
-
-		//TODO : renommer les deux
-		struct SavedCurrentUniqueIDWhenPrevious
-		{
-			bool is_saved_;
-			unsigned int saved_value_;
-		};
-		SavedCurrentUniqueIDWhenPrevious saved_when_prev_;
-
-		Uint64 last_time_;
-
-		Textbox textbox_;
-
-	private:
 		bool skip_mode_;
 		bool auto_mode_;
 
-		Music* currently_playing_music_;
-
-		struct CurrentSound
-		{
-			unsigned int associated_dialogue_pos_;
-			bool played_;
-			Sound* sound_;
-		};
-		CurrentSound currently_playing_sound_;
+		Uint64 last_time_;
 
 		Background background_;
+		Textbox textbox_;
 		bool hide_ui_textbox_;
+
+		Music* currently_playing_music_;
+		CurrentSound currently_playing_sound_;
+
 		sdl::Renderer& renderer_;
 };
