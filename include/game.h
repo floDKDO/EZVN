@@ -45,7 +45,7 @@ class Game
 
 		void update_fps_count(const std::string_view fps) const;
 
-		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path="", const std::string_view namebox_path = "");
+		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path="", const std::string_view namebox_path = "");
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
 
 		void show_character(const std::string_view character_variable, std::string transform_name, int zorder);
@@ -71,6 +71,10 @@ class Game
 
 		void autofocus_enable();
 		void autofocus_disable();
+
+		void change_textbox(const std::string_view character_variable, const std::string_view textbox_path);
+		void change_namebox(const std::string_view character_variable, const std::string_view namebox_path);
+		void change_namebox_text_color(const std::string_view character_variable, const SDL_Color namebox_text_color);
 
 	private:
 		void push_state(GameState* state);

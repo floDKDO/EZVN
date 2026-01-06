@@ -48,6 +48,11 @@ void Textbox::change_namebox(std::string_view new_namebox_path, sdl::Renderer& r
 	namebox_.init_image(new_namebox_path, namebox_.position_.x, namebox_.position_.y, renderer);
 }
 
+void Textbox::change_namebox_text_color(SDL_Color new_namebox_text_color)
+{
+	text_name_box_.change_color(new_namebox_text_color);
+}
+
 void Textbox::show_new_dialogue(const std::string_view new_dialogue, std::string speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)
 {
 	if(is_first_dialogue_ || (text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)

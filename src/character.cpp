@@ -8,7 +8,7 @@
 Character::Character(const CharacterDefinition& character_definition, sdl::Renderer& renderer)
 	: character_definition_(&character_definition)
 	//TODO : si zorder, transform_name, is_speaking et is_visible ont toujours leur valeur par défaut, on peut retirer leur paramètre du constructeur de Character::Editableproperties
-	, properties_{character_definition.initial_name_, constants::default_zorder_, character_definition.initial_textbox_path_, character_definition.initial_namebox_path_, "none", false, false}
+	, properties_{character_definition.initial_name_, constants::default_zorder_, character_definition.initial_namebox_text_color_, character_definition.initial_textbox_path_, character_definition.initial_namebox_path_, "none", false, false}
 {
 	if(!character_definition_->character_path_.empty())
 	{

@@ -8,6 +8,7 @@
 #include <algorithm>
 
 //TODO : éviter de répéter plein de fois les mêmes boucles for
+//TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
 	: GameState(game), current_dialogue_index_(size_t(1)), current_script_index_(0), script_index_when_prev_({false, current_script_index_}), which_dialogue_from_where_({WhichDialogue::none, false, false}),
@@ -156,6 +157,30 @@ void InGame::rename_character(const std::string_view character_variable, const s
 	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
 }
 
+//Character
+void InGame::insert_textbox(const std::string_view character_variable, const std::string_view textbox_path)
+{
+	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
+	character_properties.textbox_path_ = textbox_path;
+	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
+}
+
+//Character
+void InGame::insert_namebox(const std::string_view character_variable, const std::string_view namebox_path)
+{
+	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
+	character_properties.namebox_path_ = namebox_path;
+	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
+}
+
+//Character
+void InGame::insert_namebox_text_color(const std::string_view character_variable, const SDL_Color namebox_text_color)
+{
+	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
+	character_properties.namebox_text_color_ = namebox_text_color;
+	script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
+}
+
 //Background
 void InGame::insert_background(const std::string_view background_path)
 {
@@ -199,6 +224,7 @@ void InGame::insert_autofocus(bool autofocus)
 {
 	script_information_.push_back(InfoAutofocus(autofocus));
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -305,9 +331,9 @@ void InGame::show_dialogue_mouse_wheel()
 //Character//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Character
-void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color, const std::string_view textbox_path, const std::string_view namebox_path)
+void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
 {
-	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_font_color, textbox_path, namebox_path}));
+	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
 }
 
 //Character
@@ -532,6 +558,9 @@ void InGame::update_characters()
 				character.set_transform(p_character.t_.transform_name_);
 				character.properties_.zorder_ = p_character.t_.zorder_;
 				character.properties_.name_ = p_character.t_.name_;
+				character.properties_.textbox_path_ = p_character.t_.textbox_path_;
+				character.properties_.namebox_path_ = p_character.t_.namebox_path_;
+				character.properties_.namebox_text_color_ = p_character.t_.namebox_text_color_;
 			}
 		}
 	}
@@ -765,6 +794,7 @@ void InGame::update_textbox()
 		{
 			textbox_.change_textbox(value_character.properties_.textbox_path_, renderer_);
 			textbox_.change_namebox(value_character.properties_.namebox_path_, renderer_);
+			textbox_.change_namebox_text_color(value_character.properties_.namebox_text_color_);
 		}
 	}
 
@@ -772,6 +802,7 @@ void InGame::update_textbox()
 	{
 		textbox_.update();
 	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
@@ -851,12 +882,33 @@ void InGame::update()
 //TODO : ne pas oublier les cas "i = 0" pour les sons et la musique
 void InGame::update2()
 {
-	/*for(size_t i = current_script_index_; i != -1; --i)
+	/*
+
+	update_current_script_index_dialogue();
+
+	update_skip_auto_modes();
+	
+	for(size_t i = current_script_index_; i != -1; --i)
 	{
 		if(std::holds_alternative<InfoBackground>(script_information_[i]))
 		{
 			change_background(std::get<InfoBackground>(script_information_[i]));
 			break; //TODO : nécessaire pour tous les cas ??
+		}
+		else if(std::holds_alternative<InfoCharacter>(script_information_[i]))
+		{
+			InfoCharacter& p_character = std::get<InfoCharacter>(script_information_[i]);
+			const std::string& character_variable = p_character.character_variable_;
+
+			if(!character_variables_seen_.count(character_variable)) //si la character_variable du personnage n'est pas déjà dans le std::unordered_set
+			{
+				character_variables_seen_.insert(character_variable);
+
+				Character& character = active_characters_.at(character_variable);
+				character.set_transform(p_character.t_.transform_name_);
+				character.properties_.zorder_ = p_character.t_.zorder_;
+				character.properties_.name_ = p_character.t_.name_;
+			}
 		}
 		else if(std::holds_alternative<InfoAutofocus>(script_information_[i]) || constants::default_autofocus)
 		{
@@ -963,10 +1015,6 @@ void InGame::update2()
 				}
 			}
 			break;
-		}
-		else if(std::holds_alternative<InfoCharacter>(script_information_[i]))
-		{
-
 		}
 		else if(std::holds_alternative<InfoDialogue>(script_information_[i]))
 		{

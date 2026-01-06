@@ -167,9 +167,9 @@ void Game::update_fps_count(const std::string_view fps) const
 	window_.set_title(std::string(constants::game_name_) + std::string(fps));
 }
 
-void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color, const std::string_view textbox_path, const std::string_view namebox_path)
+void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
 {
-	dynamic_cast<InGame*>(in_game_.get())->add_character(character_variable, character_name, character_path, namebox_font_color, textbox_path, namebox_path);
+	dynamic_cast<InGame*>(in_game_.get())->add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
 }
 
 void Game::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
@@ -255,4 +255,19 @@ void Game::autofocus_enable()
 void Game::autofocus_disable()
 {
 	dynamic_cast<InGame*>(in_game_.get())->insert_autofocus(false);
+}
+
+void Game::change_textbox(const std::string_view character_variable, const std::string_view textbox_path)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_textbox(character_variable, textbox_path);
+}
+
+void Game::change_namebox(const std::string_view character_variable, const std::string_view namebox_path)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_namebox(character_variable, namebox_path);
+}
+
+void Game::change_namebox_text_color(const std::string_view character_variable, const SDL_Color namebox_text_color)
+{
+	dynamic_cast<InGame*>(in_game_.get())->insert_namebox_text_color(character_variable, namebox_text_color);
 }

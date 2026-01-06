@@ -37,9 +37,9 @@
 
 //TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
 
-//TODO : crash si aucun dialogue => current_script_index_ a la valeur initiale -1 ??
+//TODO : possibilité de déplacer la textbox
 
-//TODO : créer une méthode pour changer la textbox/namebox d'un personnage
+//TODO : crash si aucun dialogue => current_script_index_ a la valeur initiale -1 ??
 
 //TODO : dans la member initialization list, ne pas écrire : transform_(Transform(transform_name)) mais transform_(transform_name)
 
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 
 	//TODO : pause et window hide
 
-	//TODO : la textbox noire apparaît brièvement pour le premier dialogue
+	//TODO : la textbox noire apparaît brièvement pour le premier dialogue, de même que des anciens noms dans la namebox
 
 	Game game;
 
@@ -91,6 +91,9 @@ int main(int argc, char* argv[])
 	game.show_character("Sayori", "t11");
 	game.rename_character("Sayori", "xxxxx");
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
+	game.change_textbox("Sayori", "img/gui/yuri_textbox.png");
+	game.change_namebox("Sayori", "img/gui/monika_namebox.png");
+	game.change_namebox_text_color("Sayori", {0, 0, 0, 255});
 	game.rename_character("Sayori", "yyyyy"); 
 	game.add_new_dialogue("Sayori", "Hihihi!");
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");

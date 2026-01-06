@@ -87,6 +87,9 @@ class InGame : public GameState
 		void show_character(const std::string_view character_variable, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
 		void hide_character(const std::string_view character_variable);
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
+		void insert_textbox(const std::string_view character_variable, const std::string_view textbox_path);
+		void insert_namebox(const std::string_view character_variable, const std::string_view namebox_path);
+		void insert_namebox_text_color(const std::string_view character_variable, const SDL_Color namebox_text_color);
 
 		void insert_background(const std::string_view background_path);
 		void insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
@@ -106,7 +109,7 @@ class InGame : public GameState
 		void show_next_dialogue();
 		void show_dialogue_mouse_wheel();
 
-		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_font_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
+		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
 		void create_narrator();
 		Character* is_character_active(const std::string_view character_variable);
 		std::optional<Character::Editableproperties> get_last_character_properties(const std::string_view character_variable);
