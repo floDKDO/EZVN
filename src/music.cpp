@@ -47,7 +47,10 @@ void Music::resume_music() const
 
 void Music::stop_music(const int fadeout_length) const
 {
-	music_.fade_out(fadeout_length * 1000);
+	if(music_.playing())
+	{
+		music_.fade_out(fadeout_length * 1000);
+	}
 }
 
 void Music::change_volume(const int volume) //[0; MIX_MAX_VOLUME(=128)]
@@ -64,6 +67,7 @@ void Music::set_position(const double position) const
 
 void Music::update()
 {
+	std::cout << "UPDATE MUSIQUE\n";
 	if(local_music_volume_ != global_music_volume_)
 	{
 		std::cout << "CHANGEMENT de VOLUME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";

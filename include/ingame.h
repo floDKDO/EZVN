@@ -56,6 +56,12 @@ class InGame : public GameState
 		int channel_; //not used for musics
 	};
 
+	struct CurrentMusic
+	{
+		struct AudioProperties audio_properties_;
+		Music* music_;
+	};
+
 	using InfoCharacter = MyPair<Character::Editableproperties>;
 	using InfoDialogue = MyPair<const std::string>;
 	using InfoBackground = Background;
@@ -118,14 +124,15 @@ class InGame : public GameState
 		void change_background(const InfoBackground& b); 
 
 		void update_current_script_index_dialogue();
-		void update_backgrounds();
-		void update_characters();
-		void update_autofocus();
+		void update_backgrounds(const InfoBackground& info_background);
+		void update_characters(const InfoCharacter& info_character);
+		void update_autofocus(const InfoAutofocus& info_autofocus);
 		void update_skip_auto_modes();
-		void update_music();
+		void update_music(InfoMusic& info_music);
+		static void callback();
 
 		void halt_all_sounds();
-		void update_sounds();
+		void update_sounds(InfoSound& info_sound, size_t i);
 
 		void update_textbox();
 		void update_dialogue();
@@ -140,6 +147,7 @@ class InGame : public GameState
 
 		size_t current_dialogue_index_; 
 		size_t current_script_index_;
+		size_t previous_script_index_;
 
 		ScriptIndexWhenPrev script_index_when_prev_;
 		WhichDialogueFromWhere which_dialogue_from_where_;
@@ -153,8 +161,13 @@ class InGame : public GameState
 		Textbox textbox_;
 		bool hide_ui_textbox_;
 
-		Music* currently_playing_music_;
+		static CurrentMusic currently_playing_music_;
 		CurrentSound currently_playing_sound_;
+
+		bool background_changed_;
+		bool autofocus_changed_;
+		bool music_changed_;
+		bool sound_changed_;
 
 		sdl::Renderer& renderer_;
 };
