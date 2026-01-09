@@ -60,17 +60,17 @@ int main(int argc, char* argv[])
 
 	//TODO : la textbox noire apparaît brièvement pour le premier dialogue, de même que des anciens noms dans la namebox
 
-	Color c1(Color::from_rgba8(120, 200, 140));
+	Color c1(Color::from_rgba8(120, 200, 140, 100));
 	std::cout << "c1: " << int(c1.r_) << ", " << int(c1.g_) << ", " << int(c1.b_) << ", " << int(c1.a_) << std::endl;
-	Color c2(Color::from_rgba(0.2, 0.5, 0.3));
+	Color c2(Color::from_rgba(0.2, 0.5, 0.3, 0.75));
 	std::cout << "c2: " << int(c2.r_) << ", " << int(c2.g_) << ", " << int(c2.b_) << ", " << int(c2.a_) << std::endl;
-	Color c3(Color::from_hsva8(342, 80, 100));
+	Color c3(Color::from_hsva8(342, 80, 100, 220));
 	std::cout << "c3: " << int(c3.r_) << ", " << int(c3.g_) << ", " << int(c3.b_) << ", " << int(c3.a_) << std::endl;
-	Color c4(Color::from_hsva(342, 0.2, 0.5));
+	Color c4(Color::from_hsva(342, 0.2, 0.5, 0.8));
 	std::cout << "c4: " << int(c4.r_) << ", " << int(c4.g_) << ", " << int(c4.b_) << ", " << int(c4.a_) << std::endl;
-	Color c5(Color::from_hex("#ff00ff"));
+	Color c5(Color::from_hex("#ff00ffee"));
 	std::cout << "c5: " << int(c5.r_) << ", " << int(c5.g_) << ", " << int(c5.b_) << ", " << int(c5.a_) << std::endl;
-	Color c6(Color::from_string("dark red"));
+	Color c6(Color::from_string("DARK Red"));
 	std::cout << "c6: " << int(c6.r_) << ", " << int(c6.g_) << ", " << int(c6.b_) << ", " << int(c6.a_) << std::endl;
 
 	Game game;

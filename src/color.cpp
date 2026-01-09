@@ -39,9 +39,15 @@ Color Color::from_hex(std::string_view hex_color)
 Color Color::from_string(std::string_view string_color)
 {
     RGBA8 rgba8_color;
-    if(colors_.count(std::string(string_color)))
+    std::string string_color_lower = std::string(string_color);
+    for(char& c : string_color_lower)
     {
-        rgba8_color = colors_.at(std::string(string_color));
+        c = std::tolower(c);
+    }
+
+    if(colors_.count(string_color_lower))
+    {
+        rgba8_color = colors_.at(string_color_lower);
     }
     else
     {
