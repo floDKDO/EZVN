@@ -6,8 +6,6 @@
 namespace sdl
 {
 
-//int Chunk::unused_channel_ = 0;
-
 Chunk::Chunk(const std::string_view file) //Mix_LoadWAV
 {
 	if((chunk_ = Mix_LoadWAV(file.data())) == nullptr)
@@ -57,7 +55,7 @@ bool Chunk::playing(int channel)
 	return Mix_Playing(channel);
 }
 
-void Chunk::play_channel(sdl::Chunk& chunk, int channel, const bool loop)
+void Chunk::play_channel(sdl::Chunk& chunk, int channel, const bool loop, const int volume)
 {
 	int loops;
 	if(loop)
@@ -68,6 +66,8 @@ void Chunk::play_channel(sdl::Chunk& chunk, int channel, const bool loop)
 	{
 		loops = 0;
 	}
+
+	Chunk::volume(chunk, volume);
 
 	Mix_PlayChannel(channel, chunk.fetch(), loops);
 }

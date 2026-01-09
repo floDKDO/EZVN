@@ -5,6 +5,7 @@
 #include "GUI/inputfield.h"
 #include "GUI/confirmationpopup.h"
 #include "constants.h"
+#include "game.h"
 
 #include <iostream>
 
@@ -167,7 +168,7 @@ void UiManager::assign_ui_on_moving() const
 
 void UiManager::select_new(Ui* ui)
 {
-	sdl::Chunk::play_channel(select_sound_, -1, false);
+	sdl::Chunk::play_channel(select_sound_, -1, false, Game::global_sound_volume_);
 	
 	previous_selected_ = current_selected_;
 	previous_selected_->state_ = State::NORMAL;
@@ -307,7 +308,7 @@ void UiManager::on_input_released(const SDL_Event& e)
 	else if((e.type == SDL_CONTROLLERBUTTONUP && e.cbutton.button == SDL_CONTROLLER_BUTTON_A)
 		 || (e.type == SDL_KEYUP && e.key.keysym.sym == SDLK_RETURN))
 	{
-		sdl::Chunk::play_channel(click_sound_, -1, false);
+		sdl::Chunk::play_channel(click_sound_, -1, false, Game::global_sound_volume_);
 		current_selected_->on_enter_released();
 	}
 }
@@ -359,7 +360,7 @@ void UiManager::handle_events(const SDL_Event& e)
 					if((current_selected_->pointer_on_ui_when_pointer_up_ && is_mouse_on_specific_ui(current_selected_, pointer_event_data)) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
 					|| !current_selected_->pointer_on_ui_when_pointer_up_) //second conditon: the callback function is called even if the pointer is not on the UI when it is released/up
 					{
-						sdl::Chunk::play_channel(click_sound_, -1, false);
+						sdl::Chunk::play_channel(click_sound_, -1, false, Game::global_sound_volume_);
 						current_selected_->on_pointer_up(pointer_event_data);
 						current_selected_->mouse_was_on_ui_before_drag_ = false;
 					}
@@ -375,7 +376,7 @@ void UiManager::handle_events(const SDL_Event& e)
 					current_selected_->mouse_entered_ = true;
 					if(!is_mouse_left_button_held_down_ && current_selected_->state_ == State::NORMAL)
 					{
-						sdl::Chunk::play_channel(select_sound_, -1, false);
+						sdl::Chunk::play_channel(select_sound_, -1, false, Game::global_sound_volume_);
 						current_selected_->on_pointer_enter(pointer_event_data);
 					}
 				}
