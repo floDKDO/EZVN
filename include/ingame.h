@@ -6,7 +6,7 @@
 #include "background.h"
 #include "GUI/texttoggle.h"
 #include "RAII_SDL2/music.h"
-#include "sound.h"
+#include "RAII_SDL2/chunk.h"
 
 #include <vector>
 #include <unordered_set>
@@ -33,20 +33,6 @@ class InGame : public GameState
 		size_t saved_script_index_;
 	};
 
-	struct CurrentSound
-	{
-		size_t associated_script_index_;
-		bool played_;
-		Sound* sound_;
-	};
-
-	template <typename T>
-	struct MyPair
-	{
-		std::string character_variable_;
-		T t_;
-	};
-
 	struct AudioProperties
 	{
 		int fadein_length_;
@@ -54,6 +40,21 @@ class InGame : public GameState
 		int volume_;
 		bool loop_;
 		int channel_; //not used for musics
+	};
+
+	struct CurrentSound
+	{
+		struct AudioProperties audio_properties_;
+		size_t associated_script_index_;
+		bool played_;
+		sdl::Chunk* sound_;
+	};
+
+	template <typename T>
+	struct MyPair
+	{
+		std::string character_variable_;
+		T t_;
 	};
 
 	struct CurrentMusic
@@ -66,7 +67,7 @@ class InGame : public GameState
 	using InfoDialogue = MyPair<const std::string>;
 	using InfoBackground = Background;
 	using InfoMusic = std::pair<AudioProperties, std::optional<sdl::Music>>;
-	using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
+	using InfoSound = std::pair<AudioProperties, std::optional<sdl::Chunk>>;
 	using InfoAutofocus = bool;
 	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
 

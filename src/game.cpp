@@ -9,6 +9,7 @@
 //TODO : garder les vectors de C-pointeurs ??
 
 int Game::global_music_volume_ = MIX_MAX_VOLUME / 2;
+int Game::global_sound_volume_ = MIX_MAX_VOLUME / 2;
 
 Game::Game()
 	: sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),

@@ -14,7 +14,7 @@ InGame::CurrentMusic InGame::currently_playing_music_ = {{}, nullptr};
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
 	: GameState(game), current_dialogue_index_(size_t(1)), current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_}), which_dialogue_from_where_({WhichDialogue::none, false, false}),
-	skip_mode_(false), auto_mode_(false), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({0, false, nullptr}),
+	skip_mode_(false), auto_mode_(false), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}),
 	background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer); 
@@ -205,7 +205,7 @@ void InGame::insert_sound(const std::string_view sound_path, int fadein_length, 
 	}
 	else //play sound
 	{
-		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, Sound(sound_path, channel, volume))));
+		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, sdl::Chunk(sound_path))));
 	}
 }
 
@@ -321,7 +321,7 @@ void InGame::show_dialogue_mouse_wheel()
 		if(get_current_script_index() == currently_playing_sound_.associated_script_index_)
 		{
 			//faire cela uniquement si le son n'est pas en train de se jouer si on est sur le dialogue sinon il sera rejoué une fois sur le dialogue
-			if(currently_playing_sound_.sound_ != nullptr && !sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
+			if(currently_playing_sound_.sound_ != nullptr && !sdl::Chunk::playing(currently_playing_sound_.audio_properties_.channel_))
 			{
 				currently_playing_sound_.played_ = false;
 			}
@@ -660,11 +660,10 @@ void InGame::halt_all_sounds()
 			InfoSound& sound_pair = std::get<InfoSound>(s);
 			if(sound_pair.second.has_value())
 			{
-				Sound& sound = sound_pair.second.value();
-
-				if(sdl::Chunk::playing(sound.channel_))
+				InGame::AudioProperties& sound_properties = sound_pair.first;
+				if(sdl::Chunk::playing(sound_properties.channel_))
 				{
-					sdl::Chunk::halt_channel(sound.channel_);
+					sdl::Chunk::halt_channel(sound_properties.channel_);
 				}
 			}
 		}
@@ -680,7 +679,7 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 
 		if(info_sound.second.has_value()) //play sound
 		{
-			Sound& sound = info_sound.second.value();
+			sdl::Chunk& sound = info_sound.second.value();
 
 			if(currently_playing_sound_.sound_ == &sound)
 			{
@@ -688,8 +687,8 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 				&& ((!sound_properties.loop_ && !currently_playing_sound_.played_) || sound_properties.loop_)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
 				{
 					//sound.change_volume(sound_properties.volume); //TODO
-					sound.play_sound(sound_properties.loop_, sound_properties.fadein_length_);
-					currently_playing_sound_ = {get_current_script_index(), true, &sound};
+					sdl::Chunk::fade_in(sound, sound_properties.channel_, sound_properties.loop_, sound_properties.fadein_length_, Game::global_sound_volume_);
+					currently_playing_sound_ = {sound_properties, get_current_script_index(), true, &sound};
 				}
 				sound_changed_ = true;
 			}
@@ -701,9 +700,9 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 				if(currently_playing_sound_.sound_ && currently_playing_sound_.associated_script_index_ > i) //TODO : remplacer i par current_script_index_ 
 				{
 					std::cout << "HALT DU SON\n";
-					if(sdl::Chunk::playing(currently_playing_sound_.sound_->channel_))
+					if(sdl::Chunk::playing(currently_playing_sound_.audio_properties_.channel_))
 					{
-						sdl::Chunk::halt_channel(currently_playing_sound_.sound_->channel_);
+						sdl::Chunk::halt_channel(currently_playing_sound_.audio_properties_.channel_);
 					}
 				}
 				else
@@ -716,11 +715,11 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 
 				if(current_dialogue_index_ > 0 && i <= get_prev_script_index()) //on est au moins un dialogue avant le dialogue courant
 				{
-					currently_playing_sound_ = {get_current_script_index(), false, nullptr};
+					currently_playing_sound_ = {sound_properties, get_current_script_index(), false, nullptr};
 				}
 				else
 				{
-					currently_playing_sound_ = {get_current_script_index(), false, &sound};
+					currently_playing_sound_ = {sound_properties, get_current_script_index(), false, &sound};
 				}
 			}
 		}
@@ -911,11 +910,7 @@ void InGame::update2()
 	if(!sound_changed_)
 	{
 		halt_all_sounds();
-		currently_playing_sound_ = {0, false, nullptr};
-	}
-	if(currently_playing_sound_.sound_ != nullptr)
-	{
-		currently_playing_sound_.sound_->update();
+		currently_playing_sound_ = {{}, 0, false, nullptr};
 	}
 	//////////////////////////////
 

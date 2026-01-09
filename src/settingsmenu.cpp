@@ -16,7 +16,7 @@ SettingsMenu::SettingsMenu(Game& game, const std::string_view background_path, s
 void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 {
 	ui_manager_.add_element(std::make_unique<TextButton>("Return", 200, 500, renderer, std::bind(&SettingsMenu::previous_menu_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(0, 100, Sound::global_sound_volume_, 800, 200, "Sound effect", renderer, std::bind(&SettingsMenu::slider_sound_function, this, std::placeholders::_1)));
+	ui_manager_.add_element(std::make_unique<Slider>(0, 100, Game::global_sound_volume_, 800, 200, "Sound effect", renderer, std::bind(&SettingsMenu::slider_sound_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<Slider>(0, 100, Game::global_music_volume_, 450, 200, "Music effect", renderer, std::bind(&SettingsMenu::slider_music_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<Slider>(30, 60, Text::global_text_divisor_, 625, 350, "Text speed", renderer, std::bind(&SettingsMenu::slider_text_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)}));
@@ -52,7 +52,7 @@ void SettingsMenu::slider_sound_function(Ui* ui)
 {
 	Slider* slider = dynamic_cast<Slider*>(ui);
 	std::cout << "Changed value (" << slider->current_value_ << ") of slider!" << std::endl;
-	Sound::global_sound_volume_ = slider->current_value_;
+	Game::global_sound_volume_ = slider->current_value_;
 }
 
 void SettingsMenu::slider_music_function(Ui* ui)

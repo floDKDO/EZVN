@@ -18,12 +18,15 @@ class Chunk
 
 		Mix_Chunk* fetch() const;
 		static bool playing(int channel);
-		void fade_in(const int channel, const int loops, const int ms) const;
+		static void play_channel(sdl::Chunk& chunk, int channel, const bool loop); //not the same as Mix_PlayChannel() => loop is a bool (true <=> -1, false <=> 0).
+		static void fade_in(sdl::Chunk& chunk, const int channel, const bool loop, const int ms, const int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInChannel() => loop is a bool (true <=> -1, false <=> 0). It also has a additional parameter (volume)
 		static void fade_out(const int which, const int ms);
 		static void halt_channel(int channel);
 		static void pause(const int channel);
 		static void resume(const int channel);
-		void volume(const int volume) const;
+		static void volume(sdl::Chunk& chunk, const int volume);
+
+		//static int unused_channel_;
 
 	private:
 		Mix_Chunk* chunk_;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GUI/ui.h"
-#include "sound.h"
+#include "RAII_SDL2/chunk.h"
 
 #include <vector>
 #include <memory>
@@ -50,8 +50,8 @@ class UiManager
 		bool is_mouse_left_button_held_down_;
 		//bool is_pop_up_visible_;
 
-		Sound click_sound_;
-		Sound select_sound_;
+		sdl::Chunk click_sound_;
+		sdl::Chunk select_sound_;
 
 		Uint64 last_time_;
 };

@@ -6,6 +6,8 @@
 namespace sdl
 {
 
+//int Chunk::unused_channel_ = 0;
+
 Chunk::Chunk(const std::string_view file) //Mix_LoadWAV
 {
 	if((chunk_ = Mix_LoadWAV(file.data())) == nullptr)
@@ -55,9 +57,36 @@ bool Chunk::playing(int channel)
 	return Mix_Playing(channel);
 }
 
-void Chunk::fade_in(const int channel, int loops, int ms) const
+void Chunk::play_channel(sdl::Chunk& chunk, int channel, const bool loop)
 {
-	Mix_FadeInChannel(channel, chunk_, loops, ms);
+	int loops;
+	if(loop)
+	{
+		loops = -1;
+	}
+	else
+	{
+		loops = 0;
+	}
+
+	Mix_PlayChannel(channel, chunk.fetch(), loops);
+}
+
+void Chunk::fade_in(sdl::Chunk& chunk, const int channel, const bool loop, const int ms, const int volume)
+{
+	int loops;
+	if(loop)
+	{
+		loops = -1;
+	}
+	else
+	{
+		loops = 0;
+	}
+
+	Chunk::volume(chunk, volume);
+
+	Mix_FadeInChannel(channel, chunk.fetch(), loops, ms);
 }
 
 void Chunk::fade_out(const int which, const int ms)
@@ -83,9 +112,9 @@ void Chunk::resume(const int channel)
 	Mix_Resume(channel);
 }
 
-void Chunk::volume(const int volume) const
+void Chunk::volume(sdl::Chunk& chunk, const int volume)
 {
-	Mix_VolumeChunk(chunk_, volume);
+	Mix_VolumeChunk(chunk.fetch(), volume);
 }
 
 }
