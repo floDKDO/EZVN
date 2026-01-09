@@ -67,7 +67,6 @@ void Music::set_position(const double position) const
 
 void Music::update()
 {
-	std::cout << "UPDATE MUSIQUE\n";
 	if(local_music_volume_ != global_music_volume_)
 	{
 		std::cout << "CHANGEMENT de VOLUME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";

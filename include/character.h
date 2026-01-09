@@ -21,13 +21,13 @@ class Character
 				: name_(""), zorder_(constants::default_zorder_), namebox_text_color_(constants::namebox_text_color_), textbox_path_(""), namebox_path_(""), transform_name_("none"), is_speaking_(false), is_visible_(false)
 			{}
 
-			Editableproperties(std::string name, int zorder, SDL_Color namebox_text_color, std::string textbox_path, std::string namebox_path, std::string transform_name, bool is_speaking, bool is_visible)
+			Editableproperties(std::string name, int zorder, Color namebox_text_color, std::string textbox_path, std::string namebox_path, std::string transform_name, bool is_speaking, bool is_visible)
 				: name_(name), zorder_(zorder), namebox_text_color_(namebox_text_color), textbox_path_(textbox_path), namebox_path_(namebox_path), transform_name_(transform_name), is_speaking_(is_speaking), is_visible_(is_visible)
 			{}
 
 			std::string name_; //garder le type std::string pour permettre au joueur de taper son nom au clavier
 			int zorder_;
-			SDL_Color namebox_text_color_;
+			Color namebox_text_color_;
 			std::string textbox_path_;
 			std::string namebox_path_; 
 			std::string transform_name_;

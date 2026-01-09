@@ -14,7 +14,7 @@ InGame::CurrentMusic InGame::currently_playing_music_ = {{}, nullptr};
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
 	: GameState(game), current_dialogue_index_(size_t(1)), current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_}), which_dialogue_from_where_({WhichDialogue::none, false, false}),
-	skip_mode_(false), auto_mode_(false), last_time_(0), background_(0, 0, 0, 255), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({0, false, nullptr}), 
+	skip_mode_(false), auto_mode_(false), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({0, false, nullptr}), 
 	background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer); 
@@ -177,7 +177,7 @@ void InGame::insert_namebox(const std::string_view character_variable, const std
 }
 
 //Character
-void InGame::insert_namebox_text_color(const std::string_view character_variable, const SDL_Color namebox_text_color)
+void InGame::insert_namebox_text_color(const std::string_view character_variable, Color namebox_text_color)
 {
 	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
 	character_properties.namebox_text_color_ = namebox_text_color;
@@ -191,9 +191,9 @@ void InGame::insert_background(const std::string_view background_path)
 }
 
 //Background
-void InGame::insert_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
+void InGame::insert_background(Color color)
 {
-	script_information_.push_back(InfoBackground(Background(r, g, b, a)));
+	script_information_.push_back(InfoBackground(Background(color)));
 }
 
 //Sounds
@@ -334,7 +334,7 @@ void InGame::show_dialogue_mouse_wheel()
 //Character//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Character
-void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
+void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
 {
 	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
 }
@@ -437,7 +437,7 @@ void InGame::change_background(const InfoBackground& b)
 	else
 	{
 		background_.image_.reset();
-		background_.color_ = {b.color_.r, b.color_.g, b.color_.b, b.color_.a};
+		background_.color_ = b.color_;
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////

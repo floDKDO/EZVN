@@ -13,7 +13,7 @@ class Color
             double r_, g_, b_, a_; //between 0.0 and 1.0 
         };
 
-        struct RGBA8
+        struct RGBA8 //<=> SDL_Color
         {
             Uint8 r_, g_, b_, a_; //between 0 and 255 
         };
@@ -59,27 +59,29 @@ class Color
         static HSVA8 hsva_to_hsva8(HSVA hsva_color);
 };
 
-const std::unordered_map<std::string, Color::RGBA8> colors_ =
+//TODO : pouvoir ajouter des entrées dedans
+//TODO : fonctionne uniquement si les couleurs sont RGBA8...
+const std::unordered_map<std::string, Color> colors_ =
 {
-    {"black",       Color::RGBA8{0, 0, 0, 255}},
-    {"white",       Color::RGBA8{255, 255, 255, 255}},
-    {"grey",        Color::RGBA8{128, 128, 128, 255}},
-    {"light grey",  Color::RGBA8{192, 192, 192, 255}},
-    {"dark grey",   Color::RGBA8{64, 64, 64, 255}},
-    {"red",         Color::RGBA8{255, 0, 0, 255}},
-    {"dark red",    Color::RGBA8{127, 0, 0, 255}},
-    {"green",       Color::RGBA8{0, 255, 0, 255}},
-    {"lime green",  Color::RGBA8{182, 255, 0, 255}},
-    {"dark green",  Color::RGBA8{0, 127, 0, 255}},
-    {"blue",        Color::RGBA8{0, 0, 255, 255}},
-    {"sky blue",    Color::RGBA8{149, 200, 216, 255}},
-    {"dark blue",   Color::RGBA8{0, 0, 127, 255}},
-    {"yellow",      Color::RGBA8{255, 255, 0, 255}},
-    {"orange",      Color::RGBA8{255, 106, 0, 255}},
-    {"pink",        Color::RGBA8{255, 0, 255, 255}},
-    {"violet",      Color::RGBA8{129, 0, 255, 255}},
-    {"purple",      Color::RGBA8{72, 0, 0, 255}},
-    {"brown",       Color::RGBA8{124, 71, 0, 255}},
-    {"light brown", Color::RGBA8{153, 121, 80, 255}},
-    {"dark brown",  Color::RGBA8{43, 23, 0, 255}}
+    {"black",       Color::from_rgba8(0, 0, 0)},
+    {"white",       Color::from_rgba8(255, 255, 255)},
+    {"grey",        Color::from_rgba8(128, 128, 128)},
+    {"light grey",  Color::from_rgba8(192, 192, 192)},
+    {"dark grey",   Color::from_rgba8(64, 64, 64)},
+    {"red",         Color::from_rgba8(255, 0, 0)},
+    {"dark red",    Color::from_rgba8(127, 0, 0)},
+    {"green",       Color::from_rgba8(0, 255, 0)},
+    {"lime green",  Color::from_rgba8(182, 255, 0)},
+    {"dark green",  Color::from_rgba8(0, 127, 0)},
+    {"blue",        Color::from_rgba8(0, 0, 255)},
+    {"sky blue",    Color::from_rgba8(149, 200, 216)},
+    {"dark blue",   Color::from_rgba8(0, 0, 127)},
+    {"yellow",      Color::from_rgba8(255, 255, 0)},
+    {"orange",      Color::from_rgba8(255, 106, 0)},
+    {"pink",        Color::from_rgba8(255, 0, 255)},
+    {"violet",      Color::from_rgba8(129, 0, 255)},
+    {"purple",      Color::from_rgba8(72, 0, 0)},
+    {"brown",       Color::from_rgba8(124, 71, 0)},
+    {"light brown", Color::from_rgba8(153, 121, 80)},
+    {"dark brown",  Color::from_rgba8(43, 23, 0)}
 };

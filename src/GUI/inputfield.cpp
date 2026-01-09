@@ -103,20 +103,20 @@ void Inputfield::on_delete_pressed()
 
 void Inputfield::draw(sdl::Renderer& renderer)
 {
-	renderer.set_draw_color(constants::inputfield_container_color_.r, constants::inputfield_container_color_.g, constants::inputfield_container_color_.b, constants::inputfield_container_color_.a);
+	renderer.set_draw_color(constants::inputfield_container_color_.r_, constants::inputfield_container_color_.g_, constants::inputfield_container_color_.b_, constants::inputfield_container_color_.a_);
 	renderer.fill_rect(&container_);
 
 	if(state_ == State::NORMAL)
 	{
-		renderer.set_draw_color(constants::inputfield_outline_normal_color_.r, constants::inputfield_outline_normal_color_.g, constants::inputfield_outline_normal_color_.b, constants::inputfield_outline_normal_color_.a);
+		renderer.set_draw_color(constants::inputfield_outline_normal_color_.r_, constants::inputfield_outline_normal_color_.g_, constants::inputfield_outline_normal_color_.b_, constants::inputfield_outline_normal_color_.a_);
 	}
 	else if(state_ == State::SELECTED)
 	{
-		renderer.set_draw_color(constants::inputfield_outline_selected_color_.r, constants::inputfield_outline_selected_color_.g, constants::inputfield_outline_selected_color_.b, constants::inputfield_outline_selected_color_.a);
+		renderer.set_draw_color(constants::inputfield_outline_selected_color_.r_, constants::inputfield_outline_selected_color_.g_, constants::inputfield_outline_selected_color_.b_, constants::inputfield_outline_selected_color_.a_);
 	}
 	else if(state_ == State::CLICKED)
 	{
-		renderer.set_draw_color(constants::inputfield_outline_clicked_color_.r, constants::inputfield_outline_clicked_color_.g, constants::inputfield_outline_clicked_color_.b, constants::inputfield_outline_clicked_color_.a);
+		renderer.set_draw_color(constants::inputfield_outline_clicked_color_.r_, constants::inputfield_outline_clicked_color_.g_, constants::inputfield_outline_clicked_color_.b_, constants::inputfield_outline_clicked_color_.a_);
 	}
 	renderer.draw_rect(&container_outline_);
 

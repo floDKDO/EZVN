@@ -11,8 +11,8 @@
 class Text : public Drawable
 {
 	public:
-		Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer);
-		Text(const std::string_view text, const SDL_Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, bool is_animated, const Uint32 wrap_length);
+		Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer);
+		Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, bool is_animated, const Uint32 wrap_length);
 
 		void set_italic();
 		void set_bold();
@@ -47,7 +47,7 @@ class Text : public Drawable
 	private:
 		sdl::Font create_outline();
 
-		sdl::Surface create_surface(sdl::Font& font, const SDL_Color color);
+		sdl::Surface create_surface(sdl::Font& font, Color color);
 		void recreate_surfaces_texture();
 
 		int font_size_;

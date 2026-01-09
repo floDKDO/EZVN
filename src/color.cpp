@@ -38,23 +38,21 @@ Color Color::from_hex(std::string_view hex_color)
 
 Color Color::from_string(std::string_view string_color)
 {
-    RGBA8 rgba8_color;
     std::string string_color_lower = std::string(string_color);
     for(char& c : string_color_lower)
     {
-        c = std::tolower(c);
+        c = char(std::tolower(c));
     }
 
     if(colors_.count(string_color_lower))
     {
-        rgba8_color = colors_.at(string_color_lower);
+        return colors_.at(string_color_lower);
     }
     else
     {
         std::cerr << "Invalid format!\n";
-        rgba8_color = {0, 0, 0, 255};
+        return Color(0, 0, 0, 255);
     }
-    return Color(rgba8_color.r_, rgba8_color.g_, rgba8_color.b_, rgba8_color.a_);
 }
 
 SDL_Color Color::to_SDL_Color()
@@ -76,7 +74,7 @@ Color::RGBA8 Color::hex_to_rgba8(std::string_view hex_color)
         return {0, 0, 0, 255};
     }
 
-    RGBA8 rgba8_color;
+    RGBA8 rgba8_color = {0};
     size_t i = 0;
     for(; i < hex_values.length(); i += 2)
     {

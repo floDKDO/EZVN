@@ -45,7 +45,7 @@ class Game
 
 		void update_fps_count(const std::string_view fps) const;
 
-		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path="", const std::string_view namebox_path = "");
+		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path="", const std::string_view namebox_path = "");
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
 
 		void show_character(const std::string_view character_variable, std::string transform_name, int zorder);
@@ -59,7 +59,7 @@ class Game
 		void add_new_dialogue(const std::string_view dialogue);
 
 		void show_background(const std::string_view background_path);
-		void show_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
+		void show_background(Color color);
 
 		void hide_background();
 
@@ -74,7 +74,7 @@ class Game
 
 		void change_textbox(const std::string_view character_variable, const std::string_view textbox_path);
 		void change_namebox(const std::string_view character_variable, const std::string_view namebox_path);
-		void change_namebox_text_color(const std::string_view character_variable, const SDL_Color namebox_text_color);
+		void change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color);
 
 	private:
 		void push_state(GameState* state);

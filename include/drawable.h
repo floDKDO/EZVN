@@ -2,6 +2,7 @@
 
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/texture.h"
+#include "color.h"
 
 #include <memory>
 
@@ -36,20 +37,20 @@ class Drawable
 
 		void night_filter();
 		void afternoon_filter();
-		void change_color(const SDL_Color color);
+		void change_color(Color color);
 
 		Uint64 last_time_;
 		SDL_Rect position_;
 		
 
 	protected:
-		Drawable(sdl::Renderer& renderer, SDL_Color color = {255, 255, 255, 255});
+		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
 
 		std::unique_ptr<sdl::Texture> texture_;
 		SDL_Rect initial_rect_;
 		double angle_;
 		SDL_RendererFlip flip_;
-		SDL_Color color_; 
+		Color color_; 
 
 		sdl::Renderer& renderer_; //do not own it !!
 		

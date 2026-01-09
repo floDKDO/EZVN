@@ -3,29 +3,29 @@
 
 #include <iostream>
 
-Drawable::Drawable(sdl::Renderer& renderer, SDL_Color color)
+Drawable::Drawable(sdl::Renderer& renderer, Color color)
 	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), angle_(0.0), flip_(SDL_FLIP_NONE), color_(color), renderer_(renderer)
 {}
 
 void Drawable::show()
 {
 	//std::cout << "SHOW ***********************************************************\n";
-	color_.a = 255;
-	texture_->set_alpha_mod(color_.a);
+	color_.a_ = 255;
+	texture_->set_alpha_mod(color_.a_);
 }
 
 void Drawable::hide()
 {
 	//std::cout << "HIDE ***********************************************************\n";
-	color_.a = 0;
-	texture_->set_alpha_mod(color_.a);
+	color_.a_ = 0;
+	texture_->set_alpha_mod(color_.a_);
 }
 
 void Drawable::set_alpha(const Uint8 alpha)
 {
 	//std::cout << "SET ALPHA ***********************************************************\n";
-	color_.a = alpha;
-	texture_->set_alpha_mod(color_.a);
+	color_.a_ = alpha;
+	texture_->set_alpha_mod(color_.a_);
 }
 
 void Drawable::rotate(const double angle)
@@ -129,20 +129,20 @@ void Drawable::set_center()
 void Drawable::night_filter()
 {
 	//std::cout << "N FILTER ***********************************************************\n";
-	color_ = {127, 127, 165, color_.a};
-	texture_->set_color_mod(color_.r, color_.g, color_.b);
+	color_ = Color::from_rgba8(127, 127, 165, color_.a_);
+	texture_->set_color_mod(color_.r_, color_.g_, color_.b_);
 }
 
 void Drawable::afternoon_filter()
 {
 	//std::cout << "A FILTER ***********************************************************\n";
-	color_ = {210, 150, 130, color_.a};
-	texture_->set_color_mod(color_.r, color_.g, color_.b);
+	color_ = Color::from_rgba8(210, 150, 130, color_.a_);
+	texture_->set_color_mod(color_.r_, color_.g_, color_.b_);
 }
 
-void Drawable::change_color(const SDL_Color color)
+void Drawable::change_color(Color color)
 {
 	//std::cout << "CHANGE COLOR ***********************************************************\n";
 	color_ = color;
-	texture_->set_color_mod(color_.r, color_.g, color_.b);
+	texture_->set_color_mod(color_.r_, color_.g_, color_.b_);
 }

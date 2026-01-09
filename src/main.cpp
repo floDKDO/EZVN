@@ -12,8 +12,6 @@
 
 //TODO : supprimer les .cpp inutiles où tout le code est dans le header à cause des templates ?
 
-//TODO : r, g, b, a ou SDL_Color ?? x, y ou {x, h} dans un Vec2 ?? Prendre aussi en charge la notation hex #FF00FFFF ??
-
 //TODO:  être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
 
 //TODO : utilité des vector.reserve(10) ??
@@ -48,8 +46,6 @@
 //TODO : mettre des constructeurs par défaut dans les structs pour simplifier l'initialisation de leurs membres 
 
 
-#include "color.h"
-
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
@@ -60,7 +56,7 @@ int main(int argc, char* argv[])
 
 	//TODO : la textbox noire apparaît brièvement pour le premier dialogue, de même que des anciens noms dans la namebox
 
-	Color c1(Color::from_rgba8(120, 200, 140, 100));
+	/*Color c1(Color::from_rgba8(120, 200, 140, 100));
 	std::cout << "c1: " << int(c1.r_) << ", " << int(c1.g_) << ", " << int(c1.b_) << ", " << int(c1.a_) << std::endl;
 	Color c2(Color::from_rgba(0.2, 0.5, 0.3, 0.75));
 	std::cout << "c2: " << int(c2.r_) << ", " << int(c2.g_) << ", " << int(c2.b_) << ", " << int(c2.a_) << std::endl;
@@ -68,10 +64,11 @@ int main(int argc, char* argv[])
 	std::cout << "c3: " << int(c3.r_) << ", " << int(c3.g_) << ", " << int(c3.b_) << ", " << int(c3.a_) << std::endl;
 	Color c4(Color::from_hsva(342, 0.2, 0.5, 0.8));
 	std::cout << "c4: " << int(c4.r_) << ", " << int(c4.g_) << ", " << int(c4.b_) << ", " << int(c4.a_) << std::endl;
-	Color c5(Color::from_hex("#ff00ffee"));
+	Color c5(Color::from_hex("#ff00ff"));
 	std::cout << "c5: " << int(c5.r_) << ", " << int(c5.g_) << ", " << int(c5.b_) << ", " << int(c5.a_) << std::endl;
 	Color c6(Color::from_string("DARK Red"));
-	std::cout << "c6: " << int(c6.r_) << ", " << int(c6.g_) << ", " << int(c6.b_) << ", " << int(c6.a_) << std::endl;
+	std::cout << "c6: " << int(c6.r_) << ", " << int(c6.g_) << ", " << int(c6.b_) << ", " << int(c6.a_) << std::endl;*/
+
 
 	Game game;
 
@@ -87,10 +84,10 @@ int main(int argc, char* argv[])
 	//play music => Fadeout gives the fadeout time for currently playing music, in seconds, while fadein gives the time it takes to fade in the new music.
 	//stop music => fadeout
 
-	game.create_character("Sayori", "Sayo", "img/characters/sayori.png", {168, 224, 255, 255}, "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
-	game.create_character("Monika", "???", "img/characters/monika.png", {168, 255, 169, 255}, "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
-	game.create_character("Yuri", "???", "img/characters/yuri.png", {184, 168, 255, 255}, "img/gui/yuri_textbox.png");
-	game.create_character("Natsuki", "???", "img/characters/natsuki.png", {255, 203, 228, 255}, "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
+	game.create_character("Sayori", "Sayo", "img/characters/sayori.png", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
+	game.create_character("Monika", "???", "img/characters/monika.png", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
+	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png");
+	game.create_character("Natsuki", "???", "img/characters/natsuki.png", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
 	/*game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
@@ -108,7 +105,7 @@ int main(int argc, char* argv[])
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
 	game.change_textbox("Sayori", "img/gui/yuri_textbox.png");
 	game.change_namebox("Sayori", "img/gui/monika_namebox.png");
-	game.change_namebox_text_color("Sayori", {0, 0, 0, 255});
+	game.change_namebox_text_color("Sayori", Color::from_rgba8(0, 0, 0));
 	game.rename_character("Sayori", "yyyyy"); 
 	game.add_new_dialogue("Sayori", "Hihihi!");
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
@@ -120,7 +117,7 @@ int main(int argc, char* argv[])
 	game.show_character("Monika", "t43");
 	game.show_character("Natsuki", "t44");
 	game.add_new_dialogue("Elle est chiante...");
-	game.show_background(129, 0, 255, 255); 
+	game.show_background(Color::from_rgba8(129, 0, 255)); 
 	game.add_new_dialogue("Yuri", "How are you MC?");
 	game.stop_music(2000); //TODO : attention, ici il faut mettre des ms car fade_out est une méthode statique => le * 1000 effectué par stop_music n'est pas réalisé car stop_music n'est donc pas appelé
 	game.rename_character("Yuri", "Yuri beta");

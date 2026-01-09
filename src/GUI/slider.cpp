@@ -140,27 +140,27 @@ void Slider::on_enter_pressed_hook_end()
 
 void Slider::draw(sdl::Renderer& renderer)
 {
-	renderer.set_draw_color(constants::slider_container_color_.r, constants::slider_container_color_.g, constants::slider_container_color_.b, constants::slider_container_color_.a);
+	renderer.set_draw_color(constants::slider_container_color_.r_, constants::slider_container_color_.g_, constants::slider_container_color_.b_, constants::slider_container_color_.a_);
 	renderer.fill_rect(&container_);
 
-	renderer.set_draw_color(constants::slider_container_outline_color_.r, constants::slider_container_outline_color_.g, constants::slider_container_outline_color_.b, constants::slider_container_outline_color_.a);
+	renderer.set_draw_color(constants::slider_container_outline_color_.r_, constants::slider_container_outline_color_.g_, constants::slider_container_outline_color_.b_, constants::slider_container_outline_color_.a_);
 	renderer.draw_rect(&container_outline_);
 
 	if(state_ == State::NORMAL)
 	{
-		renderer.set_draw_color(constants::slider_handle_normal_color_.r, constants::slider_handle_normal_color_.g, constants::slider_handle_normal_color_.b, constants::slider_handle_normal_color_.a);
+		renderer.set_draw_color(constants::slider_handle_normal_color_.r_, constants::slider_handle_normal_color_.g_, constants::slider_handle_normal_color_.b_, constants::slider_handle_normal_color_.a_);
 	}
 	else if(state_ == State::SELECTED)
 	{
-		renderer.set_draw_color(constants::slider_handle_selected_color_.r, constants::slider_handle_selected_color_.g, constants::slider_handle_selected_color_.b, constants::slider_handle_selected_color_.a);
+		renderer.set_draw_color(constants::slider_handle_selected_color_.r_, constants::slider_handle_selected_color_.g_, constants::slider_handle_selected_color_.b_, constants::slider_handle_selected_color_.a_);
 	}
 	else if(state_ == State::CLICKED)
 	{
-		renderer.set_draw_color(constants::slider_handle_clicked_color_.r, constants::slider_handle_clicked_color_.g, constants::slider_handle_clicked_color_.b, constants::slider_handle_clicked_color_.a);
+		renderer.set_draw_color(constants::slider_handle_clicked_color_.r_, constants::slider_handle_clicked_color_.g_, constants::slider_handle_clicked_color_.b_, constants::slider_handle_clicked_color_.a_);
 	}
 	renderer.fill_rect(&handle_);
 
-	renderer.set_draw_color(constants::slider_handle_outline_color_.r, constants::slider_handle_outline_color_.g, constants::slider_handle_outline_color_.b, constants::slider_handle_outline_color_.a);
+	renderer.set_draw_color(constants::slider_handle_outline_color_.r_, constants::slider_handle_outline_color_.g_, constants::slider_handle_outline_color_.b_, constants::slider_handle_outline_color_.a_);
 	renderer.draw_rect(&handle_outline_);
 
 	text_.draw(renderer);

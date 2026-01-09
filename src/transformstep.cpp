@@ -56,7 +56,7 @@ void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_mo
 
 void TransformStep::alpha_common(Uint8 alpha, Image& image, const Uint64 time)
 {
-	no_modif_common(image.color_.a == alpha);
+	no_modif_common(image.color_.a_ == alpha);
 
 	instant_modif_common([&]()
 	{
@@ -64,16 +64,16 @@ void TransformStep::alpha_common(Uint8 alpha, Image& image, const Uint64 time)
 	}
 	, time);
 
-	each_frame_modif_common([&](){ return AlphaStep(image.color_.a, alpha); },
+	each_frame_modif_common([&](){ return AlphaStep(image.color_.a_, alpha); },
 	[&](AlphaStep& alpha_step) -> bool
 	{
 		alpha_step.delta_alpha_frame_ = alpha_step.delta_alpha_ / (60.0f / (1000.0f / float(time)));
 		alpha_step.f_alpha_ += alpha_step.delta_alpha_frame_;
 
-		image.color_.a = Uint8(alpha_step.f_alpha_);
-		image.texture_->set_alpha_mod(image.color_.a);
+		image.color_.a_ = Uint8(alpha_step.f_alpha_);
+		image.texture_->set_alpha_mod(image.color_.a_);
 
-		return (alpha_step.initial_alpha_ > alpha && image.color_.a <= alpha) || (alpha_step.initial_alpha_ < alpha && image.color_.a >= alpha);
+		return (alpha_step.initial_alpha_ > alpha && image.color_.a_ <= alpha) || (alpha_step.initial_alpha_ < alpha && image.color_.a_ >= alpha);
 	}
 	, time);
 }
@@ -268,15 +268,15 @@ void TransformStep::resize(Image& image, const int w, const int h, const Uint64 
 
 void TransformStep::filter_common(Image& image, const Uint8 r, const Uint8 g, const Uint8 b, const Uint64 time)
 {
-	no_modif_common(image.color_.r == r && image.color_.g == g && image.color_.b == b);
+	no_modif_common(image.color_.r_ == r && image.color_.g_ == g && image.color_.b_ == b);
 
 	instant_modif_common([&]()
 	{
-		image.change_color({r, g, b, image.color_.a});
+		image.change_color(Color::from_rgba8(r, g, b, image.color_.a_));
 	}
 	, time);
 
-	each_frame_modif_common([&](){ return FilterStep(image.color_.r, image.color_.g, image.color_.b, r, g, b); },
+	each_frame_modif_common([&](){ return FilterStep(image.color_.r_, image.color_.g_, image.color_.b_, r, g, b); },
 	[&](FilterStep& filter_step) -> bool
 	{
 		filter_step.delta_r_frame_ = filter_step.delta_r_ / (60.0f / (1000.0f / float(time)));
@@ -288,15 +288,15 @@ void TransformStep::filter_common(Image& image, const Uint8 r, const Uint8 g, co
 		filter_step.delta_b_frame_ = filter_step.delta_b_ / (60.0f / (1000.0f / float(time)));
 		filter_step.f_b_ += filter_step.delta_b_frame_;
 
-		image.color_.r = Uint8(filter_step.f_r_);
-		image.color_.g = Uint8(filter_step.f_g_);
-		image.color_.b = Uint8(filter_step.f_b_);
+		image.color_.r_ = Uint8(filter_step.f_r_);
+		image.color_.g_ = Uint8(filter_step.f_g_);
+		image.color_.b_ = Uint8(filter_step.f_b_);
 
-		image.texture_->set_color_mod(image.color_.r, image.color_.g, image.color_.b);
+		image.texture_->set_color_mod(image.color_.r_, image.color_.g_, image.color_.b_);
 
-		return ((filter_step.initial_r_ <= r && image.color_.r >= r) || (filter_step.initial_r_ > r && image.color_.r <= r))
-			&& ((filter_step.initial_g_ <= g && image.color_.g >= g) || (filter_step.initial_g_ > g && image.color_.g <= g))
-			&& ((filter_step.initial_b_ <= b && image.color_.b >= b) || (filter_step.initial_b_ > b && image.color_.b <= b));
+		return ((filter_step.initial_r_ <= r && image.color_.r_ >= r) || (filter_step.initial_r_ > r && image.color_.r_ <= r))
+			&& ((filter_step.initial_g_ <= g && image.color_.g_ >= g) || (filter_step.initial_g_ > g && image.color_.g_ <= g))
+			&& ((filter_step.initial_b_ <= b && image.color_.b_ >= b) || (filter_step.initial_b_ > b && image.color_.b_ <= b));
 	}
 	, time);
 }

@@ -167,7 +167,7 @@ void Game::update_fps_count(const std::string_view fps) const
 	window_.set_title(std::string(constants::game_name_) + std::string(fps));
 }
 
-void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, const SDL_Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
+void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
 {
 	dynamic_cast<InGame*>(in_game_.get())->add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
 }
@@ -217,14 +217,14 @@ void Game::show_background(const std::string_view background_path)
 	dynamic_cast<InGame*>(in_game_.get())->insert_background(background_path);
 }
 
-void Game::show_background(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
+void Game::show_background(Color color)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_background(r, g, b, a);
+	dynamic_cast<InGame*>(in_game_.get())->insert_background(color);
 }
 
 void Game::hide_background()
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_background(0, 0, 0, 255);
+	dynamic_cast<InGame*>(in_game_.get())->insert_background(Color::from_rgba8(0, 0, 0));
 }
 
 void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, int volume, bool loop)
@@ -267,7 +267,7 @@ void Game::change_namebox(const std::string_view character_variable, const std::
 	dynamic_cast<InGame*>(in_game_.get())->insert_namebox(character_variable, namebox_path);
 }
 
-void Game::change_namebox_text_color(const std::string_view character_variable, const SDL_Color namebox_text_color)
+void Game::change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color)
 {
 	dynamic_cast<InGame*>(in_game_.get())->insert_namebox_text_color(character_variable, namebox_text_color);
 }
