@@ -2,7 +2,7 @@
 #include "GUI/textbutton.h"
 #include "GUI/slider.h"
 #include "GUI/texttogglegroup.h"
-#include "music.h"
+#include "RAII_SDL2/music.h"
 #include "game.h"
 
 #include <iostream>
@@ -17,7 +17,7 @@ void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 {
 	ui_manager_.add_element(std::make_unique<TextButton>("Return", 200, 500, renderer, std::bind(&SettingsMenu::previous_menu_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<Slider>(0, 100, Sound::global_sound_volume_, 800, 200, "Sound effect", renderer, std::bind(&SettingsMenu::slider_sound_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(0, 100, Music::global_music_volume_, 450, 200, "Music effect", renderer, std::bind(&SettingsMenu::slider_music_function, this, std::placeholders::_1)));
+	ui_manager_.add_element(std::make_unique<Slider>(0, 100, Game::global_music_volume_, 450, 200, "Music effect", renderer, std::bind(&SettingsMenu::slider_music_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<Slider>(30, 60, Text::global_text_divisor_, 625, 350, "Text speed", renderer, std::bind(&SettingsMenu::slider_text_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 	//ui_elements.push_back(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
@@ -29,6 +29,16 @@ void SettingsMenu::draw(sdl::Renderer& renderer)
 {
 	background_.draw(renderer);
 	GameState::draw(renderer);
+}
+
+void SettingsMenu::update()
+{
+	GameState::update();
+	if(current_music_volume_ != Game::global_music_volume_)
+	{
+		sdl::Music::volume(Game::global_music_volume_);
+		current_music_volume_ = Game::global_music_volume_;
+	}
 }
 
 void SettingsMenu::previous_menu_function(Ui* ui)
@@ -49,7 +59,7 @@ void SettingsMenu::slider_music_function(Ui* ui)
 {
 	Slider* slider = dynamic_cast<Slider*>(ui);
 	std::cout << "Changed value (" << slider->current_value_ << ") of slider!" << std::endl;
-	Music::global_music_volume_ = slider->current_value_;
+	Game::global_music_volume_ = slider->current_value_;
 }
 
 void SettingsMenu::slider_text_function(Ui* ui)

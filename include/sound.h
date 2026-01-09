@@ -5,7 +5,7 @@
 class Sound
 {
 	public:
-		explicit Sound(const std::string_view path, int volume = global_sound_volume_);
+		Sound(const std::string_view path, int volume = global_sound_volume_);
 		Sound(const std::string_view path, int channel, int volume = global_sound_volume_);
 
 		void play_sound(const bool loop=false, const int fadein_length=0); 

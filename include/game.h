@@ -103,6 +103,7 @@ class Game
 
 	public:
 		sdl::Window window_;
+		static int global_music_volume_;
 
 	private:
 		sdl::Renderer renderer_;

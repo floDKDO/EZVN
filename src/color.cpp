@@ -50,7 +50,7 @@ Color Color::from_string(std::string_view string_color)
     }
     else
     {
-        std::cerr << "Invalid format!\n";
+        std::cerr << "Invalid format! (" << string_color << ")\n";
         return Color(0, 0, 0, 255);
     }
 }
@@ -70,7 +70,7 @@ Color::RGBA8 Color::hex_to_rgba8(std::string_view hex_color)
     }
     else
     {
-        std::cerr << "Invalid format!\n";
+        std::cerr << "Invalid format! (" << hex_color << ")\n";
         return {0, 0, 0, 255};
     }
 

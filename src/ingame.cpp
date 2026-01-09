@@ -14,7 +14,7 @@ InGame::CurrentMusic InGame::currently_playing_music_ = {{}, nullptr};
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
 	: GameState(game), current_dialogue_index_(size_t(1)), current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_}), which_dialogue_from_where_({WhichDialogue::none, false, false}),
-	skip_mode_(false), auto_mode_(false), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({0, false, nullptr}), 
+	skip_mode_(false), auto_mode_(false), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({0, false, nullptr}),
 	background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer); 
@@ -218,7 +218,7 @@ void InGame::insert_music(const std::string_view music_path, int fadein_length, 
 	}
 	else //play music
 	{
-		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, Music(music_path))));
+		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, sdl::Music(music_path))));
 	}
 }
 
@@ -617,7 +617,7 @@ void InGame::callback()
 {
 	if(currently_playing_music_.music_ != nullptr)
 	{
-		currently_playing_music_.music_->play_music(currently_playing_music_.audio_properties_.loop_, currently_playing_music_.audio_properties_.fadein_length_);
+		sdl::Music::fade_in(*(currently_playing_music_.music_), currently_playing_music_.audio_properties_.loop_, currently_playing_music_.audio_properties_.fadein_length_, Game::global_music_volume_);
 	}
 }
 
@@ -630,10 +630,10 @@ void InGame::update_music(InfoMusic& info_music)
 		const InGame::AudioProperties& music_properties = info_music.first;
 		if(info_music.second.has_value()) //play music
 		{
-			Music& music = info_music.second.value();
+			sdl::Music& music = info_music.second.value();
 			if(!sdl::Music::playing())
 			{
-				music.play_music(music_properties.loop_, music_properties.fadein_length_);
+				sdl::Music::fade_in(music, music_properties.loop_, music_properties.fadein_length_, game_.global_music_volume_);
 			}
 			else if(currently_playing_music_.music_ != &music)
 			{
@@ -647,11 +647,6 @@ void InGame::update_music(InfoMusic& info_music)
 			currently_playing_music_.music_ = nullptr;
 		}
 		music_changed_ = true;
-	}
-
-	if(currently_playing_music_.music_ != nullptr)
-	{
-		currently_playing_music_.music_->update();
 	}
 }
 
@@ -783,6 +778,7 @@ void InGame::update()
 	{
 		current_script_index_ = get_current_script_index();
 	}
+
 
 	update2();
 

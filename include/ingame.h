@@ -5,7 +5,7 @@
 #include "character.h"
 #include "background.h"
 #include "GUI/texttoggle.h"
-#include "music.h"
+#include "RAII_SDL2/music.h"
 #include "sound.h"
 
 #include <vector>
@@ -59,13 +59,13 @@ class InGame : public GameState
 	struct CurrentMusic
 	{
 		struct AudioProperties audio_properties_;
-		Music* music_;
+		sdl::Music* music_;
 	};
 
 	using InfoCharacter = MyPair<Character::Editableproperties>;
 	using InfoDialogue = MyPair<const std::string>;
 	using InfoBackground = Background;
-	using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
+	using InfoMusic = std::pair<AudioProperties, std::optional<sdl::Music>>;
 	using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
 	using InfoAutofocus = bool;
 	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;

@@ -9,6 +9,7 @@ int Sound::unused_channel_ = 0;
 Sound::Sound(const std::string_view path, int volume)
 	: sound_(path), loop_(false), local_sound_volume_(volume), channel_(unused_channel_)
 {
+	std::cout << "CE CONSTRUCTEUR\n";
 	unused_channel_ += 1;
 	if(unused_channel_ == MIX_CHANNELS)
 	{

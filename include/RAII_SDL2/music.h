@@ -18,7 +18,7 @@ class Music
 
 		Mix_Music* fetch() const;
 		static bool playing();
-		void fade_in(const int loops, const int ms) const;
+		static void fade_in(sdl::Music& music, const bool loop, const int ms, const int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInMusic() => loop is a bool (true <=> -1, false <=> 0). Is also has a additional parameter (volume)
 		static void fade_out(const int ms);
 		static void halt();
 		static void pause();

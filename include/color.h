@@ -60,7 +60,6 @@ class Color
 };
 
 //TODO : pouvoir ajouter des entrées dedans
-//TODO : fonctionne uniquement si les couleurs sont RGBA8...
 const std::unordered_map<std::string, Color> colors_ =
 {
     {"black",       Color::from_rgba8(0, 0, 0)},
@@ -80,7 +79,7 @@ const std::unordered_map<std::string, Color> colors_ =
     {"orange",      Color::from_rgba8(255, 106, 0)},
     {"pink",        Color::from_rgba8(255, 0, 255)},
     {"violet",      Color::from_rgba8(129, 0, 255)},
-    {"purple",      Color::from_rgba8(72, 0, 0)},
+    {"purple",      Color::from_rgba8(90, 0, 255)},
     {"brown",       Color::from_rgba8(124, 71, 0)},
     {"light brown", Color::from_rgba8(153, 121, 80)},
     {"dark brown",  Color::from_rgba8(43, 23, 0)}
