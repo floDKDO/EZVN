@@ -133,4 +133,8 @@ inline constexpr std::string_view sound_click_ = "sounds/click.ogg";
 
 inline constexpr int fadeout_length_scroll_back_ = 1500; //ms
 
+inline constexpr std::string_view main_menu_unique_id_ = "Main";
+inline constexpr std::string_view settings_menu_unique_id_ = "Settings";
+inline constexpr std::string_view ingame_unique_id_ = "InGame";
+
 }

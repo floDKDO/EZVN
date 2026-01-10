@@ -48,14 +48,14 @@ void MainMenu::play_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Play!" << std::endl;
-	game_.request_push_state(game_.in_game_.get()); //TODO : simplifier avec un truc plus générique (ex : game_.request_change_state("Ingame"))
+	game_.request_push_state(constants::ingame_unique_id_);
 }
 
 void MainMenu::settings_function(Ui* ui)
 {
 	(void)ui;
 	std::cout << "Clicked Settings!" << std::endl;
-	game_.request_push_state(game_.settings_menu_.get());
+	game_.request_push_state(constants::settings_menu_unique_id_);
 }
 
 void MainMenu::confirmationpopup_quit_function(Ui* ui)

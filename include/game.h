@@ -22,7 +22,7 @@ class Game
 
 		void run();
 
-		void request_push_state(GameState* state);
+		void request_push_state(std::string_view unique_id);
 		void request_pop_state();
 		void quit_game();
 
@@ -35,7 +35,7 @@ class Game
 		struct RequestedAction
 		{
 			Action action;
-			GameState* game_state;
+			std::string_view unique_id;
 		};
 
 		std::stack<RequestedAction> requested_actions_;
@@ -108,20 +108,10 @@ class Game
 
 	private:
 		sdl::Renderer renderer_;
-
 		sdl::GameController game_controller_;
-
 		sdl::Surface window_icon_;
-
-	public:
-		std::unique_ptr<GameState> main_menu_;
-		std::unique_ptr<GameState> settings_menu_;
-		std::unique_ptr<GameState> load_menu_;
-		std::unique_ptr<GameState> save_menu_;
-		std::unique_ptr<GameState> in_game_;
-
-	private:
+		std::unordered_map<std::string_view /* unique_id_ of the state */, std::unique_ptr<GameState>> game_states_map_; 
 		bool window_is_open_;
-		std::stack<GameState*> states_;
+		std::stack<GameState*> game_states_stack_;
 };
 
