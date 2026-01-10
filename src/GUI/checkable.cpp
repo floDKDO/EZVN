@@ -25,7 +25,7 @@ void Checkable::on_pointer_up_hook_end(PointerEventData pointer_event_data)
 	reverse_checked();
 	if(checkable_group_ != nullptr)
 	{
-		checkable_group_->on_click(this);
+		checkable_group_->on_press(this);
 	}
 }
 
@@ -34,6 +34,6 @@ void Checkable::on_enter_released_hook_end()
 	reverse_checked();
 	if(checkable_group_ != nullptr)
 	{
-		checkable_group_->on_click(this);
+		checkable_group_->on_press(this);
 	}
 }

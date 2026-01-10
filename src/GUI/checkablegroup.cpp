@@ -23,14 +23,14 @@ void CheckableGroup::uncheck_all_others(const Checkable* checkable_to_not_unchec
 
 void CheckableGroup::handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck)
 {
-	if(checkable_to_not_uncheck->previous_checked_) //Cas clic sur un checkable déjà coché => ne pas le décocher dans ce cas
+	if(checkable_to_not_uncheck->previous_checked_) //Cas press sur un checkable déjà coché => ne pas le décocher dans ce cas
 	{
 		checkable_to_not_uncheck->change_checked(true);
 	}
 	uncheck_all_others(checkable_to_not_uncheck);
 }
 
-void CheckableGroup::on_click(Checkable* c)
+void CheckableGroup::on_press(Checkable* c)
 {
 	if(only_one_has_to_be_checked_ && (c->is_checked_ || c->previous_checked_))
 	{

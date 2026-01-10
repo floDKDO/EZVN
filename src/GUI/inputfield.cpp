@@ -114,9 +114,9 @@ void Inputfield::draw(sdl::Renderer& renderer)
 	{
 		renderer.set_draw_color(constants::inputfield_outline_selected_color_.r_, constants::inputfield_outline_selected_color_.g_, constants::inputfield_outline_selected_color_.b_, constants::inputfield_outline_selected_color_.a_);
 	}
-	else if(state_ == State::CLICKED)
+	else if(state_ == State::PRESSED)
 	{
-		renderer.set_draw_color(constants::inputfield_outline_clicked_color_.r_, constants::inputfield_outline_clicked_color_.g_, constants::inputfield_outline_clicked_color_.b_, constants::inputfield_outline_clicked_color_.a_);
+		renderer.set_draw_color(constants::inputfield_outline_pressed_color_.r_, constants::inputfield_outline_pressed_color_.g_, constants::inputfield_outline_pressed_color_.b_, constants::inputfield_outline_pressed_color_.a_);
 	}
 	renderer.draw_rect(&container_outline_);
 

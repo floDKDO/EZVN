@@ -50,9 +50,9 @@ void TextButton::update()
 	{
 		text_.change_color(constants::textbutton_selected_color_);
 	}
-	else if(state_ == State::CLICKED)
+	else if(state_ == State::PRESSED)
 	{
-		text_.change_color(constants::textbutton_clicked_color_);
+		text_.change_color(constants::textbutton_pressed_color_);
 	}
 	text_.update();
 	

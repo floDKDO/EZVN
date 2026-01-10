@@ -42,15 +42,15 @@ void TextToggle::update()
 			text_.change_color(constants::texttoggle_selected_unchecked_color_);
 		}
 	}
-	else if(state_ == State::CLICKED)
+	else if(state_ == State::PRESSED)
 	{
 		if(is_checked_)
 		{
-			text_.change_color(constants::texttoggle_clicked_checked_color_);
+			text_.change_color(constants::texttoggle_pressed_checked_color_);
 		}
 		else
 		{
-			text_.change_color(constants::texttoggle_clicked_unchecked_color_);
+			text_.change_color(constants::texttoggle_pressed_unchecked_color_);
 		}
 	}
 	text_.update();

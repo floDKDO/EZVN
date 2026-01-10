@@ -24,7 +24,7 @@ void Ui::on_pointer_up(PointerEventData pointer_event_data)
 void Ui::on_pointer_down(PointerEventData pointer_event_data)
 {
 	(void)pointer_event_data;
-	state_ = State::CLICKED;
+	state_ = State::PRESSED;
 	on_pointer_down_hook_end(pointer_event_data);
 }
 
@@ -38,7 +38,7 @@ void Ui::on_pointer_enter(PointerEventData pointer_event_data)
 void Ui::on_pointer_exit(PointerEventData pointer_event_data)
 {
 	(void)pointer_event_data;
-	if(state_ == State::CLICKED && pointer_on_ui_when_pointer_up_)
+	if(state_ == State::PRESSED && pointer_on_ui_when_pointer_up_)
 	{
 		state_ = State::SELECTED;
 	}
@@ -68,7 +68,7 @@ void Ui::on_right_pressed()
 
 void Ui::on_enter_pressed()
 {
-	state_ = State::CLICKED;
+	state_ = State::PRESSED;
 	on_enter_pressed_hook_end();
 }
 

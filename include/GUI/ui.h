@@ -6,12 +6,11 @@
 #include <functional>
 #include <vector>
 
-//TODO : remplacer CLICKED par PRESSED pour être cohérent avec le clavier ??
 enum class State
 {
 	NORMAL, 
 	SELECTED,
-	CLICKED
+	PRESSED
 };
 
 class Ui
@@ -25,7 +24,7 @@ class Ui
 
 		virtual ~Ui() = default;
 
-		virtual void on_pointer_up(PointerEventData pointer_event_data); //<=> on click (l'action se lance quand le clic est relaché)
+		virtual void on_pointer_up(PointerEventData pointer_event_data); 
 		virtual void on_pointer_up_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
 
 		virtual void on_pointer_down(PointerEventData pointer_event_data);

@@ -34,7 +34,7 @@ void SettingsMenu::draw(sdl::Renderer& renderer)
 void SettingsMenu::previous_menu_function(Ui* ui)
 {
 	(void)ui;
-	std::cout << "Clicked go back to previous menu!" << std::endl;
+	std::cout << "Pressed => go back to previous menu!" << std::endl;
 	game_.request_pop_state();
 }
 

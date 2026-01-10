@@ -22,6 +22,6 @@ class Button : public Ui
 	private:
 		Image normal_;
 		Image selected_;
-		Image clicked_;
+		Image pressed_;
 };
 

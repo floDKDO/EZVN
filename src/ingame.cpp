@@ -70,7 +70,7 @@ void InGame::skip_function(Ui* ui)
 void InGame::settings_function(Ui* ui)
 {
 	(void)ui;
-	std::cout << "Clicked Settings!" << std::endl;
+	std::cout << "Pressed Settings!" << std::endl;
 	game_.request_push_state(constants::settings_menu_unique_id_);
 }
 

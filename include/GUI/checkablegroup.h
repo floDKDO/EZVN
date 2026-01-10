@@ -13,7 +13,7 @@ class CheckableGroup : public Ui
 
 		void uncheck_all_others(const Checkable* checkable_to_not_uncheck);
 		void handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck);
-		void on_click(Checkable* c);
+		void on_press(Checkable* c);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

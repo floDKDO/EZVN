@@ -47,20 +47,20 @@ void MainMenu::temp_function(Ui* ui)
 void MainMenu::play_function(Ui* ui)
 {
 	(void)ui;
-	std::cout << "Clicked Play!" << std::endl;
+	std::cout << "Pressed Play!" << std::endl;
 	game_.request_push_state(constants::ingame_unique_id_);
 }
 
 void MainMenu::settings_function(Ui* ui)
 {
 	(void)ui;
-	std::cout << "Clicked Settings!" << std::endl;
+	std::cout << "Pressed Settings!" << std::endl;
 	game_.request_push_state(constants::settings_menu_unique_id_);
 }
 
 void MainMenu::confirmationpopup_quit_function(Ui* ui)
 {
 	(void)ui;
-	std::cout << "Clicked Yes!" << std::endl;
+	std::cout << "Pressed Yes!" << std::endl;
 	game_.quit_game();
 }

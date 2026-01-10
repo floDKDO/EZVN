@@ -21,7 +21,7 @@ inline Color text_outline_color_ = Color::from_rgba8(255, 205, 230);
 
 inline constexpr std::string_view button_normal_ = "img/gui/button_normal.png";
 inline constexpr std::string_view button_selected_ = "img/gui/button_selected.png";
-inline constexpr std::string_view button_clicked_ = "img/gui/button_clicked.png";
+inline constexpr std::string_view button_pressed_ = "img/gui/button_pressed.png";
 inline constexpr std::string_view button_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int button_text_size_ = 30;
 inline const Color button_text_color_ = Color::from_rgba8(255, 255, 255);
@@ -36,7 +36,7 @@ inline const Color checkablegroup_text_color_ = Color::from_rgba8(255, 255, 255)
 
 inline constexpr std::string_view checkbox_normal_ = "img/gui/checkbox_normal.png";
 inline constexpr std::string_view checkbox_selected_ = "img/gui/checkbox_selected.png";
-inline constexpr std::string_view checkbox_clicked_ = "img/gui/checkbox_clicked.png";
+inline constexpr std::string_view checkbox_pressed_ = "img/gui/checkbox_pressed.png";
 inline constexpr std::string_view checkbox_check_mark_ = "img/gui/check_mark.png";
 inline constexpr std::string_view checkbox_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int checkbox_text_x_delta_ = 10;
@@ -48,7 +48,7 @@ inline constexpr int inputfield_container_height_ = 45;
 inline const Color inputfield_container_color_ = Color::from_rgba8(255, 255, 255);
 inline const Color inputfield_outline_normal_color_ = Color::from_rgba8(174, 84, 135);
 inline const Color inputfield_outline_selected_color_ = Color::from_rgba8(221, 108, 172);
-inline const Color inputfield_outline_clicked_color_ = Color::from_rgba8(255, 124, 198);
+inline const Color inputfield_outline_pressed_color_ = Color::from_rgba8(255, 124, 198);
 inline constexpr std::string_view inputfield_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int inputfield_text_x_delta_ = 7;
 inline constexpr int inputfield_text_y_delta_ = 5;
@@ -73,7 +73,7 @@ inline const Color slider_container_outline_color_ = Color::from_rgba8(174, 84, 
 inline constexpr int slider_handle_size_ = 30;
 inline const Color slider_handle_normal_color_ = Color::from_rgba8(174, 84, 135);
 inline const Color slider_handle_selected_color_ = Color::from_rgba8(221, 108, 172);
-inline const Color slider_handle_clicked_color_ = Color::from_rgba8(255, 124, 198);
+inline const Color slider_handle_pressed_color_ = Color::from_rgba8(255, 124, 198);
 inline constexpr int slider_handle_y_delta_ = -(slider_handle_size_ - slider_container_height_) / 2;
 inline const Color slider_handle_outline_color_ = Color::from_rgba8(255, 255, 255);
 inline constexpr std::string_view slider_font_ = "fonts/Aller_Rg.ttf";
@@ -84,7 +84,7 @@ inline constexpr int slider_step_count_ = 10;
 
 inline const Color textbutton_normal_color_ = Color::from_rgba8(174, 84, 135);
 inline const Color textbutton_selected_color_ = Color::from_rgba8(210, 210, 210);
-inline const Color textbutton_clicked_color_ = Color::from_rgba8(255, 255, 255);
+inline const Color textbutton_pressed_color_ = Color::from_rgba8(255, 255, 255);
 inline constexpr std::string_view textbutton_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int textbutton_text_size_ = 30;
 
@@ -92,8 +92,8 @@ inline const Color texttoggle_normal_unchecked_color_ = Color::from_rgba8(174, 8
 inline const Color texttoggle_normal_checked_color_ = Color::from_rgba8(255, 255, 255);
 inline const Color texttoggle_selected_checked_color_ = Color::from_rgba8(230, 230, 230);
 inline const Color texttoggle_selected_unchecked_color_ = Color::from_rgba8(210, 210, 210);
-inline const Color texttoggle_clicked_checked_color_ = Color::from_rgba8(255, 255, 255);
-inline const Color texttoggle_clicked_unchecked_color_ = Color::from_rgba8(255, 255, 255);
+inline const Color texttoggle_pressed_checked_color_ = Color::from_rgba8(255, 255, 255);
+inline const Color texttoggle_pressed_unchecked_color_ = Color::from_rgba8(255, 255, 255);
 
 inline constexpr std::string_view texttoggle_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int texttoggle_text_size_ = 30;
@@ -128,8 +128,8 @@ inline constexpr int buttongroup_width_ = 400; //= choice menu
 inline constexpr std::string_view window_icon_ = "img/gui/window_icon.png";
 inline constexpr std::string_view game_name_ = "EZVN";
 
-inline constexpr std::string_view sound_hover_ = "sounds/hover.ogg";
-inline constexpr std::string_view sound_click_ = "sounds/click.ogg";
+inline constexpr std::string_view ui_sound_select_ = "sounds/ui_select.ogg";
+inline constexpr std::string_view ui_sound_press_ = "sounds/ui_press.ogg";
 
 inline constexpr int fadeout_length_scroll_back_ = 1500; //ms
 

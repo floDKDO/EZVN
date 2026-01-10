@@ -154,9 +154,9 @@ void Slider::draw(sdl::Renderer& renderer)
 	{
 		renderer.set_draw_color(constants::slider_handle_selected_color_.r_, constants::slider_handle_selected_color_.g_, constants::slider_handle_selected_color_.b_, constants::slider_handle_selected_color_.a_);
 	}
-	else if(state_ == State::CLICKED)
+	else if(state_ == State::PRESSED)
 	{
-		renderer.set_draw_color(constants::slider_handle_clicked_color_.r_, constants::slider_handle_clicked_color_.g_, constants::slider_handle_clicked_color_.b_, constants::slider_handle_clicked_color_.a_);
+		renderer.set_draw_color(constants::slider_handle_pressed_color_.r_, constants::slider_handle_pressed_color_.g_, constants::slider_handle_pressed_color_.b_, constants::slider_handle_pressed_color_.a_);
 	}
 	renderer.fill_rect(&handle_);
 
@@ -187,7 +187,7 @@ void Slider::update()
 //TODO : pas ouf et ne fonctionne plus
 /*void Slider::handle_events_hook_end(const SDL_Event& e)
 {
-	//Code that allow to move the handle by clicking on it even if it go beyond the container of the slider
+	//Code that allow to move the handle by pressing on it even if it go beyond the container of the slider
 	int logical_mouse_x, logical_mouse_y;
 	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 	if(e.type == SDL_MOUSEBUTTONDOWN)

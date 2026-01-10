@@ -53,8 +53,8 @@ class UiManager
 
 		AudioManager& audio_manager_;
 
-		Sound click_sound_;
-		Sound select_sound_;
+		Sound ui_press_sound_;
+		Sound ui_select_sound_;
 
 		Uint64 last_time_;
 };

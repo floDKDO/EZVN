@@ -20,7 +20,7 @@ class Checkbox : public Checkable
 
 		Image normal_;
 		Image selected_;
-		Image clicked_;
+		Image pressed_;
 		Image check_mark_; 
 
 		Text text_;
