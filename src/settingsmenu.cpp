@@ -31,16 +31,6 @@ void SettingsMenu::draw(sdl::Renderer& renderer)
 	GameState::draw(renderer);
 }
 
-//void SettingsMenu::update()
-//{
-//	GameState::update();
-//	if(current_music_volume_ != Game::global_music_volume_)
-//	{
-//		//sdl::Music::volume(Game::global_music_volume_);
-//		current_music_volume_ = Game::global_music_volume_;
-//	}
-//}
-
 void SettingsMenu::previous_menu_function(Ui* ui)
 {
 	(void)ui;
@@ -52,14 +42,14 @@ void SettingsMenu::slider_sound_function(Ui* ui)
 {
 	Slider* slider = dynamic_cast<Slider*>(ui);
 	std::cout << "Changed value (" << slider->current_value_ << ") of slider!" << std::endl;
-	audio_manager_.set_volume_channel(-1, slider->current_value_);
+	game_.audio_manager_.set_volume_channel(-1, slider->current_value_);
 }
 
 void SettingsMenu::slider_music_function(Ui* ui)
 {
 	Slider* slider = dynamic_cast<Slider*>(ui);
 	std::cout << "Changed value (" << slider->current_value_ << ") of slider!" << std::endl;
-	audio_manager_.set_volume_music(slider->current_value_);
+	game_.audio_manager_.set_volume_music(slider->current_value_);
 }
 
 void SettingsMenu::slider_text_function(Ui* ui)

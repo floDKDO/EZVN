@@ -12,7 +12,6 @@ Music::Music(const std::string_view file) //Mix_LoadMUS
 	{
 		SDL_Log("(Mix_LoadMUS) %s\n", Mix_GetError());
 	}
-	std::cout << "Volume: " << Mix_GetMusicVolume(music_) << std::endl;
 }
 
 Music::Music(Music&& music)

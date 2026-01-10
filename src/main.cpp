@@ -117,7 +117,8 @@ int main(int argc, char* argv[])
 	game.show_character("Monika", "t43");
 	game.show_character("Natsuki", "t44");
 	game.add_new_dialogue("Elle est chiante...");
-	game.show_background(Color::from_string("purple"));
+	Color::add_new_string_color("dirt", Color::from_rgba8(50, 20, 30));
+	game.show_background(Color::from_string("dirt"));
 	game.add_new_dialogue("Yuri", "How are you MC?");
 	game.stop_music(2000); //TODO : attention, ici il faut mettre des ms car fade_out est une méthode statique => le * 1000 effectué par stop_music n'est pas réalisé car stop_music n'est donc pas appelé
 	game.rename_character("Yuri", "Yuri beta");

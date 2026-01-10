@@ -22,7 +22,6 @@ class GameState
 	protected:
 		GameState(Game& game);
 		Game& game_;
-		AudioManager& audio_manager_;
 		UiManager ui_manager_;
 };
 

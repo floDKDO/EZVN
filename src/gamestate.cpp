@@ -2,7 +2,7 @@
 #include "game.h"
 
 GameState::GameState(Game& game)
-	: game_(game), audio_manager_(game.audio_manager_), ui_manager_(audio_manager_)
+	: game_(game), ui_manager_(game.audio_manager_)
 {}
 
 void GameState::handle_events(const SDL_Event& e)

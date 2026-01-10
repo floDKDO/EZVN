@@ -7,10 +7,9 @@
 #include <iostream>
 
 MainMenu::MainMenu(Game& game, const std::string_view background_path, sdl::Renderer& renderer)
-	: GameState(game), background_(background_path, 0, 0, renderer), music_{sdl::Music{"sounds/2.ogg"}, 0.5}
+	: GameState(game), background_(background_path, 0, 0, renderer)
 {
 	build_ui_elements(renderer);
-	audio_manager_.fade_in_music(music_, false, 1000);
 }
 
 /*

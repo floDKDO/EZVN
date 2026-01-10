@@ -633,7 +633,7 @@ void InGame::update_music(InfoMusic& info_music)
 			Music& music = info_music.second.value();
 			if(!sdl::Music::playing())
 			{
-				audio_manager_.fade_in_music(music, music_properties.loop_, music_properties.fadein_length_);
+				game_.audio_manager_.fade_in_music(music, music_properties.loop_, music_properties.fadein_length_);
 				//sdl::Music::fade_in(music, music_properties.loop_, music_properties.fadein_length_, int(music_properties.volume_multiplier_ * game_.global_music_volume_));
 			}
 			else if(currently_playing_music_.music_ != &music)

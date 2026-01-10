@@ -19,6 +19,5 @@ class MainMenu : public GameState
 
 	private:
 		Image background_;
-		Music music_;
 };
 
