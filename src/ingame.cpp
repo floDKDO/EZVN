@@ -10,11 +10,9 @@
 //TODO : éviter de répéter plein de fois les mêmes boucles for
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
-InGame::CurrentMusic InGame::currently_playing_music_ = {{}, nullptr};
-
 InGame::InGame(Game& game, sdl::Renderer& renderer)
 	: GameState(game), current_dialogue_index_(size_t(1)), current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_}), which_dialogue_from_where_({WhichDialogue::none, false, false}),
-	skip_mode_(false), auto_mode_(false), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}),
+	skip_mode_(false), auto_mode_(false), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}), currently_playing_music_({{}, nullptr}),
 	background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer); 
@@ -197,29 +195,29 @@ void InGame::insert_background(Color color)
 }
 
 //Sounds
-void InGame::insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop)
+void InGame::play_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop)
 {
-	if(sound_path.empty()) //stop sound
-	{
-		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop, channel}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
-	}
-	else //play sound
-	{
-		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop, channel}, sdl::Chunk(sound_path))));
-	}
+	script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop, channel}, sdl::Chunk(sound_path)))); //TODO : std::make_pair a l'air obligatoire ici
+}
+
+//Sounds
+void InGame::stop_sound(int fadeout_length, int channel)
+{
+	//TODO : hardcodé
+	script_information_.push_back(InfoSound(std::make_pair(AudioProperties{0, fadeout_length, 1.0, false, channel}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
 //Musics
-void InGame::insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
+void InGame::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	if(music_path.empty()) //stop music
-	{
-		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
-	}
-	else //play music
-	{
-		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop}, Music{sdl::Music(music_path), volume_multiplier})));
-	}
+	script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop}, Music{sdl::Music(music_path), volume_multiplier}))); //TODO : std::make_pair a l'air obligatoire ici
+}
+
+//Musics
+void InGame::stop_music(int fadeout_length)
+{
+	//TODO : hardcodé
+	script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{0, fadeout_length, 1.0, true}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
 //Autofocus
@@ -492,6 +490,15 @@ void InGame::handle_events(const SDL_Event& e)
 	{
 		hide_ui_textbox_ = !hide_ui_textbox_;
 	}
+
+	if(e.type == AudioManager::END_MUSIC_EVENT_)
+	{
+		if(currently_playing_music_.music_ != nullptr)
+		{
+			std::cout << "PLAY EVENT\n";
+			game_.audio_manager_.fade_in_music(*currently_playing_music_.music_, currently_playing_music_.audio_properties_.loop_, currently_playing_music_.audio_properties_.fadein_length_);
+		}
+	}
 }
 
 void InGame::draw(sdl::Renderer& renderer)
@@ -613,18 +620,9 @@ void InGame::update_skip_auto_modes()
 	}
 }
 
-void InGame::callback()
-{
-	if(currently_playing_music_.music_ != nullptr)
-	{
-		//sdl::Music::fade_in(*(currently_playing_music_.music_), currently_playing_music_.audio_properties_.loop_, currently_playing_music_.audio_properties_.fadein_length_, int(currently_playing_music_.audio_properties_.volume_multiplier_ * Game::global_music_volume_));
-	}
-}
-
 void InGame::update_music(InfoMusic& info_music)
 {
 	//Musics
-	Mix_HookMusicFinished(&callback); //TODO : mettre dans un constructeur
 	if(!music_changed_)
 	{
 		const InGame::AudioProperties& music_properties = info_music.first;
@@ -634,17 +632,16 @@ void InGame::update_music(InfoMusic& info_music)
 			if(!sdl::Music::playing())
 			{
 				game_.audio_manager_.fade_in_music(music, music_properties.loop_, music_properties.fadein_length_);
-				//sdl::Music::fade_in(music, music_properties.loop_, music_properties.fadein_length_, int(music_properties.volume_multiplier_ * game_.global_music_volume_));
 			}
 			else if(currently_playing_music_.music_ != &music)
 			{
-				sdl::Music::fade_out(music_properties.fadeout_length_);
+				game_.audio_manager_.fade_out_music(music_properties.fadeout_length_);
 			}
 			currently_playing_music_ = {music_properties, &music};
 		}
 		else //stop music
 		{
-			sdl::Music::fade_out(music_properties.fadeout_length_);
+			game_.audio_manager_.fade_out_music(music_properties.fadeout_length_);
 			currently_playing_music_.music_ = nullptr;
 		}
 		music_changed_ = true;
@@ -901,7 +898,7 @@ void InGame::update2()
 	if(!music_changed_)
 	{
 		//TODO : même code que dans update_music() (sauf l'argument de fadeout)
-		sdl::Music::fade_out(constants::fadeout_length_scroll_back_);
+		game_.audio_manager_.fade_out_music(constants::fadeout_length_scroll_back_);
 		currently_playing_music_.music_ = nullptr;
 	}
 	//////////////////////////////

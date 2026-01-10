@@ -101,8 +101,11 @@ class InGame : public GameState
 		void insert_background(const std::string_view background_path);
 		void insert_background(Color color);
 
-		void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop);
-		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop);
+		void play_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop);
+		void stop_sound(int fadeout_length, int channel);
+
+		void play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop);
+		void stop_music(int fadeout_length);
 
 		void insert_autofocus(bool autofocus);
 
@@ -162,7 +165,7 @@ class InGame : public GameState
 		Textbox textbox_;
 		bool hide_ui_textbox_;
 
-		static CurrentMusic currently_playing_music_;
+		CurrentMusic currently_playing_music_; 
 		CurrentSound currently_playing_sound_;
 
 		bool background_changed_;

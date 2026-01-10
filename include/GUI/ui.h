@@ -76,7 +76,7 @@ class Ui
 
 
 		virtual void draw(sdl::Renderer& renderer) = 0;
-		virtual void update() = 0; //TODO : obligé ou juste virtual ??
+		virtual void update() {}; 
 
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 

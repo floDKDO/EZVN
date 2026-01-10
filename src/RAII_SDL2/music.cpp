@@ -108,4 +108,9 @@ void Music::set_position(const double position)
 	}
 }
 
+void Music::hook_finished(void(*music_finished)())
+{
+	Mix_HookMusicFinished(music_finished);
+}
+
 }

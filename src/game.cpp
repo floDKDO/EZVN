@@ -230,22 +230,22 @@ void Game::hide_background()
 
 void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
+	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->play_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
 }
 
 void Game::stop_sound(int channel, int fadeout_length)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_sound("", 0, fadeout_length, 1.0, channel, false); //TODO : volume, channel et loop hardcodés
+	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->stop_sound(fadeout_length, channel); 
 }
 
 void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
+	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->play_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
 }
 
 void Game::stop_music(int fadeout_length)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_music("", 0, fadeout_length, 128, true); //TODO : volume et loop hardcodés
+	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->stop_music(fadeout_length);
 }
 
 void Game::autofocus_enable()

@@ -1,11 +1,22 @@
 #include "audiomanager.h"
 
+#include <SDL2/SDL.h>
+
 int AudioManager::global_music_volume_ = MIX_MAX_VOLUME;
 int AudioManager::global_sound_volume_ = MIX_MAX_VOLUME;
+Uint32 AudioManager::END_MUSIC_EVENT_ = SDL_RegisterEvents(1); //TODO : encapsuler cet appel ou abstraire
 
 AudioManager::AudioManager()
 	: current_music_(nullptr)
-{}
+{
+	sdl::Music::hook_finished(&callback_music); 
+}
+
+void AudioManager::callback_music()
+{
+	SDL_Event e{END_MUSIC_EVENT_};
+	SDL_PushEvent(&e); //TODO : encapsuler cet appel ou abstraire
+}
 
 void AudioManager::fade_in_music(Music& music, bool loop, int ms)
 {

@@ -25,6 +25,7 @@ class Music
 		static void resume();
 		static void volume(const int volume);
 		static void set_position(const double position);
+		static void hook_finished(void(*music_finished)());
 
 	private:
 		Mix_Music* music_;
