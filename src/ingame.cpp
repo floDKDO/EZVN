@@ -197,28 +197,28 @@ void InGame::insert_background(Color color)
 }
 
 //Sounds
-void InGame::insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop)
+void InGame::insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop)
 {
 	if(sound_path.empty()) //stop sound
 	{
-		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
+		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop, channel}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 	}
 	else //play sound
 	{
-		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop, channel}, sdl::Chunk(sound_path))));
+		script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop, channel}, sdl::Chunk(sound_path))));
 	}
 }
 
 //Musics
-void InGame::insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop)
+void InGame::insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
 	if(music_path.empty()) //stop music
 	{
-		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
+		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 	}
 	else //play music
 	{
-		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume, loop}, sdl::Music(music_path))));
+		script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, volume_multiplier, loop}, Music{sdl::Music(music_path), volume_multiplier})));
 	}
 }
 
@@ -617,7 +617,7 @@ void InGame::callback()
 {
 	if(currently_playing_music_.music_ != nullptr)
 	{
-		sdl::Music::fade_in(*(currently_playing_music_.music_), currently_playing_music_.audio_properties_.loop_, currently_playing_music_.audio_properties_.fadein_length_, Game::global_music_volume_);
+		//sdl::Music::fade_in(*(currently_playing_music_.music_), currently_playing_music_.audio_properties_.loop_, currently_playing_music_.audio_properties_.fadein_length_, int(currently_playing_music_.audio_properties_.volume_multiplier_ * Game::global_music_volume_));
 	}
 }
 
@@ -630,10 +630,11 @@ void InGame::update_music(InfoMusic& info_music)
 		const InGame::AudioProperties& music_properties = info_music.first;
 		if(info_music.second.has_value()) //play music
 		{
-			sdl::Music& music = info_music.second.value();
+			Music& music = info_music.second.value();
 			if(!sdl::Music::playing())
 			{
-				sdl::Music::fade_in(music, music_properties.loop_, music_properties.fadein_length_, game_.global_music_volume_);
+				audio_manager_.fade_in_music(music, music_properties.loop_, music_properties.fadein_length_);
+				//sdl::Music::fade_in(music, music_properties.loop_, music_properties.fadein_length_, int(music_properties.volume_multiplier_ * game_.global_music_volume_));
 			}
 			else if(currently_playing_music_.music_ != &music)
 			{
@@ -686,8 +687,7 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 				if(!sdl::Chunk::playing(sound_properties.channel_)
 				&& ((!sound_properties.loop_ && !currently_playing_sound_.played_) || sound_properties.loop_)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
 				{
-					//sound.change_volume(sound_properties.volume); //TODO
-					sdl::Chunk::fade_in(sound, sound_properties.channel_, sound_properties.loop_, sound_properties.fadein_length_, Game::global_sound_volume_);
+					//sdl::Chunk::fade_in(sound, sound_properties.channel_, sound_properties.loop_, sound_properties.fadein_length_, int(sound_properties.volume_multiplier_ * Game::global_sound_volume_));
 					currently_playing_sound_ = {sound_properties, get_current_script_index(), true, &sound};
 				}
 				sound_changed_ = true;

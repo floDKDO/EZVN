@@ -8,16 +8,14 @@
 
 //TODO : garder les vectors de C-pointeurs ??
 
-int Game::global_music_volume_ = MIX_MAX_VOLUME / 2;
-int Game::global_sound_volume_ = MIX_MAX_VOLUME / 2;
-
 Game::Game()
 	: sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
 	window_(constants::game_name_, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
+	audio_manager_(),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
 	window_icon_(constants::window_icon_), 
-	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr), in_game_(nullptr), game_running_(true)
+	main_menu_(nullptr), settings_menu_(nullptr), load_menu_(nullptr), save_menu_(nullptr), in_game_(nullptr), window_is_open_(true)
 {
 	window_.set_icon(window_icon_);
 
@@ -40,7 +38,7 @@ void Game::run()
 	Uint64 end_current_frame = 0;
 	unsigned int frame_count = 0;
 
-	while(game_running_)
+	while(window_is_open_)
 	{
 		begin_current_frame = SDL_GetTicks64();
 		frame_count += 1;
@@ -83,7 +81,7 @@ void Game::request_pop_state()
 
 void Game::quit_game()
 {
-	game_running_ = false;
+	window_is_open_ = false;
 }
 
 void Game::handle_requests()
@@ -128,7 +126,7 @@ void Game::handle_events()
 			case SDL_WINDOWEVENT:
 				if(e.window.event == SDL_WINDOWEVENT_CLOSE)
 				{
-					game_running_ = false;
+					window_is_open_ = false;
 				}
 				break;
 
@@ -136,7 +134,7 @@ void Game::handle_events()
 				switch(e.key.keysym.sym)
 				{
 					case SDLK_ESCAPE:
-						game_running_ = false;
+						window_is_open_ = false;
 						break;
 
 					default:
@@ -230,19 +228,19 @@ void Game::hide_background()
 	dynamic_cast<InGame*>(in_game_.get())->insert_background(Color::from_rgba8(0, 0, 0));
 }
 
-void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, int volume, bool loop)
+void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_sound(sound_path, fadein_length, fadeout_length, volume, channel, loop);
+	dynamic_cast<InGame*>(in_game_.get())->insert_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
 }
 
 void Game::stop_sound(int channel, int fadeout_length)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_sound("", 0, fadeout_length, 128, channel, false); //TODO : volume, channel et loop hardcodés
+	dynamic_cast<InGame*>(in_game_.get())->insert_sound("", 0, fadeout_length, 1.0, channel, false); //TODO : volume, channel et loop hardcodés
 }
 
-void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop)
+void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	dynamic_cast<InGame*>(in_game_.get())->insert_music(music_path, fadein_length, fadeout_length, volume, loop);
+	dynamic_cast<InGame*>(in_game_.get())->insert_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
 }
 
 void Game::stop_music(int fadeout_length)

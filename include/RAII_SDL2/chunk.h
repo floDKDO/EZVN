@@ -24,7 +24,8 @@ class Chunk
 		static void halt_channel(int channel);
 		static void pause(const int channel);
 		static void resume(const int channel);
-		static void volume(sdl::Chunk& chunk, const int volume);
+		static void volume_chunk(sdl::Chunk& chunk, const int volume);
+		static void volume(int channel, const int volume);
 
 	private:
 		Mix_Chunk* chunk_;

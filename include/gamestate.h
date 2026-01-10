@@ -2,6 +2,7 @@
 
 #include "RAII_SDL2/renderer.h"
 #include "GUI/uimanager.h"
+#include "audiomanager.h"
 
 #include <SDL2/SDL.h>
 #include <vector>
@@ -18,10 +19,10 @@ class GameState
 		virtual void draw(sdl::Renderer& renderer);
 		virtual void update();
 
-		UiManager ui_manager_; 
-
 	protected:
 		GameState(Game& game);
 		Game& game_;
+		AudioManager& audio_manager_;
+		UiManager ui_manager_;
 };
 

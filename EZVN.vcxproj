@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\audiomanager.cpp" />
     <ClCompile Include="src\background.cpp" />
     <ClCompile Include="src\character_definition.cpp" />
     <ClCompile Include="src\color.cpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="src\transition.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\audiomanager.h" />
     <ClInclude Include="include\background.h" />
     <ClInclude Include="include\character_definition.h" />
     <ClInclude Include="include\color.h" />

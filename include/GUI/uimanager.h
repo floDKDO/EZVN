@@ -2,6 +2,7 @@
 
 #include "GUI/ui.h"
 #include "RAII_SDL2/chunk.h"
+#include "audiomanager.h"
 
 #include <vector>
 #include <memory>
@@ -9,7 +10,7 @@
 class UiManager
 {
 	public:
-		UiManager();
+		UiManager(AudioManager& audio_manager);
 
 	private:
 		enum class Axis
@@ -50,8 +51,10 @@ class UiManager
 		bool is_mouse_left_button_held_down_;
 		//bool is_pop_up_visible_;
 
-		sdl::Chunk click_sound_;
-		sdl::Chunk select_sound_;
+		AudioManager& audio_manager_;
+
+		Sound click_sound_;
+		Sound select_sound_;
 
 		Uint64 last_time_;
 };

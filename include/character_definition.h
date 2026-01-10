@@ -24,8 +24,6 @@ class CharacterDefinition
 		std::string initial_textbox_path_;
 		std::string initial_namebox_path_;
 
-	protected:
-
 
 	private:
 

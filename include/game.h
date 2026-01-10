@@ -10,6 +10,7 @@
 #include "RAII_SDL2/sdlmixer.h"
 #include "RAII_SDL2/sdlimg.h"
 #include "RAII_SDL2/sdlttf.h"
+#include "audiomanager.h"
 #include "transform.h"
 
 #include <stack>
@@ -63,10 +64,10 @@ class Game
 
 		void hide_background();
 
-		void play_sound(const std::string_view sound_path, int channel = 0, int fadein_length = 0, int fadeout_length = 0, int volume = 128, bool loop = false);
+		void play_sound(const std::string_view sound_path, int channel = 0, int fadein_length = 0, int fadeout_length = 0, float volume_multiplier = 1.0, bool loop = false);
 		void stop_sound(int channel = -1, int fadeout_length = 0);
 
-		void play_music(const std::string_view music_path, int fadein_length=0, int fadeout_length=0, int volume=128, bool loop = true);
+		void play_music(const std::string_view music_path, int fadein_length=0, int fadeout_length=0, float volume_multiplier = 1.0, bool loop = true);
 		void stop_music(int fadeout_length=0);
 
 		void autofocus_enable();
@@ -103,8 +104,7 @@ class Game
 
 	public:
 		sdl::Window window_;
-		static int global_music_volume_;
-		static int global_sound_volume_;
+		AudioManager audio_manager_;
 
 	private:
 		sdl::Renderer renderer_;
@@ -121,7 +121,7 @@ class Game
 		std::unique_ptr<GameState> in_game_;
 
 	private:
-		bool game_running_;
+		bool window_is_open_;
 		std::stack<GameState*> states_;
 };
 

@@ -2,6 +2,7 @@
 
 #include "gamestate.h"
 #include "image.h"
+#include "music.h"
 
 class MainMenu : public GameState
 {
@@ -18,5 +19,6 @@ class MainMenu : public GameState
 
 	private:
 		Image background_;
+		Music music_;
 };
 

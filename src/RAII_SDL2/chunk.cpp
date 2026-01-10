@@ -67,7 +67,7 @@ void Chunk::play_channel(sdl::Chunk& chunk, int channel, const bool loop, const 
 		loops = 0;
 	}
 
-	Chunk::volume(chunk, volume);
+	Chunk::volume_chunk(chunk, volume);
 
 	Mix_PlayChannel(channel, chunk.fetch(), loops);
 }
@@ -84,7 +84,7 @@ void Chunk::fade_in(sdl::Chunk& chunk, const int channel, const bool loop, const
 		loops = 0;
 	}
 
-	Chunk::volume(chunk, volume);
+	Chunk::volume_chunk(chunk, volume);
 
 	Mix_FadeInChannel(channel, chunk.fetch(), loops, ms);
 }
@@ -112,9 +112,14 @@ void Chunk::resume(const int channel)
 	Mix_Resume(channel);
 }
 
-void Chunk::volume(sdl::Chunk& chunk, const int volume)
+void Chunk::volume_chunk(sdl::Chunk& chunk, const int volume)
 {
 	Mix_VolumeChunk(chunk.fetch(), volume);
+}
+
+void Chunk::volume(int channel, const int volume)
+{
+	Mix_Volume(channel, volume);
 }
 
 }

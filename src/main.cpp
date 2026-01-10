@@ -99,7 +99,7 @@ int main(int argc, char* argv[])
 	game.add_new_dialogue("Y a personne ??");
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");
-	game.play_music("sounds/2.ogg", 0, 1000, 2); //TODO : volume hardcodé
+	game.play_music("sounds/2.ogg", 0, 1000, 1.0); //TODO : volume hardcodé
 	game.show_character("Sayori", "t11");
 	game.rename_character("Sayori", "xxxxx");
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");

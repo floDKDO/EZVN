@@ -5,7 +5,7 @@
 #include "character.h"
 #include "background.h"
 #include "GUI/texttoggle.h"
-#include "RAII_SDL2/music.h"
+#include "music.h"
 #include "RAII_SDL2/chunk.h"
 
 #include <vector>
@@ -37,7 +37,7 @@ class InGame : public GameState
 	{
 		int fadein_length_;
 		int fadeout_length_;
-		int volume_;
+		float volume_multiplier_;
 		bool loop_;
 		int channel_; //not used for musics
 	};
@@ -60,13 +60,13 @@ class InGame : public GameState
 	struct CurrentMusic
 	{
 		struct AudioProperties audio_properties_;
-		sdl::Music* music_;
+		Music* music_;
 	};
 
 	using InfoCharacter = MyPair<Character::Editableproperties>;
 	using InfoDialogue = MyPair<const std::string>;
 	using InfoBackground = Background;
-	using InfoMusic = std::pair<AudioProperties, std::optional<sdl::Music>>;
+	using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
 	using InfoSound = std::pair<AudioProperties, std::optional<sdl::Chunk>>;
 	using InfoAutofocus = bool;
 	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
@@ -101,8 +101,8 @@ class InGame : public GameState
 		void insert_background(const std::string_view background_path);
 		void insert_background(Color color);
 
-		void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, int volume, int channel, bool loop);
-		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, int volume, bool loop);
+		void insert_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop);
+		void insert_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop);
 
 		void insert_autofocus(bool autofocus);
 

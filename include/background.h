@@ -16,8 +16,6 @@ class Background
 		std::unique_ptr<Image> image_;
 		Color color_;
 
-	protected:
-
 	private:
 };
 
