@@ -156,10 +156,16 @@
     <ClCompile Include="src\character_definition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\color.cpp">
+    <ClCompile Include="src\Color\color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\audiomanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Color\conversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Color\str.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -305,10 +311,16 @@
     <ClInclude Include="include\character_definition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\color.h">
+    <ClInclude Include="include\Color\color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\audiomanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Color\conversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Color\str.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

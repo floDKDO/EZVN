@@ -14,11 +14,11 @@ class AudioManager
 		void fade_out_music(int ms);
 		void set_volume_music(int volume);
 		
-
 		void play_sound(Sound& sound, int channel, bool loop);
 		void fade_in_sound(Sound& sound, int channel, bool loop, int ms);
 		void fade_out_sound(int channel, int ms);
 		void set_volume_channel(int channel, int volume);
+		void halt_channel(int channel);
 
 		static int global_music_volume_;
 		static int global_sound_volume_;

@@ -27,17 +27,10 @@ class InGame : public GameState
 		bool wait_for_end_of_dialogue_;
 	};
 
-	struct ScriptIndexWhenPrev
-	{
-		bool is_saved_;
-		size_t saved_script_index_;
-	};
-
 	struct AudioProperties
 	{
 		int fadein_length_;
 		int fadeout_length_;
-		float volume_multiplier_;
 		bool loop_;
 		int channel_; //not used for musics
 	};
@@ -47,7 +40,7 @@ class InGame : public GameState
 		struct AudioProperties audio_properties_;
 		size_t associated_script_index_;
 		bool played_;
-		sdl::Chunk* sound_;
+		Sound* sound_;
 	};
 
 	template <typename T>
@@ -67,9 +60,18 @@ class InGame : public GameState
 	using InfoDialogue = MyPair<const std::string>;
 	using InfoBackground = Background;
 	using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
-	using InfoSound = std::pair<AudioProperties, std::optional<sdl::Chunk>>;
+	using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
 	using InfoAutofocus = bool;
 	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
+
+
+	struct Script
+	{
+		size_t current_script_index_;
+		size_t previous_script_index_;
+		std::vector<ScriptInformation> script_information_;
+	};
+
 
 	public:
 		InGame(Game& game, sdl::Renderer& renderer);
@@ -109,15 +111,7 @@ class InGame : public GameState
 
 		void insert_autofocus(bool autofocus);
 
-		InGame::InfoDialogue* get_current_dialogue();
-		std::string get_last_character_name();
-		bool does_next_dialogue_exist(); 
-		bool does_prev_dialogue_exist();
-		size_t get_prev_script_index();
-		size_t get_current_script_index();
-		size_t get_next_script_index();
-		void show_next_dialogue();
-		void show_dialogue_mouse_wheel();
+		bool move_dialogue();
 
 		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
 		void create_narrator();
@@ -127,37 +121,31 @@ class InGame : public GameState
 
 		void change_background(const InfoBackground& b); 
 
-		void update_current_script_index_dialogue();
 		void update_backgrounds(const InfoBackground& info_background);
 		void update_characters(const InfoCharacter& info_character);
+		void update_characters_dialogue(InfoDialogue& info_dialogue);
 		void update_autofocus(const InfoAutofocus& info_autofocus);
 		void update_skip_auto_modes();
 		void update_music(InfoMusic& info_music);
-		static void callback();
 
 		void halt_all_sounds();
 		void update_sounds(InfoSound& info_sound, size_t i);
 
 		void update_textbox();
-		void update_dialogue();
+		void update_dialogue(InfoDialogue& info_dialogue);
 
 	private:
 		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
 		std::unordered_map<std::string, Character> active_characters_;
-		std::unordered_set<std::string> character_variables_seen_; //for update_characters()
 		std::vector<std::string> draw_characters_order_;
-		std::vector<size_t> dialogues_indices_;
-		std::vector<ScriptInformation> script_information_;
 
-		size_t current_dialogue_index_; 
-		size_t current_script_index_;
-		size_t previous_script_index_;
+		Script script_;
 
-		ScriptIndexWhenPrev script_index_when_prev_;
 		WhichDialogueFromWhere which_dialogue_from_where_;
 
 		bool skip_mode_;
 		bool auto_mode_;
+		bool autofocus_;
 
 		Uint64 last_time_;
 
@@ -165,13 +153,8 @@ class InGame : public GameState
 		Textbox textbox_;
 		bool hide_ui_textbox_;
 
-		CurrentMusic currently_playing_music_; 
+		CurrentMusic currently_playing_music_;  //TODO renommer pour coller avec le user-defined event de fin de musique ??
 		CurrentSound currently_playing_sound_;
-
-		bool background_changed_;
-		bool autofocus_changed_;
-		bool music_changed_;
-		bool sound_changed_;
 
 		sdl::Renderer& renderer_;
 };

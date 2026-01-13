@@ -2,7 +2,7 @@
 
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/texture.h"
-#include "color.h"
+#include "Color/color.h"
 
 #include <memory>
 

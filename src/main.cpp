@@ -18,6 +18,14 @@
 
 //TODO : vérifier que je n'ai pas oublié un "override"
 
+//TODO : placer les définitions de types, les structs et enums au début des classes et les placer dans la bonne visibilité (ex : public)
+
+//TODO : membre static => static inline ou static constexpr pour attribuer une valeur directement dans le .h
+
+//TODO : classe avec tout en static (membres et méthodes) pas ouf... (ici les classes Color, Chunk et Music) => trouver autre chose (namespace ??)
+
+//TODO : anonymous namespace au lieu de static pour des fonctions static et des variables globales static propres à une translation unit
+
 //TODO : nettoyer le code => retirer les includes inutiles, "_" final après le nom des membres, retirer les membres et commentaires inutiles, convention pour les valeurs des enums etc.
 
 //TODO : peu de lisibilité avec tous les paramètres par défaut
@@ -46,11 +54,13 @@
 //TODO : mettre des constructeurs par défaut dans les structs pour simplifier l'initialisation de leurs membres 
 
 
+#include "Color/str.h"
+
 int main(int argc, char* argv[])
 {
 	(void)argc, (void)argv;
 
-	//TODO : inputfield qui demande le nom du joueur au premier lancement du jeu 
+	//TODO : inputfield qui demande le nom du joueur au premier lancement du jeu => nécessite les variables persistantes
 
 	//TODO : pause et window hide
 
@@ -93,13 +103,13 @@ int main(int argc, char* argv[])
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);*/
-	game.add_new_dialogue("...");
+	game.add_new_dialogue("...1");
 	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
-	game.add_new_dialogue("...");
+	game.add_new_dialogue("...2");
 	game.add_new_dialogue("Y a personne ??");
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");
-	game.play_music("sounds/2.ogg", 0, 1000, 1.0); //TODO : volume hardcodé
+	game.play_music("sounds/2.ogg", 0, 1000, 1.0); 
 	game.show_character("Sayori", "t11");
 	game.rename_character("Sayori", "xxxxx");
 	game.add_new_dialogue("Sayori", "HEYYYYYY!");
@@ -111,16 +121,16 @@ int main(int argc, char* argv[])
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
 	game.autofocus_enable();
-	game.play_music("sounds/3.ogg", 2, 1000); //TODO : bizarre qu'il y ait des secondes ici alors que dans tout le reste du moteur, j'utilise des ms
+	game.play_music("sounds/3.ogg", 2, 1000); 
 	game.show_character("Yuri", "t41");
 	game.show_character("Sayori", "t42");
 	game.show_character("Monika", "t43");
 	game.show_character("Natsuki", "t44");
 	game.add_new_dialogue("Elle est chiante...");
-	Color::add_new_string_color("dirt", Color::from_rgba8(50, 20, 30));
+	color::str::add_new_string_color("dirt", Color::from_rgba8(50, 20, 30));
 	game.show_background(Color::from_string("dirt"));
 	game.add_new_dialogue("Yuri", "How are you MC?");
-	game.stop_music(2000); //TODO : attention, ici il faut mettre des ms car fade_out est une méthode statique => le * 1000 effectué par stop_music n'est pas réalisé car stop_music n'est donc pas appelé
+	game.stop_music(2000); 
 	game.rename_character("Yuri", "Yuri beta");
 	game.hide_background();
 	game.add_new_dialogue("Yuri", "...");

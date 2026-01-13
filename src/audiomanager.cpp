@@ -62,3 +62,8 @@ void AudioManager::set_volume_channel(int channel, int volume)
 	global_sound_volume_ = volume;
 	sdl::Chunk::volume(channel, global_sound_volume_);
 }
+
+void AudioManager::halt_channel(int channel)
+{
+	sdl::Chunk::halt_channel(channel);
+}
