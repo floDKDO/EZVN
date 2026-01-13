@@ -3,6 +3,7 @@
 #include "transform.h"
 #include "constants.h"
 #include "game.h"
+#include "RAII_SDL2/channel.h"
 
 #include <iostream>
 #include <algorithm>
@@ -515,7 +516,7 @@ void InGame::update_music(InfoMusic& info_music)
 	if(info_music.second.has_value()) //play music
 	{
 		Music& music = info_music.second.value();
-		if(!sdl::Music::playing())
+		if(!sdl::music::playing())
 		{
 			game_.audio_manager_.fade_in_music(music, music_properties.loop_, music_properties.fadein_length_);
 		}
@@ -544,7 +545,7 @@ void InGame::halt_all_sounds()
 			if(sound_pair.second.has_value())
 			{
 				InGame::AudioProperties& sound_properties = sound_pair.first;
-				if(sdl::Chunk::playing(sound_properties.channel_))
+				if(sdl::channel::playing(sound_properties.channel_))
 				{
 					game_.audio_manager_.halt_channel(sound_properties.channel_);
 				}
@@ -566,7 +567,7 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 
 			if(currently_playing_sound_.sound_ == &sound)
 			{
-				if(!sdl::Chunk::playing(sound_properties.channel_)
+				if(!sdl::channel::playing(sound_properties.channel_)
 				&& ((!sound_properties.loop_ && !currently_playing_sound_.played_) || sound_properties.loop_)) //ne pas rejouer un son qui a déjà été joué s'il ne doit pas être joué en boucle
 				{
 					//currently_playing_sound_ = {sound_properties, /*get_current_script_index()*/, true, &sound};
@@ -580,14 +581,14 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 				//cas d'un scroll arrière et un son était en train de se jouer => l'arrêter
 				if(currently_playing_sound_.sound_ && currently_playing_sound_.associated_script_index_ > i) //TODO : remplacer i par current_script_index_ 
 				{
-					if(sdl::Chunk::playing(currently_playing_sound_.audio_properties_.channel_))
+					if(sdl::channel::playing(currently_playing_sound_.audio_properties_.channel_))
 					{
 						game_.audio_manager_.halt_channel(currently_playing_sound_.audio_properties_.channel_);
 					}
 				}
 				else
 				{
-					if(sdl::Chunk::playing(sound_properties.channel_))
+					if(sdl::channel::playing(sound_properties.channel_))
 					{
 						game_.audio_manager_.fade_out_sound(sound_properties.channel_, sound_properties.fadeout_length_);
 					}
@@ -606,7 +607,7 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 		}
 		else //stop sound
 		{
-			if(sdl::Chunk::playing(sound_properties.channel_))
+			if(sdl::channel::playing(sound_properties.channel_))
 			{
 				game_.audio_manager_.fade_out_sound(sound_properties.channel_, sound_properties.fadeout_length_);
 			}

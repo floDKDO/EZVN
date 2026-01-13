@@ -22,7 +22,7 @@
 
 //TODO : membre static => static inline ou static constexpr pour attribuer une valeur directement dans le .h
 
-//TODO : classe avec tout en static (membres et méthodes) pas ouf... (ici les classes Color, Chunk et Music) => trouver autre chose (namespace ??)
+//TODO : utiliser des free functions si possible
 
 //TODO : anonymous namespace au lieu de static pour des fonctions static et des variables globales static propres à une translation unit
 

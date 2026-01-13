@@ -17,17 +17,24 @@ class Music
 		~Music(); //Mix_FreeMusic
 
 		Mix_Music* fetch() const;
-		static bool playing();
-		static void fade_in(sdl::Music& music, const bool loop, const int ms, const int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInMusic() => loop is a bool (true <=> -1, false <=> 0). It also has a additional parameter (volume)
-		static void fade_out(const int ms);
-		static void halt();
-		static void pause();
-		static void resume();
-		static void volume(const int volume);
-		static void set_position(const double position);
-		static void hook_finished(void(*music_finished)());
 
 	private:
 		Mix_Music* music_;
 };
+
+	namespace music
+	{
+
+	bool playing();
+	void fade_in(sdl::Music& music, const bool loop, const int ms, const int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInMusic() => loop is a bool (true <=> -1, false <=> 0). It also has a additional parameter (volume)
+	void fade_out(const int ms);
+	void halt();
+	void pause();
+	void resume();
+	void volume(const int volume);
+	void set_position(const double position);
+	void hook_finished(void(*music_finished)());
+
+	}
+
 }

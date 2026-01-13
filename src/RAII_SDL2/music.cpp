@@ -50,12 +50,12 @@ Mix_Music* Music::fetch() const
 	return music_;
 }
 
-bool Music::playing()
+bool music::playing()
 {
 	return Mix_PlayingMusic();
 }
 
-void Music::fade_in(sdl::Music& music, const bool loop, const int ms, const int volume)
+void music::fade_in(sdl::Music& music, const bool loop, const int ms, const int volume)
 {
 	int loops;
 	if(loop)
@@ -67,7 +67,7 @@ void Music::fade_in(sdl::Music& music, const bool loop, const int ms, const int 
 		loops = 0;
 	}
 
-	Music::volume(volume);
+	sdl::music::volume(volume);
 
 	if(Mix_FadeInMusic(music.fetch(), loops, ms) == -1)
 	{
@@ -75,32 +75,32 @@ void Music::fade_in(sdl::Music& music, const bool loop, const int ms, const int 
 	}
 }
 
-void Music::fade_out(const int ms) 
+void music::fade_out(const int ms) 
 {
 	Mix_FadeOutMusic(ms);
 }
 
-void Music::halt()
+void music::halt()
 {
 	Mix_HaltMusic();
 }
 
-void Music::pause() 
+void music::pause()
 {
 	Mix_PauseMusic();
 }
 
-void Music::resume() 
+void music::resume()
 {
 	Mix_ResumeMusic();
 }
 
-void Music::volume(const int volume) 
+void music::volume(const int volume)
 {
 	Mix_VolumeMusic(volume);
 }
 
-void Music::set_position(const double position) 
+void music::set_position(const double position)
 {
 	if(Mix_SetMusicPosition(position) == -1)
 	{
@@ -108,7 +108,7 @@ void Music::set_position(const double position)
 	}
 }
 
-void Music::hook_finished(void(*music_finished)())
+void music::hook_finished(void(*music_finished)())
 {
 	Mix_HookMusicFinished(music_finished);
 }
