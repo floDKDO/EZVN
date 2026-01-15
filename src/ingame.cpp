@@ -1,5 +1,4 @@
 ﻿#include "ingame.h"
-#include "GUI/textbutton.h"
 #include "transform.h"
 #include "constants.h"
 #include "game.h"
@@ -25,17 +24,34 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
 	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
 
-	ui_manager_.add_element(std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextButton*>(ui_manager_.ui_elements_[0].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_manager_.add_element(std::make_unique<TextToggle>("Skip", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::skip_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextToggle*>(ui_manager_.ui_elements_[1].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_manager_.add_element(std::make_unique<TextToggle>("Auto", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::auto_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextToggle*>(ui_manager_.ui_elements_[2].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_manager_.add_element(std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextButton*>(ui_manager_.ui_elements_[3].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_manager_.add_element(std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
-	x_textbutton += dynamic_cast<TextButton*>(ui_manager_.ui_elements_[4].get())->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-	ui_manager_.add_element(std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::settings_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX));
+	std::unique_ptr<Ui> history_ui = std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	history_button_ = dynamic_cast<TextButton*>(history_ui.get());
+	ui_manager_.add_element(std::move(history_ui));
+	x_textbutton += history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	std::unique_ptr<Ui> skip_ui = std::make_unique<TextToggle>("Skip", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::skip_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX);
+	skip_toggle_ = dynamic_cast<TextToggle*>(skip_ui.get());
+	ui_manager_.add_element(std::move(skip_ui));
+	x_textbutton += skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	std::unique_ptr<Ui> auto_ui = std::make_unique<TextToggle>("Auto", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::auto_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX);
+	auto_toggle_ = dynamic_cast<TextToggle*>(auto_ui.get());
+	ui_manager_.add_element(std::move(auto_ui));
+	x_textbutton += auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	std::unique_ptr<Ui> save_ui = std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	save_button_ = dynamic_cast<TextButton*>(save_ui.get());
+	ui_manager_.add_element(std::move(save_ui));
+	x_textbutton += save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	std::unique_ptr<Ui> load_ui = std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	load_button_ = dynamic_cast<TextButton*>(load_ui.get());
+	ui_manager_.add_element(std::move(load_ui));
+	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	std::unique_ptr<Ui> settings_ui = std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::settings_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	settings_button_ = dynamic_cast<TextButton*>(settings_ui.get());
+	ui_manager_.add_element(std::move(settings_ui));
 
 	ui_manager_.set_elements();
 }
@@ -173,6 +189,12 @@ void InGame::insert_namebox_text_color(const std::string_view character_variable
 	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
 	character_properties.namebox_text_color_ = namebox_text_color;
 	script_.script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
+}
+
+//Textbox
+void InGame::move_textbox(const std::string_view where)
+{
+	script_.script_information_.push_back(InfoTextbox(std::string(where)));
 }
 
 //Background
@@ -615,9 +637,35 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Textbox
-void InGame::update_textbox()
+void InGame::update_textbox(InfoTextbox& info_textbox)
 {
+	textbox_.set_textbox_position(info_textbox);
 
+	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
+	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
+
+	history_button_->text_.position_.x = x_textbutton;
+	history_button_->text_.position_.y = y_textbutton;
+	x_textbutton += history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	skip_toggle_->text_.position_.x = x_textbutton;
+	skip_toggle_->text_.position_.y = y_textbutton;
+	x_textbutton += skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	auto_toggle_->text_.position_.x = x_textbutton;
+	auto_toggle_->text_.position_.y = y_textbutton;
+	x_textbutton += auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	save_button_->text_.position_.x = x_textbutton;
+	save_button_->text_.position_.y = y_textbutton;
+	x_textbutton += save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	load_button_->text_.position_.x = x_textbutton;
+	load_button_->text_.position_.y = y_textbutton;
+	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	settings_button_->text_.position_.x = x_textbutton;
+	settings_button_->text_.position_.y = y_textbutton;
 }
 
 //Dialogues
@@ -700,31 +748,36 @@ void InGame::update2()
 	//{
 	//	which_dialogue_from_where_ = {WhichDialogue::none, false, false};
 	//}
-	
-	if(std::holds_alternative<InfoBackground>(script_.script_information_[script_.current_script_index_]))
+
+	ScriptInformation& current_script_information = script_.script_information_[script_.current_script_index_];
+	if(std::holds_alternative<InfoBackground>(current_script_information))
 	{
-		update_backgrounds(std::get<InfoBackground>(script_.script_information_[script_.current_script_index_]));
+		update_backgrounds(std::get<InfoBackground>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoCharacter>(script_.script_information_[script_.current_script_index_]))
+	else if(std::holds_alternative<InfoCharacter>(current_script_information))
 	{
-		update_characters(std::get<InfoCharacter>(script_.script_information_[script_.current_script_index_]));
+		update_characters(std::get<InfoCharacter>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoAutofocus>(script_.script_information_[script_.current_script_index_]))
+	else if(std::holds_alternative<InfoAutofocus>(current_script_information))
 	{
-		update_autofocus(std::get<InfoAutofocus>(script_.script_information_[script_.current_script_index_]));
+		update_autofocus(std::get<InfoAutofocus>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoMusic>(script_.script_information_[script_.current_script_index_]))
+	else if(std::holds_alternative<InfoMusic>(current_script_information))
 	{
-		update_music(std::get<InfoMusic>(script_.script_information_[script_.current_script_index_]));
+		update_music(std::get<InfoMusic>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoSound>(script_.script_information_[script_.current_script_index_]))
+	else if(std::holds_alternative<InfoSound>(current_script_information))
 	{
-		update_sounds(std::get<InfoSound>(script_.script_information_[script_.current_script_index_]), script_.current_script_index_);
+		update_sounds(std::get<InfoSound>(current_script_information), script_.current_script_index_);
 	}
-	else if(std::holds_alternative<InfoDialogue>(script_.script_information_[script_.current_script_index_]))
+	else if(std::holds_alternative<InfoDialogue>(current_script_information))
 	{
-		update_dialogue(std::get<InfoDialogue>(script_.script_information_[script_.current_script_index_]));
-		update_characters_dialogue(std::get<InfoDialogue>(script_.script_information_[script_.current_script_index_]));
+		update_dialogue(std::get<InfoDialogue>(current_script_information));
+		update_characters_dialogue(std::get<InfoDialogue>(current_script_information));
+	}
+	else if(std::holds_alternative<InfoTextbox>(current_script_information))
+	{
+		update_textbox(std::get<InfoTextbox>(current_script_information));
 	}
 
 	if(move_dialogue())

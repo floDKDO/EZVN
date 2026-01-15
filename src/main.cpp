@@ -43,8 +43,6 @@
 
 //TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
 
-//TODO : possibilité de déplacer la textbox
-
 //TODO : crash si aucun dialogue => current_script_index_ a la valeur initiale -1 ??
 
 //TODO : dans la member initialization list, ne pas écrire : transform_(Transform(transform_name)) mais transform_(transform_name)
@@ -102,8 +100,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...1");
+	game.move_textbox("top");
 	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...2");
+	game.move_textbox("bottomleft");
 	game.add_new_dialogue("Y a personne ??");
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");

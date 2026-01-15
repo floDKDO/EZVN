@@ -111,9 +111,14 @@ void Game::pop_state()
 	game_states_stack_.pop();
 }
 
-GameState* Game::get_state() const
+GameState* Game::get_current_state() const
 {
 	return game_states_stack_.top();
+}
+
+InGame* Game::get_ingame_state() const
+{
+	return dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get());
 }
 
 void Game::handle_events()
@@ -145,7 +150,7 @@ void Game::handle_events()
 			default:
 				break;
 		}
-		get_state()->handle_events(e);
+		get_current_state()->handle_events(e);
 	}
 }
 
@@ -153,14 +158,14 @@ void Game::draw()
 {
 	renderer_.set_draw_color(0, 0, 0, 255); //TODO : à la place, une fonction de callback qui est appelée quand la fenêtre est redimensionnée ??
 	renderer_.clear();
-	get_state()->draw(renderer_);
+	get_current_state()->draw(renderer_);
 	renderer_.present();
 }
 
 void Game::update()
 {
 	handle_requests();
-	get_state()->update();
+	get_current_state()->update();
 }
 
 void Game::update_fps_count(const std::string_view fps) const
@@ -170,105 +175,110 @@ void Game::update_fps_count(const std::string_view fps) const
 
 void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
+	get_ingame_state()->add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
 }
 
 void Game::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->rename_character(character_variable, new_character_name);
+	get_ingame_state()->rename_character(character_variable, new_character_name);
 }
 
 void Game::show_character(const std::string_view character_variable, std::string transform_name, int zorder)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->show_character(character_variable, transform_name, zorder);
+	get_ingame_state()->show_character(character_variable, transform_name, zorder);
 }
 
 void Game::show_character(const std::string_view character_variable, std::string transform_name)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->show_character(character_variable, transform_name, std::nullopt);
+	get_ingame_state()->show_character(character_variable, transform_name, std::nullopt);
 }
 
 void Game::show_character(const std::string_view character_variable, int zorder)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->show_character(character_variable, std::nullopt, zorder);
+	get_ingame_state()->show_character(character_variable, std::nullopt, zorder);
 }
 
 void Game::show_character(const std::string_view character_variable)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->show_character(character_variable, std::nullopt, std::nullopt);
+	get_ingame_state()->show_character(character_variable, std::nullopt, std::nullopt);
 }
 
 void Game::hide_character(const std::string_view character_variable)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->hide_character(character_variable);
+	get_ingame_state()->hide_character(character_variable);
 }
 
 void Game::add_new_dialogue(const std::string_view character_variable, const std::string_view dialogue)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_dialogue(character_variable, dialogue);
+	get_ingame_state()->insert_dialogue(character_variable, dialogue);
 }
 
 void Game::add_new_dialogue(const std::string_view dialogue)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_dialogue("Narrator", dialogue);
+	get_ingame_state()->insert_dialogue("Narrator", dialogue);
 }
 
 void Game::show_background(const std::string_view background_path)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_background(background_path);
+	get_ingame_state()->insert_background(background_path);
 }
 
 void Game::show_background(Color color)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_background(color);
+	get_ingame_state()->insert_background(color);
 }
 
 void Game::hide_background()
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_background(Color::from_rgba8(0, 0, 0));
+	get_ingame_state()->insert_background(Color::from_rgba8(0, 0, 0));
 }
 
 void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->play_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
+	get_ingame_state()->play_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
 }
 
 void Game::stop_sound(int channel, int fadeout_length)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->stop_sound(fadeout_length, channel); 
+	get_ingame_state()->stop_sound(fadeout_length, channel);
 }
 
 void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->play_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
+	get_ingame_state()->play_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
 }
 
 void Game::stop_music(int fadeout_length)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->stop_music(fadeout_length);
+	get_ingame_state()->stop_music(fadeout_length);
 }
 
 void Game::autofocus_enable()
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_autofocus(true);
+	get_ingame_state()->insert_autofocus(true);
 }
 
 void Game::autofocus_disable()
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_autofocus(false);
+	get_ingame_state()->insert_autofocus(false);
 }
 
 void Game::change_textbox(const std::string_view character_variable, const std::string_view textbox_path)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_textbox(character_variable, textbox_path);
+	get_ingame_state()->insert_textbox(character_variable, textbox_path);
 }
 
 void Game::change_namebox(const std::string_view character_variable, const std::string_view namebox_path)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_namebox(character_variable, namebox_path);
+	get_ingame_state()->insert_namebox(character_variable, namebox_path);
 }
 
 void Game::change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color)
 {
-	dynamic_cast<InGame*>(game_states_map_.at(constants::ingame_unique_id_).get())->insert_namebox_text_color(character_variable, namebox_text_color);
+	get_ingame_state()->insert_namebox_text_color(character_variable, namebox_text_color);
+}
+
+void Game::move_textbox(const std::string_view where)
+{
+	get_ingame_state()->move_textbox(where);
 }

@@ -11,7 +11,7 @@
 #include "RAII_SDL2/sdlimg.h"
 #include "RAII_SDL2/sdlttf.h"
 #include "audiomanager.h"
-#include "transform.h"
+#include "ingame.h"
 
 #include <stack>
 
@@ -77,10 +77,13 @@ class Game
 		void change_namebox(const std::string_view character_variable, const std::string_view namebox_path);
 		void change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color);
 
+		void move_textbox(const std::string_view where);
+
 	private:
 		void push_state(GameState* state);
 		void pop_state();
-		GameState* get_state() const;
+		GameState* get_current_state() const;
+		InGame* get_ingame_state() const;
 
 		void handle_requests();
 

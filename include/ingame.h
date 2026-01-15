@@ -4,6 +4,7 @@
 #include "textbox.h"
 #include "character.h"
 #include "background.h"
+#include "GUI/textbutton.h"
 #include "GUI/texttoggle.h"
 #include "music.h"
 #include "RAII_SDL2/chunk.h"
@@ -62,7 +63,8 @@ class InGame : public GameState
 	using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
 	using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
 	using InfoAutofocus = bool;
-	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
+	using InfoTextbox = std::string;
+	using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus, InfoTextbox>;
 
 
 	struct Script
@@ -99,6 +101,7 @@ class InGame : public GameState
 		void insert_textbox(const std::string_view character_variable, const std::string_view textbox_path);
 		void insert_namebox(const std::string_view character_variable, const std::string_view namebox_path);
 		void insert_namebox_text_color(const std::string_view character_variable, Color namebox_text_color);
+		void move_textbox(const std::string_view where);
 
 		void insert_background(const std::string_view background_path);
 		void insert_background(Color color);
@@ -131,7 +134,7 @@ class InGame : public GameState
 		void halt_all_sounds();
 		void update_sounds(InfoSound& info_sound, size_t i);
 
-		void update_textbox();
+		void update_textbox(InfoTextbox& info_textbox);
 		void update_dialogue(InfoDialogue& info_dialogue);
 
 	private:
@@ -151,6 +154,14 @@ class InGame : public GameState
 
 		Background background_;
 		Textbox textbox_;
+
+		TextButton* history_button_;
+		TextToggle* skip_toggle_;
+		TextToggle* auto_toggle_;
+		TextButton* save_button_;
+		TextButton* load_button_;
+		TextButton* settings_button_;
+
 		bool hide_ui_textbox_;
 
 		CurrentMusic currently_playing_music_;  //TODO renommer pour coller avec le user-defined event de fin de musique ??
