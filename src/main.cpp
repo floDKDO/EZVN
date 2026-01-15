@@ -56,7 +56,7 @@
 
 #include "Color/str.h"
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory to use argc and argv for SDL2
 {
 	//TODO : inputfield qui demande le nom du joueur au premier lancement du jeu => nécessite les variables persistantes
 

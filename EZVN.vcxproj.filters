@@ -171,6 +171,9 @@
     <ClCompile Include="src\RAII_SDL2\channel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\RAII_SDL2\events.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\image.h">
@@ -327,6 +330,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\RAII_SDL2\channel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RAII_SDL2\events.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

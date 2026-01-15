@@ -101,6 +101,6 @@ class Ui
 
 		sdl::Renderer& renderer_; //do not own it !!
 
-		std::function<void([[maybe_unused]] Ui* ui)> callback_function_;
+		std::function<void(Ui* ui)> callback_function_;
 };
 

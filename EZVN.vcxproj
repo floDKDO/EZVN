@@ -162,6 +162,7 @@
     <ClCompile Include="src\RAII_SDL2\animation.cpp" />
     <ClCompile Include="src\RAII_SDL2\channel.cpp" />
     <ClCompile Include="src\RAII_SDL2\chunk.cpp" />
+    <ClCompile Include="src\RAII_SDL2\events.cpp" />
     <ClCompile Include="src\RAII_SDL2\font.cpp" />
     <ClCompile Include="src\RAII_SDL2\gamecontroller.cpp" />
     <ClCompile Include="src\RAII_SDL2\music.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="include\RAII_SDL2\animation.h" />
     <ClInclude Include="include\RAII_SDL2\channel.h" />
     <ClInclude Include="include\RAII_SDL2\chunk.h" />
+    <ClInclude Include="include\RAII_SDL2\events.h" />
     <ClInclude Include="include\RAII_SDL2\font.h" />
     <ClInclude Include="include\RAII_SDL2\gamecontroller.h" />
     <ClInclude Include="include\RAII_SDL2\music.h" />
