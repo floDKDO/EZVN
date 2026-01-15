@@ -27,9 +27,8 @@ void Inputfield::quit_editing()
 	has_keyboard_focus_ = false;
 }
 
-void Inputfield::on_pointer_up_hook_end(PointerEventData pointer_event_data)
+void Inputfield::on_pointer_up_hook_end([[maybe_unused]] PointerEventData pointer_event_data)
 {
-	(void)pointer_event_data;
 	has_keyboard_focus_ = !has_keyboard_focus_;
 }
 

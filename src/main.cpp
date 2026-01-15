@@ -56,10 +56,8 @@
 
 #include "Color/str.h"
 
-int main(int argc, char* argv[])
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
-	(void)argc, (void)argv;
-
 	//TODO : inputfield qui demande le nom du joueur au premier lancement du jeu => nécessite les variables persistantes
 
 	//TODO : pause et window hide

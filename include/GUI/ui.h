@@ -25,18 +25,18 @@ class Ui
 		virtual ~Ui() = default;
 
 		virtual void on_pointer_up(PointerEventData pointer_event_data); 
-		virtual void on_pointer_up_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
+		virtual void on_pointer_up_hook_end([[maybe_unused]] PointerEventData pointer_event_data) { }
 
 		virtual void on_pointer_down(PointerEventData pointer_event_data);
-		virtual void on_pointer_down_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
+		virtual void on_pointer_down_hook_end([[maybe_unused]] PointerEventData pointer_event_data) { }
 
 		virtual void on_pointer_enter(PointerEventData pointer_event_data);
-		virtual void on_pointer_enter_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
+		virtual void on_pointer_enter_hook_end([[maybe_unused]] PointerEventData pointer_event_data) { }
 
 		virtual void on_pointer_exit(PointerEventData pointer_event_data);
-		virtual void on_pointer_exit_hook_end(PointerEventData pointer_event_data) { (void)pointer_event_data; }
+		virtual void on_pointer_exit_hook_end([[maybe_unused]] PointerEventData pointer_event_data) { }
 
-		virtual void on_drag(PointerEventData pointer_event_data){ (void)pointer_event_data; }
+		virtual void on_drag([[maybe_unused]] PointerEventData pointer_event_data){ }
 
 		virtual void on_up_pressed();
 		virtual void on_up_pressed_hook_end() {}
@@ -72,7 +72,7 @@ class Ui
 		virtual void on_enter_released();
 		virtual void on_enter_released_hook_end() {}
 
-		virtual void on_typing(const std::string_view text) { (void)text; }
+		virtual void on_typing([[maybe_unused]] const std::string_view text) { }
 
 
 		virtual void draw(sdl::Renderer& renderer) = 0;
@@ -101,6 +101,6 @@ class Ui
 
 		sdl::Renderer& renderer_; //do not own it !!
 
-		std::function<void(Ui* ui)> callback_function_;
+		std::function<void([[maybe_unused]] Ui* ui)> callback_function_;
 };
 

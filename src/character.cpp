@@ -42,10 +42,10 @@ void Character::set_transform(const std::string transform_name)
 }
 
 
-void Character::handle_events(const SDL_Event& e)
-{
-	(void)e;
-}
+//void Character::handle_events(const SDL_Event& e)
+//{
+//	
+//}
 
 void Character::draw(sdl::Renderer& renderer)
 {

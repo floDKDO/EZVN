@@ -15,7 +15,6 @@ Ui::Ui(sdl::Renderer& renderer)
 
 void Ui::on_pointer_up(PointerEventData pointer_event_data) 
 {
-	(void)pointer_event_data;
 	state_ = State::SELECTED;
 	callback_function_(this);
 	on_pointer_up_hook_end(pointer_event_data);
@@ -23,21 +22,18 @@ void Ui::on_pointer_up(PointerEventData pointer_event_data)
 
 void Ui::on_pointer_down(PointerEventData pointer_event_data)
 {
-	(void)pointer_event_data;
 	state_ = State::PRESSED;
 	on_pointer_down_hook_end(pointer_event_data);
 }
 
 void Ui::on_pointer_enter(PointerEventData pointer_event_data)
 {
-	(void)pointer_event_data;
 	state_ = State::SELECTED;
 	on_pointer_enter_hook_end(pointer_event_data);
 }
 
 void Ui::on_pointer_exit(PointerEventData pointer_event_data)
 {
-	(void)pointer_event_data;
 	if(state_ == State::PRESSED && pointer_on_ui_when_pointer_up_)
 	{
 		state_ = State::SELECTED;

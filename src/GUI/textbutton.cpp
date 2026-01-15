@@ -19,9 +19,8 @@ TextButton::TextButton(const std::string_view text, const int x, const int y, sd
 	text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == TextButtonKind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == TextButtonKind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer),
 	confirmationpopup_(std::make_unique<ConfirmationPopUp>(text_popup, renderer, callback_function))
 {
-	callback_function_ = [&](Ui* ui)
+	callback_function_ = [&]([[maybe_unused]] Ui* ui)
 	{
-		(void)ui; 
 		confirmationpopup_->is_confirmationpopup_visible_ = true; 
 		//Ui::is_pop_up_visible_ = true; 
 		state_ = State::NORMAL;  

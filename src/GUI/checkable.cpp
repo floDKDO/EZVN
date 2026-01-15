@@ -19,9 +19,8 @@ void Checkable::change_checked(bool is_checked)
 	is_checked_ = is_checked;
 }
 
-void Checkable::on_pointer_up_hook_end(PointerEventData pointer_event_data)
+void Checkable::on_pointer_up_hook_end([[maybe_unused]] PointerEventData pointer_event_data)
 {
-	(void)pointer_event_data;
 	reverse_checked();
 	if(checkable_group_ != nullptr)
 	{

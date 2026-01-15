@@ -54,28 +54,24 @@ TextToggle* InGame::get_texttoggle(const std::string_view text)
 }
 
 //Fonctions de callback///////////////////////////////////////////
-void InGame::auto_function(Ui* ui)
+void InGame::auto_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	auto_mode_ = !auto_mode_;
 }
 
-void InGame::skip_function(Ui* ui)
+void InGame::skip_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	skip_mode_ = !skip_mode_;
 }
 
-void InGame::settings_function(Ui* ui)
+void InGame::settings_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	std::cout << "Pressed Settings!" << std::endl;
 	game_.request_push_state(constants::settings_menu_unique_id_);
 }
 
-void InGame::temp_function(Ui* ui)
+void InGame::temp_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	std::cout << "Pressed!\n";
 }
 //////////////////////////////////////////////////////////////////

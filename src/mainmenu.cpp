@@ -38,29 +38,25 @@ void MainMenu::draw(sdl::Renderer& renderer)
 	GameState::draw(renderer);
 }
 
-void MainMenu::temp_function(Ui* ui)
+void MainMenu::temp_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	std::cout << "Pressed!\n";
 }
 
-void MainMenu::play_function(Ui* ui)
+void MainMenu::play_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	std::cout << "Pressed Play!" << std::endl;
 	game_.request_push_state(constants::ingame_unique_id_);
 }
 
-void MainMenu::settings_function(Ui* ui)
+void MainMenu::settings_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	std::cout << "Pressed Settings!" << std::endl;
 	game_.request_push_state(constants::settings_menu_unique_id_);
 }
 
-void MainMenu::confirmationpopup_quit_function(Ui* ui)
+void MainMenu::confirmationpopup_quit_function([[maybe_unused]] Ui* ui)
 {
-	(void)ui;
 	std::cout << "Pressed Yes!" << std::endl;
 	game_.quit_game();
 }
