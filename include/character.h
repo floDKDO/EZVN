@@ -25,7 +25,7 @@ class Character
 				: name_(name), zorder_(zorder), namebox_text_color_(namebox_text_color), textbox_path_(textbox_path), namebox_path_(namebox_path), transform_name_(transform_name), is_speaking_(is_speaking), is_visible_(is_visible)
 			{}
 
-			std::string name_; //garder le type std::string pour permettre au joueur de taper son nom au clavier
+			std::string name_; 
 			int zorder_;
 			Color namebox_text_color_;
 			std::string textbox_path_;

@@ -30,7 +30,22 @@ class Script
 			int channel_; //not used for musics
 		};
 
-		using InfoCharacter = MyPair<Character::Editableproperties>;
+		enum class CharacterCommandKind
+		{
+			ZORDER,
+			NAME,
+			TRANSFORM_NAME,
+			IS_VISIBLE,
+			TEXTBOX_PATH,
+			NAMEBOX_PATH,
+			NAMEBOX_TEXT_COLOR
+		};
+
+		using CharacterCommandValue = std::variant<int, std::string, bool, Color>;
+		//zorder (int), name (std::string), transform_name (std::string), is_visible_ (bool), textbox_path_ (std::string), namebox_path_ (std::string), namebox_text_color_ (Color)
+		using CharacterCommands = std::unordered_map<CharacterCommandKind, CharacterCommandValue>;
+
+		using InfoCharacter = MyPair<CharacterCommands>;
 		using InfoDialogue = MyPair<const std::string>;
 		using InfoBackground = Background;
 		using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
@@ -39,11 +54,9 @@ class Script
 		using InfoTextbox = std::string;
 		using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus, InfoTextbox>;
 
-		std::optional<Character::Editableproperties> get_last_character_properties(const std::string_view character_variable);
-
 		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 
-		void show_character(const std::string_view character_variable, const std::optional<Character::Editableproperties> properties, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
+		void show_character(const std::string_view character_variable, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
 		void hide_character(const std::string_view character_variable);
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
 		void insert_textbox(const std::string_view character_variable, const std::string_view textbox_path);
@@ -63,11 +76,9 @@ class Script
 		void insert_autofocus(bool autofocus);
 
 		size_t current_script_index_;
-		size_t previous_script_index_;
 		std::vector<ScriptInformation> script_information_;
-		sdl::Renderer& renderer_;
 
 	private:
-		
+		sdl::Renderer& renderer_;
 };
 

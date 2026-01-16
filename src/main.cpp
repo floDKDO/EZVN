@@ -53,6 +53,8 @@
 
 //TODO : créer des variables pour les éléments de tableau utilisés à plusieurs endroits dans une même méthode
 
+//TODO : convention de nommage pour les underscores dans les noms de fichier
+
 
 #include "Color/str.h"
 
@@ -101,14 +103,14 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);*/
-	game.add_new_dialogue("...1");
+	//game.add_new_dialogue("...1");
 	//game.move_textbox("top");
 	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
-	game.add_new_dialogue("...2");
+	//game.add_new_dialogue("...2");
 	//game.move_textbox("bottomleft");
-	game.add_new_dialogue("Y a personne ??");
+	//game.add_new_dialogue("Y a personne ??");
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
-	game.add_new_dialogue("...");
+	/*game.add_new_dialogue("...");
 	game.play_music("sounds/2.ogg", 0, 1000, 1.0); 
 	game.show_character("Sayori", "t11");
 	game.rename_character("Sayori", "xxxxx");
@@ -118,9 +120,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(0, 0, 0));
 	game.rename_character("Sayori", "yyyyy"); 
 	game.add_new_dialogue("Sayori", "Hihihi!");
-	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
+	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");*/
 	game.show_background("img/backgrounds/class.png");
-	game.autofocus_enable();
+	//game.autofocus_enable();
 	game.play_music("sounds/3.ogg", 2, 1000); 
 	game.show_character("Yuri", "t41");
 	game.show_character("Sayori", "t42");
@@ -136,7 +138,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.add_new_dialogue("Yuri", "...");
 	game.show_background("img/backgrounds/corridor.png");
 	game.show_character("Sayori", "t42"); 
-	game.show_character("Natsuki", 10);
+	game.show_character("Sayori", 50);
 	game.add_new_dialogue("Natsuki", "HEYYYYYY!");
 	game.add_new_dialogue("...");
 	game.add_new_dialogue("Sayori", "How are you MC?");

@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClCompile Include="src\audiomanager.cpp" />
     <ClCompile Include="src\background.cpp" />
+    <ClCompile Include="src\charactermanager.cpp" />
     <ClCompile Include="src\character_definition.cpp" />
     <ClCompile Include="src\Color\color.cpp" />
     <ClCompile Include="src\Color\conversion.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="src\RAII_SDL2\window.cpp" />
     <ClCompile Include="src\GUI\slider.cpp" />
     <ClCompile Include="src\script.cpp" />
+    <ClCompile Include="src\scriptrunner.cpp" />
     <ClCompile Include="src\settingsmenu.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\test.cpp" />
@@ -196,6 +198,7 @@
   <ItemGroup>
     <ClInclude Include="include\audiomanager.h" />
     <ClInclude Include="include\background.h" />
+    <ClInclude Include="include\charactermanager.h" />
     <ClInclude Include="include\character_definition.h" />
     <ClInclude Include="include\Color\color.h" />
     <ClInclude Include="include\Color\conversion.h" />
@@ -234,6 +237,7 @@
     <ClInclude Include="include\RAII_SDL2\window.h" />
     <ClInclude Include="include\GUI\slider.h" />
     <ClInclude Include="include\script.h" />
+    <ClInclude Include="include\scriptrunner.h" />
     <ClInclude Include="include\settingsmenu.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />

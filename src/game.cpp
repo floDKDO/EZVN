@@ -175,7 +175,7 @@ void Game::update_fps_count(const std::string_view fps) const
 
 void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
 {
-	get_ingame_state()->add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
+	get_ingame_state()->character_manager_.add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
 }
 
 void Game::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
@@ -185,26 +185,22 @@ void Game::rename_character(const std::string_view character_variable, const std
 
 void Game::show_character(const std::string_view character_variable, std::string transform_name, int zorder)
 {
-	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
-	script_.show_character(character_variable, properties, transform_name, zorder);
+	script_.show_character(character_variable, transform_name, zorder);
 }
 
 void Game::show_character(const std::string_view character_variable, std::string transform_name)
 {
-	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
-	script_.show_character(character_variable, properties, transform_name, std::nullopt);
+	script_.show_character(character_variable, transform_name, std::nullopt);
 }
 
 void Game::show_character(const std::string_view character_variable, int zorder)
 {
-	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
-	script_.show_character(character_variable, properties, std::nullopt, zorder);
+	script_.show_character(character_variable, std::nullopt, zorder);
 }
 
 void Game::show_character(const std::string_view character_variable)
 {
-	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
-	script_.show_character(character_variable, properties, std::nullopt, std::nullopt);
+	script_.show_character(character_variable, std::nullopt, std::nullopt);
 }
 
 void Game::hide_character(const std::string_view character_variable)

@@ -5,56 +5,79 @@
 #include "RAII_SDL2/channel.h"
 
 #include <iostream>
-#include <algorithm>
 
 //TODO : éviter de répéter plein de fois les mêmes boucles for
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), /*current_dialogue_index_(size_t(1)),*/ which_dialogue_from_where_({WhichDialogue::next, false, false}),
+	: GameState(game), /*current_dialogue_index_(size_t(1)),*/ character_manager_(renderer), which_dialogue_from_where_({WhichDialogue::next, false, false}),
 	skip_mode_(false), auto_mode_(false), autofocus_(constants::default_autofocus), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}), currently_playing_music_({{}, nullptr}),
 	/*background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false),*/ renderer_(renderer)
 {
 	build_ui_elements(renderer); 
-	create_narrator();
+	character_manager_.create_narrator();
 }
 
-//TODO : séparer en deux fonctions si possible (une qui met les éléments dans ui_manager_ et une qui met les bonnes positions)
 void InGame::build_ui_elements(sdl::Renderer& renderer)
 {
-	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
-	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
-
-	std::unique_ptr<Ui> history_ui = std::make_unique<TextButton>("History", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	std::unique_ptr<Ui> history_ui = std::make_unique<TextButton>("History", 0, 0, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
 	history_button_ = dynamic_cast<TextButton*>(history_ui.get());
 	ui_manager_.add_element(std::move(history_ui));
-	x_textbutton += history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	std::unique_ptr<Ui> skip_ui = std::make_unique<TextToggle>("Skip", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::skip_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX);
+	std::unique_ptr<Ui> skip_ui = std::make_unique<TextToggle>("Skip", 0, 0, false, renderer, std::bind(&InGame::skip_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX);
 	skip_toggle_ = dynamic_cast<TextToggle*>(skip_ui.get());
 	ui_manager_.add_element(std::move(skip_ui));
-	x_textbutton += skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	std::unique_ptr<Ui> auto_ui = std::make_unique<TextToggle>("Auto", x_textbutton, y_textbutton, false, renderer, std::bind(&InGame::auto_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX);
+	std::unique_ptr<Ui> auto_ui = std::make_unique<TextToggle>("Auto", 0, 0, false, renderer, std::bind(&InGame::auto_function, this, std::placeholders::_1), TextToggleKind::ON_TEXTBOX);
 	auto_toggle_ = dynamic_cast<TextToggle*>(auto_ui.get());
 	ui_manager_.add_element(std::move(auto_ui));
-	x_textbutton += auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	std::unique_ptr<Ui> save_ui = std::make_unique<TextButton>("Save", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	std::unique_ptr<Ui> save_ui = std::make_unique<TextButton>("Save", 0, 0, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
 	save_button_ = dynamic_cast<TextButton*>(save_ui.get());
 	ui_manager_.add_element(std::move(save_ui));
-	x_textbutton += save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	std::unique_ptr<Ui> load_ui = std::make_unique<TextButton>("Load", x_textbutton, y_textbutton, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	std::unique_ptr<Ui> load_ui = std::make_unique<TextButton>("Load", 0, 0, renderer, std::bind(&InGame::temp_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
 	load_button_ = dynamic_cast<TextButton*>(load_ui.get());
 	ui_manager_.add_element(std::move(load_ui));
-	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	std::unique_ptr<Ui> settings_ui = std::make_unique<TextButton>("Settings", x_textbutton, y_textbutton, renderer, std::bind(&InGame::settings_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
+	std::unique_ptr<Ui> settings_ui = std::make_unique<TextButton>("Settings", 0, 0, renderer, std::bind(&InGame::settings_function, this, std::placeholders::_1), TextButtonKind::ON_TEXTBOX);
 	settings_button_ = dynamic_cast<TextButton*>(settings_ui.get());
 	ui_manager_.add_element(std::move(settings_ui));
 
+	set_position_ui_textbox("bottom"); //TODO : hardcodé
+
 	ui_manager_.set_elements();
+}
+
+void InGame::set_position_ui_textbox(std::string_view where)
+{
+	textbox_.set_textbox_position(where);
+
+	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
+	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
+
+	history_button_->text_.position_.x = x_textbutton;
+	history_button_->text_.position_.y = y_textbutton;
+	x_textbutton += history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	skip_toggle_->text_.position_.x = x_textbutton;
+	skip_toggle_->text_.position_.y = y_textbutton;
+	x_textbutton += skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	auto_toggle_->text_.position_.x = x_textbutton;
+	auto_toggle_->text_.position_.y = y_textbutton;
+	x_textbutton += auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	save_button_->text_.position_.x = x_textbutton;
+	save_button_->text_.position_.y = y_textbutton;
+	x_textbutton += save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	load_button_->text_.position_.x = x_textbutton;
+	load_button_->text_.position_.y = y_textbutton;
+	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+
+	settings_button_->text_.position_.x = x_textbutton;
+	settings_button_->text_.position_.y = y_textbutton;
 }
 
 //Fonctions de callback///////////////////////////////////////////
@@ -79,117 +102,6 @@ void InGame::temp_function([[maybe_unused]] Ui* ui)
 	std::cout << "Pressed!\n";
 }
 //////////////////////////////////////////////////////////////////
-
-
-//Character//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-std::optional<Character::Editableproperties> InGame::show_character_prologue(const std::string_view character_variable)
-{
-	const std::string key(character_variable);
-	std::optional<Character::Editableproperties> character_properties = std::nullopt;
-
-	if(is_character_active(character_variable) == nullptr)
-	{
-		CharacterDefinition& character_definition = character_definitions_.at(key);
-		active_characters_.insert(std::make_pair(key, Character(character_definition, renderer_)));
-		draw_characters_order_.push_back(key);
-		character_properties = active_characters_.at(key).properties_; //=> n'est pas encore dans script_information_
-		character_properties.value().is_visible_ = true;
-	}
-	return character_properties;
-}
-
-//Character
-void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
-{
-	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
-}
-
-//Character
-void InGame::create_narrator()
-{
-	add_character("Narrator", "", "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
-	CharacterDefinition& character_definition = character_definitions_.at("Narrator");
-	active_characters_.insert(std::make_pair("Narrator", Character(character_definition, renderer_)));
-}
-
-//Character
-Character* InGame::is_character_active(const std::string_view character_variable)
-{
-	const std::string key(character_variable);
-	if(active_characters_.count(key)) //déjà dans active_characters_
-	{
-		//std::cout << "(is_character_active) " << character_variable << " is already in active_characters_\n";
-		return &(active_characters_.at(key));
-	}
-	else
-	{
-		//std::cout << "(is_character_active) " << character_variable << " is not in active_characters_\n";
-		return nullptr;
-	}
-}
-
-//Character
-void InGame::draw_characters(sdl::Renderer& renderer)
-{
-	//Characters
-	std::stable_sort(draw_characters_order_.begin(), draw_characters_order_.end(),
-		[&](const std::string_view a, const std::string_view b) -> bool
-	{
-		return active_characters_.at(std::string(a)).properties_.zorder_ < active_characters_.at(std::string(b)).properties_.zorder_;
-	});
-
-	/*std::cout << "\n";
-	for(const std::string_view s : draw_characters_order_)
-	{
-		std::cout << s << std::endl;
-	}
-	std::cout << "\n";*/
-
-	//std::cout << "\n";
-	for(const std::string_view s : draw_characters_order_)
-	{
-		for(size_t i = game_.script_.current_script_index_; i != -1; --i)
-		{
-			if(std::holds_alternative<Script::InfoCharacter>(game_.script_.script_information_[i]))
-			{
-				Script::InfoCharacter& p_character = std::get<Script::InfoCharacter>(game_.script_.script_information_[i]);
-				if(s == p_character.character_variable_)
-				{
-					active_characters_.at(std::string(s)).draw(renderer);
-					//std::cout << p_character.character_variable_ << ", " << std::boolalpha << value_character.properties_.is_visible_ << std::endl;
-					break;
-				}
-			}
-		}
-	}
-	//std::cout << "\n";
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//Background/////////////////////////////////////////////////////////////////////////////////// 
-void InGame::change_background(const Script::InfoBackground& b)
-{
-	if(b.image_ != nullptr)
-	{
-		if(background_.image_ != nullptr)
-		{
-			background_.image_->init_image(b.image_->path_, 0, 0, renderer_);
-		}
-		else
-		{
-			background_ = Background(b.image_->path_, renderer_);
-		}
-	}
-	else
-	{
-		background_.image_.reset();
-		background_.color_ = b.color_;
-	}
-}
-////////////////////////////////////////////////////////////////////////////////////////////
 
 void InGame::handle_events(const SDL_Event& e)
 {
@@ -259,7 +171,7 @@ void InGame::draw(sdl::Renderer& renderer)
 
 	if(game_.script_.script_information_.size() > 0)
 	{
-		draw_characters(renderer);
+		character_manager_.draw(renderer);
 	}
 
 	if(!hide_ui_textbox_)
@@ -269,42 +181,25 @@ void InGame::draw(sdl::Renderer& renderer)
 	}
 }
 
-//void InGame::update_current_script_index_dialogue()
-//{
-//	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
-//	{
-//		return;
-//	}
-//
-//	if(!which_dialogue_from_where_.is_from_mouse_wheel_)
-//	{
-//		show_next_dialogue();
-//	}
-//	else
-//	{
-//		show_dialogue_mouse_wheel();
-//	}
-//}
-
 void InGame::update_backgrounds(const Script::InfoBackground& info_background)
 {
 	//Backgrounds
-	change_background(info_background);
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-}
-
-void InGame::update_characters(const Script::InfoCharacter& info_character)
-{
-	//Characters
-	const std::string& character_variable = info_character.character_variable_;
-
-	Character& character = active_characters_.at(character_variable);
-	character.set_transform(info_character.t_.transform_name_);
-	character.properties_.zorder_ = info_character.t_.zorder_;
-	character.properties_.name_ = info_character.t_.name_;
-	character.properties_.textbox_path_ = info_character.t_.textbox_path_;
-	character.properties_.namebox_path_ = info_character.t_.namebox_path_;
-	character.properties_.namebox_text_color_ = info_character.t_.namebox_text_color_;
+	if(info_background.image_ != nullptr)
+	{
+		if(background_.image_ != nullptr)
+		{
+			background_.image_->init_image(info_background.image_->path_, 0, 0, renderer_);
+		}
+		else
+		{
+			background_ = Background(info_background.image_->path_, renderer_);
+		}
+	}
+	else
+	{
+		background_.image_.reset();
+		background_.color_ = info_background.color_;
+	}
 }
 
 void InGame::update_autofocus(const Script::InfoAutofocus& info_autofocus)
@@ -475,37 +370,11 @@ void InGame::update_sounds(Script::InfoSound& info_sound, size_t i)
 //Textbox
 void InGame::update_textbox(Script::InfoTextbox& info_textbox)
 {
-	textbox_.set_textbox_position(info_textbox);
-
-	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
-	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
-
-	history_button_->text_.position_.x = x_textbutton;
-	history_button_->text_.position_.y = y_textbutton;
-	x_textbutton += history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-
-	skip_toggle_->text_.position_.x = x_textbutton;
-	skip_toggle_->text_.position_.y = y_textbutton;
-	x_textbutton += skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-
-	auto_toggle_->text_.position_.x = x_textbutton;
-	auto_toggle_->text_.position_.y = y_textbutton;
-	x_textbutton += auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-
-	save_button_->text_.position_.x = x_textbutton;
-	save_button_->text_.position_.y = y_textbutton;
-	x_textbutton += save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-
-	load_button_->text_.position_.x = x_textbutton;
-	load_button_->text_.position_.y = y_textbutton;
-	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
-
-	settings_button_->text_.position_.x = x_textbutton;
-	settings_button_->text_.position_.y = y_textbutton;
+	set_position_ui_textbox(info_textbox);
 }
 
 //Dialogues
-void InGame::update_dialogue(Script::InfoDialogue& info_dialogue)
+void InGame::update_dialogue(Script::InfoDialogue& info_dialogue, const Character& character)
 {
 	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
 	{
@@ -516,12 +385,10 @@ void InGame::update_dialogue(Script::InfoDialogue& info_dialogue)
 
 	//std::cout << "*************************PERSO: " << info_dialogue.character_variable_ << ", texte: " << info_dialogue.t_ << std::endl;
 
-	textbox_.show_new_dialogue(info_dialogue.t_, active_characters_.at(info_dialogue.character_variable_).properties_.name_, skip_mode_, which_dialogue_from_where_.wait_for_end_of_dialogue_);
-
-	textbox_.change_textbox(active_characters_.at(info_dialogue.character_variable_).properties_.textbox_path_, renderer_);
-	textbox_.change_namebox(active_characters_.at(info_dialogue.character_variable_).properties_.namebox_path_, renderer_);
-	textbox_.change_namebox_text_color(active_characters_.at(info_dialogue.character_variable_).properties_.namebox_text_color_);
-
+	textbox_.show_new_dialogue(info_dialogue.t_, character.properties_.name_, skip_mode_, which_dialogue_from_where_.wait_for_end_of_dialogue_);
+	textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
+	textbox_.change_namebox(character.properties_.namebox_path_, renderer_);
+	textbox_.change_namebox_text_color(character.properties_.namebox_text_color_);
 	//which_dialogue_from_where_ = {WhichDialogue::none, false, false};
 }
 
@@ -532,48 +399,24 @@ void InGame::update_characters_dialogue(Script::InfoDialogue& info_dialogue)
 		return;
 	}
 
-	for(auto& [key_character_variable, value_character] : active_characters_)
+	//TODO : attention : conflit avec l'autofocus
+	/*for(auto& [key_character_variable, value_character] : character_manager_.active_characters_)
 	{
 		value_character.properties_.is_speaking_ = false;
-	}
+	}*/
 
 	//std::cout << "PERSO: " << info_dialogue.character_variable_ << ", texte: " << info_dialogue.t_ << std::endl;
 
-	Character& character = active_characters_.at(info_dialogue.character_variable_);
-	character.properties_.is_speaking_ = true;
+	Character& character = character_manager_.active_characters_.at(info_dialogue.character_variable_);
+	/*character.properties_.is_speaking_ = true;*/ //TODO : attention : conflit avec l'autofocus
 }
 
+//TODO : utiliser std::visit ??
 void InGame::update()
 {
 	//std::cout << "AUTOFOCUS: " << autofocus_ << std::endl;
-	update2();
-}
-
-bool InGame::move_dialogue()
-{
-	//std::cout << "DEDANS (next): " << current_script_index_  << ", " << std::boolalpha << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next) << ", " << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev) << std::endl;
-	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next)
-	{
-		if(game_.script_.script_information_.size() > game_.script_.current_script_index_ + 1)
-		{
-			game_.script_.current_script_index_ += 1;
-		}
-	}
-	else if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev)
-	{
-		if(game_.script_.current_script_index_ > 0)
-		{
-			game_.script_.current_script_index_ -= 1;
-		}
-	}
-	return(!std::holds_alternative<Script::InfoDialogue>(game_.script_.script_information_[game_.script_.current_script_index_]));
-}
-
-
-//TODO : utiliser std::visit ??
-void InGame::update2()
-{
-	//TODO : enregistrer les choses courantes
+	
+		//TODO : enregistrer les choses courantes
 	static bool should_continue_advancing = false;
 
 	//if(should_continue_advancing)
@@ -592,7 +435,7 @@ void InGame::update2()
 	}
 	else if(std::holds_alternative<Script::InfoCharacter>(current_script_information))
 	{
-		update_characters(std::get<Script::InfoCharacter>(current_script_information));
+		character_manager_.update(std::get<Script::InfoCharacter>(current_script_information));
 	}
 	else if(std::holds_alternative<Script::InfoAutofocus>(current_script_information))
 	{
@@ -608,8 +451,9 @@ void InGame::update2()
 	}
 	else if(std::holds_alternative<Script::InfoDialogue>(current_script_information))
 	{
-		update_dialogue(std::get<Script::InfoDialogue>(current_script_information));
-		update_characters_dialogue(std::get<Script::InfoDialogue>(current_script_information));
+		Script::InfoDialogue& info_dialogue = std::get<Script::InfoDialogue>(current_script_information);
+		update_dialogue(info_dialogue, character_manager_.active_characters_.at(info_dialogue.character_variable_));
+		update_characters_dialogue(info_dialogue);
 	}
 	else if(std::holds_alternative<Script::InfoTextbox>(current_script_information))
 	{
@@ -639,7 +483,7 @@ void InGame::update2()
 	//update_textbox();
 
 	//Characters
-	for(auto& [key_character_variable, value_character] : active_characters_)
+	for(auto& [key_character_variable, value_character] : character_manager_.active_characters_)
 	{
 		value_character.update();
 	}
@@ -663,4 +507,24 @@ void InGame::update2()
 		currently_playing_sound_ = {{}, 0, false, nullptr};
 	}*/
 	//////////////////////////////
+}
+
+bool InGame::move_dialogue()
+{
+	//std::cout << "DEDANS (next): " << current_script_index_  << ", " << std::boolalpha << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next) << ", " << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev) << std::endl;
+	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next)
+	{
+		if(game_.script_.script_information_.size() > game_.script_.current_script_index_ + 1)
+		{
+			game_.script_.current_script_index_ += 1;
+		}
+	}
+	else if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev)
+	{
+		if(game_.script_.current_script_index_ > 0)
+		{
+			game_.script_.current_script_index_ -= 1;
+		}
+	}
+	return(!std::holds_alternative<Script::InfoDialogue>(game_.script_.script_information_[game_.script_.current_script_index_]));
 }

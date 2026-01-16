@@ -9,6 +9,7 @@
 #include "music.h"
 #include "RAII_SDL2/chunk.h"
 #include "script.h"
+#include "charactermanager.h"
 
 #include <vector>
 #include <unordered_set>
@@ -51,7 +52,8 @@ class InGame : public GameState
 		void handle_events(const SDL_Event& e) override;
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		void update2();
+
+		void set_position_ui_textbox(std::string_view where);
 
 		void auto_function(Ui* ui);
 		void skip_function(Ui* ui);
@@ -60,16 +62,7 @@ class InGame : public GameState
 
 		bool move_dialogue();
 
-		std::optional<Character::Editableproperties> show_character_prologue(const std::string_view character_variable);
-		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
-		void create_narrator();
-		Character* is_character_active(const std::string_view character_variable);
-		void draw_characters(sdl::Renderer& renderer);
-
-		void change_background(const Script::InfoBackground& b); 
-
 		void update_backgrounds(const Script::InfoBackground& info_background);
-		void update_characters(const Script::InfoCharacter& info_character);
 		void update_characters_dialogue(Script::InfoDialogue& info_dialogue);
 		void update_autofocus(const Script::InfoAutofocus& info_autofocus);
 		void update_skip_auto_modes();
@@ -79,13 +72,11 @@ class InGame : public GameState
 		void update_sounds(Script::InfoSound& info_sound, size_t i);
 
 		void update_textbox(Script::InfoTextbox& info_textbox);
-		void update_dialogue(Script::InfoDialogue& info_dialogue);
+		void update_dialogue(Script::InfoDialogue& info_dialogue, const Character& character);
+
+		CharacterManager character_manager_;
 
 	private:
-		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
-		std::unordered_map<std::string, Character> active_characters_;
-		std::vector<std::string> draw_characters_order_;
-
 		WhichDialogueFromWhere which_dialogue_from_where_;
 
 		bool skip_mode_;
