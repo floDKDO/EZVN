@@ -15,7 +15,7 @@ Game::Game()
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
 	game_controller_(),
 	window_icon_(constants::window_icon_), 
-	window_is_open_(true)
+	window_is_open_(true), script_(renderer_)
 {
 	window_.set_icon(window_icon_);
 
@@ -180,105 +180,109 @@ void Game::create_character(const std::string_view character_variable, const std
 
 void Game::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
 {
-	get_ingame_state()->rename_character(character_variable, new_character_name);
+	script_.rename_character(character_variable, new_character_name);
 }
 
 void Game::show_character(const std::string_view character_variable, std::string transform_name, int zorder)
 {
-	get_ingame_state()->show_character(character_variable, transform_name, zorder);
+	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
+	script_.show_character(character_variable, properties, transform_name, zorder);
 }
 
 void Game::show_character(const std::string_view character_variable, std::string transform_name)
 {
-	get_ingame_state()->show_character(character_variable, transform_name, std::nullopt);
+	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
+	script_.show_character(character_variable, properties, transform_name, std::nullopt);
 }
 
 void Game::show_character(const std::string_view character_variable, int zorder)
 {
-	get_ingame_state()->show_character(character_variable, std::nullopt, zorder);
+	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
+	script_.show_character(character_variable, properties, std::nullopt, zorder);
 }
 
 void Game::show_character(const std::string_view character_variable)
 {
-	get_ingame_state()->show_character(character_variable, std::nullopt, std::nullopt);
+	std::optional<Character::Editableproperties> properties = get_ingame_state()->show_character_prologue(character_variable);
+	script_.show_character(character_variable, properties, std::nullopt, std::nullopt);
 }
 
 void Game::hide_character(const std::string_view character_variable)
 {
-	get_ingame_state()->hide_character(character_variable);
+	script_.hide_character(character_variable);
 }
 
 void Game::add_new_dialogue(const std::string_view character_variable, const std::string_view dialogue)
 {
-	get_ingame_state()->insert_dialogue(character_variable, dialogue);
+	script_.insert_dialogue(character_variable, dialogue);
 }
 
 void Game::add_new_dialogue(const std::string_view dialogue)
 {
-	get_ingame_state()->insert_dialogue("Narrator", dialogue);
+	script_.insert_dialogue("Narrator", dialogue);
 }
 
 void Game::show_background(const std::string_view background_path)
 {
-	get_ingame_state()->insert_background(background_path);
+	script_.insert_background(background_path);
 }
 
 void Game::show_background(Color color)
 {
-	get_ingame_state()->insert_background(color);
+	script_.insert_background(color);
 }
 
 void Game::hide_background()
 {
-	get_ingame_state()->insert_background(Color::from_rgba8(0, 0, 0));
+	script_.insert_background(Color::from_rgba8(0, 0, 0));
 }
 
 void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	get_ingame_state()->play_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
+	script_.play_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
 }
 
 void Game::stop_sound(int channel, int fadeout_length)
 {
-	get_ingame_state()->stop_sound(fadeout_length, channel);
+	script_.stop_sound(fadeout_length, channel);
 }
 
 void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
-	get_ingame_state()->play_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
+	script_.play_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
 }
 
 void Game::stop_music(int fadeout_length)
 {
-	get_ingame_state()->stop_music(fadeout_length);
+	script_.stop_music(fadeout_length);
 }
 
 void Game::autofocus_enable()
 {
-	get_ingame_state()->insert_autofocus(true);
+	script_.insert_autofocus(true);
 }
 
 void Game::autofocus_disable()
 {
-	get_ingame_state()->insert_autofocus(false);
+	script_.insert_autofocus(false);
 }
 
 void Game::change_textbox(const std::string_view character_variable, const std::string_view textbox_path)
 {
-	get_ingame_state()->insert_textbox(character_variable, textbox_path);
+	script_.insert_textbox(character_variable, textbox_path);
 }
 
 void Game::change_namebox(const std::string_view character_variable, const std::string_view namebox_path)
 {
-	get_ingame_state()->insert_namebox(character_variable, namebox_path);
+	script_.insert_namebox(character_variable, namebox_path);
 }
 
 void Game::change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color)
 {
-	get_ingame_state()->insert_namebox_text_color(character_variable, namebox_text_color);
+	script_.insert_namebox_text_color(character_variable, namebox_text_color);
 }
 
 void Game::move_textbox(const std::string_view where)
 {
-	get_ingame_state()->move_textbox(where);
+	script_.move_textbox(where);
 }

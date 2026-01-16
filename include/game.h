@@ -12,6 +12,7 @@
 #include "RAII_SDL2/sdlttf.h"
 #include "audiomanager.h"
 #include "ingame.h"
+#include "script.h"
 
 #include <stack>
 
@@ -46,7 +47,7 @@ class Game
 
 		void update_fps_count(const std::string_view fps) const;
 
-		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path="", const std::string_view namebox_path = "");
+		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path="", Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
 
 		void show_character(const std::string_view character_variable, std::string transform_name, int zorder);
@@ -116,5 +117,8 @@ class Game
 		std::unordered_map<std::string_view /* unique_id_ of the state */, std::unique_ptr<GameState>> game_states_map_; 
 		bool window_is_open_;
 		std::stack<GameState*> game_states_stack_;
+
+	public: 
+		Script script_;
 };
 

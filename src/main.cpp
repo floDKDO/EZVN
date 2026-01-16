@@ -51,6 +51,8 @@
 
 //TODO : mettre des constructeurs par défaut dans les structs pour simplifier l'initialisation de leurs membres 
 
+//TODO : créer des variables pour les éléments de tableau utilisés à plusieurs endroits dans une même méthode
+
 
 #include "Color/str.h"
 
@@ -100,10 +102,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...1");
-	game.move_textbox("top");
+	//game.move_textbox("top");
 	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...2");
-	game.move_textbox("bottomleft");
+	//game.move_textbox("bottomleft");
 	game.add_new_dialogue("Y a personne ??");
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...");

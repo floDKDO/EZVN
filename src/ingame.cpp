@@ -11,7 +11,7 @@
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), /*current_dialogue_index_(size_t(1)),*/ script_({0, 0}), which_dialogue_from_where_({WhichDialogue::next, false, false}),
+	: GameState(game), /*current_dialogue_index_(size_t(1)),*/ which_dialogue_from_where_({WhichDialogue::next, false, false}),
 	skip_mode_(false), auto_mode_(false), autofocus_(constants::default_autofocus), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}), currently_playing_music_({{}, nullptr}),
 	/*background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false),*/ renderer_(renderer)
 {
@@ -19,6 +19,7 @@ InGame::InGame(Game& game, sdl::Renderer& renderer)
 	create_narrator();
 }
 
+//TODO : séparer en deux fonctions si possible (une qui met les éléments dans ui_manager_ et une qui met les bonnes positions)
 void InGame::build_ui_elements(sdl::Renderer& renderer)
 {
 	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
@@ -56,19 +57,6 @@ void InGame::build_ui_elements(sdl::Renderer& renderer)
 	ui_manager_.set_elements();
 }
 
-TextToggle* InGame::get_texttoggle(const std::string_view text)
-{
-	for(Ui* ui : ui_manager_.navigation_list_)
-	{
-		TextToggle* texttoggle = dynamic_cast<TextToggle*>(ui);
-		if(texttoggle != nullptr && texttoggle->text_.text_ == text)
-		{
-			return texttoggle;
-		}
-	}
-	return nullptr;
-}
-
 //Fonctions de callback///////////////////////////////////////////
 void InGame::auto_function([[maybe_unused]] Ui* ui)
 {
@@ -93,158 +81,23 @@ void InGame::temp_function([[maybe_unused]] Ui* ui)
 //////////////////////////////////////////////////////////////////
 
 
-//Insert* ////////////////////////////////////////////////////////////////////////////////////////////////
+//Character//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Dialogues
-void InGame::insert_dialogue(const std::string_view character_variable, const std::string_view dialogue)
-{
-	script_.script_information_.push_back(InfoDialogue({std::string(character_variable), std::string(dialogue)}));
-}
-
-//Character
-Character::Editableproperties InGame::show_character_prologue(const std::string_view character_variable)
+std::optional<Character::Editableproperties> InGame::show_character_prologue(const std::string_view character_variable)
 {
 	const std::string key(character_variable);
-
-	CharacterDefinition& character_definition = character_definitions_.at(key);
-	Character::Editableproperties character_properties;
+	std::optional<Character::Editableproperties> character_properties = std::nullopt;
 
 	if(is_character_active(character_variable) == nullptr)
 	{
+		CharacterDefinition& character_definition = character_definitions_.at(key);
 		active_characters_.insert(std::make_pair(key, Character(character_definition, renderer_)));
 		draw_characters_order_.push_back(key);
 		character_properties = active_characters_.at(key).properties_; //=> n'est pas encore dans script_information_
+		character_properties.value().is_visible_ = true;
 	}
-	else
-	{
-		character_properties = get_last_character_properties(character_variable).value();
-	}
-	character_properties.is_visible_ = true;
-
 	return character_properties;
 }
-
-//Character
-void InGame::show_character(const std::string_view character_variable, const std::optional<std::string> transform_name, const std::optional<int> zorder)
-{
-	Character::Editableproperties character_properties = show_character_prologue(character_variable);
-
-	if(zorder.has_value())
-	{
-		character_properties.zorder_ = zorder.value();
-	}
-
-	if(transform_name.has_value())
-	{
-		character_properties.transform_name_ = transform_name.value();
-	}
-
-	script_.script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
-}
-
-//Character
-void InGame::hide_character(const std::string_view character_variable)
-{
-	Character* character = is_character_active(character_variable);
-	if(character == nullptr)
-	{
-		std::cerr << "ERREUR: hide d'un personnage qui n'a pas encore été show()\n";
-		exit(1);
-	}
-
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
-	character_properties.is_visible_ = false;
-
-	script_.script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
-}
-
-//Character
-void InGame::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
-{
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
-	character_properties.name_ = new_character_name;
-
-	script_.script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
-}
-
-//Character
-void InGame::insert_textbox(const std::string_view character_variable, const std::string_view textbox_path)
-{
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
-	character_properties.textbox_path_ = textbox_path;
-	script_.script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
-}
-
-//Character
-void InGame::insert_namebox(const std::string_view character_variable, const std::string_view namebox_path)
-{
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
-	character_properties.namebox_path_ = namebox_path;
-	script_.script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
-}
-
-//Character
-void InGame::insert_namebox_text_color(const std::string_view character_variable, Color namebox_text_color)
-{
-	Character::Editableproperties character_properties = get_last_character_properties(character_variable).value();
-	character_properties.namebox_text_color_ = namebox_text_color;
-	script_.script_information_.push_back(InfoCharacter({std::string(character_variable), character_properties}));
-}
-
-//Textbox
-void InGame::move_textbox(const std::string_view where)
-{
-	script_.script_information_.push_back(InfoTextbox(std::string(where)));
-}
-
-//Background
-void InGame::insert_background(const std::string_view background_path)
-{
-	script_.script_information_.push_back(InfoBackground(Background(background_path, renderer_)));
-}
-
-//Background
-void InGame::insert_background(Color color)
-{
-	script_.script_information_.push_back(InfoBackground(Background(color)));
-}
-
-//Sounds
-void InGame::play_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop)
-{
-	script_.script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, loop, channel}, Sound{sdl::Chunk(sound_path), volume_multiplier}))); //TODO : std::make_pair a l'air obligatoire ici
-}
-
-//Sounds
-void InGame::stop_sound(int fadeout_length, int channel)
-{
-	//TODO : hardcodé
-	script_.script_information_.push_back(InfoSound(std::make_pair(AudioProperties{0, fadeout_length, false, channel}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
-}
-
-//Musics
-void InGame::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
-{
-	script_.script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, loop}, Music{sdl::Music(music_path), volume_multiplier}))); //TODO : std::make_pair a l'air obligatoire ici
-}
-
-//Musics
-void InGame::stop_music(int fadeout_length)
-{
-	//TODO : hardcodé
-	script_.script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{0, fadeout_length, true}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
-}
-
-//Autofocus
-void InGame::insert_autofocus(bool autofocus)
-{
-	script_.script_information_.push_back(InfoAutofocus(autofocus));
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//Character//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Character
 void InGame::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
@@ -277,23 +130,6 @@ Character* InGame::is_character_active(const std::string_view character_variable
 }
 
 //Character
-std::optional<Character::Editableproperties> InGame::get_last_character_properties(const std::string_view character_variable)
-{
-	for(size_t i = script_.script_information_.size() - 1; i != -1; --i) //si script_information_.size() == 0, on n'entre pas dans cette boucle
-	{
-		if(std::holds_alternative<InfoCharacter>(script_.script_information_[i]))
-		{
-			InfoCharacter& info_character = std::get<InfoCharacter>(script_.script_information_[i]);
-			if(info_character.character_variable_ == character_variable)
-			{
-				return info_character.t_;
-			}
-		}
-	}
-	return std::nullopt;
-}
-
-//Character
 void InGame::draw_characters(sdl::Renderer& renderer)
 {
 	//Characters
@@ -313,11 +149,11 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 	//std::cout << "\n";
 	for(const std::string_view s : draw_characters_order_)
 	{
-		for(size_t i = script_.current_script_index_; i != -1; --i)
+		for(size_t i = game_.script_.current_script_index_; i != -1; --i)
 		{
-			if(std::holds_alternative<InfoCharacter>(script_.script_information_[i]))
+			if(std::holds_alternative<Script::InfoCharacter>(game_.script_.script_information_[i]))
 			{
-				InfoCharacter& p_character = std::get<InfoCharacter>(script_.script_information_[i]);
+				Script::InfoCharacter& p_character = std::get<Script::InfoCharacter>(game_.script_.script_information_[i]);
 				if(s == p_character.character_variable_)
 				{
 					active_characters_.at(std::string(s)).draw(renderer);
@@ -334,7 +170,7 @@ void InGame::draw_characters(sdl::Renderer& renderer)
 
 
 //Background/////////////////////////////////////////////////////////////////////////////////// 
-void InGame::change_background(const InfoBackground& b)
+void InGame::change_background(const Script::InfoBackground& b)
 {
 	if(b.image_ != nullptr)
 	{
@@ -365,7 +201,7 @@ void InGame::handle_events(const SDL_Event& e)
 			if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
 			{
 				//annuler le mode skip
-				get_texttoggle("Skip")->change_checked(false);
+				skip_toggle_->change_checked(false);
 				skip_mode_ = false;
 
 				which_dialogue_from_where_ = {WhichDialogue::prev, true, false};
@@ -387,7 +223,7 @@ void InGame::handle_events(const SDL_Event& e)
 		|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 		{
 			//annuler le mode auto
-			get_texttoggle("Auto")->change_checked(false);
+			auto_toggle_->change_checked(false);
 			auto_mode_ = false;
 
 			if(textbox_.text_.is_finished_)
@@ -421,7 +257,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	background_.draw(renderer);
 	///////////////////////////
 
-	if(script_.script_information_.size() > 0)
+	if(game_.script_.script_information_.size() > 0)
 	{
 		draw_characters(renderer);
 	}
@@ -450,14 +286,14 @@ void InGame::draw(sdl::Renderer& renderer)
 //	}
 //}
 
-void InGame::update_backgrounds(const InfoBackground& info_background)
+void InGame::update_backgrounds(const Script::InfoBackground& info_background)
 {
 	//Backgrounds
 	change_background(info_background);
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-void InGame::update_characters(const InfoCharacter& info_character)
+void InGame::update_characters(const Script::InfoCharacter& info_character)
 {
 	//Characters
 	const std::string& character_variable = info_character.character_variable_;
@@ -471,7 +307,7 @@ void InGame::update_characters(const InfoCharacter& info_character)
 	character.properties_.namebox_text_color_ = info_character.t_.namebox_text_color_;
 }
 
-void InGame::update_autofocus(const InfoAutofocus& info_autofocus)
+void InGame::update_autofocus(const Script::InfoAutofocus& info_autofocus)
 {
 	////if(!autofocus_changed_)
 	//{
@@ -527,10 +363,10 @@ void InGame::update_skip_auto_modes()
 	}
 }
 
-void InGame::update_music(InfoMusic& info_music)
+void InGame::update_music(Script::InfoMusic& info_music)
 {
 	//Musics
-	const InGame::AudioProperties& music_properties = info_music.first;
+	const Script::AudioProperties& music_properties = info_music.first;
 	if(info_music.second.has_value()) //play music
 	{
 		Music& music = info_music.second.value();
@@ -555,14 +391,14 @@ void InGame::update_music(InfoMusic& info_music)
 //Sounds
 void InGame::halt_all_sounds()
 {
-	for(auto& s : script_.script_information_)
+	for(auto& s : game_.script_.script_information_)
 	{
-		if(std::holds_alternative<InfoSound>(s))
+		if(std::holds_alternative<Script::InfoSound>(s))
 		{
-			InfoSound& sound_pair = std::get<InfoSound>(s);
+			Script::InfoSound& sound_pair = std::get<Script::InfoSound>(s);
 			if(sound_pair.second.has_value())
 			{
-				InGame::AudioProperties& sound_properties = sound_pair.first;
+				Script::AudioProperties& sound_properties = sound_pair.first;
 				if(sdl::channel::playing(sound_properties.channel_))
 				{
 					game_.audio_manager_.halt_channel(sound_properties.channel_);
@@ -573,11 +409,11 @@ void InGame::halt_all_sounds()
 }
 
 //Sounds
-void InGame::update_sounds(InfoSound& info_sound, size_t i)
+void InGame::update_sounds(Script::InfoSound& info_sound, size_t i)
 {
 	//if(!sound_changed_)
 	{
-		InGame::AudioProperties& sound_properties = info_sound.first;
+		Script::AudioProperties& sound_properties = info_sound.first;
 
 		if(info_sound.second.has_value()) //play sound
 		{
@@ -637,7 +473,7 @@ void InGame::update_sounds(InfoSound& info_sound, size_t i)
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Textbox
-void InGame::update_textbox(InfoTextbox& info_textbox)
+void InGame::update_textbox(Script::InfoTextbox& info_textbox)
 {
 	textbox_.set_textbox_position(info_textbox);
 
@@ -669,7 +505,7 @@ void InGame::update_textbox(InfoTextbox& info_textbox)
 }
 
 //Dialogues
-void InGame::update_dialogue(InfoDialogue& info_dialogue)
+void InGame::update_dialogue(Script::InfoDialogue& info_dialogue)
 {
 	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
 	{
@@ -689,7 +525,7 @@ void InGame::update_dialogue(InfoDialogue& info_dialogue)
 	//which_dialogue_from_where_ = {WhichDialogue::none, false, false};
 }
 
-void InGame::update_characters_dialogue(InfoDialogue& info_dialogue)
+void InGame::update_characters_dialogue(Script::InfoDialogue& info_dialogue)
 {
 	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
 	{
@@ -718,19 +554,19 @@ bool InGame::move_dialogue()
 	//std::cout << "DEDANS (next): " << current_script_index_  << ", " << std::boolalpha << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next) << ", " << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev) << std::endl;
 	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next)
 	{
-		if(script_.script_information_.size() > script_.current_script_index_ + 1)
+		if(game_.script_.script_information_.size() > game_.script_.current_script_index_ + 1)
 		{
-			script_.current_script_index_ += 1;
+			game_.script_.current_script_index_ += 1;
 		}
 	}
 	else if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev)
 	{
-		if(script_.current_script_index_ > 0)
+		if(game_.script_.current_script_index_ > 0)
 		{
-			script_.current_script_index_ -= 1;
+			game_.script_.current_script_index_ -= 1;
 		}
 	}
-	return(!std::holds_alternative<InfoDialogue>(script_.script_information_[script_.current_script_index_]));
+	return(!std::holds_alternative<Script::InfoDialogue>(game_.script_.script_information_[game_.script_.current_script_index_]));
 }
 
 
@@ -749,35 +585,35 @@ void InGame::update2()
 	//	which_dialogue_from_where_ = {WhichDialogue::none, false, false};
 	//}
 
-	ScriptInformation& current_script_information = script_.script_information_[script_.current_script_index_];
-	if(std::holds_alternative<InfoBackground>(current_script_information))
+	Script::ScriptInformation& current_script_information = game_.script_.script_information_[game_.script_.current_script_index_];
+	if(std::holds_alternative<Script::InfoBackground>(current_script_information))
 	{
-		update_backgrounds(std::get<InfoBackground>(current_script_information));
+		update_backgrounds(std::get<Script::InfoBackground>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoCharacter>(current_script_information))
+	else if(std::holds_alternative<Script::InfoCharacter>(current_script_information))
 	{
-		update_characters(std::get<InfoCharacter>(current_script_information));
+		update_characters(std::get<Script::InfoCharacter>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoAutofocus>(current_script_information))
+	else if(std::holds_alternative<Script::InfoAutofocus>(current_script_information))
 	{
-		update_autofocus(std::get<InfoAutofocus>(current_script_information));
+		update_autofocus(std::get<Script::InfoAutofocus>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoMusic>(current_script_information))
+	else if(std::holds_alternative<Script::InfoMusic>(current_script_information))
 	{
-		update_music(std::get<InfoMusic>(current_script_information));
+		update_music(std::get<Script::InfoMusic>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoSound>(current_script_information))
+	else if(std::holds_alternative<Script::InfoSound>(current_script_information))
 	{
-		update_sounds(std::get<InfoSound>(current_script_information), script_.current_script_index_);
+		update_sounds(std::get<Script::InfoSound>(current_script_information), game_.script_.current_script_index_);
 	}
-	else if(std::holds_alternative<InfoDialogue>(current_script_information))
+	else if(std::holds_alternative<Script::InfoDialogue>(current_script_information))
 	{
-		update_dialogue(std::get<InfoDialogue>(current_script_information));
-		update_characters_dialogue(std::get<InfoDialogue>(current_script_information));
+		update_dialogue(std::get<Script::InfoDialogue>(current_script_information));
+		update_characters_dialogue(std::get<Script::InfoDialogue>(current_script_information));
 	}
-	else if(std::holds_alternative<InfoTextbox>(current_script_information))
+	else if(std::holds_alternative<Script::InfoTextbox>(current_script_information))
 	{
-		update_textbox(std::get<InfoTextbox>(current_script_information));
+		update_textbox(std::get<Script::InfoTextbox>(current_script_information));
 	}
 
 	if(move_dialogue())
