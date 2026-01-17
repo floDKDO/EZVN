@@ -1,7 +1,7 @@
 #include "script.h"
 
 Script::Script(sdl::Renderer& renderer)
-	: renderer_(renderer), current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_})
+	: current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_}), renderer_(renderer)
 {}
 
 //Dialogues
@@ -150,9 +150,15 @@ void Script::decrement_script_index()
 	}
 }
 
+bool Script::is_current_script_index_a_dialogue()
+{
+	return std::holds_alternative<Script::InfoDialogue>(script_information_[current_script_index_]);
+}
+
 bool Script::move_dialogue(Where where, bool is_from_mouse_wheel_)
 {
-	std::cout << "AVANT: " << current_script_index_ << ", " << previous_script_index_ << std::endl;
+	//std::cout << "AVANT: " << current_script_index_ << ", " << previous_script_index_ << std::endl;
+
 	if(where == Where::next)
 	{
 		if(is_from_mouse_wheel_ && current_script_index_ < script_index_when_prev_.saved_script_index_)
@@ -174,20 +180,18 @@ bool Script::move_dialogue(Where where, bool is_from_mouse_wheel_)
 		}
 
 		decrement_script_index();
-		if(current_script_index_ == 0)
+		
+		if(current_script_index_ == 0 && !is_current_script_index_a_dialogue())
 		{
-			current_script_index_ = previous_script_index_; //dans le cas où on est allé en arrière sans croiser de dialogue, revenir au tout premier dialogue
+			current_script_index_ = previous_script_index_; //on est allé en arrière sans croiser de dialogue => revenir au tout premier dialogue
 		}
 	}
-	std::cout << "APRES: " << current_script_index_ << ", " << previous_script_index_ << std::endl;
+	//std::cout << "APRES: " << current_script_index_ << ", " << previous_script_index_ << std::endl;
 
-	if(std::holds_alternative<Script::InfoDialogue>(script_information_[current_script_index_]))
+	bool is_dialogue = is_current_script_index_a_dialogue();
+	if(is_dialogue)
 	{
 		previous_script_index_ = current_script_index_;
-		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return is_dialogue;
 }

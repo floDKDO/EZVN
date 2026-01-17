@@ -7,11 +7,11 @@
 
 //Ce constructeur permet à Character::Editableproperties de disposer d'un constructeur par défaut
 Transform::Transform()
-	: is_character_visible_(false), transform_name_("none"), /*previous_transform_name_(transform_name_),*/ transform_({"none", TransformAllSteps(0)})
+	: Transform("none", 0)
 {}
 
-Transform::Transform(const std::string transform_name)
-	: is_character_visible_(false), transform_name_(transform_name), /*previous_transform_name_(transform_name_),*/ transform_({transform_name, TransformAllSteps(6)})
+Transform::Transform(const std::string transform_name, const int number_of_transform_steps)
+	: is_character_visible_(false), transform_name_(transform_name), /*previous_transform_name_(transform_name_),*/ transform_({transform_name, TransformAllSteps(number_of_transform_steps)})
 {}
 
 std::string Transform::transform_to_focus()

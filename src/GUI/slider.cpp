@@ -6,18 +6,8 @@
 const unsigned int Slider::index_rect_container_ = 0;
 
 Slider::Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
-	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}), 
-	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
-	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
-	min_value_(min_value), max_value_(max_value), current_value_((max_value + min_value) / 2), delta_mouse_handle_x_(0)
-{
-	callback_function_ = callback_function;
-	pointer_on_ui_when_pointer_up_ = false;
-	handle_.x += int((float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (container_.w - handle_.w));
-	handle_outline_.x = handle_.x;
-	text_.position_.x += (container_.w - text_.position_.w) / 2;
-}
+	: Slider(min_value, max_value, (max_value + min_value) / 2, x, y, text, renderer, callback_function)
+{}
 
 Slider::Slider(const unsigned int min_value, const unsigned int max_value, const unsigned int current_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),

@@ -10,9 +10,8 @@
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), init_(false), /*should_continue_advancing_(false),*/ /*current_dialogue_index_(size_t(1)),*/ character_manager_(renderer), which_dialogue_from_where_({Script::Where::none, false, false}),
-	skip_mode_(false), auto_mode_(false), autofocus_(constants::default_autofocus), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}), currently_playing_music_({{}, nullptr}),
-	/*background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false),*/ renderer_(renderer)
+	: GameState(game), init_(false), character_manager_(renderer), which_dialogue_from_where_({Script::Where::none, false, false}), skip_mode_(false), auto_mode_(false), autofocus_(constants::default_autofocus), last_time_(0), 
+	background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}), currently_playing_music_({{}, nullptr}), renderer_(renderer)
 {
 	build_ui_elements(renderer); 
 	character_manager_.create_narrator();
@@ -388,7 +387,6 @@ void InGame::update_dialogue(Script::InfoDialogue& info_dialogue, const Characte
 	textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 	textbox_.change_namebox(character.properties_.namebox_path_, renderer_);
 	textbox_.change_namebox_text_color(character.properties_.namebox_text_color_);
-	//which_dialogue_from_where_ = {WhichDialogue::none, false, false};
 }
 
 void InGame::update_characters_dialogue(Script::InfoDialogue& info_dialogue)
@@ -414,29 +412,27 @@ void InGame::update_characters_dialogue(Script::InfoDialogue& info_dialogue)
 void InGame::update()
 {
 	//TODO : enregistrer les choses courantes
-	/*if(!game_.script_.move_dialogue(which_dialogue_from_where_.which_dialogue_))
-	{
-		//should_continue_advancing_ = true;
-	}*/
-	//else
-	//{
-	//	should_continue_advancing_ = false;
-	//	//which_dialogue_from_where_ = {Script::Where::none, false, false};
-	//}
 
 	game_.script_.move_dialogue(which_dialogue_from_where_.which_dialogue_, which_dialogue_from_where_.is_from_mouse_wheel_);
+
+	/*bool Script::init()
+	{
+		if(!is_current_script_index_a_dialogue())
+		{
+			move_dialogue(Where::next, false);
+			return false;
+		}
+		return true;
+	}*/
 
 	if(!init_)
 	{
 		if(!std::holds_alternative<Script::InfoDialogue>(game_.script_.script_information_[game_.script_.current_script_index_]))
 		{
-			//should_continue_advancing_ = true;
 			which_dialogue_from_where_ = {Script::Where::next, false, false};
 		}
 		else
 		{
-			//should_continue_advancing_ = false;
-			//which_dialogue_from_where_ = {Script::Where::none, false, false}; //pas utile car réalisé dans le if de Script::InfoDialogue
 			init_ = true;
 		}
 	}

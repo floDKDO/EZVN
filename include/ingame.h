@@ -69,7 +69,6 @@ class InGame : public GameState
 
 	private:
 		bool init_;
-		//bool should_continue_advancing_;
 
 		WhichDialogueFromWhere which_dialogue_from_where_;
 

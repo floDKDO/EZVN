@@ -7,20 +7,8 @@ int Text::global_text_divisor_ = 45;
 int Text::initial_text_speed_ = 500;
 
 Text::Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer)
-	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(0),
-	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_), 
-	outline_size_(constants::text_outline_size_), font_outline_(create_outline()),
-	previous_text_(""), is_animated_(false),
-	surface_(create_surface(font_, color_)), surface_outline_(create_surface(font_outline_, constants::text_outline_color_))
-    /*,local_text_speed_(global_text_divisor_),*/
-{
-	int w, h;
-	font_.size_UTF8(text_, &w, &h);
-	position_ = {x, y, w, h};
-
-	texture_ = std::make_unique<sdl::Texture>(renderer_, surface_);
-	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
-}
+	: Text(text, color, font_path, font_size, x, y, renderer, false, 0)
+{}
 
 Text::Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, bool is_animated, const Uint32 wrap_length)
 	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),

@@ -82,6 +82,7 @@ class Script
 
 		void increment_script_index();
 		void decrement_script_index();
+		bool is_current_script_index_a_dialogue();
 
 		enum class Where
 		{

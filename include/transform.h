@@ -13,7 +13,7 @@ class Transform
 	//TODO : on show/replace/hide => https://www.renpy.org/doc/html/transforms.html#external-atl-events
 	public:
 		Transform();
-		Transform(const std::string transform_name);
+		Transform(const std::string transform_name, const int number_of_transform_steps);
 
 		std::string transform_to_focus();
 		std::string transform_to_unfocus();
