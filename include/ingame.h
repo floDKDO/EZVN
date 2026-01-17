@@ -16,16 +16,9 @@
 
 class InGame : public GameState
 {
-	enum class WhichDialogue
-	{
-		none,
-		next,
-		prev 
-	};
-
 	struct WhichDialogueFromWhere
 	{
-		WhichDialogue which_dialogue_;
+		Script::Where which_dialogue_;
 		bool is_from_mouse_wheel_;
 		bool wait_for_end_of_dialogue_;
 	};
@@ -60,8 +53,6 @@ class InGame : public GameState
 		void settings_function(Ui* ui);
 		void temp_function(Ui* ui);
 
-		bool move_dialogue();
-
 		void update_backgrounds(const Script::InfoBackground& info_background);
 		void update_characters_dialogue(Script::InfoDialogue& info_dialogue);
 		void update_autofocus(const Script::InfoAutofocus& info_autofocus);
@@ -77,6 +68,9 @@ class InGame : public GameState
 		CharacterManager character_manager_;
 
 	private:
+		bool init_;
+		//bool should_continue_advancing_;
+
 		WhichDialogueFromWhere which_dialogue_from_where_;
 
 		bool skip_mode_;

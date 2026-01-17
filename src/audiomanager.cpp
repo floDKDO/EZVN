@@ -16,7 +16,7 @@ AudioManager::AudioManager()
 
 void AudioManager::callback_music()
 {
-	SDL_Event e{END_MUSIC_EVENT_};
+	SDL_Event e = {END_MUSIC_EVENT_}; //init le premier élément de l'union (= type)
 	sdl::events::push_event(&e);
 }
 

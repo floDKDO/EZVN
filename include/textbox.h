@@ -25,6 +25,8 @@ class Textbox
 		static const Uint64 maximum_time_;
 		static const Uint64 base_delay_;
 
+		bool is_first_dialogue_;
+
 		Text text_;
 		Image textbox_;
 
@@ -34,7 +36,5 @@ class Textbox
 		Image namebox_;
 		Text text_name_box_;
 		Image triangle_;
-
-		bool is_first_dialogue_;
 };
 

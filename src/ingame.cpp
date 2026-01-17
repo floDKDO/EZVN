@@ -10,7 +10,7 @@
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), /*current_dialogue_index_(size_t(1)),*/ character_manager_(renderer), which_dialogue_from_where_({WhichDialogue::next, false, false}),
+	: GameState(game), init_(false), /*should_continue_advancing_(false),*/ /*current_dialogue_index_(size_t(1)),*/ character_manager_(renderer), which_dialogue_from_where_({Script::Where::none, false, false}),
 	skip_mode_(false), auto_mode_(false), autofocus_(constants::default_autofocus), last_time_(0), background_(Color::from_rgba8(0, 0, 0)), textbox_(renderer), hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}), currently_playing_music_({{}, nullptr}),
 	/*background_changed_(false), autofocus_changed_(false), music_changed_(false), sound_changed_(false),*/ renderer_(renderer)
 {
@@ -116,11 +116,11 @@ void InGame::handle_events(const SDL_Event& e)
 				skip_toggle_->change_checked(false);
 				skip_mode_ = false;
 
-				which_dialogue_from_where_ = {WhichDialogue::prev, true, false};
+				which_dialogue_from_where_ = {Script::Where::prev, true, false};
 			}
 			else //scroll vers l'arrière => avancer d'un dialogue
 			{
-				which_dialogue_from_where_ = {WhichDialogue::next, true, false};
+				which_dialogue_from_where_ = {Script::Where::next, true, false};
 			}
 		}
 
@@ -140,7 +140,7 @@ void InGame::handle_events(const SDL_Event& e)
 
 			if(textbox_.text_.is_finished_)
 			{
-				which_dialogue_from_where_ = {WhichDialogue::next, false, true};
+				which_dialogue_from_where_ = {Script::Where::next, false, true};
 			}
 			else
 			{
@@ -232,7 +232,7 @@ void InGame::update_skip_auto_modes()
 	//Dialogues//////////////////////////////////////////////////////////////////////////////////////
 	if(skip_mode_)
 	{
-		which_dialogue_from_where_ = {WhichDialogue::next, false, false};
+		which_dialogue_from_where_ = {Script::Where::next, false, false};
 		//show_next_dialogue(); 
 	}
 
@@ -249,7 +249,7 @@ void InGame::update_skip_auto_modes()
 
 			if(now > last_time_ + textbox_.get_text_delay())
 			{
-				which_dialogue_from_where_ = {WhichDialogue::next, false, true};
+				which_dialogue_from_where_ = {Script::Where::next, false, true};
 				//show_next_dialogue();
 
 				last_time_ = SDL_GetTicks64();
@@ -376,15 +376,14 @@ void InGame::update_textbox(Script::InfoTextbox& info_textbox)
 //Dialogues
 void InGame::update_dialogue(Script::InfoDialogue& info_dialogue, const Character& character)
 {
-	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
+	if(which_dialogue_from_where_.which_dialogue_ == Script::Where::none && !textbox_.is_first_dialogue_)
 	{
 		return;
 	}
 
-	//std::cout << "ICI: " << info_dialogue.t_  << ", " << info_dialogue.character_variable_ << ", " << active_characters_.at(info_dialogue.character_variable_).properties_.name_ << std::endl;
+	std::cout << "ICI: " << info_dialogue.t_  << ", " << game_.script_.current_script_index_ << ", " << info_dialogue.character_variable_ << ", " << character.properties_.name_ << std::endl;
 
 	//std::cout << "*************************PERSO: " << info_dialogue.character_variable_ << ", texte: " << info_dialogue.t_ << std::endl;
-
 	textbox_.show_new_dialogue(info_dialogue.t_, character.properties_.name_, skip_mode_, which_dialogue_from_where_.wait_for_end_of_dialogue_);
 	textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 	textbox_.change_namebox(character.properties_.namebox_path_, renderer_);
@@ -394,7 +393,7 @@ void InGame::update_dialogue(Script::InfoDialogue& info_dialogue, const Characte
 
 void InGame::update_characters_dialogue(Script::InfoDialogue& info_dialogue)
 {
-	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::none)
+	if(which_dialogue_from_where_.which_dialogue_ == Script::Where::none) //TODO : ajouter && !textbox_.is_first_dialogue_ ??
 	{
 		return;
 	}
@@ -407,26 +406,42 @@ void InGame::update_characters_dialogue(Script::InfoDialogue& info_dialogue)
 
 	//std::cout << "PERSO: " << info_dialogue.character_variable_ << ", texte: " << info_dialogue.t_ << std::endl;
 
-	Character& character = character_manager_.active_characters_.at(info_dialogue.character_variable_);
+	//Character& character = character_manager_.active_characters_.at(info_dialogue.character_variable_);
 	/*character.properties_.is_speaking_ = true;*/ //TODO : attention : conflit avec l'autofocus
 }
 
 //TODO : utiliser std::visit ??
 void InGame::update()
 {
-	//std::cout << "AUTOFOCUS: " << autofocus_ << std::endl;
-	
-		//TODO : enregistrer les choses courantes
-	static bool should_continue_advancing = false;
-
-	//if(should_continue_advancing)
-	//{
-	//	//should_continue_advancing = advance_to_next_dialogue();
-	//}
+	//TODO : enregistrer les choses courantes
+	/*if(!game_.script_.move_dialogue(which_dialogue_from_where_.which_dialogue_))
+	{
+		//should_continue_advancing_ = true;
+	}*/
 	//else
 	//{
-	//	which_dialogue_from_where_ = {WhichDialogue::none, false, false};
+	//	should_continue_advancing_ = false;
+	//	//which_dialogue_from_where_ = {Script::Where::none, false, false};
 	//}
+
+	game_.script_.move_dialogue(which_dialogue_from_where_.which_dialogue_, which_dialogue_from_where_.is_from_mouse_wheel_);
+
+	if(!init_)
+	{
+		if(!std::holds_alternative<Script::InfoDialogue>(game_.script_.script_information_[game_.script_.current_script_index_]))
+		{
+			//should_continue_advancing_ = true;
+			which_dialogue_from_where_ = {Script::Where::next, false, false};
+		}
+		else
+		{
+			//should_continue_advancing_ = false;
+			//which_dialogue_from_where_ = {Script::Where::none, false, false}; //pas utile car réalisé dans le if de Script::InfoDialogue
+			init_ = true;
+		}
+	}
+
+	std::cout << "CURRENT: " << game_.script_.current_script_index_ << std::endl;
 
 	Script::ScriptInformation& current_script_information = game_.script_.script_information_[game_.script_.current_script_index_];
 	if(std::holds_alternative<Script::InfoBackground>(current_script_information))
@@ -454,22 +469,11 @@ void InGame::update()
 		Script::InfoDialogue& info_dialogue = std::get<Script::InfoDialogue>(current_script_information);
 		update_dialogue(info_dialogue, character_manager_.active_characters_.at(info_dialogue.character_variable_));
 		update_characters_dialogue(info_dialogue);
+		which_dialogue_from_where_ = {Script::Where::none, false, false};
 	}
 	else if(std::holds_alternative<Script::InfoTextbox>(current_script_information))
 	{
 		update_textbox(std::get<Script::InfoTextbox>(current_script_information));
-	}
-
-	if(move_dialogue())
-	{
-		should_continue_advancing = true;
-		//std::cout << "SHOULD: " << std::boolalpha << should_continue_advancing << std::endl;
-	}
-	else
-	{
-		which_dialogue_from_where_ = {WhichDialogue::none, false, false};
-		should_continue_advancing = false;
-		//std::cout << "SHOULD: " << std::boolalpha << should_continue_advancing << std::endl;
 	}
 
 	update_skip_auto_modes();
@@ -507,24 +511,4 @@ void InGame::update()
 		currently_playing_sound_ = {{}, 0, false, nullptr};
 	}*/
 	//////////////////////////////
-}
-
-bool InGame::move_dialogue()
-{
-	//std::cout << "DEDANS (next): " << current_script_index_  << ", " << std::boolalpha << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next) << ", " << (which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev) << std::endl;
-	if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::next)
-	{
-		if(game_.script_.script_information_.size() > game_.script_.current_script_index_ + 1)
-		{
-			game_.script_.current_script_index_ += 1;
-		}
-	}
-	else if(which_dialogue_from_where_.which_dialogue_ == WhichDialogue::prev)
-	{
-		if(game_.script_.current_script_index_ > 0)
-		{
-			game_.script_.current_script_index_ -= 1;
-		}
-	}
-	return(!std::holds_alternative<Script::InfoDialogue>(game_.script_.script_information_[game_.script_.current_script_index_]));
 }

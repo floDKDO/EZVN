@@ -177,9 +177,6 @@
     <ClCompile Include="src\script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\scriptrunner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\charactermanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -345,9 +342,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\script.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\scriptrunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\charactermanager.h">

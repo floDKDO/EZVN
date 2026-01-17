@@ -178,7 +178,6 @@
     <ClCompile Include="src\RAII_SDL2\window.cpp" />
     <ClCompile Include="src\GUI\slider.cpp" />
     <ClCompile Include="src\script.cpp" />
-    <ClCompile Include="src\scriptrunner.cpp" />
     <ClCompile Include="src\settingsmenu.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\test.cpp" />
@@ -237,7 +236,6 @@
     <ClInclude Include="include\RAII_SDL2\window.h" />
     <ClInclude Include="include\GUI\slider.h" />
     <ClInclude Include="include\script.h" />
-    <ClInclude Include="include\scriptrunner.h" />
     <ClInclude Include="include\settingsmenu.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />

@@ -1,7 +1,7 @@
 #include "script.h"
 
 Script::Script(sdl::Renderer& renderer)
-	: renderer_(renderer), current_script_index_(0)
+	: renderer_(renderer), current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_})
 {}
 
 //Dialogues
@@ -132,4 +132,62 @@ void Script::stop_music(int fadeout_length)
 void Script::insert_autofocus(bool autofocus)
 {
 	script_information_.push_back(InfoAutofocus(autofocus));
+}
+
+void Script::increment_script_index()
+{
+	if(script_information_.size() > current_script_index_ + 1)
+	{
+		current_script_index_ += 1;
+	}
+}
+
+void Script::decrement_script_index()
+{
+	if(current_script_index_ > 0)
+	{
+		current_script_index_ -= 1;
+	}
+}
+
+bool Script::move_dialogue(Where where, bool is_from_mouse_wheel_)
+{
+	std::cout << "AVANT: " << current_script_index_ << ", " << previous_script_index_ << std::endl;
+	if(where == Where::next)
+	{
+		if(is_from_mouse_wheel_ && current_script_index_ < script_index_when_prev_.saved_script_index_)
+		{
+			increment_script_index();
+		}
+		else if(!is_from_mouse_wheel_)
+		{
+			script_index_when_prev_.is_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
+			increment_script_index();
+		}
+	}
+	else if(where == Where::prev)
+	{
+		if(!script_index_when_prev_.is_saved_) //sauvegarder une seule fois 
+		{
+			script_index_when_prev_.saved_script_index_ = current_script_index_;
+			script_index_when_prev_.is_saved_ = true;
+		}
+
+		decrement_script_index();
+		if(current_script_index_ == 0)
+		{
+			current_script_index_ = previous_script_index_; //dans le cas où on est allé en arrière sans croiser de dialogue, revenir au tout premier dialogue
+		}
+	}
+	std::cout << "APRES: " << current_script_index_ << ", " << previous_script_index_ << std::endl;
+
+	if(std::holds_alternative<Script::InfoDialogue>(script_information_[current_script_index_]))
+	{
+		previous_script_index_ = current_script_index_;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
