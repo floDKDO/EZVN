@@ -105,11 +105,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...1");
 	//game.move_textbox("top");
-	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
+	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...2");
 	//game.move_textbox("bottomleft");
-	//game.add_new_dialogue("Y a personne ??");
-	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
+	game.add_new_dialogue("Y a personne ??");
+	game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...3");
 	game.play_music("sounds/2.ogg", 0, 1000, 1.0); 
 	game.show_character("Sayori", "t11");

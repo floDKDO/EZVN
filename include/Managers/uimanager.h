@@ -2,7 +2,7 @@
 
 #include "GUI/ui.h"
 #include "RAII_SDL2/chunk.h"
-#include "audiomanager.h"
+#include "Managers/audiomanager.h"
 
 #include <vector>
 #include <memory>

@@ -138,14 +138,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\audiomanager.cpp" />
+    <ClCompile Include="src\Managers\audiomanager.cpp" />
     <ClCompile Include="src\background.cpp" />
-    <ClCompile Include="src\charactermanager.cpp" />
+    <ClCompile Include="src\Managers\charactermanager.cpp" />
     <ClCompile Include="src\character_definition.cpp" />
     <ClCompile Include="src\Color\color.cpp" />
     <ClCompile Include="src\Color\conversion.cpp" />
     <ClCompile Include="src\Color\str.cpp" />
-    <ClCompile Include="src\dialoguemanager.cpp" />
+    <ClCompile Include="src\Managers\dialoguemanager.cpp" />
     <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\GUI\button.cpp" />
     <ClCompile Include="src\character.cpp" />
@@ -157,10 +157,11 @@
     <ClCompile Include="src\GUI\inputfield.cpp" />
     <ClCompile Include="src\ingame.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\GUI\uimanager.cpp" />
+    <ClCompile Include="src\Managers\uimanager.cpp" />
     <ClCompile Include="src\mainmenu.cpp" />
     <ClCompile Include="src\music.cpp" />
     <ClCompile Include="src\GUI\confirmationpopup.cpp" />
+    <ClCompile Include="src\Managers\musicmanager.cpp" />
     <ClCompile Include="src\RAII_SDL2\animation.cpp" />
     <ClCompile Include="src\RAII_SDL2\channel.cpp" />
     <ClCompile Include="src\RAII_SDL2\chunk.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="src\scriptrunner.cpp" />
     <ClCompile Include="src\settingsmenu.cpp" />
     <ClCompile Include="src\sound.cpp" />
+    <ClCompile Include="src\Managers\soundmanager.cpp" />
     <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\textbox.cpp" />
@@ -197,15 +199,15 @@
     <ClCompile Include="src\transition.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\audiomanager.h" />
+    <ClInclude Include="include\Managers\audiomanager.h" />
     <ClInclude Include="include\background.h" />
-    <ClInclude Include="include\charactermanager.h" />
+    <ClInclude Include="include\Managers\charactermanager.h" />
     <ClInclude Include="include\character_definition.h" />
     <ClInclude Include="include\Color\color.h" />
     <ClInclude Include="include\Color\conversion.h" />
     <ClInclude Include="include\Color\str.h" />
     <ClInclude Include="include\constants.h" />
-    <ClInclude Include="include\dialoguemanager.h" />
+    <ClInclude Include="include\Managers\dialoguemanager.h" />
     <ClInclude Include="include\drawable.h" />
     <ClInclude Include="include\GUI\button.h" />
     <ClInclude Include="include\character.h" />
@@ -216,10 +218,11 @@
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\GUI\inputfield.h" />
     <ClInclude Include="include\ingame.h" />
-    <ClInclude Include="include\GUI\uimanager.h" />
+    <ClInclude Include="include\Managers\uimanager.h" />
     <ClInclude Include="include\mainmenu.h" />
     <ClInclude Include="include\music.h" />
     <ClInclude Include="include\GUI\confirmationpopup.h" />
+    <ClInclude Include="include\Managers\musicmanager.h" />
     <ClInclude Include="include\pointereventdata.h" />
     <ClInclude Include="include\RAII_SDL2\animation.h" />
     <ClInclude Include="include\RAII_SDL2\channel.h" />
@@ -242,6 +245,7 @@
     <ClInclude Include="include\scriptrunner.h" />
     <ClInclude Include="include\settingsmenu.h" />
     <ClInclude Include="include\sound.h" />
+    <ClInclude Include="include\Managers\soundmanager.h" />
     <ClInclude Include="include\text.h" />
     <ClInclude Include="include\textbox.h" />
     <ClInclude Include="include\GUI\textbutton.h" />

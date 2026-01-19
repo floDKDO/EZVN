@@ -1,22 +1,17 @@
-#include "charactermanager.h"
+#include "Managers/charactermanager.h"
 #include <algorithm>
 
 //Character//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-CharacterManager::CharacterManager(sdl::Renderer& renderer)
-	: renderer_(renderer)
-{}
-
-//Character
-void CharacterManager::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
+CharacterManager::CharacterManager(sdl::Renderer& renderer, std::unordered_map<std::string, CharacterDefinition>& character_definitions)
+	: character_definitions_(character_definitions), renderer_(renderer)
 {
-	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
+	create_narrator();
 }
 
 //Character
 void CharacterManager::create_narrator()
 {
-	add_character("Narrator", "", "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
 	CharacterDefinition& character_definition = character_definitions_.at("Narrator");
 	active_characters_.insert(std::make_pair("Narrator", Character(character_definition, renderer_)));
 }

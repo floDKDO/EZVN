@@ -1,19 +1,14 @@
 ﻿#include "ingame.h"
-#include "transform.h"
 #include "constants.h"
 #include "game.h"
-#include "RAII_SDL2/channel.h"
 
 #include <iostream>
 
-//TODO : éviter de répéter plein de fois les mêmes boucles for
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), character_manager_(renderer), script_runner_(game.script_, game_.audio_manager_, character_manager_, renderer), /*which_dialogue_from_where_({ScriptRunner::Where::none, false, false}),*/ 
-	skip_mode_(false), auto_mode_(false), 
-	autofocus_(constants::default_autofocus), /*textbox_(renderer),*/ hide_ui_textbox_(false), currently_playing_sound_({{}, 0, false, nullptr}), 
-	currently_playing_music_({{}, nullptr}), renderer_(renderer)
+	: GameState(game), script_runner_(game.script_, game_.audio_manager_, renderer), skip_mode_(false), auto_mode_(false), 
+	autofocus_(constants::default_autofocus), /*textbox_(renderer),*/ hide_ui_textbox_(false), renderer_(renderer)
 {
 	build_ui_elements(renderer); 
 }
@@ -120,27 +115,10 @@ void InGame::handle_events(const SDL_Event& e)
 	{
 		hide_ui_textbox_ = !hide_ui_textbox_;
 	}
-
-	if(e.type == AudioManager::END_MUSIC_EVENT_)
-	{
-		if(currently_playing_music_.music_ != nullptr)
-		{
-			game_.audio_manager_.fade_in_music(*currently_playing_music_.music_, currently_playing_music_.audio_properties_.loop_, currently_playing_music_.audio_properties_.fadein_length_);
-		}
-	}
 }
 
 void InGame::draw(sdl::Renderer& renderer)
 {
-	//Backgrounds
-	//background_.draw(renderer);
-	///////////////////////////
-
-	/*if(game_.script_.script_information_.size() > 0)
-	{
-		character_manager_.draw(renderer);
-	}*/
-
 	script_runner_.draw(renderer);
 
 	if(!hide_ui_textbox_)
@@ -175,11 +153,8 @@ void InGame::update_characters_dialogue(Script::InfoDialogue& info_dialogue)
 	/*character.properties_.is_speaking_ = true;*/ //TODO : attention : conflit avec l'autofocus
 }
 
-//TODO : utiliser std::visit ??
 void InGame::update()
 {
-	//TODO : enregistrer les choses courantes
-
 	script_runner_.update();
 
 	if(!hide_ui_textbox_)
@@ -187,30 +162,4 @@ void InGame::update()
 		ui_manager_.update();
 		//textbox_.update();
 	}
-
-	//Characters
-	for(auto& [key_character_variable, value_character] : character_manager_.active_characters_)
-	{
-		value_character.update();
-	}
-	//////////////////////////////
-
-	//Musics
-	//aucune musique trouvée => stopper l'éventuelle musique qui était en train de se jouer
-	//si scroll en arrière et aucune musique => fadeout de 1.5 secondes (valeur constante)
-	//if(!music_changed_)
-	//{
-	//	//TODO : même code que dans update_music() (sauf l'argument de fadeout)
-	//	game_.audio_manager_.fade_out_music(constants::fadeout_length_scroll_back_);
-	//	currently_playing_music_.music_ = nullptr;
-	//}
-	//////////////////////////////
-
-	//Sounds
-	/*if(!sound_changed_)
-	{
-		halt_all_sounds();
-		currently_playing_sound_ = {{}, 0, false, nullptr};
-	}*/
-	//////////////////////////////
 }

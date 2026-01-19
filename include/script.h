@@ -58,6 +58,9 @@ class Script
 		void show_character(const std::string_view character_variable, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
 		void hide_character(const std::string_view character_variable);
 		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
+
+		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
+
 		void insert_textbox(const std::string_view character_variable, const std::string_view textbox_path);
 		void insert_namebox(const std::string_view character_variable, const std::string_view namebox_path);
 		void insert_namebox_text_color(const std::string_view character_variable, Color namebox_text_color);
@@ -75,6 +78,7 @@ class Script
 		void insert_autofocus(bool autofocus);
 
 		std::vector<ScriptInformation> script_information_;
+		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
 
 	private:
 		sdl::Renderer& renderer_;

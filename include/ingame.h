@@ -1,43 +1,12 @@
 #pragma once
 
 #include "gamestate.h"
-#include "textbox.h"
-#include "character.h"
-#include "background.h"
 #include "GUI/textbutton.h"
 #include "GUI/texttoggle.h"
-#include "music.h"
-#include "RAII_SDL2/chunk.h"
 #include "scriptrunner.h"
-#include "charactermanager.h"
-
-#include <vector>
-#include <unordered_set>
 
 class InGame : public GameState
 {
-	/*struct WhichDialogueFromWhere
-	{
-		ScriptRunner::Where which_dialogue_;
-		bool is_from_mouse_wheel_;
-		bool wait_for_end_of_dialogue_;
-	};*/
-
-	struct CurrentSound
-	{
-		struct Script::AudioProperties audio_properties_;
-		size_t associated_script_index_;
-		bool played_;
-		Sound* sound_;
-	};
-
-	struct CurrentMusic
-	{
-		struct Script::AudioProperties audio_properties_;
-		Music* music_;
-	};
-
-
 	public:
 		InGame(Game& game, sdl::Renderer& renderer);
 
@@ -58,7 +27,6 @@ class InGame : public GameState
 
 		void update_textbox(Script::InfoTextbox& info_textbox);
 
-		CharacterManager character_manager_;
 		ScriptRunner script_runner_;
 
 	private:
@@ -74,9 +42,6 @@ class InGame : public GameState
 		TextButton* settings_button_;
 
 		bool hide_ui_textbox_;
-
-		CurrentMusic currently_playing_music_;  //TODO renommer pour coller avec le user-defined event de fin de musique ??
-		CurrentSound currently_playing_sound_;
 
 		sdl::Renderer& renderer_;
 };

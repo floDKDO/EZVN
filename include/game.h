@@ -2,7 +2,7 @@
 
 #include "constants.h"
 #include "gamestate.h"
-#include "GUI/uimanager.h"
+#include "Managers/uimanager.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/gamecontroller.h"
@@ -10,7 +10,7 @@
 #include "RAII_SDL2/sdlmixer.h"
 #include "RAII_SDL2/sdlimg.h"
 #include "RAII_SDL2/sdlttf.h"
-#include "audiomanager.h"
+#include "Managers/audiomanager.h"
 #include "ingame.h"
 #include "script.h"
 

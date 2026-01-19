@@ -39,7 +39,7 @@
     <ClCompile Include="src\GUI\ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\uimanager.cpp">
+    <ClCompile Include="src\Managers\uimanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\textbutton.cpp">
@@ -159,7 +159,7 @@
     <ClCompile Include="src\Color\color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\audiomanager.cpp">
+    <ClCompile Include="src\Managers\audiomanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Color\conversion.cpp">
@@ -177,13 +177,19 @@
     <ClCompile Include="src\script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\charactermanager.cpp">
+    <ClCompile Include="src\Managers\charactermanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\scriptrunner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\dialoguemanager.cpp">
+    <ClCompile Include="src\Managers\dialoguemanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Managers\soundmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Managers\musicmanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -209,7 +215,7 @@
     <ClInclude Include="include\GUI\ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\uimanager.h">
+    <ClInclude Include="include\Managers\uimanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\textbutton.h">
@@ -332,7 +338,7 @@
     <ClInclude Include="include\Color\color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\audiomanager.h">
+    <ClInclude Include="include\Managers\audiomanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Color\conversion.h">
@@ -350,13 +356,19 @@
     <ClInclude Include="include\script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\charactermanager.h">
+    <ClInclude Include="include\Managers\charactermanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\scriptrunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\dialoguemanager.h">
+    <ClInclude Include="include\Managers\dialoguemanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Managers\soundmanager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Managers\musicmanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

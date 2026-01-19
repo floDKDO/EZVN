@@ -2,7 +2,9 @@
 
 Script::Script(sdl::Renderer& renderer)
 	: renderer_(renderer)
-{}
+{
+	add_character("Narrator", "", "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
+}
 
 //Dialogues
 void Script::insert_dialogue(const std::string_view character_variable, const std::string_view dialogue)
@@ -55,6 +57,11 @@ void Script::rename_character(const std::string_view character_variable, const s
 	info_character.character_variable_ = character_variable;
 	info_character.t_.insert({CharacterCommandKind::NAME, std::string(new_character_name)});
 	script_information_.push_back(InfoCharacter(info_character));
+}
+
+void Script::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
+{
+	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
 }
 
 //Character

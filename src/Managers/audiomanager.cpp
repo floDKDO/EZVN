@@ -1,4 +1,4 @@
-#include "audiomanager.h"
+#include "Managers/audiomanager.h"
 #include "RAII_SDL2/channel.h"
 #include "RAII_SDL2/events.h"
 
@@ -22,7 +22,7 @@ void AudioManager::callback_music()
 	sdl::events::push_event(&e);
 }
 
-void AudioManager::callback_channel(int channel)
+void AudioManager::callback_channel([[maybe_unused]] int channel)
 {
 	SDL_Event e = {END_CHANNEL_EVENT_};
 	sdl::events::push_event(&e);

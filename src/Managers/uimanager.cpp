@@ -1,4 +1,4 @@
-#include "GUI/uimanager.h"
+#include "Managers/uimanager.h"
 #include "GUI/checkablegroup.h"
 #include "GUI/texttoggle.h"
 #include "GUI/slider.h"

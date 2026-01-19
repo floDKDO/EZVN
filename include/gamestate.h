@@ -1,8 +1,8 @@
 #pragma once
 
 #include "RAII_SDL2/renderer.h"
-#include "GUI/uimanager.h"
-#include "audiomanager.h"
+#include "Managers/uimanager.h"
+#include "Managers/audiomanager.h"
 
 #include <SDL2/SDL.h>
 #include <vector>
