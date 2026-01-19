@@ -107,3 +107,10 @@ void CharacterManager::update(const Script::InfoCharacter& info_character)
 		}
 	}
 }
+
+void CharacterManager::reset()
+{
+	active_characters_.clear();
+	draw_characters_order_.clear();
+	create_narrator();
+}

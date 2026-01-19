@@ -99,18 +99,18 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
-	game.show_character("Yuri", "t41", 1);
+	/*game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
-	game.show_character("Natsuki", "t44", 1);
+	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...1");
 	//game.move_textbox("top");
 	//game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...2");
 	//game.move_textbox("bottomleft");
-	game.add_new_dialogue("Y a personne ??");
+	//game.add_new_dialogue("Y a personne ??");
 	//game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
-	game.add_new_dialogue("...");
+	game.add_new_dialogue("...3");
 	game.play_music("sounds/2.ogg", 0, 1000, 1.0); 
 	game.show_character("Sayori", "t11");
 	game.rename_character("Sayori", "xxxxx");

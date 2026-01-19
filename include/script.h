@@ -15,12 +15,6 @@ class Script
 	public:
 		Script(sdl::Renderer& renderer);
 
-		struct ScriptIndexWhenPrev
-		{
-			bool is_saved_;
-			size_t saved_script_index_;
-		};
-
 		template <typename T>
 		struct MyPair
 		{
@@ -80,21 +74,6 @@ class Script
 
 		void insert_autofocus(bool autofocus);
 
-		void increment_script_index();
-		void decrement_script_index();
-		bool is_current_script_index_a_dialogue();
-
-		enum class Where
-		{
-			next,
-			prev,
-			none
-		};
-		bool move_dialogue(Where where, bool is_from_mouse_wheel_);
-
-		size_t current_script_index_;
-		size_t previous_script_index_;
-		ScriptIndexWhenPrev script_index_when_prev_;
 		std::vector<ScriptInformation> script_information_;
 
 	private:

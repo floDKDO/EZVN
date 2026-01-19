@@ -9,6 +9,7 @@ class AudioManager
 		AudioManager();
 
 		static void callback_music();
+		static void callback_channel(int channel);
 
 		void fade_in_music(Music& music, bool loop, int ms);
 		void fade_out_music(int ms);
@@ -23,6 +24,7 @@ class AudioManager
 		static int global_music_volume_;
 		static int global_sound_volume_;
 		static Uint32 END_MUSIC_EVENT_;
+		static Uint32 END_CHANNEL_EVENT_;
 
 	private:
 		Music* current_music_;

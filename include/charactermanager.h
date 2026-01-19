@@ -20,6 +20,8 @@ class CharacterManager
 		void draw(sdl::Renderer& renderer);
 		void update(const Script::InfoCharacter& info_character);
 
+		void reset();
+
 		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
 		std::unordered_map<std::string, Character> active_characters_;
 		std::vector<std::string> draw_characters_order_;

@@ -7,16 +7,24 @@
 int AudioManager::global_music_volume_ = MIX_MAX_VOLUME;
 int AudioManager::global_sound_volume_ = MIX_MAX_VOLUME;
 Uint32 AudioManager::END_MUSIC_EVENT_ = sdl::events::register_events(1); 
+Uint32 AudioManager::END_CHANNEL_EVENT_ = sdl::events::register_events(1);
 
 AudioManager::AudioManager()
 	: current_music_(nullptr)
 {
 	sdl::music::hook_finished(&callback_music); 
+	sdl::channel::channel_finished(&callback_channel);
 }
 
 void AudioManager::callback_music()
 {
 	SDL_Event e = {END_MUSIC_EVENT_}; //init le premier élément de l'union (= type)
+	sdl::events::push_event(&e);
+}
+
+void AudioManager::callback_channel(int channel)
+{
+	SDL_Event e = {END_CHANNEL_EVENT_};
 	sdl::events::push_event(&e);
 }
 

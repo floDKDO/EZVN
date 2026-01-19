@@ -42,7 +42,6 @@ class Drawable
 		Uint64 last_time_;
 		SDL_Rect position_;
 		
-
 	protected:
 		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
 

@@ -145,6 +145,7 @@
     <ClCompile Include="src\Color\color.cpp" />
     <ClCompile Include="src\Color\conversion.cpp" />
     <ClCompile Include="src\Color\str.cpp" />
+    <ClCompile Include="src\dialoguemanager.cpp" />
     <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\GUI\button.cpp" />
     <ClCompile Include="src\character.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="src\RAII_SDL2\window.cpp" />
     <ClCompile Include="src\GUI\slider.cpp" />
     <ClCompile Include="src\script.cpp" />
+    <ClCompile Include="src\scriptrunner.cpp" />
     <ClCompile Include="src\settingsmenu.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\test.cpp" />
@@ -203,6 +205,7 @@
     <ClInclude Include="include\Color\conversion.h" />
     <ClInclude Include="include\Color\str.h" />
     <ClInclude Include="include\constants.h" />
+    <ClInclude Include="include\dialoguemanager.h" />
     <ClInclude Include="include\drawable.h" />
     <ClInclude Include="include\GUI\button.h" />
     <ClInclude Include="include\character.h" />
@@ -236,6 +239,7 @@
     <ClInclude Include="include\RAII_SDL2\window.h" />
     <ClInclude Include="include\GUI\slider.h" />
     <ClInclude Include="include\script.h" />
+    <ClInclude Include="include\scriptrunner.h" />
     <ClInclude Include="include\settingsmenu.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\text.h" />
@@ -250,9 +254,6 @@
     <ClInclude Include="include\GUI\ui.h" />
     <ClInclude Include="include\transformstep.h" />
     <ClInclude Include="include\transition.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

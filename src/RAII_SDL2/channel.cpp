@@ -72,4 +72,9 @@ void volume(int channel, const int volume)
 	Mix_Volume(channel, volume);
 }
 
+void channel_finished(void(*channel_finished)(int channel))
+{
+	Mix_ChannelFinished(channel_finished);
+}
+
 }

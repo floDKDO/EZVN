@@ -13,5 +13,6 @@ void halt_channel(int channel);
 void pause(const int channel);
 void resume(const int channel);
 void volume(int channel, const int volume);
+void channel_finished(void(*channel_finished)(int channel));
 
 }
