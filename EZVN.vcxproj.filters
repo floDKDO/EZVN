@@ -183,7 +183,7 @@
     <ClCompile Include="src\scriptrunner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\dialoguemanager.cpp">
+    <ClCompile Include="src\Managers\textboxmanager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\soundmanager.cpp">
@@ -362,7 +362,7 @@
     <ClInclude Include="include\scriptrunner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\dialoguemanager.h">
+    <ClInclude Include="include\Managers\textboxmanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Managers\soundmanager.h">

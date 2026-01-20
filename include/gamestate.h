@@ -14,7 +14,7 @@ class GameState
 {
 	public:
 		virtual ~GameState() = default;
-		virtual void build_ui_elements(sdl::Renderer& renderer) = 0;
+		virtual void build_ui_elements(sdl::Renderer& renderer) {};
 		virtual void handle_events(const SDL_Event& e);
 		virtual void draw(sdl::Renderer& renderer);
 		virtual void update();

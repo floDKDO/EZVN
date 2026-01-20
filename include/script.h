@@ -43,15 +43,26 @@ class Script
 
 		using CharacterCommandValue = std::variant<int, std::string, bool, Color>; //zorder (int), name (std::string), transform_name (std::string), is_visible_ (bool), textbox_path_ (std::string), namebox_path_ (std::string), namebox_text_color_ (Color)
 		using CharacterCommands = std::unordered_map<CharacterCommandKind, CharacterCommandValue>;
-
 		using InfoCharacter = MyPair<CharacterCommands>;
-		using InfoDialogue = MyPair<const std::string>;
+
+		enum class TextboxCommandKind
+		{
+			DIALOGUE,
+			MOVE_TEXTBOX
+		};
+
+		struct TextboxCommands
+		{
+			TextboxCommandKind textbox_command_kind_;
+			std::string textbox_command_value_;
+		};
+		using InfoTextbox = MyPair<TextboxCommands>;
+
 		using InfoBackground = Background;
 		using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
 		using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
 		using InfoAutofocus = bool;
-		using InfoTextbox = std::string;
-		using ScriptInformation = std::variant<InfoCharacter, InfoDialogue, InfoBackground, InfoMusic, InfoSound, InfoAutofocus, InfoTextbox>;
+		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
 
 		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
 

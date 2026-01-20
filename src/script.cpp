@@ -9,7 +9,12 @@ Script::Script(sdl::Renderer& renderer)
 //Dialogues
 void Script::insert_dialogue(const std::string_view character_variable, const std::string_view dialogue)
 {
-	script_information_.push_back(InfoDialogue({std::string(character_variable), std::string(dialogue)}));
+	InfoTextbox info_textbox;
+	info_textbox.character_variable_ = character_variable;
+	info_textbox.t_.textbox_command_kind_ = TextboxCommandKind::DIALOGUE;
+	info_textbox.t_.textbox_command_value_ = std::string(dialogue);
+
+	script_information_.push_back(InfoTextbox(info_textbox));
 }
 
 //Character
@@ -94,7 +99,12 @@ void Script::insert_namebox_text_color(const std::string_view character_variable
 //Textbox
 void Script::move_textbox(const std::string_view where)
 {
-	script_information_.push_back(InfoTextbox(std::string(where)));
+	InfoTextbox info_textbox;
+	info_textbox.character_variable_ = "Narrator"; //TODO : garder Narrator ??
+	info_textbox.t_.textbox_command_kind_ = TextboxCommandKind::MOVE_TEXTBOX;
+	info_textbox.t_.textbox_command_value_ = std::string(where);
+
+	script_information_.push_back(InfoTextbox(info_textbox));
 }
 
 //Background

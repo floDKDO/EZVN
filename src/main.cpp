@@ -26,7 +26,8 @@
 
 //TODO : anonymous namespace au lieu de static pour des fonctions static et des variables globales static propres à une translation unit
 
-//TODO : nettoyer le code => retirer les includes inutiles, "_" final après le nom des membres, retirer les membres et commentaires inutiles, convention pour les valeurs des enums etc.
+//TODO : nettoyer le code => retirer les includes inutiles (attention que je n'inclus pas le même header dans un .h et son .cpp associé + utiliser des forward declarations quand c'est possible), 
+//                        => "_" final après le nom des membres, retirer les membres et commentaires inutiles, convention pour les valeurs des enums etc.
 
 //TODO : peu de lisibilité avec tous les paramètres par défaut
 
@@ -54,6 +55,8 @@
 //TODO : créer des variables pour les éléments de tableau utilisés à plusieurs endroits dans une même méthode
 
 //TODO : convention de nommage pour les underscores dans les noms de fichier
+
+//TODO : bloquer le changement de dialogues (auto/skip) quand on appuie sur Settings
 
 
 #include "Color/str.h"
@@ -104,10 +107,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...1");
-	//game.move_textbox("top");
+	game.move_textbox("top");
 	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...2");
-	//game.move_textbox("bottomleft");
+	game.move_textbox("bottomleft");
 	game.add_new_dialogue("Y a personne ??");
 	game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...3");

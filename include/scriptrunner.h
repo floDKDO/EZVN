@@ -1,8 +1,7 @@
 #pragma once
 
-#include "textbox.h"
 #include "Managers/charactermanager.h"
-#include "Managers/dialoguemanager.h"
+#include "Managers/textboxmanager.h"
 #include "Managers/musicmanager.h"
 #include "Managers/soundmanager.h"
 
@@ -51,20 +50,6 @@ class ScriptRunner
 			sdl::Renderer& renderer_;
 		};
 
-		struct TextboxManager
-		{
-			TextboxManager(sdl::Renderer& renderer)
-				: textbox_(renderer)
-			{}
-
-			void update(Script::InfoTextbox& info_textbox)
-			{
-
-			}
-
-			Textbox textbox_;
-		};
-
 		struct AutofocusManager
 		{
 			AutofocusManager()
@@ -99,12 +84,12 @@ class ScriptRunner
 			bool autofocus_;
 		};
 
-		ScriptRunner(Script& script, AudioManager& audio_manager, sdl::Renderer& renderer);
+		ScriptRunner(Game& game, sdl::Renderer& renderer);
 
 		void increment_script_index();
 		void decrement_script_index();
 		bool is_current_script_index_a_dialogue();
-		bool move_dialogue(DialogueManager::Where where, bool is_from_mouse_wheel_);
+		bool move_dialogue(TextboxManager::Where where, bool is_from_mouse_wheel_);
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
@@ -128,7 +113,6 @@ class ScriptRunner
 		MusicManager music_manager_;  
 		SoundManager sound_manager_;
 		TextboxManager textbox_manager_;
-		DialogueManager dialogue_manager_;
 		AutofocusManager autofocus_manager_;
 };
 

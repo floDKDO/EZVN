@@ -11,10 +11,11 @@
 #include "RAII_SDL2/sdlimg.h"
 #include "RAII_SDL2/sdlttf.h"
 #include "Managers/audiomanager.h"
-#include "ingame.h"
 #include "script.h"
 
 #include <stack>
+
+class InGame;
 
 class Game
 {

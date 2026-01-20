@@ -145,7 +145,7 @@
     <ClCompile Include="src\Color\color.cpp" />
     <ClCompile Include="src\Color\conversion.cpp" />
     <ClCompile Include="src\Color\str.cpp" />
-    <ClCompile Include="src\Managers\dialoguemanager.cpp" />
+    <ClCompile Include="src\Managers\textboxmanager.cpp" />
     <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\GUI\button.cpp" />
     <ClCompile Include="src\character.cpp" />
@@ -207,7 +207,7 @@
     <ClInclude Include="include\Color\conversion.h" />
     <ClInclude Include="include\Color\str.h" />
     <ClInclude Include="include\constants.h" />
-    <ClInclude Include="include\Managers\dialoguemanager.h" />
+    <ClInclude Include="include\Managers\textboxmanager.h" />
     <ClInclude Include="include\drawable.h" />
     <ClInclude Include="include\GUI\button.h" />
     <ClInclude Include="include\character.h" />
