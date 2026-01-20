@@ -219,6 +219,7 @@ void ScriptRunner::rebuild()
 	character_manager_.reset();
 	textbox_manager_.reset();
 	sound_manager_.reset();
+	background_manager_.reset();
 
 	size_t target_script_index = current_script_index_;
 	do

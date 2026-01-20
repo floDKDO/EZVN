@@ -9,6 +9,7 @@ class BackgroundManager
 
 		void draw(sdl::Renderer& renderer);
 		void update(const Script::InfoBackground& info_background);
+		void reset();
 
 	private:
 		Background background_;
