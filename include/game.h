@@ -75,6 +75,9 @@ class Game
 		void autofocus_enable();
 		void autofocus_disable();
 
+		void autozorder_enable();
+		void autozorder_disable();
+
 		void change_textbox(const std::string_view character_variable, const std::string_view textbox_path);
 		void change_namebox(const std::string_view character_variable, const std::string_view namebox_path);
 		void change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color);

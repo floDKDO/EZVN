@@ -263,6 +263,16 @@ void Game::autofocus_disable()
 	script_.insert_autofocus(false);
 }
 
+void Game::autozorder_enable()
+{
+	script_.insert_autozorder(true);
+}
+
+void Game::autozorder_disable()
+{
+	script_.insert_autozorder(false);
+}
+
 void Game::change_textbox(const std::string_view character_variable, const std::string_view textbox_path)
 {
 	script_.insert_textbox(character_variable, textbox_path);

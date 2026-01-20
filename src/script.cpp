@@ -148,5 +148,10 @@ void Script::stop_music(int fadeout_length)
 //Autofocus
 void Script::insert_autofocus(bool autofocus)
 {
-	script_information_.push_back(InfoAutofocus(autofocus));
+	script_information_.push_back(InfoAutofocus({AutofocusCommandKind::AUTOFOCUS, autofocus}));
+}
+
+void Script::insert_autozorder(bool autozorder)
+{
+	script_information_.push_back(InfoAutofocus({AutofocusCommandKind::AUTOZORDER, autozorder}));
 }

@@ -15,7 +15,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
 	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {
-	set_textbox_position("bottom");
+	set_textbox_position("bottom"); //TODO : hardcodé
 }
 
 void Textbox::change_textbox(std::string_view new_textbox_path, sdl::Renderer& renderer)

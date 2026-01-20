@@ -1,5 +1,7 @@
 #include "scriptrunner.h"
 
+//TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
+
 ScriptRunner::ScriptRunner(Game& game, sdl::Renderer& renderer)
 	: current_script_index_(0), previous_script_index_(current_script_index_), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false),
 	character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(renderer, game)
@@ -113,7 +115,7 @@ void ScriptRunner::apply_line(size_t script_index)
 	}
 	else if(std::holds_alternative<Script::InfoAutofocus>(current_script_information))
 	{
-		//update_autofocus(std::get<Script::InfoAutofocus>(current_script_information));
+		character_manager_.update_autofocus(std::get<Script::InfoAutofocus>(current_script_information));
 	}
 	else if(std::holds_alternative<Script::InfoMusic>(current_script_information))
 	{
@@ -127,6 +129,7 @@ void ScriptRunner::apply_line(size_t script_index)
 	{
 		Script::InfoTextbox& info_textbox = std::get<Script::InfoTextbox>(current_script_information);
 		textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
+		character_manager_.update_characters_dialogue(info_textbox);
 		//update_characters_dialogue(info_textbox);
 		//textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::none, false, false};
 	}
@@ -136,6 +139,7 @@ void ScriptRunner::update()
 {
 	//std::cout << "CURRENT: " << current_script_index_ << std::endl;
 	//std::cout << script_index_when_prev_.saved_script_index_ << std::endl;
+	//std::cout << std::boolalpha << autofocus_manager_.autofocus_ << std::endl;
 
 	if(textbox_manager_.which_dialogue_from_where_.which_dialogue_ == TextboxManager::Where::prev)
 	{
@@ -246,7 +250,7 @@ void ScriptRunner::rebuild()
 		}
 		else if(std::holds_alternative<Script::InfoAutofocus>(current_script_information))
 		{
-			//update_autofocus(std::get<Script::InfoAutofocus>(current_script_information));
+			character_manager_.update_autofocus(std::get<Script::InfoAutofocus>(current_script_information));
 		}
 		//else if(std::holds_alternative<Script::InfoMusic>(current_script_information))
 		//{

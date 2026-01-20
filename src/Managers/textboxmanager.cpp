@@ -2,8 +2,9 @@
 #include "game.h"
 
 TextboxManager::TextboxManager(sdl::Renderer& renderer, Game& game)
-	: last_time_(0), which_dialogue_from_where_({Where::none, false, false}), skip_mode_(false), auto_mode_(false), hide_ui_textbox_(false), where_("bottom"), textbox_(renderer), ui_manager_(game.audio_manager_),
-	history_button_(nullptr), skip_toggle_(nullptr), auto_toggle_(nullptr), save_button_(nullptr), load_button_(nullptr), settings_button_(nullptr), game_(game), renderer_(renderer)
+	: last_time_(0), which_dialogue_from_where_({Where::none, false, false}), skip_mode_(false), auto_mode_(false), hide_ui_textbox_(false), where_("bottom"), //TODO : hardcodé
+	textbox_(renderer), ui_manager_(game.audio_manager_), history_button_(nullptr), skip_toggle_(nullptr), auto_toggle_(nullptr), save_button_(nullptr), 
+	load_button_(nullptr), settings_button_(nullptr), game_(game), renderer_(renderer)
 {
 	build_ui_elements(renderer);
 }
@@ -209,7 +210,7 @@ void TextboxManager::update(Script::InfoTextbox& info_textbox, const Character& 
 			return;
 		}
 
-		std::cout << "*************************PERSO: " << info_textbox.character_variable_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
+		//std::cout << "*************************PERSO: " << info_textbox.character_variable_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
 		textbox_.show_new_dialogue(info_textbox.t_.textbox_command_value_, character.properties_.name_, skip_mode_, which_dialogue_from_where_.wait_for_end_of_dialogue_);
 		textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 		textbox_.change_namebox(character.properties_.namebox_path_, renderer_);

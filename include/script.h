@@ -61,7 +61,20 @@ class Script
 		using InfoBackground = Background;
 		using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
 		using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
-		using InfoAutofocus = bool;
+
+		enum class AutofocusCommandKind
+		{
+			AUTOFOCUS,
+			AUTOZORDER
+		};
+
+		struct AutofocusCommands
+		{
+			AutofocusCommandKind autofocus_command_kind_;
+			bool autofocus_command_value_;
+		};
+		using InfoAutofocus = AutofocusCommands;
+
 		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
 
 		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
@@ -87,6 +100,7 @@ class Script
 		void stop_music(int fadeout_length);
 
 		void insert_autofocus(bool autofocus);
+		void insert_autozorder(bool autozorder);
 
 		std::vector<ScriptInformation> script_information_;
 		std::unordered_map<std::string, CharacterDefinition> character_definitions_;

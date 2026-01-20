@@ -104,17 +104,20 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
-	game.add_new_dialogue("...0");
+	//game.autofocus_enable();
+	//game.autozorder_enable();
+	/*game.add_new_dialogue("...0");
 	game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
-	game.show_character("Natsuki", "t44", 1);
+	game.show_character("Natsuki", "t44", 1);*/
 	game.add_new_dialogue("...1");
 	game.move_textbox("top");
 	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
 	game.add_new_dialogue("...2");
 	game.move_textbox("bottomleft");
 	game.add_new_dialogue("Y a personne ??");
+	game.move_textbox("bottom");
 	game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
 	game.add_new_dialogue("...3");
 	game.play_music("sounds/2.ogg", 0, 1000, 1.0); 
@@ -129,6 +132,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
 	game.show_background("img/backgrounds/class.png");
 	game.autofocus_enable();
+	game.autozorder_enable();
 	game.play_music("sounds/3.ogg", 2, 1000); 
 	game.show_character("Yuri", "t41");
 	game.show_character("Sayori", "t42");
@@ -147,6 +151,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character("Natsuki", 50);
 	game.add_new_dialogue("Natsuki", "HEYYYYYY!");
 	game.add_new_dialogue("...");
+	//game.autozorder_enable();
 	game.add_new_dialogue("Sayori", "How are you MC?");
 
 	game.run();

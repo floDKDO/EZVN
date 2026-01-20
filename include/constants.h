@@ -14,7 +14,9 @@ inline constexpr int window_width_ = 1280;
 inline constexpr int window_height_ = 720;
 
 inline constexpr int default_zorder_ = 0;
-inline constexpr bool default_autofocus = false;
+inline constexpr bool default_autofocus_ = false;
+inline constexpr bool default_autozorder_ = false;
+inline constexpr int default_minimum_character_for_autofocus_ = 2;
 
 inline constexpr int text_outline_size_ = 1;
 inline Color text_outline_color_ = Color::from_rgba8(255, 205, 230);

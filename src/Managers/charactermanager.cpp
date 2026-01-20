@@ -4,7 +4,7 @@
 //Character//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CharacterManager::CharacterManager(sdl::Renderer& renderer, std::unordered_map<std::string, CharacterDefinition>& character_definitions)
-	: character_definitions_(character_definitions), renderer_(renderer)
+	: autofocus_(constants::default_autofocus_), autozorder_(constants::default_autozorder_), character_definitions_(character_definitions), renderer_(renderer)
 {
 	create_narrator();
 }
@@ -103,9 +103,66 @@ void CharacterManager::update(const Script::InfoCharacter& info_character)
 	}
 }
 
+void CharacterManager::update_characters_dialogue(const Script::InfoTextbox& info_textbox)
+{
+	//if(which_dialogue_from_where_.which_dialogue_ == ScriptRunner::Where::none) //TODO : ajouter && !textbox_.is_first_dialogue_ ??
+	//{
+	//	return;
+	//}
+
+	if((active_characters_.size() - 1) < constants::default_minimum_character_for_autofocus_) //-1 pour ne pac compter le Narrator
+	{
+		return;
+	}
+
+	//TODO : attention : conflit avec l'autofocus
+	for(auto& [key_character_variable, value_character] : active_characters_)
+	{
+		if(autofocus_)
+		{
+			value_character.properties_.is_speaking_ = false;
+		}
+		if(autozorder_)
+		{
+			value_character.properties_.zorder_ = 5;
+		}
+	}
+
+	//std::cout << "PERSO: " << info_textbox.character_variable_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
+
+	Character& character = active_characters_.at(info_textbox.character_variable_);
+	if(autofocus_)
+	{
+		character.properties_.is_speaking_ = true; //TODO : attention : conflit avec l'autofocus
+	}
+	if(autozorder_)
+	{
+		character.properties_.zorder_ = 10;
+	}
+}
+
+void CharacterManager::update_autofocus(const Script::InfoAutofocus& info_autofocus)
+{
+	if(info_autofocus.autofocus_command_kind_ == Script::AutofocusCommandKind::AUTOFOCUS)
+	{
+		autofocus_ = info_autofocus.autofocus_command_value_;
+	}
+	else if(info_autofocus.autofocus_command_kind_ == Script::AutofocusCommandKind::AUTOZORDER)
+	{
+		autozorder_ = info_autofocus.autofocus_command_value_;
+	}
+}
+
 void CharacterManager::reset()
 {
+	autofocus_ = constants::default_autofocus_;
+	autozorder_ = constants::default_autozorder_;
 	active_characters_.clear();
 	draw_characters_order_.clear();
 	create_narrator();
+	for(auto& [key_character_variable, value_character] : active_characters_)
+	{
+		value_character.properties_.is_speaking_ = false;
+		value_character.properties_.zorder_ = 5;
+	}
 }
