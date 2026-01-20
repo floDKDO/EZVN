@@ -38,7 +38,7 @@ class TextboxManager
 		void temp_function(Ui* ui);
 
 		void update_skip_auto_modes();
-		void update(Script::InfoTextbox& info_dialogue, const Character& character);
+		void update(Script::InfoTextbox& info_textbox, const Character& character);
 
 		void reset();
 
@@ -50,6 +50,8 @@ class TextboxManager
 		bool skip_mode_;
 		bool auto_mode_;
 		bool hide_ui_textbox_;
+
+		std::string where_;
 
 		Textbox textbox_;
 		UiManager ui_manager_;

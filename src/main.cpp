@@ -58,6 +58,8 @@
 
 //TODO : bloquer le changement de dialogues (auto/skip) quand on appuie sur Settings
 
+//TODO : convention pour les strings vides ("" ou std::string() ??)
+
 
 #include "Color/str.h"
 
@@ -102,10 +104,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png");
 	game.create_character("Natsuki", "???", "img/characters/natsuki.png", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 
-	/*game.show_character("Yuri", "t41", 1);
+	game.add_new_dialogue("...0");
+	game.show_character("Yuri", "t41", 1);
 	game.show_character("Sayori", "t42", 0);
 	game.show_character("Monika", "t43", 2);
-	game.show_character("Natsuki", "t44", 1);*/
+	game.show_character("Natsuki", "t44", 1);
 	game.add_new_dialogue("...1");
 	game.move_textbox("top");
 	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);

@@ -127,7 +127,7 @@ void ScriptRunner::apply_line(size_t script_index)
 	{
 		Script::InfoTextbox& info_textbox = std::get<Script::InfoTextbox>(current_script_information);
 		textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
-		//update_characters_dialogue(info_dialogue);
+		//update_characters_dialogue(info_textbox);
 		//textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::none, false, false};
 	}
 }
@@ -135,7 +135,7 @@ void ScriptRunner::apply_line(size_t script_index)
 void ScriptRunner::update()
 {
 	//std::cout << "CURRENT: " << current_script_index_ << std::endl;
-	std::cout << script_index_when_prev_.saved_script_index_ << std::endl;
+	//std::cout << script_index_when_prev_.saved_script_index_ << std::endl;
 
 	if(textbox_manager_.which_dialogue_from_where_.which_dialogue_ == TextboxManager::Where::prev)
 	{
@@ -144,18 +144,25 @@ void ScriptRunner::update()
 	else
 	{
 		textbox_manager_.update_skip_auto_modes();
+
+		//std::cout << "INIT: " << std::boolalpha << init_ << std::endl;
+
 		move_dialogue(textbox_manager_.which_dialogue_from_where_.which_dialogue_, textbox_manager_.which_dialogue_from_where_.is_from_mouse_wheel_);
 	}
 
 	if(!init_)
 	{
+		//std::cout << current_script_index_ << " et " << std::boolalpha << (std::holds_alternative<Script::InfoCharacter>(script_.script_information_[current_script_index_])) << std::endl;
 		if(!(std::holds_alternative<Script::InfoTextbox>(script_.script_information_[current_script_index_]) && std::get<Script::InfoTextbox>(script_.script_information_[current_script_index_]).t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE))
 		{
+			//std::cout << "DEDANS\n";
 			textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::next, false, false};
 		}
 		else
 		{
 			init_ = true;
+			textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::none, false, false}; //TODO : utile ??
+			//std::cout << "INIT: " << std::boolalpha << init_ << std::endl;
 		}
 	}
 
@@ -216,9 +223,15 @@ void ScriptRunner::rebuild()
 		{
 			target_script_index -= 1;
 		}
-	} while(!(std::holds_alternative<Script::InfoTextbox>(script_.script_information_[target_script_index]) && std::get<Script::InfoTextbox>(script_.script_information_[target_script_index]).t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE));
+	} while(!(std::holds_alternative<Script::InfoTextbox>(script_.script_information_[target_script_index]) && std::get<Script::InfoTextbox>(script_.script_information_[target_script_index]).t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE)
+		&& target_script_index != 0);
 
-	std::cout << "target script index: " << target_script_index << ", current script index: " << current_script_index_ << std::endl;
+	if(target_script_index == 0 && !(std::holds_alternative<Script::InfoTextbox>(script_.script_information_[target_script_index]) && std::get<Script::InfoTextbox>(script_.script_information_[target_script_index]).t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE))
+	{
+		target_script_index = current_script_index_;
+	}
+
+	//std::cout << "target script index: " << target_script_index << ", current script index: " << current_script_index_ << std::endl;
 
 	for(size_t i = 0; i <= target_script_index; ++i)
 	{
@@ -244,12 +257,15 @@ void ScriptRunner::rebuild()
 		//	//update_sounds(std::get<Script::InfoSound>(current_script_information), current_script_index_);
 		//	sound_manager_.update(std::get<Script::InfoSound>(current_script_information));
 		//}
-		//else if(std::holds_alternative<Script::InfoTextbox>(current_script_information)) 
-		//{
-		//	Script::InfoTextbox& info_textbox = std::get<Script::InfoTextbox>(current_script_information);
-		//	//textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
-		//	//update_characters_dialogue(info_textbox);
-		//}
+		else if(std::holds_alternative<Script::InfoTextbox>(current_script_information)) 
+		{
+			Script::InfoTextbox& info_textbox = std::get<Script::InfoTextbox>(current_script_information);
+			if(info_textbox.t_.textbox_command_kind_ == Script::TextboxCommandKind::MOVE_TEXTBOX) //TODO : pas ouf...
+			{
+				textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
+			}
+			//update_characters_dialogue(info_textbox);
+		}
 		move_dialogue(textbox_manager_.which_dialogue_from_where_.which_dialogue_, textbox_manager_.which_dialogue_from_where_.is_from_mouse_wheel_); //TODO : pour l'instant, si je commente cette ligne, la sauvegarde du current_script_index_ lors d'un scroll back n'est pas effectuée
 	}
 	play_all_sounds_before_previous_dialogue(target_script_index);

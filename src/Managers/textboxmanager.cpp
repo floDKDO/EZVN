@@ -2,7 +2,7 @@
 #include "game.h"
 
 TextboxManager::TextboxManager(sdl::Renderer& renderer, Game& game)
-	: last_time_(0), which_dialogue_from_where_({Where::none, false, false}), skip_mode_(false), auto_mode_(false), hide_ui_textbox_(false), textbox_(renderer), ui_manager_(game.audio_manager_),
+	: last_time_(0), which_dialogue_from_where_({Where::none, false, false}), skip_mode_(false), auto_mode_(false), hide_ui_textbox_(false), where_("bottom"), textbox_(renderer), ui_manager_(game.audio_manager_),
 	history_button_(nullptr), skip_toggle_(nullptr), auto_toggle_(nullptr), save_button_(nullptr), load_button_(nullptr), settings_button_(nullptr), game_(game), renderer_(renderer)
 {
 	build_ui_elements(renderer);
@@ -41,6 +41,8 @@ void TextboxManager::build_ui_elements(sdl::Renderer& renderer)
 
 void TextboxManager::set_position_ui_textbox(std::string_view where)
 {
+	where_ = where;
+
 	textbox_.set_textbox_position(where);
 
 	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
@@ -167,7 +169,6 @@ void TextboxManager::update_skip_auto_modes()
 	if(skip_mode_)
 	{
 		which_dialogue_from_where_ = {Where::next, false, false};
-		//show_next_dialogue(); 
 	}
 
 	//Dialogues
@@ -185,15 +186,13 @@ void TextboxManager::update_skip_auto_modes()
 			if(now > last_time_ + textbox_.get_text_delay())
 			{
 				which_dialogue_from_where_ = {Where::next, false, true};
-				//show_next_dialogue();
-
 				last_time_ = SDL_GetTicks64();
 			}
 		}
 	}
 }
 
-void TextboxManager::update(Script::InfoTextbox& info_dialogue, const Character& character)
+void TextboxManager::update(Script::InfoTextbox& info_textbox, const Character& character)
 {
 	//update_skip_auto_modes();
 
@@ -203,30 +202,33 @@ void TextboxManager::update(Script::InfoTextbox& info_dialogue, const Character&
 		textbox_.update();
 	}
 
-	if(info_dialogue.t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE)
+	if(info_textbox.t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE)
 	{
-		std::cout << "INFO: " << std::boolalpha << (which_dialogue_from_where_.which_dialogue_ == TextboxManager::Where::none) << std::endl;
-
 		if(which_dialogue_from_where_.which_dialogue_ == Where::none && !textbox_.is_first_dialogue_)
 		{
 			return;
 		}
 
-		std::cout << "*************************PERSO: " << info_dialogue.character_variable_ << ", texte: " << info_dialogue.t_.textbox_command_value_ << std::endl;
-		textbox_.show_new_dialogue(info_dialogue.t_.textbox_command_value_, character.properties_.name_, skip_mode_, which_dialogue_from_where_.wait_for_end_of_dialogue_);
+		std::cout << "*************************PERSO: " << info_textbox.character_variable_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
+		textbox_.show_new_dialogue(info_textbox.t_.textbox_command_value_, character.properties_.name_, skip_mode_, which_dialogue_from_where_.wait_for_end_of_dialogue_);
 		textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 		textbox_.change_namebox(character.properties_.namebox_path_, renderer_);
 		textbox_.change_namebox_text_color(character.properties_.namebox_text_color_);
 		//which_dialogue_from_where_ = {Where::none, false, false};
+
+		if(!skip_mode_)
+		{
+			which_dialogue_from_where_ = {Where::none, false, false};
+		}
 	}
-	else if(info_dialogue.t_.textbox_command_kind_ == Script::TextboxCommandKind::MOVE_TEXTBOX)
+	else if(info_textbox.t_.textbox_command_kind_ == Script::TextboxCommandKind::MOVE_TEXTBOX)
 	{
-		set_position_ui_textbox(info_dialogue.t_.textbox_command_value_);
+		set_position_ui_textbox(info_textbox.t_.textbox_command_value_);
 	}
 
-	if(!skip_mode_)
+	if(where_.empty())
 	{
-		which_dialogue_from_where_ = {Where::none, false, false};
+		set_position_ui_textbox("bottom"); //TODO : hardcodé
 	}
 }
 
@@ -234,4 +236,5 @@ void TextboxManager::reset()
 {
 	textbox_.text_.text_ = "";
 	textbox_.is_first_dialogue_ = true;
+	where_ = "";
 }

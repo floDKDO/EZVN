@@ -12,7 +12,7 @@ class InGame : public GameState
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 
-		void update_characters_dialogue(Script::InfoTextbox& info_dialogue);
+		void update_characters_dialogue(Script::InfoTextbox& info_textbox);
 		void update_skip_auto_modes();
 
 		ScriptRunner script_runner_;

@@ -20,7 +20,7 @@ void InGame::draw(sdl::Renderer& renderer)
 	script_runner_.draw(renderer);
 }
 
-void InGame::update_characters_dialogue(Script::InfoTextbox& info_dialogue)
+void InGame::update_characters_dialogue(Script::InfoTextbox& info_textbox)
 {
 	//if(which_dialogue_from_where_.which_dialogue_ == ScriptRunner::Where::none) //TODO : ajouter && !textbox_.is_first_dialogue_ ??
 	//{
@@ -33,9 +33,9 @@ void InGame::update_characters_dialogue(Script::InfoTextbox& info_dialogue)
 		value_character.properties_.is_speaking_ = false;
 	}*/
 
-	//std::cout << "PERSO: " << info_dialogue.character_variable_ << ", texte: " << info_dialogue.t_ << std::endl;
+	//std::cout << "PERSO: " << info_textbox.character_variable_ << ", texte: " << info_textbox.t_ << std::endl;
 
-	//Character& character = character_manager_.active_characters_.at(info_dialogue.character_variable_);
+	//Character& character = character_manager_.active_characters_.at(info_textbox.character_variable_);
 	/*character.properties_.is_speaking_ = true;*/ //TODO : attention : conflit avec l'autofocus
 }
 
