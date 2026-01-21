@@ -21,10 +21,13 @@ Game::Game()
 
 	renderer_.set_logical_size(constants::window_width_, constants::window_height_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
+}
 
+void Game::init_game_states()
+{
 	game_states_map_.insert({constants::ingame_unique_id_, std::make_unique<InGame>(*this, renderer_)});
-	game_states_map_.insert({constants::main_menu_unique_id_, std::make_unique<MainMenu>(*this, "img/backgrounds/night.png", renderer_)});
-	game_states_map_.insert({constants::settings_menu_unique_id_, std::make_unique<SettingsMenu>(*this, "img/backgrounds/night.png", renderer_)});
+	game_states_map_.insert({constants::main_menu_unique_id_, std::make_unique<MainMenu>(*this, "img/backgrounds/night.png", renderer_)}); //TODO : pas ouf le paramètre de l'image dans le constructeur
+	game_states_map_.insert({constants::settings_menu_unique_id_, std::make_unique<SettingsMenu>(*this, "img/backgrounds/night.png", renderer_)}); //TODO : pas ouf le paramètre de l'image dans le constructeur
 	push_state(game_states_map_.at(constants::main_menu_unique_id_).get());
 }
 
@@ -37,6 +40,9 @@ void Game::run()
 	Uint64 begin_current_frame = 0;
 	Uint64 end_current_frame = 0;
 	unsigned int frame_count = 0;
+
+	//TODO : possibilité de mettre ce code ici (utilité : script_information_ est initialisé dans le constructeur de ScriptRunner)
+	init_game_states();
 
 	while(window_is_open_)
 	{

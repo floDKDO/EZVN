@@ -6,6 +6,8 @@
 #include "Managers/soundmanager.h"
 #include "Managers/backgroundmanager.h"
 
+#include <set>
+
 class ScriptRunner
 {
 	public:
@@ -17,10 +19,16 @@ class ScriptRunner
 
 		ScriptRunner(Game& game, sdl::Renderer& renderer);
 
+		void init_dialogues_script_index();
+		std::optional<size_t> get_script_index_of_previous_dialogue();
+		size_t get_script_index_of_first_dialogue();
+
 		void increment_script_index();
 		void decrement_script_index();
 		bool is_current_script_index_a_dialogue();
-		bool move_dialogue(TextboxManager::Where where, bool is_from_mouse_wheel_);
+		bool is_script_index_a_dialogue(size_t script_index);
+		void save_current_script_index_when_scroll_back();
+		void move_dialogue(TextboxManager::Where where, bool is_from_mouse_wheel_);
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
@@ -31,11 +39,12 @@ class ScriptRunner
 		void handle_music_when_scroll_back(size_t target_script_index);
 
 		size_t current_script_index_;
-		size_t previous_script_index_;
 		ScriptIndexWhenPrev script_index_when_prev_;
 
 	private:
 		Script& script_;
+
+		std::set<size_t> dialogues_script_index_;
 
 		bool init_;
 

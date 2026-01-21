@@ -22,6 +22,7 @@ class Game
 	public:
 		Game();
 
+		void init_game_states();
 		void run();
 
 		void request_push_state(std::string_view unique_id);
