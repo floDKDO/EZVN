@@ -26,7 +26,7 @@ Slider::Slider(const unsigned int min_value, const unsigned int max_value, const
 bool Slider::is_mouse_on_handle(const int mouse_x, const int mouse_y) const
 {
 	float logical_x, logical_y;
-	SDL_RenderWindowToLogical(renderer_.fetch(), mouse_x, mouse_y, &logical_x, &logical_y);
+	renderer_.window_to_logical(mouse_x, mouse_y, &logical_x, &logical_y);
 
 	return (handle_.y + handle_.h > logical_y
 		 && handle_.y < logical_y

@@ -120,4 +120,17 @@ void Renderer::draw_rect(const SDL_Rect* rect)
 	}
 }
 
+void Renderer::window_to_logical(int window_x, int window_y, float* logical_x, float* logical_y)
+{
+	SDL_RenderWindowToLogical(renderer_, window_x, window_y, logical_x, logical_y);
+}
+
+void Renderer::set_clip_rect(const SDL_Rect* rect)
+{
+	if(SDL_RenderSetClipRect(renderer_, rect) < 0)
+	{
+		SDL_Log("(SDL_RenderSetClipRect) %s\n", SDL_GetError());
+	}
+}
+
 }

@@ -15,7 +15,7 @@ class ButtonGroup : public Ui
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		void handle_events(const SDL_Event& e) override;
+		void handle_events(const SDL_Event& e) /*override*/;
 		std::vector<Ui*> get_navigation_nodes() override;
 
 		void buttongroup_function(Ui* ui);

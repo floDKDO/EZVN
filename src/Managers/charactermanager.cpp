@@ -103,6 +103,14 @@ void CharacterManager::update(const Script::InfoCharacter& info_character)
 	}
 }
 
+void CharacterManager::update_characters()
+{
+	for(auto& [key_character_variable, value_character] : active_characters_)
+	{
+		value_character.update();
+	}
+}
+
 void CharacterManager::update_characters_dialogue(const Script::InfoTextbox& info_textbox)
 {
 	//if(which_dialogue_from_where_.which_dialogue_ == ScriptRunner::Where::none) //TODO : ajouter && !textbox_.is_first_dialogue_ ??

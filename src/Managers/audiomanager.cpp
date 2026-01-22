@@ -45,7 +45,10 @@ void AudioManager::fade_out_music(int ms)
 void AudioManager::set_volume_music(int volume)
 {
 	global_music_volume_ = volume;
-	sdl::music::volume(int(current_music_->volume_multiplier_ * global_music_volume_));
+	if(current_music_ != nullptr)
+	{
+		sdl::music::volume(int(current_music_->volume_multiplier_ * global_music_volume_));
+	}
 }
 
 void AudioManager::play_sound(Sound& sound, int channel, bool loop)

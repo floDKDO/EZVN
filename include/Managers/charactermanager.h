@@ -15,6 +15,7 @@ class CharacterManager
 		void sort_characters_zorder();
 		void draw(sdl::Renderer& renderer);
 		void update(const Script::InfoCharacter& info_character);
+		void update_characters();
 		void update_characters_dialogue(const Script::InfoTextbox& info_textbox);
 		void update_autofocus(const Script::InfoAutofocus& info_autofocus);
 		void reset();

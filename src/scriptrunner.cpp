@@ -101,6 +101,22 @@ void ScriptRunner::move_dialogue(TextboxManager::Where where, bool is_from_mouse
 	//std::cout << "APRES: " << current_script_index_ << std::endl;
 }
 
+void ScriptRunner::init_to_first_dialogue()
+{
+	if(!init_)
+	{
+		if(!is_current_script_index_a_dialogue())
+		{
+			textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::next, false, false};
+		}
+		else
+		{
+			textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::none, false, false}; //TODO : utile ??
+			init_ = true;
+		}
+	}
+}
+
 void ScriptRunner::handle_events(const SDL_Event& e)
 {
 	textbox_manager_.handle_events(e);
@@ -163,7 +179,7 @@ void ScriptRunner::apply_line(size_t script_index)
 
 void ScriptRunner::update()
 {
-	std::cout << "CURRENT: " << current_script_index_ << std::endl;
+	//std::cout << "CURRENT: " << current_script_index_ << std::endl;
 	//std::cout << script_index_when_prev_.saved_script_index_ << std::endl;
 	//std::cout << std::boolalpha << autofocus_manager_.autofocus_ << std::endl;
 
@@ -175,29 +191,11 @@ void ScriptRunner::update()
 	textbox_manager_.update_skip_auto_modes(); //car doit être exécuté avant move_dialogue()
 	move_dialogue(textbox_manager_.which_dialogue_from_where_.which_dialogue_, textbox_manager_.which_dialogue_from_where_.is_from_mouse_wheel_);
 
-	if(!init_)
-	{
-		//std::cout << current_script_index_ << " et " << std::boolalpha << (std::holds_alternative<Script::InfoCharacter>(script_.script_information_[current_script_index_])) << std::endl
-		
-		if(!is_current_script_index_a_dialogue())
-		{
-			textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::next, false, false};
-		}
-		else
-		{
-			textbox_manager_.which_dialogue_from_where_ = {TextboxManager::Where::none, false, false}; //TODO : utile ??
-			init_ = true;
-		}
-	}
-
+	init_to_first_dialogue(); //doit être après move_dialogue()
 	apply_line(current_script_index_);
 	//move_dialogue(textbox_manager_.which_dialogue_from_where_.which_dialogue_, textbox_manager_.which_dialogue_from_where_.is_from_mouse_wheel_);
 	
-	//TODO : pas ouf placé ici...
-	for(auto& [key_character_variable, value_character] : character_manager_.active_characters_)
-	{
-		value_character.update();
-	}
+	character_manager_.update_characters();
 }
 
 void ScriptRunner::play_all_sounds_before_previous_dialogue(size_t target_script_index)
@@ -246,6 +244,7 @@ void ScriptRunner::rebuild()
 	sound_manager_.reset();
 	background_manager_.reset();
 
+	//TODO : mettre dans une fonction
 	size_t target_script_index = get_script_index_of_previous_dialogue().value();
 	for(size_t i = 0; i <= target_script_index; ++i)
 	{

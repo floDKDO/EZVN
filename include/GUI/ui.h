@@ -93,6 +93,7 @@ class Ui
 		bool mouse_was_on_ui_before_drag_;
 		bool wants_text_input_;
 		bool pointer_on_ui_when_pointer_up_;
+		bool callback_called_when_pointer_up_;
 
 	protected:
 		Ui(sdl::Renderer& renderer);

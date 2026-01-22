@@ -3,6 +3,7 @@
 #include "gamestate.h"
 #include "image.h"
 #include "music.h"
+#include "GUI/scrollbar.h"
 
 class MainMenu : public GameState
 {
@@ -16,6 +17,8 @@ class MainMenu : public GameState
 		void play_function(Ui* ui);
 		void settings_function(Ui* ui);
 		void confirmationpopup_quit_function(Ui* ui);
+
+		Scrollbar* scrollbar_;
 
 	private:
 		Image background_;

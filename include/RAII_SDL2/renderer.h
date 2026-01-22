@@ -28,6 +28,8 @@ class Renderer
 		void set_draw_color(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a);
 		void fill_rect(const SDL_Rect* rect);
 		void draw_rect(const SDL_Rect* rect);
+		void window_to_logical(int window_x, int window_y, float* logical_x, float* logical_y);
+		void set_clip_rect(const SDL_Rect * rect);
 
 	private:
 		SDL_Renderer* renderer_;

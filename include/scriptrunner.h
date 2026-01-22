@@ -29,6 +29,7 @@ class ScriptRunner
 		bool is_script_index_a_dialogue(size_t script_index);
 		void save_current_script_index_when_scroll_back();
 		void move_dialogue(TextboxManager::Where where, bool is_from_mouse_wheel_);
+		void init_to_first_dialogue();
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);

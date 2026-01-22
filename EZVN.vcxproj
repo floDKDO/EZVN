@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GUI\scrollbar.cpp" />
     <ClCompile Include="src\Managers\backgroundmanager.cpp" />
     <ClCompile Include="src\Managers\audiomanager.cpp" />
     <ClCompile Include="src\background.cpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="src\transition.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\GUI\scrollbar.h" />
     <ClInclude Include="include\Managers\backgroundmanager.h" />
     <ClInclude Include="include\Managers\audiomanager.h" />
     <ClInclude Include="include\background.h" />
