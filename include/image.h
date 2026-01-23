@@ -16,6 +16,7 @@ class Image : public Drawable
 
 		void init_image(std::string_view new_path, int x, int y, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
+		void update() override;
 
 		int zorder_;
 		std::string path_;

@@ -142,8 +142,6 @@ void Inputfield::draw(sdl::Renderer& renderer)
 
 void Inputfield::update()
 {
-	text_.update();
-
 	Uint64 now = SDL_GetTicks64();
 	Uint64 idle_time = now - last_input_time;
 
@@ -163,11 +161,15 @@ void Inputfield::update()
 	if(is_caret_visible_)
 	{
 		text_caret_.show();
+		text_placeholder_.update();
 	}
 	else 
 	{
 		text_caret_.hide();
 	}
+
+	text_.update();
+	text_caret_.update();
 }
 
 void Inputfield::on_typing(std::string_view text)

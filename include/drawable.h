@@ -12,6 +12,7 @@ class Drawable
 
 	public:
 		virtual void draw(sdl::Renderer& renderer) = 0;
+		virtual void update() = 0;
 
 		void show();
 		void hide();

@@ -24,3 +24,11 @@ void Background::draw(sdl::Renderer& renderer)
 		renderer.clear();
 	}
 }
+
+void Background::update()
+{
+	if(image_ != nullptr)
+	{
+		image_->update();
+	}
+}

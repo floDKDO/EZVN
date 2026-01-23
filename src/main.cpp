@@ -6,7 +6,7 @@
 
 //TODO : utiliser les bons types (ex : unsigned int, std::string_view...)
 
-//TODO : const pour les références/pointeurs en paramètre
+//TODO : const pour les références/pointeurs en paramètre (passer les vector par ref ??)
 
 //TODO : si valeur de wrap_length pas connue dans le constructeur ?
 
@@ -16,7 +16,7 @@
 
 //TODO : utilité des vector.reserve(10) ??
 
-//TODO : vérifier que je n'ai pas oublié un "override"
+//TODO : si je garde la scrollbar, créer une classe intermédiaire (ex : Scrollable) pour ne pas répéter le code du Slider
 
 //TODO : placer les définitions de types, les structs et enums au début des classes et les placer dans la bonne visibilité (ex : public)
 
@@ -34,14 +34,6 @@
 //TODO : problème de couleur pour la couleur du premier UI de chaque menu => pas d'outline ??
 //Le problème viendrait de ces deux lignes dans UiManager : current_selected_ = navigation_list_[0]; current_selected_->state_ = State::SELECTED;
 
-//TODO : Pour l'autofocus : 
-//autofocus_coloring = True
-//autofocus_filter = True
-//autofocus_zoom = True
-//autofocus_zoom_zorder_minimum_char_requirement = 2
-//autofocus_zorder = True
-//autofocus_mouth = True
-
 //TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
 
 //TODO : crash si aucun dialogue => current_script_index_ a la valeur initiale -1 ??
@@ -55,10 +47,6 @@
 //TODO : créer des variables pour les éléments de tableau utilisés à plusieurs endroits dans une même méthode
 
 //TODO : convention de nommage pour les underscores dans les noms de fichier
-
-//TODO : bloquer le changement de dialogues (auto/skip) quand on appuie sur Settings
-
-//TODO : convention pour les strings vides ("" ou std::string() ??)
 
 
 #include "Color/str.h"

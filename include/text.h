@@ -30,7 +30,7 @@ class Text : public Drawable
 		int get_height_text() const;
 
 		void draw(sdl::Renderer& renderer) override;
-		void update();
+		void update() override;
 
 		static int global_text_divisor_;
 		static int initial_text_speed_;

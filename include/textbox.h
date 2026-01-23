@@ -35,6 +35,6 @@ class Textbox
 
 		Image namebox_;
 		Text text_name_box_;
-		Image triangle_;
+		Image end_dialogue_indicator_;
 };
 

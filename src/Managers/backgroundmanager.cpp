@@ -28,6 +28,8 @@ void BackgroundManager::update(const Script::InfoBackground& info_background)
 		background_.image_.reset();
 		background_.color_ = info_background.color_;
 	}
+
+	background_.update();
 }
 
 void BackgroundManager::reset()

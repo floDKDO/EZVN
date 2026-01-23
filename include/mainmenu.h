@@ -12,6 +12,7 @@ class MainMenu : public GameState
 
 		void build_ui_elements(sdl::Renderer& renderer) override;
 		void draw(sdl::Renderer& renderer) override;
+		void update() override;
 
 		void temp_function(Ui* ui);
 		void play_function(Ui* ui);

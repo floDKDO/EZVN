@@ -11,8 +11,8 @@ class Checkable : public Ui
 		virtual void reverse_checked();
 		virtual void change_checked(bool is_checked);
 
-		virtual void on_pointer_up_hook_end(PointerEventData pointer_event_data) override;
-		virtual void on_enter_released_hook_end() override;
+		void on_pointer_up_hook_end(PointerEventData pointer_event_data) override;
+		void on_enter_released_hook_end() override;
 
 		bool is_checked_;
 		bool previous_checked_;

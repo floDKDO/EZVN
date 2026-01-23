@@ -70,16 +70,20 @@ void Image::draw(sdl::Renderer& renderer)
 	//std::cout << "HEHEHEHEHEHE " << path_ << std::endl;
 	renderer.copy(*texture_, nullptr, &(position_), angle_, nullptr, flip_);
 	//SDL_RenderCopyEx(renderer.fetch(), texture_->fetch(), nullptr, &(position_), angle_, nullptr, flip_);
+}
+
+void Image::update()
+{
 	if(animated_image_.has_value())
 	{
 		if(frame_index_ < animated_image_->fetch()->count - 1)
 		{
 			frame_index_ += 1;
 		}
-		else 
+		else
 		{
 			frame_index_ = 0;
 		}
-		texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->fetch()->frames[frame_index_]);
+		texture_ = std::make_unique<sdl::Texture>(renderer_, animated_image_->fetch()->frames[frame_index_]);
 	}
 }

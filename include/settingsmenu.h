@@ -10,6 +10,7 @@ class SettingsMenu : public GameState
 
 		void build_ui_elements(sdl::Renderer& renderer) override;
 		void draw(sdl::Renderer& renderer) override;
+		void update() override;
 
 		void previous_menu_function(Ui* ui);
 		void slider_sound_function(Ui* ui);

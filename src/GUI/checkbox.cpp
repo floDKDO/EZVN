@@ -40,7 +40,11 @@ void Checkbox::draw(sdl::Renderer& renderer)
 
 void Checkbox::update()
 {
-
+	normal_.update();
+	selected_.update();
+	pressed_.update();
+	check_mark_.update();
+	text_.update();
 }
 
 SDL_Rect Checkbox::get_rect() const

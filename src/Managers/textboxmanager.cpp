@@ -235,7 +235,7 @@ void TextboxManager::update(Script::InfoTextbox& info_textbox, const Character& 
 
 void TextboxManager::reset()
 {
-	textbox_.text_.text_ = "";
+	textbox_.text_.text_.clear();
 	textbox_.is_first_dialogue_ = true;
-	where_ = "";
+	where_.clear();
 }

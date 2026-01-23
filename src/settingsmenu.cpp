@@ -31,6 +31,12 @@ void SettingsMenu::draw(sdl::Renderer& renderer)
 	GameState::draw(renderer);
 }
 
+void SettingsMenu::update()
+{
+	background_.update();
+	GameState::update();
+}
+
 void SettingsMenu::previous_menu_function([[maybe_unused]] Ui* ui)
 {
 	std::cout << "Pressed => go back to previous menu!" << std::endl;

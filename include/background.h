@@ -12,6 +12,7 @@ class Background
 		Background(Color color);
 
 		void draw(sdl::Renderer& renderer);
+		void update();
 
 		std::unique_ptr<Image> image_;
 		Color color_;

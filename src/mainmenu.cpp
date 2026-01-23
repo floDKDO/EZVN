@@ -39,6 +39,12 @@ void MainMenu::draw(sdl::Renderer& renderer)
 	GameState::draw(renderer);
 }
 
+void MainMenu::update()
+{
+	background_.update();
+	GameState::update();
+}
+
 void MainMenu::temp_function([[maybe_unused]] Ui* ui)
 {
 	std::cout << "Pressed!\n";

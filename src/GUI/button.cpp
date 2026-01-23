@@ -34,7 +34,10 @@ void Button::draw(sdl::Renderer& renderer)
 
 void Button::update()
 {
-
+	text_.update();
+	normal_.update();
+	selected_.update();
+	pressed_.update();
 }
 
 SDL_Rect Button::get_rect() const

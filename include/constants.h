@@ -5,7 +5,6 @@
 #include <string_view>
 
 //TODO : centrer les boutons du menu principal
-//TODO : text_.update() partout
 
 namespace constants
 {

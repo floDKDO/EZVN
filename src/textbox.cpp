@@ -13,7 +13,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""), 
 	namebox_(constants::namebox_image_, 0, 0, renderer),
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
-	triangle_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
+	end_dialogue_indicator_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {
 	set_textbox_position("bottom"); //TODO : hardcodé
 }
@@ -78,8 +78,8 @@ void Textbox::set_textbox_position(std::string_view where)
 
 	text_.wrap_length_ = textbox_.position_.w - (constants::textbox_text_x_delta_ * 2);
 
-	triangle_.position_.x = textbox_.position_.x + textbox_.position_.w + constants::textbox_end_dialogue_indicator_x_delta_;
-	triangle_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_;
+	end_dialogue_indicator_.position_.x = textbox_.position_.x + textbox_.position_.w + constants::textbox_end_dialogue_indicator_x_delta_;
+	end_dialogue_indicator_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_;
 }
 
 void Textbox::show_new_dialogue(std::string_view new_dialogue, std::string speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)
@@ -92,8 +92,8 @@ void Textbox::show_new_dialogue(std::string_view new_dialogue, std::string speak
 		
 		text_.is_finished_ = false;
 		text_.index_dialogue_ = 0;
-		text_.text_ = "";
-		text_.text_dialogue_ = "";
+		text_.text_.clear();
+		text_.text_dialogue_.clear();
 		text_.text_ = new_dialogue;
 		text_.is_animated_ = !in_skip_mode;
 
@@ -155,7 +155,7 @@ void Textbox::draw(sdl::Renderer& renderer)
 	text_.draw(renderer);
 	if(text_.is_finished_)
 	{
-		triangle_.draw(renderer);
+		end_dialogue_indicator_.draw(renderer);
 	}
 }
 
@@ -170,14 +170,19 @@ void Textbox::update()
 	Uint64 now = SDL_GetTicks64(); 
 	if(text_.is_finished_)
 	{
-		if(now - triangle_.last_time_ > 500)
+		if(now - end_dialogue_indicator_.last_time_ > 500)
 		{
-			triangle_.show();
+			end_dialogue_indicator_.show();
 		}
-		if(now - triangle_.last_time_ > 1000) 
+		if(now - end_dialogue_indicator_.last_time_ > 1000)
 		{
-			triangle_.hide();
-			triangle_.last_time_ = SDL_GetTicks64();
+			end_dialogue_indicator_.hide();
+			end_dialogue_indicator_.last_time_ = SDL_GetTicks64();
 		}
 	}
+
+	text_name_box_.update();
+	textbox_.update();
+	namebox_.update();
+	end_dialogue_indicator_.update();
 }

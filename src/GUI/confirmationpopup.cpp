@@ -41,6 +41,8 @@ void ConfirmationPopUp::update()
 		text_.update();
 		yes_.update();
 		no_.update();
+		frame_.update();
+		background_.update();
 	}
 }
 
