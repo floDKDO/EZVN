@@ -6,7 +6,7 @@
 namespace sdl
 {
 
-Renderer::Renderer(Window& window, const int index, const Uint32 flags) //SDL_CreateRenderer()
+Renderer::Renderer(Window& window, int index, Uint32 flags) //SDL_CreateRenderer()
 {
 	if((renderer_ = SDL_CreateRenderer(window.fetch(), index, flags)) == nullptr)
 	{
@@ -80,7 +80,7 @@ void Renderer::present() const
 	SDL_RenderPresent(renderer_);
 }
 
-void Renderer::set_logical_size(const int w, const int h) const
+void Renderer::set_logical_size(int w, int h) const
 {
 	if(SDL_RenderSetLogicalSize(renderer_, w, h) < 0)
 	{
@@ -88,7 +88,7 @@ void Renderer::set_logical_size(const int w, const int h) const
 	}
 }
 
-void Renderer::set_draw_blend_mode(const SDL_BlendMode blend_mode) const
+void Renderer::set_draw_blend_mode(SDL_BlendMode blend_mode) const
 {
 	if(SDL_SetRenderDrawBlendMode(renderer_, blend_mode) < 0)
 	{
@@ -96,7 +96,7 @@ void Renderer::set_draw_blend_mode(const SDL_BlendMode blend_mode) const
 	}
 }
 
-void Renderer::set_draw_color(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a)
+void Renderer::set_draw_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
 	if(SDL_SetRenderDrawColor(renderer_, r, g, b, a) < 0)
 	{

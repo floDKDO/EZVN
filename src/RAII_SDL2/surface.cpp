@@ -5,7 +5,7 @@
 namespace sdl
 {
 
-Surface::Surface(Font& font, const std::string_view text, const SDL_Color fg, const Uint32 wrap_length)
+Surface::Surface(Font& font, std::string_view text, SDL_Color fg, Uint32 wrap_length)
 {
 	if((surface_ = TTF_RenderUTF8_Blended_Wrapped(font.fetch(), text.data(), fg, wrap_length)) == nullptr)
 	{
@@ -13,7 +13,7 @@ Surface::Surface(Font& font, const std::string_view text, const SDL_Color fg, co
 	}
 }
 
-Surface::Surface(const std::string_view file)
+Surface::Surface(std::string_view file)
 {
 	if((surface_ = IMG_Load(file.data())) == nullptr)
 	{
@@ -57,7 +57,7 @@ SDL_Surface* Surface::fetch() const
 	return surface_;
 }
 
-void Surface::set_blend_mode(const SDL_BlendMode blend_mode) const
+void Surface::set_blend_mode(SDL_BlendMode blend_mode) const
 {
 	if(SDL_SetSurfaceBlendMode(surface_, blend_mode) < 0)
 	{

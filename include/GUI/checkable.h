@@ -19,6 +19,6 @@ class Checkable : public Ui
 		CheckableGroup* checkable_group_;
 
 	protected:
-		Checkable(const bool is_checked, sdl::Renderer& renderer);
+		Checkable(bool is_checked, sdl::Renderer& renderer);
 };
 

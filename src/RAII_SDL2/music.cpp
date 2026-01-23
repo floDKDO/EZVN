@@ -6,7 +6,7 @@
 namespace sdl
 {
 
-Music::Music(const std::string_view file) //Mix_LoadMUS
+Music::Music(std::string_view file) //Mix_LoadMUS
 {
 	if((music_ = Mix_LoadMUS(file.data())) == nullptr)
 	{
@@ -55,7 +55,7 @@ bool music::playing()
 	return Mix_PlayingMusic();
 }
 
-void music::fade_in(sdl::Music& music, const bool loop, const int ms, const int volume)
+void music::fade_in(sdl::Music& music, bool loop, int ms, int volume)
 {
 	int loops;
 	if(loop)
@@ -75,7 +75,7 @@ void music::fade_in(sdl::Music& music, const bool loop, const int ms, const int 
 	}
 }
 
-void music::fade_out(const int ms) 
+void music::fade_out(int ms) 
 {
 	Mix_FadeOutMusic(ms);
 }
@@ -95,12 +95,12 @@ void music::resume()
 	Mix_ResumeMusic();
 }
 
-void music::volume(const int volume)
+void music::volume(int volume)
 {
 	Mix_VolumeMusic(volume);
 }
 
-void music::set_position(const double position)
+void music::set_position(double position)
 {
 	if(Mix_SetMusicPosition(position) == -1)
 	{

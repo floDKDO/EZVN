@@ -8,7 +8,7 @@ namespace sdl
 class SDLMixer
 {
 	public:
-		explicit SDLMixer(const int flags);
+		explicit SDLMixer(int flags);
 		SDLMixer(const SDLMixer& sdl_mixer) = delete;
 		SDLMixer(SDLMixer&& sdl_mixer) = delete;
 		SDLMixer& operator=(const SDLMixer& sdl_mixer) = delete;

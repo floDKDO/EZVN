@@ -6,11 +6,11 @@
 int Text::global_text_divisor_ = 45;
 int Text::initial_text_speed_ = 500;
 
-Text::Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer)
+Text::Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer)
 	: Text(text, color, font_path, font_size, x, y, renderer, false, 0)
 {}
 
-Text::Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, bool is_animated, const Uint32 wrap_length)
+Text::Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer, bool is_animated, Uint32 wrap_length)
 	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
 	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_),
 	outline_size_(constants::text_outline_size_), font_outline_(create_outline()),
@@ -121,7 +121,7 @@ void Text::unset_all()
 	font_style_ = TTF_STYLE_NORMAL;
 }
 
-int Text::get_width_one_char(const char c) const
+int Text::get_width_one_char(char c) const
 {
 	std::string s(1, c);
 	int w;
@@ -136,7 +136,7 @@ int Text::get_width_text() const
 	return w;
 }
 
-int Text::get_height_one_char(const char c) const
+int Text::get_height_one_char(char c) const
 {
 	std::string s(1, c);
 	int h;

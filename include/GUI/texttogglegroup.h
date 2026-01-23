@@ -8,12 +8,12 @@ template<size_t N>
 class TextToggleGroup : public CheckableGroup
 {
 	public:
-		TextToggleGroup(const std::string_view top_text, const  std::vector<std::string> texts, const int x, const int y, const bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
+		TextToggleGroup(std::string_view top_text, std::vector<std::string> texts, int x, int y, bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions);
 };
 
 
 template<size_t N>
-TextToggleGroup<N>::TextToggleGroup(const std::string_view top_text, const std::vector<std::string> texts, const int x, const int y, const bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
+TextToggleGroup<N>::TextToggleGroup(std::string_view top_text, std::vector<std::string> texts, int x, int y, bool only_one_has_to_be_checked, sdl::Renderer& renderer, std::vector<std::function<void(Ui* ui)>> callback_functions)
 	: CheckableGroup(N, only_one_has_to_be_checked, top_text, x, y, renderer)
 {
 	SDL_assert(texts.size() == N && callback_functions.size() == N);

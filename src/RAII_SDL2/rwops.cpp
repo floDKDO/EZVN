@@ -5,7 +5,7 @@
 namespace sdl
 {
 
-RWops::RWops(const std::string_view file, const std::string_view mode) //SDL_RWFromFile
+RWops::RWops(std::string_view file, std::string_view mode) //SDL_RWFromFile
 {
 	if((rwops_ = SDL_RWFromFile(file.data(), mode.data())) == nullptr)
 	{

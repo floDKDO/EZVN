@@ -7,7 +7,7 @@ Script::Script(sdl::Renderer& renderer)
 }
 
 //Dialogues
-void Script::insert_dialogue(const std::string_view character_variable, const std::string_view dialogue)
+void Script::insert_dialogue(std::string_view character_variable, std::string_view dialogue)
 {
 	InfoTextbox info_textbox;
 	info_textbox.character_variable_ = character_variable;
@@ -18,7 +18,7 @@ void Script::insert_dialogue(const std::string_view character_variable, const st
 }
 
 //Character
-void Script::show_character(const std::string_view character_variable, const std::optional<std::string> transform_name, const std::optional<int> zorder)
+void Script::show_character(std::string_view character_variable, std::optional<std::string> transform_name, std::optional<int> zorder)
 {
 	InfoCharacter info_character;
 	info_character.character_variable_ = character_variable;
@@ -39,7 +39,7 @@ void Script::show_character(const std::string_view character_variable, const std
 }
 
 //Character
-void Script::hide_character(const std::string_view character_variable)
+void Script::hide_character(std::string_view character_variable)
 {
 	//TODO : garder ??
 	/*Character* character = is_character_active(character_variable);
@@ -56,7 +56,7 @@ void Script::hide_character(const std::string_view character_variable)
 }
 
 //Character
-void Script::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
+void Script::rename_character(std::string_view character_variable, std::string_view new_character_name)
 {
 	InfoCharacter info_character;
 	info_character.character_variable_ = character_variable;
@@ -64,13 +64,13 @@ void Script::rename_character(const std::string_view character_variable, const s
 	script_information_.push_back(InfoCharacter(info_character));
 }
 
-void Script::add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
+void Script::add_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path, Color namebox_text_color, std::string_view textbox_path, std::string_view namebox_path)
 {
 	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
 }
 
 //Character
-void Script::insert_textbox(const std::string_view character_variable, const std::string_view textbox_path)
+void Script::insert_textbox(std::string_view character_variable, std::string_view textbox_path)
 {
 	InfoCharacter info_character;
 	info_character.character_variable_ = character_variable;
@@ -79,7 +79,7 @@ void Script::insert_textbox(const std::string_view character_variable, const std
 }
 
 //Character
-void Script::insert_namebox(const std::string_view character_variable, const std::string_view namebox_path)
+void Script::insert_namebox(std::string_view character_variable, std::string_view namebox_path)
 {
 	InfoCharacter info_character;
 	info_character.character_variable_ = character_variable;
@@ -88,7 +88,7 @@ void Script::insert_namebox(const std::string_view character_variable, const std
 }
 
 //Character
-void Script::insert_namebox_text_color(const std::string_view character_variable, Color namebox_text_color)
+void Script::insert_namebox_text_color(std::string_view character_variable, Color namebox_text_color)
 {
 	InfoCharacter info_character;
 	info_character.character_variable_ = character_variable;
@@ -97,7 +97,7 @@ void Script::insert_namebox_text_color(const std::string_view character_variable
 }
 
 //Textbox
-void Script::move_textbox(const std::string_view where)
+void Script::move_textbox(std::string_view where)
 {
 	InfoTextbox info_textbox;
 	info_textbox.character_variable_ = "Narrator"; //TODO : garder Narrator ??
@@ -108,7 +108,7 @@ void Script::move_textbox(const std::string_view where)
 }
 
 //Background
-void Script::insert_background(const std::string_view background_path)
+void Script::insert_background(std::string_view background_path)
 {
 	script_information_.push_back(InfoBackground(Background(background_path, renderer_)));
 }
@@ -120,7 +120,7 @@ void Script::insert_background(Color color)
 }
 
 //Sounds
-void Script::play_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop)
+void Script::play_sound(std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop)
 {
 	script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, loop, channel}, Sound{sdl::Chunk(sound_path), volume_multiplier}))); //TODO : std::make_pair a l'air obligatoire ici
 }
@@ -133,7 +133,7 @@ void Script::stop_sound(int fadeout_length, int channel)
 }
 
 //Musics
-void Script::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
+void Script::play_music(std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
 	script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, loop}, Music{sdl::Music(music_path), volume_multiplier}))); //TODO : std::make_pair a l'air obligatoire ici
 }

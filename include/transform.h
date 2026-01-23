@@ -13,13 +13,13 @@ class Transform
 	//TODO : on show/replace/hide => https://www.renpy.org/doc/html/transforms.html#external-atl-events
 	public:
 		Transform();
-		Transform(const std::string transform_name, const int number_of_transform_steps);
+		Transform(std::string transform_name, int number_of_transform_steps);
 
 		std::string transform_to_focus();
 		std::string transform_to_unfocus();
 
-		void create_transform(const std::string transform_name, bool is_visible);
-		void show_transform(const std::string transform_name, Image& image);
+		void create_transform(std::string transform_name, bool is_visible);
+		void show_transform(std::string transform_name, Image& image);
 
 		bool is_character_visible_;
 		std::string transform_name_;
@@ -28,7 +28,7 @@ class Transform
 	private:
 		struct TransformAllSteps
 		{
-			TransformAllSteps(const int number_of_transform_steps)
+			TransformAllSteps(int number_of_transform_steps)
 				: current_step_number_(0), transform_finished_(false), number_of_transform_steps_(number_of_transform_steps), transform_steps_(number_of_transform_steps)
 			{}
 
@@ -38,7 +38,7 @@ class Transform
 			std::vector<TransformStep> transform_steps_;
 		};
 
-		void tcommon(const int xpos, Image& image);
+		void tcommon(int xpos, Image& image);
 		void t11(Image& image);
 		void t21(Image& image);
 		void t22(Image& image);
@@ -55,7 +55,7 @@ class Transform
 		void t54(Image& image);
 		void t55(Image& image);
 
-		void focus_common(const int xpos, Image& image);
+		void focus_common(int xpos, Image& image);
 		void f11(Image& image);
 		void f21(Image& image);
 		void f22(Image& image);

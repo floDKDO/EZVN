@@ -7,7 +7,7 @@
 class Inputfield : public Ui
 {
 	public:
-		Inputfield(const std::string_view text_placeholder, const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Inputfield(std::string_view text_placeholder, unsigned int character_limit, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void quit_editing();
 
@@ -22,7 +22,7 @@ class Inputfield : public Ui
 		void update() override;
 		SDL_Rect get_rect() const override;
 
-		void on_typing(const std::string_view text) override;
+		void on_typing(std::string_view text) override;
 		void set_character_limit(unsigned int character_limit);
 
 	private:

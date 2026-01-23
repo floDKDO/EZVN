@@ -8,7 +8,7 @@
 class Background
 {
 	public:
-		Background(const std::string_view path, sdl::Renderer& renderer);
+		Background(std::string_view path, sdl::Renderer& renderer);
 		Background(Color color);
 
 		void draw(sdl::Renderer& renderer);

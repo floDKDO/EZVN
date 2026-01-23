@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-MainMenu::MainMenu(Game& game, const std::string_view background_path, sdl::Renderer& renderer)
+MainMenu::MainMenu(Game& game, std::string_view background_path, sdl::Renderer& renderer)
 	: GameState(game), background_(background_path, 0, 0, renderer)
 {
 	build_ui_elements(renderer);

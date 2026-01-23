@@ -7,9 +7,9 @@
 class Scrollbar : public Ui
 {
 	public:
-		Scrollbar(const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Scrollbar(int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
-		bool is_mouse_on_handle(const int mouse_x, const int mouse_y) const;
+		bool is_mouse_on_handle(int mouse_x, int mouse_y) const;
 		void disable_keyboard_focus();
 		void handle_movement(int mouse_y);
 

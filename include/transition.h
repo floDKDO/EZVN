@@ -12,7 +12,7 @@ enum class TransitionName
 class Transition
 {
 	public:
-		Transition(const TransitionName transition_name);
+		Transition(TransitionName transition_name);
 
 		void draw(sdl::Renderer& renderer);
 		void update();

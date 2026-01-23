@@ -59,7 +59,7 @@ Color Color::from_string(std::string_view string_color)
     }
 }
 
-SDL_Color Color::to_SDL_Color()
+SDL_Color Color::to_SDL_Color() const
 {
     SDL_Color c = {r_, g_, b_, a_};
 	return c;

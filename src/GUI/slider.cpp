@@ -5,11 +5,11 @@
 
 const unsigned int Slider::index_rect_container_ = 0;
 
-Slider::Slider(const unsigned int min_value, const unsigned int max_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+Slider::Slider(unsigned int min_value, unsigned int max_value, int x, int y, std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Slider(min_value, max_value, (max_value + min_value) / 2, x, y, text, renderer, callback_function)
 {}
 
-Slider::Slider(const unsigned int min_value, const unsigned int max_value, const unsigned int current_value, const int x, const int y, const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+Slider::Slider(unsigned int min_value, unsigned int max_value, unsigned int current_value, int x, int y, std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
@@ -23,7 +23,7 @@ Slider::Slider(const unsigned int min_value, const unsigned int max_value, const
 	text_.position_.x += (container_.w - text_.position_.w) / 2;
 }
 
-bool Slider::is_mouse_on_handle(const int mouse_x, const int mouse_y) const
+bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y) const
 {
 	float logical_x, logical_y;
 	renderer_.window_to_logical(mouse_x, mouse_y, &logical_x, &logical_y);

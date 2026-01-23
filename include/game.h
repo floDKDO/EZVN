@@ -47,30 +47,30 @@ class Game
 		void draw();
 		void update();
 
-		void update_fps_count(const std::string_view fps) const;
+		void update_fps_count(std::string_view fps) const;
 
-		void create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path="", Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
-		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
+		void create_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path="", Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
+		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 
-		void show_character(const std::string_view character_variable, std::string transform_name, int zorder);
-		void show_character(const std::string_view character_variable, std::string transform_name);
-		void show_character(const std::string_view character_variable, int zorder);
-		void show_character(const std::string_view character_variable);
+		void show_character(std::string_view character_variable, std::string transform_name, int zorder);
+		void show_character(std::string_view character_variable, std::string transform_name);
+		void show_character(std::string_view character_variable, int zorder);
+		void show_character(std::string_view character_variable);
 
-		void hide_character(const std::string_view character_variable);
+		void hide_character(std::string_view character_variable);
 
-		void add_new_dialogue(const std::string_view character_variable, const std::string_view dialogue);
-		void add_new_dialogue(const std::string_view dialogue);
+		void add_new_dialogue(std::string_view character_variable, std::string_view dialogue);
+		void add_new_dialogue(std::string_view dialogue);
 
-		void show_background(const std::string_view background_path);
+		void show_background(std::string_view background_path);
 		void show_background(Color color);
 
 		void hide_background();
 
-		void play_sound(const std::string_view sound_path, int channel = 0, int fadein_length = 0, int fadeout_length = 0, float volume_multiplier = 1.0, bool loop = false);
+		void play_sound(std::string_view sound_path, int channel = 0, int fadein_length = 0, int fadeout_length = 0, float volume_multiplier = 1.0, bool loop = false);
 		void stop_sound(int channel = -1, int fadeout_length = 0);
 
-		void play_music(const std::string_view music_path, int fadein_length=0, int fadeout_length=0, float volume_multiplier = 1.0, bool loop = true);
+		void play_music(std::string_view music_path, int fadein_length=0, int fadeout_length=0, float volume_multiplier = 1.0, bool loop = true);
 		void stop_music(int fadeout_length=0);
 
 		void autofocus_enable();
@@ -79,11 +79,11 @@ class Game
 		void autozorder_enable();
 		void autozorder_disable();
 
-		void change_textbox(const std::string_view character_variable, const std::string_view textbox_path);
-		void change_namebox(const std::string_view character_variable, const std::string_view namebox_path);
-		void change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color);
+		void change_textbox(std::string_view character_variable, std::string_view textbox_path);
+		void change_namebox(std::string_view character_variable, std::string_view namebox_path);
+		void change_namebox_text_color(std::string_view character_variable, Color namebox_text_color);
 
-		void move_textbox(const std::string_view where);
+		void move_textbox(std::string_view where);
 
 	private:
 		void push_state(GameState* state);

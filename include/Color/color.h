@@ -16,7 +16,7 @@ class Color
         static Color from_hex(std::string_view hex_color);
         static Color from_string(std::string_view string_color);
 
-        SDL_Color to_SDL_Color();
+        SDL_Color to_SDL_Color() const;
 
         Uint8 r_, g_, b_, a_; //stored in RGBA8 format (values between 0 and 255)
 

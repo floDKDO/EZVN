@@ -1,6 +1,6 @@
 #include "transition.h"
 
-Transition::Transition(const TransitionName transition_name)
+Transition::Transition(TransitionName transition_name)
 	: transition_name_(transition_name)
 {
 

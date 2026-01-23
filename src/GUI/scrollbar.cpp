@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Scrollbar::Scrollbar(const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+Scrollbar::Scrollbar(int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), current_value_(0.0f), min_value_(0.0f), max_value_(1.0f),
 	container_({x, y, constants::slider_container_height_, constants::slider_container_width_}), 
 	container_outline_({x, y, constants::slider_container_height_, constants::slider_container_width_}),
@@ -24,7 +24,7 @@ Scrollbar::Scrollbar(const int x, const int y, sdl::Renderer& renderer, std::fun
 
 //TODO : faire garndir la barre selon ce qu'il y a dans la scrollable area ??
 
-bool Scrollbar::is_mouse_on_handle(const int mouse_x, const int mouse_y) const
+bool Scrollbar::is_mouse_on_handle(int mouse_x, int mouse_y) const
 {
 	float logical_x, logical_y;
 	renderer_.window_to_logical(mouse_x, mouse_y, &logical_x, &logical_y);

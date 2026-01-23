@@ -9,7 +9,7 @@ namespace sdl
 class Music
 {
 	public:
-		explicit Music(const std::string_view file); //Mix_LoadMUS
+		explicit Music(std::string_view file); //Mix_LoadMUS
 		Music(const Music& music) = delete;
 		Music(Music&& music);
 		Music& operator=(const Music& music) = delete;
@@ -26,13 +26,13 @@ class Music
 	{
 
 	bool playing();
-	void fade_in(sdl::Music& music, const bool loop, const int ms, const int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInMusic() => loop is a bool (true <=> -1, false <=> 0). It also has a additional parameter (volume)
-	void fade_out(const int ms);
+	void fade_in(sdl::Music& music, bool loop, int ms, int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInMusic() => loop is a bool (true <=> -1, false <=> 0). It also has a additional parameter (volume)
+	void fade_out(int ms);
 	void halt();
 	void pause();
 	void resume();
-	void volume(const int volume);
-	void set_position(const double position);
+	void volume(int volume);
+	void set_position(double position);
 	void hook_finished(void(*music_finished)());
 
 	}

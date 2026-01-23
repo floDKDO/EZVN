@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-Background::Background(const std::string_view path, sdl::Renderer& renderer)
+Background::Background(std::string_view path, sdl::Renderer& renderer)
 	: color_(Color::from_rgba8(0, 0, 0))
 {
 	image_ = std::make_unique<Image>(path, 0, 0, renderer, 0);

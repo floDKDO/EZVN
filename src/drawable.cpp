@@ -21,14 +21,14 @@ void Drawable::hide()
 	texture_->set_alpha_mod(color_.a_);
 }
 
-void Drawable::set_alpha(const Uint8 alpha)
+void Drawable::set_alpha(Uint8 alpha)
 {
 	//std::cout << "SET ALPHA ***********************************************************\n";
 	color_.a_ = alpha;
 	texture_->set_alpha_mod(color_.a_);
 }
 
-void Drawable::rotate(const double angle)
+void Drawable::rotate(double angle)
 {
 	//std::cout << "ROTATE ***********************************************************\n";
 	angle_ = angle;
@@ -64,7 +64,7 @@ int Drawable::get_ycenter() const
 	return position_.h / 2;
 }
 
-void Drawable::zoom(const float zoom)
+void Drawable::zoom(float zoom)
 {
 	//std::cout << "ZOOM ***********************************************************\n";
 
@@ -78,43 +78,43 @@ void Drawable::zoom(const float zoom)
 	position_.h = int(position_h);
 }
 
-void Drawable::resize(const int w, const int h)
+void Drawable::resize(int w, int h)
 {
 	//std::cout << "RESIZE ***********************************************************\n";
 	position_ = {position_.x, position_.y, w, h};
 }
 
-void Drawable::set_position(const int x, const int y)
+void Drawable::set_position(int x, int y)
 {
 	//std::cout << "SET POS ***********************************************************\n";
 	position_ = {x, y, position_.w, position_.h};
 }
 
-void Drawable::set_position_xcenter(const int x)
+void Drawable::set_position_xcenter(int x)
 {
 	//std::cout << "SET POS XCENTER ***********************************************************\n";
 	position_ = {x - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
 }
 
-void Drawable::set_position_ycenter(const int y)
+void Drawable::set_position_ycenter(int y)
 {
 	//std::cout << "SET POS YCENTER ***********************************************************\n";
 	position_ = {position_.x, y - std::abs(get_ycenter()), position_.w, position_.h};
 }
 
-void Drawable::set_position_xycenter(const int x, const int y)
+void Drawable::set_position_xycenter(int x, int y)
 {
 	//std::cout << "SET POS XYCENTER ***********************************************************\n";
 	position_ = {x - std::abs(get_xcenter()), y - std::abs(get_ycenter()), position_.w, position_.h};
 }
 
-void Drawable::set_position_xoffset(const int x)
+void Drawable::set_position_xoffset(int x)
 {
 	//std::cout << "SET POS XOFFSET ***********************************************************\n";
 	position_ = {initial_rect_.x + x, position_.y, position_.w, position_.h};
 }
 
-void Drawable::set_position_yoffset(const int y)
+void Drawable::set_position_yoffset(int y)
 {
 	//std::cout << "SET POS YOFFSET ***********************************************************\n";
 	position_ = {position_.x, initial_rect_.y + y, position_.w, position_.h};

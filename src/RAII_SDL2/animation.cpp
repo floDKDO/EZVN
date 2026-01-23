@@ -4,7 +4,7 @@
 namespace sdl
 {
 
-Animation::Animation(const std::string_view file) //IMG_LoadAnimation
+Animation::Animation(std::string_view file) //IMG_LoadAnimation
 {
 	sdl::RWops rwops(file, "rb");
 	if(rwops.is_gif())

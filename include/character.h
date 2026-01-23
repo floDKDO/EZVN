@@ -8,7 +8,7 @@ class Character
 	public:
 		Character(const CharacterDefinition& character_definition, sdl::Renderer& renderer);
 
-		void set_transform(const std::string transform_name);
+		void set_transform(std::string transform_name);
 		//void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 		void update();

@@ -8,7 +8,7 @@ namespace sdl
 class SDL
 {
 	public:
-		explicit SDL(const Uint32 flags);
+		explicit SDL(Uint32 flags);
 		SDL(const SDL& sdl) = delete;
 		SDL(SDL&& sdl) = delete;
 		SDL& operator=(const SDL& sdl) = delete;

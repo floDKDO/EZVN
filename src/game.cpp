@@ -174,57 +174,57 @@ void Game::update()
 	get_current_state()->update();
 }
 
-void Game::update_fps_count(const std::string_view fps) const
+void Game::update_fps_count(std::string_view fps) const
 {
 	window_.set_title(std::string(constants::game_name_) + std::string(fps));
 }
 
-void Game::create_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color, const std::string_view textbox_path, const std::string_view namebox_path)
+void Game::create_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path, Color namebox_text_color, std::string_view textbox_path, std::string_view namebox_path)
 {
 	script_.add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
 }
 
-void Game::rename_character(const std::string_view character_variable, const std::string_view new_character_name)
+void Game::rename_character(std::string_view character_variable, std::string_view new_character_name)
 {
 	script_.rename_character(character_variable, new_character_name);
 }
 
-void Game::show_character(const std::string_view character_variable, std::string transform_name, int zorder)
+void Game::show_character(std::string_view character_variable, std::string transform_name, int zorder)
 {
 	script_.show_character(character_variable, transform_name, zorder);
 }
 
-void Game::show_character(const std::string_view character_variable, std::string transform_name)
+void Game::show_character(std::string_view character_variable, std::string transform_name)
 {
 	script_.show_character(character_variable, transform_name, std::nullopt);
 }
 
-void Game::show_character(const std::string_view character_variable, int zorder)
+void Game::show_character(std::string_view character_variable, int zorder)
 {
 	script_.show_character(character_variable, std::nullopt, zorder);
 }
 
-void Game::show_character(const std::string_view character_variable)
+void Game::show_character(std::string_view character_variable)
 {
 	script_.show_character(character_variable, std::nullopt, std::nullopt);
 }
 
-void Game::hide_character(const std::string_view character_variable)
+void Game::hide_character(std::string_view character_variable)
 {
 	script_.hide_character(character_variable);
 }
 
-void Game::add_new_dialogue(const std::string_view character_variable, const std::string_view dialogue)
+void Game::add_new_dialogue(std::string_view character_variable, std::string_view dialogue)
 {
 	script_.insert_dialogue(character_variable, dialogue);
 }
 
-void Game::add_new_dialogue(const std::string_view dialogue)
+void Game::add_new_dialogue(std::string_view dialogue)
 {
 	script_.insert_dialogue("Narrator", dialogue);
 }
 
-void Game::show_background(const std::string_view background_path)
+void Game::show_background(std::string_view background_path)
 {
 	script_.insert_background(background_path);
 }
@@ -239,7 +239,7 @@ void Game::hide_background()
 	script_.insert_background(Color::from_rgba8(0, 0, 0));
 }
 
-void Game::play_sound(const std::string_view sound_path, int channel, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
+void Game::play_sound(std::string_view sound_path, int channel, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
 	script_.play_sound(sound_path, fadein_length, fadeout_length, volume_multiplier, channel, loop);
 }
@@ -249,7 +249,7 @@ void Game::stop_sound(int channel, int fadeout_length)
 	script_.stop_sound(fadeout_length, channel);
 }
 
-void Game::play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
+void Game::play_music(std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
 	script_.play_music(music_path, fadein_length, fadeout_length, volume_multiplier, loop);
 }
@@ -279,22 +279,22 @@ void Game::autozorder_disable()
 	script_.insert_autozorder(false);
 }
 
-void Game::change_textbox(const std::string_view character_variable, const std::string_view textbox_path)
+void Game::change_textbox(std::string_view character_variable, std::string_view textbox_path)
 {
 	script_.insert_textbox(character_variable, textbox_path);
 }
 
-void Game::change_namebox(const std::string_view character_variable, const std::string_view namebox_path)
+void Game::change_namebox(std::string_view character_variable, std::string_view namebox_path)
 {
 	script_.insert_namebox(character_variable, namebox_path);
 }
 
-void Game::change_namebox_text_color(const std::string_view character_variable, Color namebox_text_color)
+void Game::change_namebox_text_color(std::string_view character_variable, Color namebox_text_color)
 {
 	script_.insert_namebox_text_color(character_variable, namebox_text_color);
 }
 
-void Game::move_textbox(const std::string_view where)
+void Game::move_textbox(std::string_view where)
 {
 	script_.move_textbox(where);
 }

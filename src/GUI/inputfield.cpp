@@ -5,7 +5,7 @@
 
 const unsigned int Inputfield::index_rect_inputfield_ = 0;
 
-Inputfield::Inputfield(const std::string_view text_placeholder, const unsigned int character_limit, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+Inputfield::Inputfield(std::string_view text_placeholder, unsigned int character_limit, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Ui(renderer), 
 	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),
 	  container_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
@@ -170,7 +170,7 @@ void Inputfield::update()
 	}
 }
 
-void Inputfield::on_typing(const std::string_view text)
+void Inputfield::on_typing(std::string_view text)
 {
 	last_input_time = SDL_GetTicks64();
 	if(has_keyboard_focus_ && text_.text_.length() < character_limit_)

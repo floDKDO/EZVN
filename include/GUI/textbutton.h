@@ -17,8 +17,8 @@ enum class TextButtonKind
 class TextButton : public Ui
 {
 	public:
-		TextButton(const std::string_view text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, const TextButtonKind textbutton_kind = TextButtonKind::NORMAL);
-		//TextButton(const std::string_view text, const int x, const int y, sdl::Renderer& renderer, const std::string_view text_popup, std::function<void(Ui* ui)> callback_function, const TextButtonKind textbutton_kind = TextButtonKind::NORMAL);
+		TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, TextButtonKind textbutton_kind = TextButtonKind::NORMAL);
+		//TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::string_view text_popup, std::function<void(Ui* ui)> callback_function, TextButtonKind textbutton_kind = TextButtonKind::NORMAL);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

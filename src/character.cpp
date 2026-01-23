@@ -16,7 +16,7 @@ Character::Character(const CharacterDefinition& character_definition, sdl::Rende
 	}
 }
 
-void Character::set_transform(const std::string transform_name)
+void Character::set_transform(std::string transform_name)
 {
 	if(transform_name == "none")
 	{

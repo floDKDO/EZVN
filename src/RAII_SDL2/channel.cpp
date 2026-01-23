@@ -10,7 +10,7 @@ bool playing(int channel)
 	return Mix_Playing(channel);
 }
 
-void play_channel(sdl::Chunk& chunk, int channel, const bool loop, const int volume)
+void play_channel(sdl::Chunk& chunk, int channel, bool loop, int volume)
 {
 	int loops;
 	if(loop)
@@ -27,7 +27,7 @@ void play_channel(sdl::Chunk& chunk, int channel, const bool loop, const int vol
 	Mix_PlayChannel(channel, chunk.fetch(), loops);
 }
 
-void fade_in(sdl::Chunk& chunk, const int channel, const bool loop, const int ms, const int volume)
+void fade_in(sdl::Chunk& chunk, int channel, bool loop, int ms, int volume)
 {
 	int loops;
 	if(loop)
@@ -44,7 +44,7 @@ void fade_in(sdl::Chunk& chunk, const int channel, const bool loop, const int ms
 	Mix_FadeInChannel(channel, chunk.fetch(), loops, ms);
 }
 
-void fade_out(const int which, const int ms)
+void fade_out(int which, int ms)
 {
 	Mix_FadeOutChannel(which, ms);
 }
@@ -57,17 +57,17 @@ void halt_channel(int channel)
 	}
 }
 
-void pause(const int channel)
+void pause(int channel)
 {
 	Mix_Pause(channel);
 }
 
-void resume(const int channel)
+void resume(int channel)
 {
 	Mix_Resume(channel);
 }
 
-void volume(int channel, const int volume)
+void volume(int channel, int volume)
 {
 	Mix_Volume(channel, volume);
 }

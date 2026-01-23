@@ -3,7 +3,7 @@
 namespace sdl
 {
 
-Window::Window(const std::string_view title, const int x, const int y, const int w, const int h, const Uint32 flags) //SDL_CreateWindow
+Window::Window(std::string_view title, int x, int y, int w, int h, Uint32 flags) //SDL_CreateWindow
 	: previous_x_(x), previous_y_(y), previous_width_(w), previous_height_(h)
 {
 	if((window_ = SDL_CreateWindow(title.data(), x, y, w, h, flags)) == nullptr)
@@ -48,7 +48,7 @@ SDL_Window* Window::fetch() const
 	return window_;
 }
 
-void Window::set_title(const std::string_view title) const //SDL_SetWindowTitle
+void Window::set_title(std::string_view title) const //SDL_SetWindowTitle
 {
 	SDL_SetWindowTitle(window_, title.data());
 }
@@ -63,7 +63,7 @@ void Window::get_size(int* w, int* h) //SDL_GetWindowSize
 	SDL_GetWindowSize(window_, w, h);
 }
 
-void Window::set_size(const int w, const int h) //SDL_SetWindowSize
+void Window::set_size(int w, int h) //SDL_SetWindowSize
 {
 	SDL_SetWindowSize(window_, w, h);
 }
@@ -73,7 +73,7 @@ void Window::get_position(int* x, int* y) //SDL_GetWindowPosition
 	SDL_GetWindowPosition(window_, x, y);
 }
 
-void Window::set_position(const int x, const int y) //SDL_SetWindowPosition
+void Window::set_position(int x, int y) //SDL_SetWindowPosition
 {
 	SDL_SetWindowPosition(window_, x, y);
 }

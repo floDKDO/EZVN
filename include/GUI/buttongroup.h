@@ -11,7 +11,7 @@ template<size_t N>
 class ButtonGroup : public Ui
 {
 	public:
-		ButtonGroup(const std::vector<std::string> texts, const int y, sdl::Renderer& renderer);
+		ButtonGroup(std::vector<std::string> texts, int y, sdl::Renderer& renderer);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
@@ -26,7 +26,7 @@ class ButtonGroup : public Ui
 };
 
 template<size_t N>
-ButtonGroup<N>::ButtonGroup(const std::vector<std::string> texts, const int y, sdl::Renderer& renderer)
+ButtonGroup<N>::ButtonGroup(std::vector<std::string> texts, int y, sdl::Renderer& renderer)
 	: Ui(renderer), selected_button_(nullptr)
 {
 	SDL_assert(texts.size() == N);

@@ -8,7 +8,7 @@
 class MainMenu : public GameState
 {
 	public:
-		MainMenu(Game& game, const std::string_view background_path, sdl::Renderer& renderer);
+		MainMenu(Game& game, std::string_view background_path, sdl::Renderer& renderer);
 
 		void build_ui_elements(sdl::Renderer& renderer) override;
 		void draw(sdl::Renderer& renderer) override;

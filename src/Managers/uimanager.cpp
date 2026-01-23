@@ -50,7 +50,7 @@ void UiManager::set_elements()
 	current_selected_->state_ = State::SELECTED;
 }
 
-bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2, const Axis mode) const
+bool UiManager::is_ui1_facing_ui2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode) const
 {
 	SDL_assert(mode == Axis::X_AXIS || mode == Axis::Y_AXIS);
 
@@ -70,7 +70,7 @@ bool UiManager::is_ui1_facing_ui2(const SDL_Rect pos_ui1, const SDL_Rect pos_ui2
 	}
 }
 
-bool UiManager::is_candidate_closer(const Ui* const ui, const Ui* const candidate, const Ui* const current_best, const Axis mode) const
+bool UiManager::is_candidate_closer(Ui* ui, Ui* candidate, Ui* current_best, Axis mode) const
 {
 	SDL_assert(mode == Axis::X_AXIS || mode == Axis::Y_AXIS);
 
@@ -96,7 +96,7 @@ bool UiManager::is_candidate_closer(const Ui* const ui, const Ui* const candidat
 //ui = ui to which we assign a "select_on_*"
 //candidate = the current ui in the inner for loop
 //current_best = the "select_on_*" we try to assign to ui (up, down, left or right)
-Ui* UiManager::get_ui_facing(Ui* ui, Ui* candidate, Ui* current_best, const Axis mode) const
+Ui* UiManager::get_ui_facing(Ui* ui, Ui* candidate, Ui* current_best, Axis mode) const
 {
 	if(current_best == nullptr)
 	{

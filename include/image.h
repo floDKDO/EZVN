@@ -12,9 +12,9 @@
 class Image : public Drawable
 {
 	public:
-		Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder = constants::default_zorder_);
+		Image(std::string_view path, int x, int y, sdl::Renderer& renderer, int zorder = constants::default_zorder_);
 
-		void init_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer);
+		void init_image(std::string_view new_path, int x, int y, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
 
 		int zorder_;
@@ -36,7 +36,7 @@ class Image : public Drawable
 			BACKGROUND
 		};
 
-		std::optional<sdl::Animation> create_animation(const std::string_view path);
+		std::optional<sdl::Animation> create_animation(std::string_view path);
 
 		std::optional<sdl::Animation> animated_image_; 
 		ImageType image_type_;

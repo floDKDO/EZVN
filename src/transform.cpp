@@ -10,7 +10,7 @@ Transform::Transform()
 	: Transform("none", 0)
 {}
 
-Transform::Transform(const std::string transform_name, const int number_of_transform_steps)
+Transform::Transform(std::string transform_name, int number_of_transform_steps)
 	: is_character_visible_(false), transform_name_(transform_name), /*previous_transform_name_(transform_name_),*/ transform_({transform_name, TransformAllSteps(number_of_transform_steps)})
 {}
 
@@ -40,14 +40,14 @@ std::string Transform::transform_to_unfocus()
 	}
 }
 
-void Transform::create_transform(const std::string transform_name, bool is_visible)
+void Transform::create_transform(std::string transform_name, bool is_visible)
 {
 	transform_name_ = transform_name;
 	is_character_visible_ = is_visible; //to choose between on show and on replace
 	transform_ = {transform_name, TransformAllSteps(6)};
 }
 
-void Transform::show_transform(const std::string transform_name, Image& image)
+void Transform::show_transform(std::string transform_name, Image& image)
 {
 	if(transform_name == "t11")
 	{
@@ -187,7 +187,7 @@ void Transform::show_transform(const std::string transform_name, Image& image)
 	}
 }
 
-void Transform::tcommon(const int xpos, Image& image) 
+void Transform::tcommon(int xpos, Image& image) 
 {
 	Transform::TransformAllSteps& transform_t = transform_.second;
 
@@ -330,7 +330,7 @@ void Transform::t55(Image& image)
 	tcommon(1140, image);
 }
 
-void Transform::focus_common(const int xpos, Image& image) 
+void Transform::focus_common(int xpos, Image& image) 
 {
 	Transform::TransformAllSteps& transform_f = transform_.second;
 

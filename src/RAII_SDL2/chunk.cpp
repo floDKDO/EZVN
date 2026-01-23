@@ -6,7 +6,7 @@
 namespace sdl
 {
 
-Chunk::Chunk(const std::string_view file) //Mix_LoadWAV
+Chunk::Chunk(std::string_view file) //Mix_LoadWAV
 {
 	if((chunk_ = Mix_LoadWAV(file.data())) == nullptr)
 	{
@@ -50,7 +50,7 @@ Mix_Chunk* Chunk::fetch() const
 	return chunk_;
 }
 
-void Chunk::volume_chunk(const int volume)
+void Chunk::volume_chunk(int volume)
 {
 	Mix_VolumeChunk(chunk_, volume);
 }

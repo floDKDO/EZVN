@@ -77,26 +77,26 @@ class Script
 
 		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
 
-		void insert_dialogue(const std::string_view character_variable, const std::string_view dialogue);
+		void insert_dialogue(std::string_view character_variable, std::string_view dialogue);
 
-		void show_character(const std::string_view character_variable, const std::optional<std::string> transform_name = std::nullopt, const std::optional<int> zorder = std::nullopt);
-		void hide_character(const std::string_view character_variable);
-		void rename_character(const std::string_view character_variable, const std::string_view new_character_name);
+		void show_character(std::string_view character_variable, std::optional<std::string> transform_name = std::nullopt, std::optional<int> zorder = std::nullopt);
+		void hide_character(std::string_view character_variable);
+		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 
-		void add_character(const std::string_view character_variable, const std::string_view character_name, const std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, const std::string_view textbox_path = "", const std::string_view namebox_path = "");
+		void add_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
 
-		void insert_textbox(const std::string_view character_variable, const std::string_view textbox_path);
-		void insert_namebox(const std::string_view character_variable, const std::string_view namebox_path);
-		void insert_namebox_text_color(const std::string_view character_variable, Color namebox_text_color);
-		void move_textbox(const std::string_view where);
+		void insert_textbox(std::string_view character_variable, std::string_view textbox_path);
+		void insert_namebox(std::string_view character_variable, std::string_view namebox_path);
+		void insert_namebox_text_color(std::string_view character_variable, Color namebox_text_color);
+		void move_textbox(std::string_view where);
 
-		void insert_background(const std::string_view background_path);
+		void insert_background(std::string_view background_path);
 		void insert_background(Color color);
 
-		void play_sound(const std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop);
+		void play_sound(std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop);
 		void stop_sound(int fadeout_length, int channel);
 
-		void play_music(const std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop);
+		void play_music(std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop);
 		void stop_music(int fadeout_length);
 
 		void insert_autofocus(bool autofocus);

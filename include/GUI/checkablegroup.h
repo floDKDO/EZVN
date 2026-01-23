@@ -11,7 +11,7 @@ class CheckableGroup : public Ui
 	public:
 		virtual ~CheckableGroup() = default;
 
-		void uncheck_all_others(const Checkable* checkable_to_not_uncheck);
+		void uncheck_all_others(Checkable* checkable_to_not_uncheck);
 		void handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck);
 		void on_press(Checkable* c);
 
@@ -21,7 +21,7 @@ class CheckableGroup : public Ui
 		std::vector<Ui*> get_navigation_nodes() override;
 		
 	protected:
-		CheckableGroup(const size_t number_of_checkables, const bool only_one_has_to_be_checked, const std::string_view top_text, const int x, const int y, sdl::Renderer& renderer);
+		CheckableGroup(size_t number_of_checkables, bool only_one_has_to_be_checked, std::string_view top_text, int x, int y, sdl::Renderer& renderer);
 
 		std::vector<std::unique_ptr<Checkable>> checkables_;
 		Text top_text_;

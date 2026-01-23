@@ -8,7 +8,7 @@
 class ConfirmationPopUp : public Ui
 {
 	public:
-		ConfirmationPopUp(const std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		ConfirmationPopUp(std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

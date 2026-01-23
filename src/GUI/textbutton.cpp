@@ -6,7 +6,7 @@
 
 const unsigned int TextButton::index_rect_textbutton_ = 0;
 
-TextButton::TextButton(const std::string_view text, const int x, const int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, const TextButtonKind textbutton_kind)
+TextButton::TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, TextButtonKind textbutton_kind)
 	: Ui(renderer), 
 	  text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == TextButtonKind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == TextButtonKind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer)
 {
@@ -14,7 +14,7 @@ TextButton::TextButton(const std::string_view text, const int x, const int y, sd
 	pointer_on_ui_when_pointer_up_ = true;
 }
 
-/*TextButton::TextButton(const std::string_view text, const int x, const int y, sdl::Renderer& renderer, const std::string_view text_popup, std::function<void(Ui* ui)> callback_function, const TextButtonKind textbutton_kind)
+/*TextButton::TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::string_view text_popup, std::function<void(Ui* ui)> callback_function, TextButtonKind textbutton_kind)
 	: Ui(renderer),
 	text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == TextButtonKind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == TextButtonKind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer),
 	confirmationpopup_(std::make_unique<ConfirmationPopUp>(text_popup, renderer, callback_function))

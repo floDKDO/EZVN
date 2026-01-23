@@ -10,8 +10,8 @@ namespace sdl
 class Surface
 {
 	public:
-		Surface(Font& font, const std::string_view text, const SDL_Color fg, const Uint32 wrap_length); //TTF_RenderUTF8_Blended_Wrapped();
-		explicit Surface(const std::string_view file); //IMG_Load
+		Surface(Font& font, std::string_view text, SDL_Color fg, Uint32 wrap_length); //TTF_RenderUTF8_Blended_Wrapped();
+		explicit Surface(std::string_view file); //IMG_Load
 		Surface(const Surface& surface) = delete;
 		Surface(Surface&& surface);
 		Surface& operator=(const Surface& surface) = delete;
@@ -19,7 +19,7 @@ class Surface
 		~Surface(); //SDL_FreeSurface
 
 		SDL_Surface* fetch() const;
-		void set_blend_mode(const SDL_BlendMode blend_mode) const;
+		void set_blend_mode(SDL_BlendMode blend_mode) const;
 		void blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect) const;
 
 	private:

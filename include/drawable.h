@@ -15,9 +15,9 @@ class Drawable
 
 		void show();
 		void hide();
-		void set_alpha(const Uint8 alpha);
+		void set_alpha(Uint8 alpha);
 
-		void rotate(const double angle);
+		void rotate(double angle);
 
 		void flip_vertically();
 		void flip_horizontally();
@@ -25,14 +25,14 @@ class Drawable
 
 		int get_xcenter() const;
 		int get_ycenter() const;
-		void zoom(const float zoom);
-		void resize(const int w, const int h);
-		void set_position(const int x, const int y);
-		void set_position_xcenter(const int x);
-		void set_position_ycenter(const int y);
-		void set_position_xycenter(const int x, const int y);
-		void set_position_xoffset(const int x);
-		void set_position_yoffset(const int y);
+		void zoom(float zoom);
+		void resize(int w, int h);
+		void set_position(int x, int y);
+		void set_position_xcenter(int x);
+		void set_position_ycenter(int y);
+		void set_position_xycenter(int x, int y);
+		void set_position_xoffset(int x);
+		void set_position_yoffset(int y);
 		void set_center();
 
 		void night_filter();

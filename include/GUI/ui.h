@@ -72,7 +72,7 @@ class Ui
 		virtual void on_enter_released();
 		virtual void on_enter_released_hook_end() {}
 
-		virtual void on_typing([[maybe_unused]] const std::string_view text) { }
+		virtual void on_typing([[maybe_unused]] std::string_view text) { }
 
 
 		virtual void draw(sdl::Renderer& renderer) = 0;

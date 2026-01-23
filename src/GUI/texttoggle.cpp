@@ -5,7 +5,7 @@
 
 const unsigned int TextToggle::index_rect_texttoggle_ = 0;
 
-TextToggle::TextToggle(const std::string_view text, const int x, const int y, const bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, const TextToggleKind texttoggle_kind)
+TextToggle::TextToggle(std::string_view text, int x, int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, TextToggleKind texttoggle_kind)
 	: Checkable(is_checked, renderer), 
 	text_(text, is_checked ? constants::texttoggle_normal_checked_color_ : constants::texttoggle_normal_unchecked_color_, constants::texttoggle_font_, texttoggle_kind == TextToggleKind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : constants::texttoggle_text_size_, x, y, renderer)
 {

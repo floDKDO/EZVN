@@ -23,7 +23,7 @@ Texture::Texture(Renderer& renderer, SDL_Surface* surface) //SDL_CreateTextureFr
 	}
 }
 
-Texture::Texture(Renderer& renderer, const std::string_view file) //IMG_LoadTexture()
+Texture::Texture(Renderer& renderer, std::string_view file) //IMG_LoadTexture()
 {
 	texture_ = IMG_LoadTexture(renderer.fetch(), file.data());
 	if(texture_ == nullptr) //TODO: gérer le cas pour les backgrounds
@@ -72,7 +72,7 @@ SDL_Texture* Texture::fetch() const
 	return texture_;
 }
 
-void Texture::set_alpha_mod(const Uint8 alpha) const
+void Texture::set_alpha_mod(Uint8 alpha) const
 {
 	if(SDL_SetTextureAlphaMod(texture_, alpha) < 0)
 	{
@@ -80,7 +80,7 @@ void Texture::set_alpha_mod(const Uint8 alpha) const
 	}
 }
 
-void Texture::set_color_mod(const Uint8 r, const Uint8 g, const Uint8 b) const
+void Texture::set_color_mod(Uint8 r, Uint8 g, Uint8 b) const
 {
 	if(SDL_SetTextureColorMod(texture_, r, g, b) < 0)
 	{
@@ -88,7 +88,7 @@ void Texture::set_color_mod(const Uint8 r, const Uint8 g, const Uint8 b) const
 	}
 }
 
-void Texture::set_blend_mode(const SDL_BlendMode blend_mode) const
+void Texture::set_blend_mode(SDL_BlendMode blend_mode) const
 {
 	if(SDL_SetTextureBlendMode(texture_, blend_mode) < 0)
 	{

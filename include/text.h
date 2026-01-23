@@ -11,8 +11,8 @@
 class Text : public Drawable
 {
 	public:
-		Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer);
-		Text(const std::string_view text, Color color, const std::string_view font_path, const int font_size, const int x, const int y, sdl::Renderer& renderer, bool is_animated, const Uint32 wrap_length);
+		Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer);
+		Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer, bool is_animated, Uint32 wrap_length);
 
 		void set_italic();
 		void set_bold();
@@ -24,9 +24,9 @@ class Text : public Drawable
 		void unset_strike_through();
 		void unset_all();
 
-		int get_width_one_char(const char c) const;
+		int get_width_one_char(char c) const;
 		int get_width_text() const;
-		int get_height_one_char(const char c) const;
+		int get_height_one_char(char c) const;
 		int get_height_text() const;
 
 		void draw(sdl::Renderer& renderer) override;

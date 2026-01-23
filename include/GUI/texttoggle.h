@@ -12,7 +12,7 @@ enum class TextToggleKind
 class TextToggle : public Checkable
 {
 	public:
-		TextToggle(const std::string_view text, const int x, const int y, const bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, const TextToggleKind texttoggle_kind = TextToggleKind::NORMAL);
+		TextToggle(std::string_view text, int x, int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, TextToggleKind texttoggle_kind = TextToggleKind::NORMAL);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

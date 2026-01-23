@@ -4,13 +4,13 @@
 
 #include <iostream>
 
-Image::Image(const std::string_view path, const int x, const int y, sdl::Renderer& renderer, const int zorder)
+Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, int zorder)
 	: Drawable(renderer), zorder_(zorder), animated_image_(create_animation(path)), path_(path), frame_index_(0)
 {
 	init_image(path, x, y, renderer);
 }
 
-std::optional<sdl::Animation> Image::create_animation(const std::string_view path)
+std::optional<sdl::Animation> Image::create_animation(std::string_view path)
 {
 	sdl::RWops rwops(path, "rb");
 
@@ -24,7 +24,7 @@ std::optional<sdl::Animation> Image::create_animation(const std::string_view pat
 	}
 }
 
-void Image::init_image(const std::string_view new_path, const int x, const int y, sdl::Renderer& renderer)
+void Image::init_image(std::string_view new_path, int x, int y, sdl::Renderer& renderer)
 {
 	path_ = new_path;
 	position_.x = x;
