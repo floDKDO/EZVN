@@ -1,5 +1,4 @@
 #include "GUI/ui.h"
-#include "constants.h"
 
 #include <iostream>
 

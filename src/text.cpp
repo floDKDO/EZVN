@@ -4,7 +4,7 @@
 #include <iostream>
 
 int Text::global_text_divisor_ = 45;
-int Text::initial_text_speed_ = 500;
+const int Text::initial_text_speed_ = 500;
 
 Text::Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer)
 	: Text(text, color, font_path, font_size, x, y, renderer, false, 0)

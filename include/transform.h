@@ -1,10 +1,8 @@
 #pragma once
 
-#include "transformstep.h"
+#include "transform_step.h"
 
 #include <vector>
-#include <unordered_map>
-#include <functional>
 
 //TODO : ajouter les autres transfos (hop etc.)
 
@@ -32,9 +30,9 @@ class Transform
 				: current_step_number_(0), transform_finished_(false), number_of_transform_steps_(number_of_transform_steps), transform_steps_(number_of_transform_steps)
 			{}
 
-			int current_step_number_;
+			unsigned int current_step_number_;
 			bool transform_finished_; //TODO : membre inutilisé
-			int number_of_transform_steps_;
+			unsigned int number_of_transform_steps_;
 			std::vector<TransformStep> transform_steps_;
 		};
 

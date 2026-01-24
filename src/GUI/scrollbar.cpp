@@ -64,13 +64,13 @@ void Scrollbar::handle_movement(int mouse_y)
 
 void Scrollbar::on_pointer_down_hook_end(PointerEventData pointer_event_data)
 {
-	handle_movement(pointer_event_data.mouse_y);
+	handle_movement(pointer_event_data.mouse_y_);
 }
 
 void Scrollbar::on_drag(PointerEventData pointer_event_data)
 {
 	callback_function_(this);
-	handle_movement(pointer_event_data.mouse_y);
+	handle_movement(pointer_event_data.mouse_y_);
 }
 
 void Scrollbar::on_up_pressed()

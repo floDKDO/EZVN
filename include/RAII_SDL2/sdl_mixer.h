@@ -1,0 +1,17 @@
+#pragma once
+
+namespace sdl
+{
+
+class SDLMixer
+{
+	public:
+		explicit SDLMixer(int flags);
+		SDLMixer(const SDLMixer& sdl_mixer) = delete;
+		SDLMixer(SDLMixer&& sdl_mixer) = delete;
+		SDLMixer& operator=(const SDLMixer& sdl_mixer) = delete;
+		SDLMixer& operator=(SDLMixer&& sdl_mixer) = delete;
+		~SDLMixer();
+
+};
+}

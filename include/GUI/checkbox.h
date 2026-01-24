@@ -4,8 +4,6 @@
 #include "image.h"
 #include "text.h"
 
-#include <string>
-
 class Checkbox : public Checkable
 {
 	public:

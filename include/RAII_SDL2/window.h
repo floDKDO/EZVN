@@ -3,7 +3,7 @@
 #include "RAII_SDL2/surface.h"
 
 #include <SDL2/SDL.h>
-#include <string>
+#include <string_view>
 
 namespace sdl
 {

@@ -1,21 +1,21 @@
 #pragma once
 
-#include "pointereventdata.h"
+#include "pointer_event_data.h"
 #include "RAII_SDL2/renderer.h"
 
 #include <functional>
 #include <vector>
 
-enum class State
-{
-	NORMAL, 
-	SELECTED,
-	PRESSED
-};
-
 class Ui
 {
 	public:
+		enum class State
+		{
+			NORMAL,
+			SELECTED,
+			PRESSED
+		};
+
 		//nécessaires pour les push_back de Buttons dans ButtonGroup
 		Ui(const Ui& ui) = delete;
 		Ui(Ui&& ui) = default;
@@ -100,7 +100,7 @@ class Ui
 
 		Uint64 last_time_;
 
-		sdl::Renderer& renderer_; //do not own it !!
+		sdl::Renderer& renderer_; 
 
 		std::function<void(Ui* ui)> callback_function_;
 };

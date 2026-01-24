@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL_mixer.h>
-#include <string>
+#include <string_view>
 
 namespace sdl
 {

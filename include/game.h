@@ -1,16 +1,16 @@
 #pragma once
 
 #include "constants.h"
-#include "gamestate.h"
-#include "Managers/uimanager.h"
+#include "game_state.h"
+#include "Managers/ui_manager.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
-#include "RAII_SDL2/gamecontroller.h"
+#include "RAII_SDL2/game_controller.h"
 #include "RAII_SDL2/sdl.h"
-#include "RAII_SDL2/sdlmixer.h"
-#include "RAII_SDL2/sdlimg.h"
-#include "RAII_SDL2/sdlttf.h"
-#include "Managers/audiomanager.h"
+#include "RAII_SDL2/sdl_mixer.h"
+#include "RAII_SDL2/sdl_img.h"
+#include "RAII_SDL2/sdl_ttf.h"
+#include "Managers/audio_manager.h"
 #include "script.h"
 
 #include <stack>
@@ -29,20 +29,6 @@ class Game
 		void request_pop_state();
 		void quit_game();
 
-		enum class Action
-		{
-			push,
-			pop
-		};
-
-		struct RequestedAction
-		{
-			Action action;
-			std::string_view unique_id;
-		};
-
-		std::stack<RequestedAction> requested_actions_;
-
 		void handle_events();
 		void draw();
 		void update();
@@ -52,15 +38,15 @@ class Game
 		void create_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path="", Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
 		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 
-		void show_character(std::string_view character_variable, std::string transform_name, int zorder);
+		void show_character(std::string_view character_variable, std::string transform_name, unsigned int zorder);
 		void show_character(std::string_view character_variable, std::string transform_name);
-		void show_character(std::string_view character_variable, int zorder);
+		void show_character(std::string_view character_variable, unsigned int zorder);
 		void show_character(std::string_view character_variable);
 
 		void hide_character(std::string_view character_variable);
 
-		void add_new_dialogue(std::string_view character_variable, std::string_view dialogue);
-		void add_new_dialogue(std::string_view dialogue);
+		void show_dialogue(std::string_view character_variable, std::string_view dialogue);
+		void show_dialogue(std::string_view dialogue);
 
 		void show_background(std::string_view background_path);
 		void show_background(Color color);
@@ -86,6 +72,20 @@ class Game
 		void move_textbox(std::string_view where);
 
 	private:
+		enum class Action
+		{
+			PUSH,
+			POP
+		};
+
+		struct RequestedAction
+		{
+			Action action_;
+			std::string_view unique_id_;
+		};
+
+		std::stack<RequestedAction> requested_actions_;
+
 		void push_state(GameState* state);
 		void pop_state();
 		GameState* get_current_state() const;

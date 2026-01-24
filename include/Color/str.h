@@ -1,9 +1,9 @@
 #pragma once
 
+#include "Color/color.h"
+
 #include <unordered_map>
 #include <string>
-
-#include "Color/color.h"
 
 namespace color::str
 {

@@ -1,5 +1,5 @@
 #include "GUI/checkable.h"
-#include "GUI/checkablegroup.h"
+#include "GUI/checkable_group.h"
 
 #include <iostream>
 

@@ -39,22 +39,22 @@
     <ClCompile Include="src\GUI\ui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\uimanager.cpp">
+    <ClCompile Include="src\Managers\ui_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\textbutton.cpp">
+    <ClCompile Include="src\GUI\text_button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\texttoggle.cpp">
+    <ClCompile Include="src\GUI\text_toggle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gamestate.cpp">
+    <ClCompile Include="src\game_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\slider.cpp">
@@ -78,7 +78,7 @@
     <ClCompile Include="src\RAII_SDL2\font.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RAII_SDL2\gamecontroller.cpp">
+    <ClCompile Include="src\RAII_SDL2\game_controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\RAII_SDL2\music.cpp">
@@ -93,13 +93,13 @@
     <ClCompile Include="src\RAII_SDL2\sdl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RAII_SDL2\sdlimg.cpp">
+    <ClCompile Include="src\RAII_SDL2\sdl_img.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RAII_SDL2\sdlmixer.cpp">
+    <ClCompile Include="src\RAII_SDL2\sdl_mixer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RAII_SDL2\sdlttf.cpp">
+    <ClCompile Include="src\RAII_SDL2\sdl_ttf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\RAII_SDL2\surface.cpp">
@@ -111,37 +111,37 @@
     <ClCompile Include="src\RAII_SDL2\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\checkboxgroup.cpp">
+    <ClCompile Include="src\GUI\checkbox_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\texttogglegroup.cpp">
+    <ClCompile Include="src\GUI\text_toggle_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\checkablegroup.cpp">
+    <ClCompile Include="src\GUI\checkable_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\checkable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ingame.cpp">
+    <ClCompile Include="src\in_game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\confirmationpopup.cpp">
+    <ClCompile Include="src\GUI\confirmation_popup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\transformstep.cpp">
+    <ClCompile Include="src\transform_step.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\buttongroup.cpp">
+    <ClCompile Include="src\GUI\button_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\drawable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mainmenu.cpp">
+    <ClCompile Include="src\main_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\settingsmenu.cpp">
+    <ClCompile Include="src\settings_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\transition.cpp">
@@ -159,7 +159,7 @@
     <ClCompile Include="src\Color\color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\audiomanager.cpp">
+    <ClCompile Include="src\Managers\audio_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Color\conversion.cpp">
@@ -177,22 +177,25 @@
     <ClCompile Include="src\script.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\charactermanager.cpp">
+    <ClCompile Include="src\Managers\character_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\scriptrunner.cpp">
+    <ClCompile Include="src\script_runner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\textboxmanager.cpp">
+    <ClCompile Include="src\Managers\textbox_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\soundmanager.cpp">
+    <ClCompile Include="src\Managers\sound_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\musicmanager.cpp">
+    <ClCompile Include="src\Managers\music_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Managers\backgroundmanager.cpp">
+    <ClCompile Include="src\Managers\background_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\scrollbar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,22 +221,22 @@
     <ClInclude Include="include\GUI\ui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\uimanager.h">
+    <ClInclude Include="include\Managers\ui_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\textbutton.h">
+    <ClInclude Include="include\GUI\text_button.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\texttoggle.h">
+    <ClInclude Include="include\GUI\text_toggle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gamestate.h">
+    <ClInclude Include="include\game_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\slider.h">
@@ -257,7 +260,7 @@
     <ClInclude Include="include\RAII_SDL2\font.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RAII_SDL2\gamecontroller.h">
+    <ClInclude Include="include\RAII_SDL2\game_controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\RAII_SDL2\music.h">
@@ -272,13 +275,13 @@
     <ClInclude Include="include\RAII_SDL2\sdl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RAII_SDL2\sdlimg.h">
+    <ClInclude Include="include\RAII_SDL2\sdl_img.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RAII_SDL2\sdlmixer.h">
+    <ClInclude Include="include\RAII_SDL2\sdl_mixer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\RAII_SDL2\sdlttf.h">
+    <ClInclude Include="include\RAII_SDL2\sdl_ttf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\RAII_SDL2\surface.h">
@@ -290,28 +293,28 @@
     <ClInclude Include="include\RAII_SDL2\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\checkboxgroup.h">
+    <ClInclude Include="include\GUI\checkbox_group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\texttogglegroup.h">
+    <ClInclude Include="include\GUI\text_toggle_group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\checkablegroup.h">
+    <ClInclude Include="include\GUI\checkable_group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\checkable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\ingame.h">
+    <ClInclude Include="include\in_game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\confirmationpopup.h">
+    <ClInclude Include="include\GUI\confirmation_popup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\transformstep.h">
+    <ClInclude Include="include\transform_step.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\buttongroup.h">
+    <ClInclude Include="include\GUI\button_group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\constants.h">
@@ -320,16 +323,16 @@
     <ClInclude Include="include\drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\mainmenu.h">
+    <ClInclude Include="include\main_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\settingsmenu.h">
+    <ClInclude Include="include\settings_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\transition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\pointereventdata.h">
+    <ClInclude Include="include\pointer_event_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\background.h">
@@ -341,7 +344,7 @@
     <ClInclude Include="include\Color\color.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\audiomanager.h">
+    <ClInclude Include="include\Managers\audio_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Color\conversion.h">
@@ -359,22 +362,25 @@
     <ClInclude Include="include\script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\charactermanager.h">
+    <ClInclude Include="include\Managers\character_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\scriptrunner.h">
+    <ClInclude Include="include\script_runner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\textboxmanager.h">
+    <ClInclude Include="include\Managers\textbox_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\soundmanager.h">
+    <ClInclude Include="include\Managers\sound_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\musicmanager.h">
+    <ClInclude Include="include\Managers\music_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Managers\backgroundmanager.h">
+    <ClInclude Include="include\Managers\background_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\scrollbar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,7 +3,7 @@
 #include "constants.h"
 
 #include <string>
-#include <SDL2/SDL.h>
+#include <string_view>
 
 class CharacterDefinition
 {

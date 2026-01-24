@@ -52,7 +52,7 @@ class Drawable
 		SDL_RendererFlip flip_;
 		Color color_; 
 
-		sdl::Renderer& renderer_; //do not own it !!
+		sdl::Renderer& renderer_; 
 		
 	private:
 };

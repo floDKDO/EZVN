@@ -2,7 +2,6 @@
 
 #include "GUI/ui.h"
 #include "text.h"
-#include "image.h"
 
 class Inputfield : public Ui
 {
@@ -39,7 +38,7 @@ class Inputfield : public Ui
 		Text text_placeholder_;
 
 		Uint64 last_blink_time_;
-		Uint64 last_input_time;
+		Uint64 last_input_time_;
 		bool is_caret_visible_;
 		
 		size_t index_caret_;

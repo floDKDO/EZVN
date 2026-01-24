@@ -13,7 +13,7 @@ Inputfield::Inputfield(std::string_view text_placeholder, unsigned int character
 	  character_limit_(character_limit),
 	  text_caret_("|", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),
 	  text_placeholder_(text_placeholder, constants::inputfield_placeholder_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),
-	  index_caret_(0), offset_caret_(0), last_input_time(0), last_blink_time_(0), is_caret_visible_(true)
+	  index_caret_(0), offset_caret_(0), last_input_time_(0), last_blink_time_(0), is_caret_visible_(true)
 {
 	callback_function_ = callback_function;
 	SDL_SetTextInputRect(&(container_));
@@ -36,7 +36,7 @@ void Inputfield::on_left_pressed()
 {
 	if(has_keyboard_focus_)
 	{
-		last_input_time = SDL_GetTicks64();
+		last_input_time_ = SDL_GetTicks64();
 		if(index_caret_ > 0)
 		{
 			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_ - 1]);
@@ -54,7 +54,7 @@ void Inputfield::on_right_pressed()
 {
 	if(has_keyboard_focus_)
 	{
-		last_input_time = SDL_GetTicks64();
+		last_input_time_ = SDL_GetTicks64();
 		if(index_caret_ < character_limit_ && index_caret_ < text_.text_.length())
 		{
 			int current_char_width = text_.get_width_one_char(text_.text_[index_caret_]);
@@ -75,7 +75,7 @@ void Inputfield::on_enter_pressed_hook_end()
 
 void Inputfield::on_backspace_pressed()
 {
-	last_input_time = SDL_GetTicks64();
+	last_input_time_ = SDL_GetTicks64();
 	if(has_keyboard_focus_ && !text_.text_.empty())
 	{
 		if(index_caret_ > 0)
@@ -88,7 +88,7 @@ void Inputfield::on_backspace_pressed()
 
 void Inputfield::on_delete_pressed()
 {
-	last_input_time = SDL_GetTicks64();
+	last_input_time_ = SDL_GetTicks64();
 	if(has_keyboard_focus_ && !text_.text_.empty())
 	{
 		if(index_caret_ < text_.text_.length())
@@ -143,7 +143,7 @@ void Inputfield::draw(sdl::Renderer& renderer)
 void Inputfield::update()
 {
 	Uint64 now = SDL_GetTicks64();
-	Uint64 idle_time = now - last_input_time;
+	Uint64 idle_time = now - last_input_time_;
 
 	if(idle_time >= constants::inputfield_idle_time_)
 	{
@@ -174,7 +174,7 @@ void Inputfield::update()
 
 void Inputfield::on_typing(std::string_view text)
 {
-	last_input_time = SDL_GetTicks64();
+	last_input_time_ = SDL_GetTicks64();
 	if(has_keyboard_focus_ && text_.text_.length() < character_limit_)
 	{
 		text_.text_.insert(index_caret_, text);

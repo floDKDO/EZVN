@@ -15,7 +15,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
 	end_dialogue_indicator_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {
-	set_textbox_position("bottom"); //TODO : hardcodé
+	set_textbox_position(constants::default_textbox_position_); 
 }
 
 void Textbox::change_textbox(std::string_view new_textbox_path, sdl::Renderer& renderer)
@@ -67,6 +67,10 @@ void Textbox::set_textbox_position(std::string_view where)
 	{
 		textbox_.set_position(constants::window_width_ - textbox_.position_.w, constants::window_height_ - textbox_.position_.h + constants::textbox_y_delta_);
 	}
+	else
+	{
+		std::cerr << "Unknown textbox position!\n";
+	}
 
 	namebox_.set_position(textbox_.position_.x + constants::namebox_textbox_x_delta_, textbox_.position_.y - namebox_.position_.h);
 
@@ -112,38 +116,6 @@ Uint64 Textbox::get_text_delay()
 	return std::clamp(static_cast<Uint64>(Textbox::base_delay_ + (float(text_.text_.length()) / (Text::global_text_divisor_ / 2) * 1000)), Textbox::minimum_time_, Textbox::maximum_time_);
 }
 
-void Textbox::handle_events(const SDL_Event& e)
-{
-	/*switch(e.type)
-	{
-		case SDL_KEYDOWN:
-			switch(e.key.keysym.sym)
-			{
-				case SDLK_SPACE:
-					//Prochain dialogue
-					//show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
-					break;
-
-				default:
-					break;
-			}
-			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-			if(e.button.button == SDL_BUTTON_LEFT)
-			{
-				//show_new_dialogue("And then, I would be I good guy because they are a lot of people that like somebody that used to be.", "Sayori");
-			}
-			break;
-
-		case SDL_KEYUP:
-			break;
-
-		default:
-			break;
-	}*/
-}
-
 void Textbox::draw(sdl::Renderer& renderer)
 {
 	if(!current_speaker_.empty())
@@ -181,7 +153,6 @@ void Textbox::update()
 		}
 	}
 
-	text_name_box_.update();
 	textbox_.update();
 	namebox_.update();
 	end_dialogue_indicator_.update();

@@ -17,7 +17,6 @@ class Textbox
 
 		Uint64 get_text_delay();
 
-		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 		void update();
 

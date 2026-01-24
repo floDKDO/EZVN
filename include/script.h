@@ -9,12 +9,11 @@
 #include <vector>
 #include <variant>
 #include <optional>
+#include <unordered_map>
 
 class Script
 {
 	public:
-		Script(sdl::Renderer& renderer);
-
 		template <typename T>
 		struct MyPair
 		{
@@ -41,7 +40,7 @@ class Script
 			NAMEBOX_TEXT_COLOR
 		};
 
-		using CharacterCommandValue = std::variant<int, std::string, bool, Color>; //zorder (int), name (std::string), transform_name (std::string), is_visible_ (bool), textbox_path_ (std::string), namebox_path_ (std::string), namebox_text_color_ (Color)
+		using CharacterCommandValue = std::variant<unsigned int, std::string, bool, Color>; //zorder (unsigned int), name (std::string), transform_name (std::string), is_visible_ (bool), textbox_path_ (std::string), namebox_path_ (std::string), namebox_text_color_ (Color)
 		using CharacterCommands = std::unordered_map<CharacterCommandKind, CharacterCommandValue>;
 		using InfoCharacter = MyPair<CharacterCommands>;
 
@@ -77,9 +76,11 @@ class Script
 
 		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
 
+		Script(sdl::Renderer& renderer);
+
 		void insert_dialogue(std::string_view character_variable, std::string_view dialogue);
 
-		void show_character(std::string_view character_variable, std::optional<std::string> transform_name = std::nullopt, std::optional<int> zorder = std::nullopt);
+		void show_character(std::string_view character_variable, std::optional<std::string> transform_name = std::nullopt, std::optional<unsigned int> zorder = std::nullopt);
 		void hide_character(std::string_view character_variable);
 		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 

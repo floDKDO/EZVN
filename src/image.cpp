@@ -1,10 +1,9 @@
 #include "image.h"
-#include "constants.h"
 #include "RAII_SDL2/rwops.h"
 
 #include <iostream>
 
-Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, int zorder)
+Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder)
 	: Drawable(renderer), zorder_(zorder), animated_image_(create_animation(path)), path_(path), frame_index_(0)
 {
 	init_image(path, x, y, renderer);
@@ -32,19 +31,19 @@ void Image::init_image(std::string_view new_path, int x, int y, sdl::Renderer& r
 
 	if(path_.find("img/characters/") != std::string_view::npos)
 	{
-		image_type_ = ImageType::CHARACTER;
+		image_type_ = Kind::CHARACTER;
 	}
 	else if(path_.find("img/gui/") != std::string_view::npos)
 	{
-		image_type_ = ImageType::GUI;
+		image_type_ = Kind::GUI;
 	}
 	else if(path_.find("img/backgrounds/") != std::string_view::npos)
 	{
-		image_type_ = ImageType::BACKGROUND;
+		image_type_ = Kind::BACKGROUND;
 	}
 	else 
 	{
-		image_type_ = ImageType::NONE;
+		image_type_ = Kind::NONE;
 	}
 
 	if(animated_image_.has_value())

@@ -1,12 +1,7 @@
 #include "game.h"
-#include "ingame.h"
-#include "mainmenu.h"
-#include "settingsmenu.h"
-
-#include <chrono>
-#include <thread>
-
-//TODO : garder les vectors de C-pointeurs ??
+#include "in_game.h"
+#include "main_menu.h"
+#include "settings_menu.h"
 
 Game::Game()
 	: sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
@@ -41,7 +36,7 @@ void Game::run()
 	Uint64 end_current_frame = 0;
 	unsigned int frame_count = 0;
 
-	//TODO : possibilité de mettre ce code ici (utilité : script_information_ est initialisé dans le constructeur de ScriptRunner)
+	//mettre ce code ici (utilité : script_information_ est initialisé dans le constructeur de ScriptRunner)
 	init_game_states();
 
 	while(window_is_open_)
@@ -67,21 +62,20 @@ void Game::run()
 
 		if(FRAME_TIME > elapsed)
 		{
-			//SDL_Delay(delay); //TODO : utiliser SDL_Delay ??
-			std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+			SDL_Delay(Uint32(delay)); 
 		}
 	}
 }
 
 void Game::request_push_state(std::string_view unique_id) //pour ne pas que les fonctions de callback rendent invalide current_selected_ via un appel direct à push_state qui vide le vector navigation_list_ dans lequel current_selected_ prend sa valeur
 {
-	RequestedAction requested_action = {Action::push, unique_id};
+	RequestedAction requested_action = {Action::PUSH, unique_id};
 	requested_actions_.push(requested_action);
 }
 
 void Game::request_pop_state()
 {
-	RequestedAction requested_action = {Action::pop, ""};
+	RequestedAction requested_action = {Action::POP, ""};
 	requested_actions_.push(requested_action);
 }
 
@@ -95,11 +89,11 @@ void Game::handle_requests()
 	while(!requested_actions_.empty())
 	{
 		RequestedAction top = requested_actions_.top();
-		if(top.action == Action::push)
+		if(top.action_ == Action::PUSH)
 		{
-			push_state(game_states_map_.at(top.unique_id).get());
+			push_state(game_states_map_.at(top.unique_id_).get());
 		}
-		else if(top.action == Action::pop)
+		else if(top.action_ == Action::POP)
 		{
 			pop_state();
 		}
@@ -189,7 +183,7 @@ void Game::rename_character(std::string_view character_variable, std::string_vie
 	script_.rename_character(character_variable, new_character_name);
 }
 
-void Game::show_character(std::string_view character_variable, std::string transform_name, int zorder)
+void Game::show_character(std::string_view character_variable, std::string transform_name, unsigned int zorder)
 {
 	script_.show_character(character_variable, transform_name, zorder);
 }
@@ -199,7 +193,7 @@ void Game::show_character(std::string_view character_variable, std::string trans
 	script_.show_character(character_variable, transform_name, std::nullopt);
 }
 
-void Game::show_character(std::string_view character_variable, int zorder)
+void Game::show_character(std::string_view character_variable, unsigned int zorder)
 {
 	script_.show_character(character_variable, std::nullopt, zorder);
 }
@@ -214,12 +208,12 @@ void Game::hide_character(std::string_view character_variable)
 	script_.hide_character(character_variable);
 }
 
-void Game::add_new_dialogue(std::string_view character_variable, std::string_view dialogue)
+void Game::show_dialogue(std::string_view character_variable, std::string_view dialogue)
 {
 	script_.insert_dialogue(character_variable, dialogue);
 }
 
-void Game::add_new_dialogue(std::string_view dialogue)
+void Game::show_dialogue(std::string_view dialogue)
 {
 	script_.insert_dialogue("Narrator", dialogue);
 }

@@ -6,7 +6,6 @@ Script::Script(sdl::Renderer& renderer)
 	add_character("Narrator", "", "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
 }
 
-//Dialogues
 void Script::insert_dialogue(std::string_view character_variable, std::string_view dialogue)
 {
 	InfoTextbox info_textbox;
@@ -17,8 +16,7 @@ void Script::insert_dialogue(std::string_view character_variable, std::string_vi
 	script_information_.push_back(InfoTextbox(info_textbox));
 }
 
-//Character
-void Script::show_character(std::string_view character_variable, std::optional<std::string> transform_name, std::optional<int> zorder)
+void Script::show_character(std::string_view character_variable, std::optional<std::string> transform_name, std::optional<unsigned int> zorder)
 {
 	InfoCharacter info_character;
 	info_character.character_variable_ = character_variable;
@@ -38,7 +36,6 @@ void Script::show_character(std::string_view character_variable, std::optional<s
 	script_information_.push_back(InfoCharacter(info_character));
 }
 
-//Character
 void Script::hide_character(std::string_view character_variable)
 {
 	//TODO : garder ??
@@ -55,7 +52,6 @@ void Script::hide_character(std::string_view character_variable)
 	script_information_.push_back(InfoCharacter(info_character));
 }
 
-//Character
 void Script::rename_character(std::string_view character_variable, std::string_view new_character_name)
 {
 	InfoCharacter info_character;
@@ -69,7 +65,6 @@ void Script::add_character(std::string_view character_variable, std::string_view
 	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
 }
 
-//Character
 void Script::insert_textbox(std::string_view character_variable, std::string_view textbox_path)
 {
 	InfoCharacter info_character;
@@ -78,7 +73,6 @@ void Script::insert_textbox(std::string_view character_variable, std::string_vie
 	script_information_.push_back(InfoCharacter(info_character));
 }
 
-//Character
 void Script::insert_namebox(std::string_view character_variable, std::string_view namebox_path)
 {
 	InfoCharacter info_character;
@@ -87,7 +81,6 @@ void Script::insert_namebox(std::string_view character_variable, std::string_vie
 	script_information_.push_back(InfoCharacter(info_character));
 }
 
-//Character
 void Script::insert_namebox_text_color(std::string_view character_variable, Color namebox_text_color)
 {
 	InfoCharacter info_character;
@@ -96,7 +89,6 @@ void Script::insert_namebox_text_color(std::string_view character_variable, Colo
 	script_information_.push_back(InfoCharacter(info_character));
 }
 
-//Textbox
 void Script::move_textbox(std::string_view where)
 {
 	InfoTextbox info_textbox;
@@ -107,45 +99,38 @@ void Script::move_textbox(std::string_view where)
 	script_information_.push_back(InfoTextbox(info_textbox));
 }
 
-//Background
 void Script::insert_background(std::string_view background_path)
 {
 	script_information_.push_back(InfoBackground(Background(background_path, renderer_)));
 }
 
-//Background
 void Script::insert_background(Color color)
 {
 	script_information_.push_back(InfoBackground(Background(color)));
 }
 
-//Sounds
 void Script::play_sound(std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop)
 {
 	script_information_.push_back(InfoSound(std::make_pair(AudioProperties{fadein_length, fadeout_length, loop, channel}, Sound{sdl::Chunk(sound_path), volume_multiplier}))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
-//Sounds
 void Script::stop_sound(int fadeout_length, int channel)
 {
 	//TODO : hardcodé
 	script_information_.push_back(InfoSound(std::make_pair(AudioProperties{0, fadeout_length, false, channel}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
-//Musics
 void Script::play_music(std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop)
 {
 	script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{fadein_length, fadeout_length, loop}, Music{sdl::Music(music_path), volume_multiplier}))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
-//Musics
 void Script::stop_music(int fadeout_length)
 {
 	//TODO : hardcodé
 	script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{0, fadeout_length, true}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
-//Autofocus
 void Script::insert_autofocus(bool autofocus)
 {
 	script_information_.push_back(InfoAutofocus({AutofocusCommandKind::AUTOFOCUS, autofocus}));

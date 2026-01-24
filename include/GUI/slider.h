@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GUI/ui.h"
-#include "image.h"
 #include "text.h"
 
 class Slider : public Ui

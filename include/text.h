@@ -1,12 +1,11 @@
 #pragma once
 
 #include "RAII_SDL2/surface.h"
-#include "RAII_SDL2/texture.h"
 #include "RAII_SDL2/font.h"
 #include "RAII_SDL2/renderer.h"
 #include "drawable.h"
 
-#include <memory>
+#include <string>
 
 class Text : public Drawable
 {
@@ -36,11 +35,11 @@ class Text : public Drawable
 		void update() override;
 
 		static int global_text_divisor_;
-		static int initial_text_speed_;
+		static const int initial_text_speed_;
 
 		std::string text_;
 		std::string text_dialogue_;
-		int index_dialogue_;
+		size_t index_dialogue_;
 		bool is_finished_;
 		Uint32 wrap_length_;
 		//int local_text_speed_; //TODO : unité ?? (actuellement, agrandir cette valeur réduit la vitesse d'affichage) => objectif = cps

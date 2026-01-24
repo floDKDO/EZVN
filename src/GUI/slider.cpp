@@ -63,12 +63,12 @@ void Slider::handle_movement(int mouse_x)
 
 void Slider::on_pointer_down_hook_end(PointerEventData pointer_event_data)
 {
-	handle_movement(pointer_event_data.mouse_x);
+	handle_movement(pointer_event_data.mouse_x_);
 }
 
 void Slider::on_drag(PointerEventData pointer_event_data)
 {
-	handle_movement(pointer_event_data.mouse_x);
+	handle_movement(pointer_event_data.mouse_x_);
 }
 
 void Slider::on_up_pressed()

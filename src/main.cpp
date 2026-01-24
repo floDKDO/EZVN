@@ -2,23 +2,119 @@
 
 #include <iostream>
 
-//TODO : lambdas à la place des std::bind ??
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory to use argc and argv for SDL2
+{
+	Game game;
+
+	//First stpe : character creation
+	game.create_character("Sayori", "???", "img/characters/sayori.png", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
+	game.create_character("Monika", "???", "img/characters/monika.png", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
+	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");
+	game.create_character("Natsuki", "???", "img/characters/natsuki.png", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
+	game.create_character("MC", "MC");
+
+
+	//Second step : write your own story!
+
+	game.autofocus_enable();
+	game.autozorder_enable();
+	game.show_background("img/backgrounds/cafeteria.png");
+	game.play_sound("sounds/school_bell.ogg");
+	game.show_dialogue("I am feeling quite lonely right now...");
+	game.show_dialogue("I know, I should try to find Sayori!");
+	game.play_music("sounds/2.ogg");
+	game.show_character("Sayori", "t11");
+	game.show_dialogue("Sayori", "No need, I'm already there!");
+	game.show_dialogue("Sayori!");
+	game.show_dialogue("She almost scared me...");
+	game.rename_character("Sayori", "Sayori");
+	game.show_dialogue("Sayori", "Come to my club! You will feel less lonely there.");
+	game.show_character("MC"); //mandatory for now even if the MC has no image
+	game.show_dialogue("MC", "If you say so...");
+	game.show_background("img/backgrounds/corridor.png");
+	game.hide_character("Sayori");
+	game.show_dialogue("I am following Sayori to her club not without feeling nervous.");
+	game.show_dialogue("I heard that her club is full of girls!");
+	game.show_character("Sayori", "t11");
+	game.show_dialogue("Sayori", "We arrived!");
+	game.show_dialogue("Sayori", "Before entering, I have a question MC.");
+	game.show_dialogue("MC", "I'm listening.");
+	game.show_dialogue("Sayori", "What is your favorite color?");
+	game.change_textbox("Sayori", "img/gui/monika_textbox.png");
+	game.change_namebox("Sayori", "img/gui/monika_namebox.png");
+	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 255, 169));
+	game.move_textbox("bottomleft");
+	game.show_dialogue("Sayori", "Green?");
+	game.change_textbox("Sayori", "img/gui/yuri_textbox.png");
+	game.change_namebox("Sayori", "img/gui/yuri_namebox.png");
+	game.change_namebox_text_color("Sayori", Color::from_rgba8(184, 168, 255));
+	game.move_textbox("topright");
+	game.show_dialogue("Sayori", "Purple?");
+	game.change_textbox("Sayori", "img/gui/natsuki_textbox.png");
+	game.change_namebox("Sayori", "img/gui/natsuki_namebox.png");
+	game.change_namebox_text_color("Sayori", Color::from_rgba8(255, 203, 228));
+	game.move_textbox("topleft");
+	game.show_dialogue("Sayori", "Pink?");
+	game.change_textbox("Sayori", "img/gui/sayori_textbox.png");
+	game.change_namebox("Sayori", "img/gui/sayori_namebox.png");
+	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 224, 255));
+	game.move_textbox("bottom");
+	game.show_dialogue("Sayori", "Or blue?");
+	game.show_dialogue("MC", "I...");
+	game.play_sound("sounds/door_open.ogg");
+	game.show_dialogue("Sayori", "Follow me!");
+	game.show_background("img/backgrounds/club.png");
+	game.stop_sound();
+	game.play_music("sounds/3.ogg", 0, 500);
+	game.show_character("Yuri", "t41", 1);
+	game.show_character("Sayori", "t42", 0);
+	game.show_character("Monika", "t43", 2);
+	game.show_character("Natsuki", "t44", 1);
+	game.show_dialogue("Sayori", "Look everyone, I brought a new member.");
+	game.show_dialogue("Monika", "Hi there!");
+	game.show_dialogue("Yuri", "Hello, nice to meet you");
+	game.show_dialogue("Natsuki", "Hey.");
+	game.show_dialogue("Gulp...");
+
+
+	//Third and last step : run the game
+
+	game.run();
+
+	return 0;
+}
+
 
 //TODO : utiliser les bons types (ex : unsigned int, std::string_view...)
 
-//TODO : const pour les références/pointeurs en paramètre (passer les vector par ref ??)
+//TODO:  être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
+
+//TODO : nettoyer le code => retirer les includes inutiles (attention que je n'inclus pas le même header dans un .h et son .cpp associé + utiliser des forward declarations quand c'est possible), 
+//                        => retirer les membres et commentaires inutiles, utiliser using pour simplifier les types etc.
+
+//TODO : composition over inheritance
+
+//TODO : éventuellement remplacer les C-casts par static_cast
+
+//TODO : si un membre d'une classe est retourné, je peux retourner une référence
+
+//TODO : crash si aucun dialogue => current_script_index_ a la valeur initiale -1 ??
+
+//TODO : mettre des constructeurs par défaut dans les structs pour simplifier l'initialisation de leurs membres 
+
+//TODO : créer des variables pour les éléments de tableau utilisés à plusieurs endroits dans une même méthode
+
+//TODO : lambdas à la place des std::bind ??
+
+//TODO : passer les vector par ref ??
+
+//TODO : système de logs
 
 //TODO : si valeur de wrap_length pas connue dans le constructeur ?
 
 //TODO : supprimer les .cpp inutiles où tout le code est dans le header à cause des templates ?
 
-//TODO:  être cohérent entre utiliser les membres ou les paramètres du constructeur (ex : renderer ou renderer_)
-
-//TODO : utilité des vector.reserve(10) ??
-
 //TODO : si je garde la scrollbar, créer une classe intermédiaire (ex : Scrollable) pour ne pas répéter le code du Slider
-
-//TODO : placer les définitions de types, les structs et enums au début des classes et les placer dans la bonne visibilité (ex : public)
 
 //TODO : membre static => static inline ou static constexpr pour attribuer une valeur directement dans le .h
 
@@ -26,123 +122,32 @@
 
 //TODO : anonymous namespace au lieu de static pour des fonctions static et des variables globales static propres à une translation unit
 
-//TODO : nettoyer le code => retirer les includes inutiles (attention que je n'inclus pas le même header dans un .h et son .cpp associé + utiliser des forward declarations quand c'est possible), 
-//                        => "_" final après le nom des membres, retirer les membres et commentaires inutiles, convention pour les valeurs des enums etc.
-
 //TODO : peu de lisibilité avec tous les paramètres par défaut
 
-//TODO : problème de couleur pour la couleur du premier UI de chaque menu => pas d'outline ??
-//Le problème viendrait de ces deux lignes dans UiManager : current_selected_ = navigation_list_[0]; current_selected_->state_ = State::SELECTED;
-
 //TODO : si trop de code en commun entre Sound et Music, pk pas créer une classe de base Audio ??
-
-//TODO : crash si aucun dialogue => current_script_index_ a la valeur initiale -1 ??
 
 //TODO : dans la member initialization list, ne pas écrire : transform_(Transform(transform_name)) mais transform_(transform_name)
 
 //TODO : il ne faudrait pas utiliser std::string_view en tant que clef dans une std::map ou std::unordered_map
 
-//TODO : mettre des constructeurs par défaut dans les structs pour simplifier l'initialisation de leurs membres 
+//TODO : pouvoir modifier la résolution du jeu quand il est en mode plein écran (voir les fonctions "display" de la SDL2) + ajouter d'autres options utiles ?
 
-//TODO : créer des variables pour les éléments de tableau utilisés à plusieurs endroits dans une même méthode
+//TODO : améliorer le système de UI pour qu'un UI puisse contenir plusieurs UI membres
 
-//TODO : convention de nommage pour les underscores dans les noms de fichier
+//TODO : inputfield qui demande le nom du joueur au premier lancement du jeu => nécessite les variables persistantes
 
+//TODO : pause et window hide, pouvoir attendre la fin exacte d'un son
 
-#include "Color/str.h"
+//TODO : la textbox noire apparaît brièvement pour le premier dialogue, de même que des anciens noms dans la namebox
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory to use argc and argv for SDL2
-{
-	//TODO : inputfield qui demande le nom du joueur au premier lancement du jeu => nécessite les variables persistantes
-
-	//TODO : pause et window hide
-
-	//TODO : la textbox noire apparaît brièvement pour le premier dialogue, de même que des anciens noms dans la namebox
-
-	/*Color c1(Color::from_rgba8(120, 200, 140, 100));
-	std::cout << "c1: " << int(c1.r_) << ", " << int(c1.g_) << ", " << int(c1.b_) << ", " << int(c1.a_) << std::endl;
-	Color c2(Color::from_rgba(0.2, 0.5, 0.3, 0.75));
-	std::cout << "c2: " << int(c2.r_) << ", " << int(c2.g_) << ", " << int(c2.b_) << ", " << int(c2.a_) << std::endl;
-	Color c3(Color::from_hsva8(342, 80, 100, 220));
-	std::cout << "c3: " << int(c3.r_) << ", " << int(c3.g_) << ", " << int(c3.b_) << ", " << int(c3.a_) << std::endl;
-	Color c4(Color::from_hsva(342, 0.2, 0.5, 0.8));
-	std::cout << "c4: " << int(c4.r_) << ", " << int(c4.g_) << ", " << int(c4.b_) << ", " << int(c4.a_) << std::endl;
-	Color c5(Color::from_hex("#ff00ff"));
-	std::cout << "c5: " << int(c5.r_) << ", " << int(c5.g_) << ", " << int(c5.b_) << ", " << int(c5.a_) << std::endl;
-	Color c6(Color::from_string("DARK Red"));
-	std::cout << "c6: " << int(c6.r_) << ", " << int(c6.g_) << ", " << int(c6.b_) << ", " << int(c6.a_) << std::endl;*/
-
-
-	Game game;
-
-	//TODO : il faudrait qu'il y ait une erreur si : 
+//TODO : il faudrait qu'il y ait une erreur si : 
 	//- plusieurs personnages ont la même character_variable
 	//- un personnage possède une character_variable vide (= "") car il serait considéré à tort comme le narrateur
 
-	//si un son sur le même channel est lancé alors qu'un autre son était en train de se jouer, il faut stopper ce dernier
-	//deux sons sur un channel différent ne s'interfèrent pas
-	//fadein = facile
-	//fadeout => fadeout un précédent son uniquement s'il est sur le même channel
+//si un son sur le même channel est lancé alors qu'un autre son était en train de se jouer, il faut stopper ce dernier
+//deux sons sur un channel différent ne s'interfèrent pas
+//fadein = facile
+//fadeout => fadeout un précédent son uniquement s'il est sur le même channel
 
-	//play music => Fadeout gives the fadeout time for currently playing music, in seconds, while fadein gives the time it takes to fade in the new music.
-	//stop music => fadeout
-
-	game.create_character("Sayori", "Sayo", "img/characters/sayori.png", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
-	game.create_character("Monika", "???", "img/characters/monika.png", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
-	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png");
-	game.create_character("Natsuki", "???", "img/characters/natsuki.png", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
-
-	//game.autofocus_enable();
-	//game.autozorder_enable();
-	//game.add_new_dialogue("...0");
-	game.show_character("Yuri", "t41", 1);
-	game.show_character("Sayori", "t42", 0);
-	game.show_character("Monika", "t43", 2);
-	game.show_character("Natsuki", "t44", 1);
-	game.add_new_dialogue("...1");
-	game.move_textbox("top");
-	game.play_sound("sounds/fc_starting.ogg", 0, 2000, 3000, 10);
-	game.add_new_dialogue("...2");
-	game.move_textbox("bottomleft");
-	game.add_new_dialogue("Y a personne ??");
-	game.move_textbox("bottom");
-	game.play_sound("sounds/new_hour.ogg", 0, 2000, 3000);
-	game.add_new_dialogue("...3");
-	game.play_music("sounds/2.ogg", 0, 1000, 1.0); 
-	game.show_character("Sayori", "t11");
-	game.rename_character("Sayori", "xxxxx");
-	game.add_new_dialogue("Sayori", "HEYYYYYY!");
-	game.change_textbox("Sayori", "img/gui/yuri_textbox.png");
-	game.change_namebox("Sayori", "img/gui/monika_namebox.png");
-	game.change_namebox_text_color("Sayori", Color::from_rgba8(0, 0, 0));
-	game.rename_character("Sayori", "yyyyy"); 
-	game.add_new_dialogue("Sayori", "Hihihi!");
-	game.add_new_dialogue("I say that, but joining Sayori's club might be good because given the enthusiasm she has when she talks about it, it has to be nice.");
-	game.show_background("img/backgrounds/class.png");
-	game.autofocus_enable();
-	game.autozorder_enable();
-	game.play_music("sounds/3.ogg", 2, 1000); 
-	game.show_character("Yuri", "t41");
-	game.show_character("Sayori", "t42");
-	game.show_character("Monika", "t43");
-	game.show_character("Natsuki", "t44");
-	game.add_new_dialogue("Elle est chiante...");
-	color::str::add_new_string_color("dirt", Color::from_rgba8(50, 20, 30));
-	game.show_background(Color::from_string("dirt"));
-	game.add_new_dialogue("Yuri", "How are you MC?");
-	game.stop_music(2000); 
-	game.rename_character("Yuri", "Yuri beta");
-	game.hide_background();
-	game.add_new_dialogue("Yuri", "...");
-	game.show_background("img/backgrounds/corridor.png");
-	game.show_character("Sayori", "t42"); 
-	game.show_character("Natsuki", 50);
-	game.add_new_dialogue("Natsuki", "HEYYYYYY!");
-	game.add_new_dialogue("...");
-	//game.autozorder_enable();
-	game.add_new_dialogue("Sayori", "How are you MC?");
-
-	game.run();
-
-	return 0;
-}
+//play music => Fadeout gives the fadeout time for currently playing music, in seconds, while fadein gives the time it takes to fade in the new music.
+//stop music => fadeout

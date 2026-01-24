@@ -6,7 +6,7 @@ Transition::Transition(TransitionName transition_name)
 
 }
 
-void Transition::draw(sdl::Renderer& renderer)
+/*void Transition::draw(sdl::Renderer& renderer)
 {
 
 }
@@ -14,4 +14,4 @@ void Transition::draw(sdl::Renderer& renderer)
 void Transition::update()
 {
 
-}
+}*/

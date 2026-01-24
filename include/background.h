@@ -3,8 +3,6 @@
 #include "RAII_SDL2/renderer.h"
 #include "image.h"
 
-#include <SDL2/SDL.h>
-
 class Background
 {
 	public:
