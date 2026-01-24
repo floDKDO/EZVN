@@ -17,7 +17,7 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
   - *GUI/*: classes attached to the GUI system (buttons, textbuttons, texttoggles, checkboxes, inputfields, sliders)
   - *RAII_SDL2/*: SDL2 encapsulation according to the RAII principle
   - *./*: the remaining files
-- *main.cpp*: contains your story (an example is already written there)
+- *src/main.cpp*: contains your story (an example is already written there)
 
 ## Current features: 
 - Main screen, options menu (windowed/full-screen mode, music/sound volume, dialogue display speed)
