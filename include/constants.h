@@ -84,7 +84,7 @@ inline const Color slider_text_color_ = Color::from_rgba8(174, 84, 135);
 inline constexpr int slider_step_count_ = 10;
 
 inline const Color textbutton_normal_color_ = Color::from_rgba8(174, 84, 135);
-inline const Color textbutton_selected_color_ = Color::from_rgba8(210, 210, 210);
+inline const Color textbutton_selected_color_ = Color::from_rgba8(220, 220, 220);
 inline const Color textbutton_pressed_color_ = Color::from_rgba8(255, 255, 255);
 inline constexpr std::string_view textbutton_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int textbutton_text_size_ = 30;

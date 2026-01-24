@@ -13,7 +13,7 @@ Text::Text(std::string_view text, Color color, std::string_view font_path, int f
 Text::Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer, bool is_animated, Uint32 wrap_length)
 	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
 	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_),
-	outline_size_(constants::text_outline_size_), font_outline_(create_outline()),
+	outline_size_(constants::text_outline_size_), font_outline_(create_outline()), outline_visible_(false),
 	previous_text_(""), is_animated_(is_animated),
 	surface_(create_surface(font_, color_)), surface_outline_(create_surface(font_outline_, constants::text_outline_color_))
 	/*,local_text_speed_(global_text_divisor_),*/
@@ -58,7 +58,7 @@ sdl::Surface Text::create_surface(sdl::Font& font, Color color)
 	position_.w = surface.fetch()->w;
 	position_.h = surface.fetch()->h;
 
-	if(&font == &font_outline_)
+	if(&font == &font_outline_ && outline_visible_)
 	{
 		SDL_Rect rect = {-outline_size_, -outline_size_, position_.w, position_.h};
 		surface.blit(nullptr, surface_, &rect);
@@ -119,6 +119,16 @@ void Text::unset_strike_through()
 void Text::unset_all()
 {
 	font_style_ = TTF_STYLE_NORMAL;
+}
+
+void Text::show_outline()
+{
+	outline_visible_ = true;
+}
+
+void Text::hide_outline()
+{
+	outline_visible_ = false;
 }
 
 int Text::get_width_one_char(char c) const

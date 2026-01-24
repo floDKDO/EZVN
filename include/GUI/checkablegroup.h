@@ -11,7 +11,7 @@ class CheckableGroup : public Ui
 	public:
 		virtual ~CheckableGroup() = default;
 
-		void uncheck_all_others(Checkable* checkable_to_not_uncheck);
+		void uncheck_all_others(const Checkable* checkable_to_not_uncheck);
 		void handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck);
 		void on_press(Checkable* c);
 

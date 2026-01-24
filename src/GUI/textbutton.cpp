@@ -41,6 +41,8 @@ void TextButton::draw(sdl::Renderer& renderer)
 
 void TextButton::update()
 {
+	text_.update(); //doit être placé en premier pour que le premier UI SELECTED dans un menu ait la bonne couleur
+
 	if(state_ == State::NORMAL)
 	{
 		text_.change_color(constants::textbutton_normal_color_);
@@ -53,7 +55,6 @@ void TextButton::update()
 	{
 		text_.change_color(constants::textbutton_pressed_color_);
 	}
-	text_.update();
 	
 	/*if(confirmationpopup_)
 	{

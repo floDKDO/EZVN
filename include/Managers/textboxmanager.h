@@ -38,7 +38,7 @@ class TextboxManager
 		void temp_function(Ui* ui);
 
 		void update_skip_auto_modes();
-		void update(Script::InfoTextbox& info_textbox, const Character& character);
+		void update(const Script::InfoTextbox& info_textbox, const Character& character);
 
 		void reset();
 

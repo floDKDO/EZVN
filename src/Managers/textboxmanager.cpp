@@ -193,7 +193,7 @@ void TextboxManager::update_skip_auto_modes()
 	}
 }
 
-void TextboxManager::update(Script::InfoTextbox& info_textbox, const Character& character)
+void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Character& character)
 {
 	//update_skip_auto_modes();
 

@@ -24,6 +24,9 @@ class Text : public Drawable
 		void unset_strike_through();
 		void unset_all();
 
+		void show_outline();
+		void hide_outline();
+
 		int get_width_one_char(char c) const;
 		int get_width_text() const;
 		int get_height_one_char(char c) const;
@@ -58,6 +61,7 @@ class Text : public Drawable
 
 		int outline_size_; 
 		sdl::Font font_outline_; //TODO : mettre l'outline en optionnel
+		bool outline_visible_;
 		
 		std::string previous_text_;
 		//bool is_animated_; //TODO : préciser une wrap_length mais que le texte ne soit pas animé (pour pop-up et skip des dialogues) ??

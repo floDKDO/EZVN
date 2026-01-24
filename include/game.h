@@ -93,19 +93,6 @@ class Game
 
 		void handle_requests();
 
-		void play_function(Ui* ui);
-		void settings_function(Ui* ui);
-
-		void confirmationpopup_quit_function(Ui* ui);
-
-		void previous_menu_function(Ui* ui);
-		void slider_sound_function(Ui* ui);
-		void slider_music_function(Ui* ui);
-		void slider_text_function(Ui* ui);
-
-		void texttoggle_full_screen_function(Ui* ui);
-		void texttoggle_windowed_function(Ui* ui);
-
 		sdl::SDL sdl_;
 		sdl::SDLImage sdl_img_;
 		sdl::SDLMixer sdl_mixer_;

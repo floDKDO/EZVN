@@ -26,7 +26,7 @@ class Music
 	{
 
 	bool playing();
-	void fade_in(sdl::Music& music, bool loop, int ms, int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInMusic() => loop is a bool (true <=> -1, false <=> 0). It also has a additional parameter (volume)
+	void fade_in(const sdl::Music& music, bool loop, int ms, int volume = MIX_MAX_VOLUME); //not the same as Mix_FadeInMusic() => loop is a bool (true <=> -1, false <=> 0). It also has a additional parameter (volume)
 	void fade_out(int ms);
 	void halt();
 	void pause();

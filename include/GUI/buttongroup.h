@@ -40,7 +40,7 @@ ButtonGroup<N>::ButtonGroup(std::vector<std::string> texts, int y, sdl::Renderer
 template<size_t N>
 void ButtonGroup<N>::draw(sdl::Renderer& renderer)
 {
-	for(Button& b : buttons_)
+	for(const Button& b : buttons_)
 	{
 		b.draw(renderer);
 	}
@@ -49,7 +49,7 @@ void ButtonGroup<N>::draw(sdl::Renderer& renderer)
 template<size_t N>
 void ButtonGroup<N>::update()
 {
-	for(Button& b : buttons_)
+	for(const Button& b : buttons_)
 	{
 		b.update();
 		if(b.state_ == State::SELECTED)
@@ -70,7 +70,7 @@ void ButtonGroup<N>::update()
 template<size_t N>
 void ButtonGroup<N>::handle_events(const SDL_Event& e)
 {
-	for(Button& b : buttons_)
+	for(const Button& b : buttons_)
 	{
 		b.handle_events(e);
 	}
@@ -80,7 +80,7 @@ template<size_t N>
 std::vector<Ui*> ButtonGroup<N>::get_navigation_nodes()
 {
 	std::vector<Ui*> vector;
-	for(Button& b : buttons_)
+	for(const Button& b : buttons_)
 	{
 		vector.push_back(&b);
 	}

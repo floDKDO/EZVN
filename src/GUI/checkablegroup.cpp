@@ -10,7 +10,7 @@ CheckableGroup::CheckableGroup(size_t number_of_checkables, bool only_one_has_to
 	only_one_has_to_be_checked_(only_one_has_to_be_checked)
 {}
 
-void CheckableGroup::uncheck_all_others(Checkable* checkable_to_not_uncheck)
+void CheckableGroup::uncheck_all_others(const Checkable* checkable_to_not_uncheck)
 {
 	for(const std::unique_ptr<Checkable>& c : checkables_)
 	{

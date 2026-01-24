@@ -26,9 +26,9 @@ void MainMenu::build_ui_elements(sdl::Renderer& renderer)
 	ui_manager_.add_element(std::make_unique<TextButton>("Settings", 600, 350, renderer, std::bind(&MainMenu::settings_function, this, std::placeholders::_1)));
 	//ui_elements_.push_back(std::make_unique<TextButton>("Quit", 600, 500, renderer, "Are you sure you want to quit?", std::bind(&MainMenu::confirmationpopup_quit_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<TextButton>("Quit", 600, 500, renderer, std::bind(&MainMenu::confirmationpopup_quit_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Inputfield>("Your text...", 10, 200, 200, renderer, std::bind(&MainMenu::temp_function, this, std::placeholders::_1)));
+	//ui_manager_.add_element(std::make_unique<Inputfield>("Your text...", 10, 200, 200, renderer, std::bind(&MainMenu::temp_function, this, std::placeholders::_1)));
 	//ui_elements_.push_back(std::make_unique<ButtonGroup<2>>(std::vector<std::string>{"Windowed", "Fullscreen"}, 50, renderer));
-	ui_manager_.add_element(std::make_unique<Scrollbar>(100, 100, renderer, std::bind(&MainMenu::temp_function, this, std::placeholders::_1)));
+	//ui_manager_.add_element(std::make_unique<Scrollbar>(100, 100, renderer, std::bind(&MainMenu::temp_function, this, std::placeholders::_1)));
 
 	ui_manager_.set_elements();
 }

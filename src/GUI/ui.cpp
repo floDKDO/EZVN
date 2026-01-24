@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-//TODO : parfois un bug avec la touche Entrée au lancement du programme
-
 Ui::Ui(sdl::Renderer& renderer)
 	: select_on_up_(nullptr), select_on_down_(nullptr), select_on_left_(nullptr), select_on_right_(nullptr),
 	state_(State::NORMAL), last_time_(0),
@@ -93,9 +91,12 @@ void Ui::on_right_released()
 
 void Ui::on_enter_released()
 {
-	state_ = State::SELECTED;
-	callback_function_(this);
-	on_enter_released_hook_end();
+	if(state_ == State::PRESSED) //empêche le fait d'appuyer sur Entrée sur un UI, se déplacer sur un autre UI et relâcher Entrée dessus, ce qui lancerait la callback function du dernier bouton
+	{
+		state_ = State::SELECTED;
+		callback_function_(this);
+		on_enter_released_hook_end();
+	}
 }
 
 std::vector<Ui*> Ui::get_navigation_nodes()

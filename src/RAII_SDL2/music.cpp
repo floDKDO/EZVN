@@ -55,7 +55,7 @@ bool music::playing()
 	return Mix_PlayingMusic();
 }
 
-void music::fade_in(sdl::Music& music, bool loop, int ms, int volume)
+void music::fade_in(const sdl::Music& music, bool loop, int ms, int volume)
 {
 	int loops;
 	if(loop)

@@ -20,7 +20,7 @@ class Surface
 
 		SDL_Surface* fetch() const;
 		void set_blend_mode(SDL_BlendMode blend_mode) const;
-		void blit(SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect) const;
+		void blit(const SDL_Rect* srcrect, Surface& dst, SDL_Rect* dstrect) const;
 
 	private:
 		SDL_Surface* surface_;
