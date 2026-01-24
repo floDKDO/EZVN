@@ -9,17 +9,17 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
   <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image2.png" alt="Image 2" width="500"/>
 </p>
 
-## Project architecture : 
-- *fonts/* : the fonts used by the engine
-- *img/* : the images (backgrounds, character and GUI elements images) used by the engine
-- *sounds/* : the sounds and musics used by the engine
-- *include/* et *src/* : the project's header and source files, respectively. These folders are divided into the following three subfolders: :
-  - *GUI/* : classes attached to the GUI system (buttons, textbuttons, texttoggles, checkboxes, inputfields, sliders)
-  - *RAII_SDL2/* : SDL2 encapsulation according to the RAII principle
-  - *./* : the remaining files
-- *main.cpp* : contains your story
+## Project architecture: 
+- *fonts/*: the fonts used by the engine
+- *img/*: the images (backgrounds, character and GUI elements images) used by the engine
+- *sounds/*: the sounds and musics used by the engine
+- *include/* and *src/*: the project's header and source files, respectively. These folders are divided into the following three subfolders:
+  - *GUI/*: classes attached to the GUI system (buttons, textbuttons, texttoggles, checkboxes, inputfields, sliders)
+  - *RAII_SDL2/*: SDL2 encapsulation according to the RAII principle
+  - *./*: the remaining files
+- *main.cpp*: contains your story (an example is already written there)
 
-## Current features : 
+## Current features: 
 - Main screen, options menu (windowed/full-screen mode, music/sound volume, dialogue display speed)
 - Display characters at the desired position with an animation (similar to Ren'Py's Transform)
 - Assign a text box, name box, and/or custom name color for each character independently
@@ -30,17 +30,17 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 - Rename characters
 - Autofocus that highlights a character who is speaking by changing their size and zorder
 
-## Remaining features to be implemented : 
+## Remaining features to be implemented: 
 - Background animation
 - Modify the characters' eyes, mouth, etc.
 - Add a scrollable area (for dialogues history for example)
 - Add a logging system to obtain information about the engine states
-- Save system and persistent variables
+- Save/load system and persistent variables
 - Domain Specific Language like Ren'Py's
 - Drag-and-drop system using UI elements for menu creation
 - Possible switch to SDL3 if it's worth it
 
-## Dependencies : 
+## Dependencies: 
 - [SDL2](https://wiki.libsdl.org/SDL2/FrontPage)
 - [SDL_image](https://wiki.libsdl.org/SDL2_image/FrontPage)
 - [SDL_mixer](https://wiki.libsdl.org/SDL2_mixer/FrontPage)
