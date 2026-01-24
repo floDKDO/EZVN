@@ -17,6 +17,7 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
   - *GUI/* : classes attached to the GUI system (buttons, textbuttons, texttoggles, checkboxes, inputfields, sliders)
   - *RAII_SDL2/* : SDL2 encapsulation according to the RAII principle
   - *./* : the remaining files
+- *main.cpp* : contains your story
 
 ## Current features : 
 - Main screen, options menu (windowed/full-screen mode, music/sound volume, dialogue display speed)
@@ -31,13 +32,16 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 
 ## Remaining features to be implemented : 
 - Background animation
+- Modify the characters' eyes, mouth, etc.
+- Add a scrollable area (for dialogues history for example)
+- Add a logging system to obtain information about the engine states
 - Save system and persistent variables
 - Domain Specific Language like Ren'Py's
 - Drag-and-drop system using UI elements for menu creation
 - Possible switch to SDL3 if it's worth it
 
 ## Dependencies : 
-- SDL2
-- SDL_image
-- SDL_mixer
-- SDL_ttf
+- [SDL2](https://wiki.libsdl.org/SDL2/FrontPage)
+- [SDL_image](https://wiki.libsdl.org/SDL2_image/FrontPage)
+- [SDL_mixer](https://wiki.libsdl.org/SDL2_mixer/FrontPage)
+- [SDL_ttf](https://wiki.libsdl.org/SDL2_ttf/FrontPage)
