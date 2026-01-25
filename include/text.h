@@ -23,6 +23,8 @@ class Text : public Drawable
 		void unset_strike_through();
 		void unset_all();
 
+		void change_color(Color color) override;
+
 		void show_outline();
 		void hide_outline();
 

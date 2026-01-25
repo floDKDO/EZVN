@@ -26,33 +26,69 @@ void TextToggle::update()
 	{
 		if(is_checked_)
 		{
-			text_.change_color(constants::texttoggle_normal_checked_color_);
+			if(text_.color_.r_ != constants::texttoggle_normal_checked_color_.r_
+			|| text_.color_.g_ != constants::texttoggle_normal_checked_color_.g_
+			|| text_.color_.b_ != constants::texttoggle_normal_checked_color_.b_
+			|| text_.color_.a_ != constants::texttoggle_normal_checked_color_.a_)
+			{
+				text_.change_color(constants::texttoggle_normal_checked_color_);
+			}
 		}
 		else
 		{
-			text_.change_color(constants::texttoggle_normal_unchecked_color_);
+			if(text_.color_.r_ != constants::texttoggle_normal_unchecked_color_.r_
+			|| text_.color_.g_ != constants::texttoggle_normal_unchecked_color_.g_
+			|| text_.color_.b_ != constants::texttoggle_normal_unchecked_color_.b_
+			|| text_.color_.a_ != constants::texttoggle_normal_unchecked_color_.a_)
+			{
+				text_.change_color(constants::texttoggle_normal_unchecked_color_);
+			}
 		}
 	}
 	else if(state_ == State::SELECTED)
 	{
 		if(is_checked_)
 		{
-			text_.change_color(constants::texttoggle_selected_checked_color_);
+			if(text_.color_.r_ != constants::texttoggle_selected_checked_color_.r_
+			|| text_.color_.g_ != constants::texttoggle_selected_checked_color_.g_
+			|| text_.color_.b_ != constants::texttoggle_selected_checked_color_.b_
+			|| text_.color_.a_ != constants::texttoggle_selected_checked_color_.a_)
+			{
+				text_.change_color(constants::texttoggle_selected_checked_color_);
+			}
 		}
 		else
 		{
-			text_.change_color(constants::texttoggle_selected_unchecked_color_);
+			if(text_.color_.r_ != constants::texttoggle_selected_unchecked_color_.r_
+			|| text_.color_.g_ != constants::texttoggle_selected_unchecked_color_.g_
+			|| text_.color_.b_ != constants::texttoggle_selected_unchecked_color_.b_
+			|| text_.color_.a_ != constants::texttoggle_selected_unchecked_color_.a_)
+			{
+				text_.change_color(constants::texttoggle_selected_unchecked_color_);
+			}
 		}
 	}
 	else if(state_ == State::PRESSED)
 	{
 		if(is_checked_)
 		{
-			text_.change_color(constants::texttoggle_pressed_checked_color_);
+			if(text_.color_.r_ != constants::texttoggle_pressed_checked_color_.r_
+			|| text_.color_.g_ != constants::texttoggle_pressed_checked_color_.g_
+			|| text_.color_.b_ != constants::texttoggle_pressed_checked_color_.b_
+			|| text_.color_.a_ != constants::texttoggle_pressed_checked_color_.a_)
+			{
+				text_.change_color(constants::texttoggle_pressed_checked_color_);
+			}
 		}
 		else
 		{
-			text_.change_color(constants::texttoggle_pressed_unchecked_color_);
+			if(text_.color_.r_ != constants::texttoggle_pressed_unchecked_color_.r_
+			|| text_.color_.g_ != constants::texttoggle_pressed_unchecked_color_.g_
+			|| text_.color_.b_ != constants::texttoggle_pressed_unchecked_color_.b_
+			|| text_.color_.a_ != constants::texttoggle_pressed_unchecked_color_.a_)
+			{
+				text_.change_color(constants::texttoggle_pressed_unchecked_color_);
+			}
 		}
 	}
 }

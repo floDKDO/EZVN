@@ -45,15 +45,33 @@ void TextButton::update()
 
 	if(state_ == State::NORMAL)
 	{
-		text_.change_color(constants::textbutton_normal_color_);
+		if(text_.color_.r_ != constants::textbutton_normal_color_.r_ 
+		|| text_.color_.g_ != constants::textbutton_normal_color_.g_ 
+		|| text_.color_.b_ != constants::textbutton_normal_color_.b_ 
+		|| text_.color_.a_ != constants::textbutton_normal_color_.a_)
+		{
+			text_.change_color(constants::textbutton_normal_color_);
+		}
 	}
 	else if(state_ == State::SELECTED)
 	{
-		text_.change_color(constants::textbutton_selected_color_);
+		if(text_.color_.r_ != constants::textbutton_selected_color_.r_
+		|| text_.color_.g_ != constants::textbutton_selected_color_.g_
+		|| text_.color_.b_ != constants::textbutton_selected_color_.b_
+		|| text_.color_.a_ != constants::textbutton_selected_color_.a_)
+		{
+			text_.change_color(constants::textbutton_selected_color_);
+		}
 	}
 	else if(state_ == State::PRESSED)
 	{
-		text_.change_color(constants::textbutton_pressed_color_);
+		if(text_.color_.r_ != constants::textbutton_pressed_color_.r_
+		|| text_.color_.g_ != constants::textbutton_pressed_color_.g_
+		|| text_.color_.b_ != constants::textbutton_pressed_color_.b_
+		|| text_.color_.a_ != constants::textbutton_pressed_color_.a_)
+		{
+			text_.change_color(constants::textbutton_pressed_color_);
+		}
 	}
 	
 	/*if(confirmationpopup_)

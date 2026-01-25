@@ -28,7 +28,7 @@ void Game::init_game_states()
 
 void Game::run()
 {
-	const Uint64 FPS = 60;
+	const Uint64 FPS = 60; //TODO : limitation arbitraire ? Je pourrais la retirer et faire des déplacements constants pour tous les FPS
 	const Uint64 FRAME_TIME = Uint64((1.0f / FPS) * 1000.0f);
 
 	Uint64 second = 0;
@@ -39,6 +39,7 @@ void Game::run()
 	//mettre ce code ici (utilité : script_information_ est initialisé dans le constructeur de ScriptRunner)
 	init_game_states();
 
+	//TODO : vérifier que ma boucle de jeu est bonne
 	while(window_is_open_)
 	{
 		begin_current_frame = SDL_GetTicks64();

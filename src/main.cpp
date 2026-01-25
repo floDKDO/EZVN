@@ -53,7 +53,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.change_textbox("Sayori", "img/gui/natsuki_textbox.png");
 	game.change_namebox("Sayori", "img/gui/natsuki_namebox.png");
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(255, 203, 228));
-	game.move_textbox("topleft");
+	game.move_textbox("bottomright");
 	game.show_dialogue("Sayori", "Pink?");
 	game.change_textbox("Sayori", "img/gui/sayori_textbox.png");
 	game.change_namebox("Sayori", "img/gui/sayori_namebox.png");

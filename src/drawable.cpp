@@ -4,7 +4,7 @@
 #include <iostream>
 
 Drawable::Drawable(sdl::Renderer& renderer, Color color)
-	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), angle_(0.0), flip_(SDL_FLIP_NONE), color_(color), renderer_(renderer)
+	: last_time_(0), position_({0, 0, 0, 0}), color_(color), initial_rect_(position_), angle_(0.0), flip_(SDL_FLIP_NONE), renderer_(renderer)
 {}
 
 void Drawable::show()
@@ -143,6 +143,7 @@ void Drawable::afternoon_filter()
 void Drawable::change_color(Color color)
 {
 	//std::cout << "CHANGE COLOR ***********************************************************\n";
+
 	color_ = color;
 	texture_->set_color_mod(color_.r_, color_.g_, color_.b_);
 }

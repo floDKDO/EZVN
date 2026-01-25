@@ -38,10 +38,11 @@ class Drawable
 
 		void night_filter();
 		void afternoon_filter();
-		void change_color(Color color);
+		virtual void change_color(Color color);
 
 		Uint64 last_time_;
 		SDL_Rect position_;
+		Color color_;
 		
 	protected:
 		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
@@ -50,7 +51,6 @@ class Drawable
 		SDL_Rect initial_rect_;
 		double angle_;
 		SDL_RendererFlip flip_;
-		Color color_; 
 
 		sdl::Renderer& renderer_; 
 		

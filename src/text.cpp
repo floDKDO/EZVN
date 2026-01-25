@@ -121,6 +121,12 @@ void Text::unset_all()
 	font_style_ = TTF_STYLE_NORMAL;
 }
 
+void Text::change_color(Color color)
+{
+	Drawable::change_color(color);
+	recreate_surfaces_texture();
+}
+
 void Text::show_outline()
 {
 	outline_visible_ = true;
