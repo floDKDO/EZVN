@@ -37,6 +37,118 @@ Transform::Transform(std::string transform_name, int number_of_transform_steps)
 	: is_character_visible_(false), transform_name_(transform_name), /*previous_transform_name_(transform_name_),*/ transform_({transform_name, TransformAllSteps(number_of_transform_steps)})
 {}
 
+void Transform::fill_all_transforms()
+{
+	if(all_transforms_.size() > 0) //TODO : l'idéal serait de rendre all_transforms_ static
+	{
+		return;
+	}
+
+	all_transforms_.insert({"t11", [this](Image& image){ t11(image); }});
+	all_transforms_.insert({"t21", [this](Image& image){ t21(image); }});
+	all_transforms_.insert({"t22", [this](Image& image){ t22(image); }});
+	all_transforms_.insert({"t31", [this](Image& image){ t31(image); }});
+	all_transforms_.insert({"t32", [this](Image& image){ t32(image); }});
+	all_transforms_.insert({"t33", [this](Image& image){ t33(image); }});
+	all_transforms_.insert({"t41", [this](Image& image){ t41(image); }});
+	all_transforms_.insert({"t42", [this](Image& image){ t42(image); }});
+	all_transforms_.insert({"t43", [this](Image& image){ t43(image); }});
+	all_transforms_.insert({"t44", [this](Image& image){ t44(image); }});
+	all_transforms_.insert({"t51", [this](Image& image){ t51(image); }});
+	all_transforms_.insert({"t52", [this](Image& image){ t52(image); }});
+	all_transforms_.insert({"t53", [this](Image& image){ t53(image); }});
+	all_transforms_.insert({"t54", [this](Image& image){ t54(image); }});
+	all_transforms_.insert({"t55", [this](Image& image){ t55(image); }});
+
+	all_transforms_.insert({"f11", [this](Image& image){ f11(image); }});
+	all_transforms_.insert({"f21", [this](Image& image){ f21(image); }});
+	all_transforms_.insert({"f22", [this](Image& image){ f22(image); }});
+	all_transforms_.insert({"f31", [this](Image& image){ f31(image); }});
+	all_transforms_.insert({"f32", [this](Image& image){ f32(image); }});
+	all_transforms_.insert({"f33", [this](Image& image){ f33(image); }});
+	all_transforms_.insert({"f41", [this](Image& image){ f41(image); }});
+	all_transforms_.insert({"f42", [this](Image& image){ f42(image); }});
+	all_transforms_.insert({"f43", [this](Image& image){ f43(image); }});
+	all_transforms_.insert({"f44", [this](Image& image){ f44(image); }});
+	all_transforms_.insert({"f51", [this](Image& image){ f51(image); }});
+	all_transforms_.insert({"f52", [this](Image& image){ f52(image); }});
+	all_transforms_.insert({"f53", [this](Image& image){ f53(image); }});
+	all_transforms_.insert({"f54", [this](Image& image){ f54(image); }});
+	all_transforms_.insert({"f55", [this](Image& image){ f55(image); }});
+
+	all_transforms_.insert({"h11", [this](Image& image){ h11(image); }});
+	all_transforms_.insert({"h21", [this](Image& image){ h21(image); }});
+	all_transforms_.insert({"h22", [this](Image& image){ h22(image); }});
+	all_transforms_.insert({"h31", [this](Image& image){ h31(image); }});
+	all_transforms_.insert({"h32", [this](Image& image){ h32(image); }});
+	all_transforms_.insert({"h33", [this](Image& image){ h33(image); }});
+	all_transforms_.insert({"h41", [this](Image& image){ h41(image); }});
+	all_transforms_.insert({"h42", [this](Image& image){ h42(image); }});
+	all_transforms_.insert({"h43", [this](Image& image){ h43(image); }});
+	all_transforms_.insert({"h44", [this](Image& image){ h44(image); }});
+	all_transforms_.insert({"h51", [this](Image& image){ h51(image); }});
+	all_transforms_.insert({"h52", [this](Image& image){ h52(image); }});
+	all_transforms_.insert({"h53", [this](Image& image){ h53(image); }});
+	all_transforms_.insert({"h54", [this](Image& image){ h54(image); }});
+	all_transforms_.insert({"h55", [this](Image& image){ h55(image); }});
+
+	all_transforms_.insert({"hf11", [this](Image& image){ hf11(image); }});
+	all_transforms_.insert({"hf21", [this](Image& image){ hf21(image); }});
+	all_transforms_.insert({"hf22", [this](Image& image){ hf22(image); }});
+	all_transforms_.insert({"hf31", [this](Image& image){ hf31(image); }});
+	all_transforms_.insert({"hf32", [this](Image& image){ hf32(image); }});
+	all_transforms_.insert({"hf33", [this](Image& image){ hf33(image); }});
+	all_transforms_.insert({"hf41", [this](Image& image){ hf41(image); }});
+	all_transforms_.insert({"hf42", [this](Image& image){ hf42(image); }});
+	all_transforms_.insert({"hf43", [this](Image& image){ hf43(image); }});
+	all_transforms_.insert({"hf44", [this](Image& image){ hf44(image); }});
+	all_transforms_.insert({"hf51", [this](Image& image){ hf51(image); }});
+	all_transforms_.insert({"hf52", [this](Image& image){ hf52(image); }});
+	all_transforms_.insert({"hf53", [this](Image& image){ hf53(image); }});
+	all_transforms_.insert({"hf54", [this](Image& image){ hf54(image); }});
+	all_transforms_.insert({"hf55", [this](Image& image){ hf55(image); }});
+
+	all_transforms_.insert({"s11", [this](Image& image){ s11(image); }});
+	all_transforms_.insert({"s21", [this](Image& image){ s21(image); }});
+	all_transforms_.insert({"s22", [this](Image& image){ s22(image); }});
+	all_transforms_.insert({"s31", [this](Image& image){ s31(image); }});
+	all_transforms_.insert({"s32", [this](Image& image){ s32(image); }});
+	all_transforms_.insert({"s33", [this](Image& image){ s33(image); }});
+	all_transforms_.insert({"s41", [this](Image& image){ s41(image); }});
+	all_transforms_.insert({"s42", [this](Image& image){ s42(image); }});
+	all_transforms_.insert({"s43", [this](Image& image){ s43(image); }});
+	all_transforms_.insert({"s44", [this](Image& image){ s44(image); }});
+	all_transforms_.insert({"s51", [this](Image& image){ s51(image); }});
+	all_transforms_.insert({"s52", [this](Image& image){ s52(image); }});
+	all_transforms_.insert({"s53", [this](Image& image){ s53(image); }});
+	all_transforms_.insert({"s54", [this](Image& image){ s54(image); }});
+	all_transforms_.insert({"s55", [this](Image& image){ s55(image); }});
+
+	all_transforms_.insert({"d11", [this](Image& image){ d11(image); }});
+	all_transforms_.insert({"d21", [this](Image& image){ d21(image); }});
+	all_transforms_.insert({"d22", [this](Image& image){ d22(image); }});
+	all_transforms_.insert({"d31", [this](Image& image){ d31(image); }});
+	all_transforms_.insert({"d32", [this](Image& image){ d32(image); }});
+	all_transforms_.insert({"d33", [this](Image& image){ d33(image); }});
+	all_transforms_.insert({"d41", [this](Image& image){ d41(image); }});
+	all_transforms_.insert({"d42", [this](Image& image){ d42(image); }});
+	all_transforms_.insert({"d43", [this](Image& image){ d43(image); }});
+	all_transforms_.insert({"d44", [this](Image& image){ d44(image); }});
+	all_transforms_.insert({"d51", [this](Image& image){ d51(image); }});
+	all_transforms_.insert({"d52", [this](Image& image){ d52(image); }});
+	all_transforms_.insert({"d53", [this](Image& image){ d53(image); }});
+	all_transforms_.insert({"d54", [this](Image& image){ d54(image); }});
+	all_transforms_.insert({"d55", [this](Image& image){ d55(image); }});
+
+	all_transforms_.insert({"hide", [this](Image& image){ hide(image); }});
+	all_transforms_.insert({"lhide", [this](Image& image){ lhide(image); }});
+	all_transforms_.insert({"rhide", [this](Image& image){ rhide(image); }});
+
+	all_transforms_.insert({"test", [this](Image& image){ test(image); }});
+
+	all_transforms_.insert({"none", nullptr}); //do nothing!
+}
+
 //TODO : ne fonctionne pas pour hop etc.
 std::string Transform::transform_to_focus()
 {
@@ -71,391 +183,14 @@ void Transform::create_transform(std::string transform_name, bool is_visible)
 	transform_name_ = transform_name;
 	is_character_visible_ = is_visible; //to choose between on show and on replace
 	transform_ = {transform_name, TransformAllSteps(6)};
+	fill_all_transforms();
 }
 
 void Transform::show_transform(std::string transform_name, Image& image)
 {
-	//TODO : utiliser une std::unordered_map(std::string, std::function) ??
-
-	if(transform_name == "t11")
+	if(all_transforms_.count(transform_name))
 	{
-		t11(image);
-	}
-	else if(transform_name == "t21")
-	{
-		t21(image);
-	}
-	else if(transform_name == "t22")
-	{
-		t22(image);
-	}
-	else if(transform_name == "t31")
-	{
-		t31(image);
-	}
-	else if(transform_name == "t32")
-	{
-		t32(image);
-	}
-	else if(transform_name == "t33")
-	{
-		t33(image);
-	}
-	else if(transform_name == "t41")
-	{
-		t41(image);
-	}
-	else if(transform_name == "t42")
-	{
-		t42(image);
-	}
-	else if(transform_name == "t43")
-	{
-		t43(image);
-	}
-	else if(transform_name == "t44")
-	{
-		t44(image);
-	}
-	else if(transform_name == "t51")
-	{
-		t51(image);
-	}
-	else if(transform_name == "t52")
-	{
-		t52(image);
-	}
-	else if(transform_name == "t53")
-	{
-		t53(image);
-	}
-	else if(transform_name == "t54")
-	{
-		t54(image);
-	}
-	else if(transform_name == "t55")
-	{
-		t55(image);
-	}
-	else if(transform_name == "f11")
-	{
-		f11(image);
-	}
-	else if(transform_name == "f21")
-	{
-		f21(image);
-	}
-	else if(transform_name == "f22")
-	{
-		f22(image);
-	}
-	else if(transform_name == "f31")
-	{
-		f31(image);
-	}
-	else if(transform_name == "f32")
-	{
-		f32(image);
-	}
-	else if(transform_name == "f33")
-	{
-		f33(image);
-	}
-	else if(transform_name == "f41")
-	{
-		f41(image);
-	}
-	else if(transform_name == "f42")
-	{
-		f42(image);
-	}
-	else if(transform_name == "f43")
-	{
-		f43(image);
-	}
-	else if(transform_name == "f44")
-	{
-		f44(image);
-	}
-	else if(transform_name == "f51")
-	{
-		f51(image);
-	}
-	else if(transform_name == "f52")
-	{
-		f52(image);
-	}
-	else if(transform_name == "f53")
-	{
-		f53(image);
-	}
-	else if(transform_name == "f54")
-	{
-		f54(image);
-	}
-	else if(transform_name == "f55")
-	{
-		f55(image);
-	}
-	else if(transform_name == "h11")
-	{
-		h11(image);
-	}
-	else if(transform_name == "h21")
-	{
-		h21(image);
-	}
-	else if(transform_name == "h22")
-	{
-		h22(image);
-	}
-	else if(transform_name == "h31")
-	{
-		h31(image);
-	}
-	else if(transform_name == "h32")
-	{
-		h32(image);
-	}
-	else if(transform_name == "h33")
-	{
-		h33(image);
-	}
-	else if(transform_name == "h41")
-	{
-		h41(image);
-	}
-	else if(transform_name == "h42")
-	{
-		h42(image);
-	}
-	else if(transform_name == "h43")
-	{
-		h43(image);
-	}
-	else if(transform_name == "h44")
-	{
-		h44(image);
-	}
-	else if(transform_name == "h51")
-	{
-		h51(image);
-	}
-	else if(transform_name == "h52")
-	{
-		h52(image);
-	}
-	else if(transform_name == "h53")
-	{
-		h53(image);
-	}
-	else if(transform_name == "h54")
-	{
-		h54(image);
-	}
-	else if(transform_name == "h55")
-	{
-		h55(image);
-	}
-	else if(transform_name == "hf11")
-	{
-		hf11(image);
-	}
-	else if(transform_name == "hf21")
-	{
-		hf21(image);
-	}
-	else if(transform_name == "hf22")
-	{
-		hf22(image);
-	}
-	else if(transform_name == "hf31")
-	{
-		hf31(image);
-	}
-	else if(transform_name == "hf32")
-	{
-		hf32(image);
-	}
-	else if(transform_name == "hf33")
-	{
-		hf33(image);
-	}
-	else if(transform_name == "hf41")
-	{
-		hf41(image);
-	}
-	else if(transform_name == "hf42")
-	{
-		hf42(image);
-	}
-	else if(transform_name == "hf43")
-	{
-		hf43(image);
-	}
-	else if(transform_name == "hf44")
-	{
-		hf44(image);
-	}
-	else if(transform_name == "hf51")
-	{
-		hf51(image);
-	}
-	else if(transform_name == "hf52")
-	{
-		hf52(image);
-	}
-	else if(transform_name == "hf53")
-	{
-		hf53(image);
-	}
-	else if(transform_name == "hf54")
-	{
-		hf54(image);
-	}
-	else if(transform_name == "hf55")
-	{
-		hf55(image);
-	}
-	else if(transform_name == "s11")
-	{
-		s11(image);
-	}
-	else if(transform_name == "s21")
-	{
-		s21(image);
-	}
-	else if(transform_name == "s22")
-	{
-		s22(image);
-	}
-	else if(transform_name == "s31")
-	{
-		s31(image);
-	}
-	else if(transform_name == "s32")
-	{
-		s32(image);
-	}
-	else if(transform_name == "s33")
-	{
-		s33(image);
-	}
-	else if(transform_name == "s41")
-	{
-		s41(image);
-	}
-	else if(transform_name == "s42")
-	{
-		s42(image);
-	}
-	else if(transform_name == "s43")
-	{
-		s43(image);
-	}
-	else if(transform_name == "s44")
-	{
-		s44(image);
-	}
-	else if(transform_name == "s51")
-	{
-		s51(image);
-	}
-	else if(transform_name == "s52")
-	{
-		s52(image);
-	}
-	else if(transform_name == "s53")
-	{
-		s53(image);
-	}
-	else if(transform_name == "s54")
-	{
-		s54(image);
-	}
-	else if(transform_name == "s55")
-	{
-		s55(image);
-	}
-	else if(transform_name == "d11")
-	{
-		d11(image);
-	}
-	else if(transform_name == "d21")
-	{
-		d21(image);
-	}
-	else if(transform_name == "d22")
-	{
-		d22(image);
-	}
-	else if(transform_name == "d31")
-	{
-		d31(image);
-	}
-	else if(transform_name == "d32")
-	{
-		d32(image);
-	}
-	else if(transform_name == "d33")
-	{
-		d33(image);
-	}
-	else if(transform_name == "d41")
-	{
-		d41(image);
-	}
-	else if(transform_name == "d42")
-	{
-		d42(image);
-	}
-	else if(transform_name == "d43")
-	{
-		d43(image);
-	}
-	else if(transform_name == "d44")
-	{
-		d44(image);
-	}
-	else if(transform_name == "d51")
-	{
-		d51(image);
-	}
-	else if(transform_name == "d52")
-	{
-		d52(image);
-	}
-	else if(transform_name == "d53")
-	{
-		d53(image);
-	}
-	else if(transform_name == "d54")
-	{
-		d54(image);
-	}
-	else if(transform_name == "d55")
-	{
-		d55(image);
-	}
-	else if(transform_name == "lhide")
-	{
-		lhide(image);
-	}
-	else if(transform_name == "rhide")
-	{
-		rhide(image);
-	}
-	else if(transform_name == "test")
-	{
-		test(image);
-	}
-	else if(transform_name == "hide")
-	{
-		hide(image);
-	}
-	else if(transform_name == "none")
-	{
-		//do nothing!
+		all_transforms_[transform_name](image);
 	}
 	else
 	{

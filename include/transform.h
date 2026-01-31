@@ -3,8 +3,8 @@
 #include "transform_step.h"
 
 #include <vector>
-
-//TODO : ajouter les autres transfos (hop etc.)
+#include <unordered_map>
+#include <functional>
 
 class Transform
 {
@@ -19,7 +19,6 @@ class Transform
 		void create_transform(std::string transform_name, bool is_visible);
 		void show_transform(std::string transform_name, Image& image);
 
-		bool is_character_visible_;
 		std::string transform_name_;
 		//std::string previous_transform_name_;
 
@@ -35,6 +34,8 @@ class Transform
 			unsigned int number_of_transform_steps_;
 			std::vector<TransformStep> transform_steps_;
 		};
+
+		void fill_all_transforms();
 
 		void tcommon(int xpos, Image& image);
 		void t11(Image& image);
@@ -144,7 +145,9 @@ class Transform
 		void test(Image& image);
 		void hide(Image& image); //TODO : time
 
-		//std::unordered_map<std::string, std::function<void(Image& image)>> all_transforms_; //ex : {"t11", t11()}
+		bool is_character_visible_;
+
+		std::unordered_map<std::string, std::function<void(Image& image)>> all_transforms_; 
 
 		//std::unordered_map<TransformName, TransformAllSteps> transforms_;
 
