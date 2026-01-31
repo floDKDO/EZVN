@@ -81,6 +81,7 @@ void Drawable::zoom(float zoom)
 void Drawable::resize(int w, int h)
 {
 	//std::cout << "RESIZE ***********************************************************\n";
+	
 	position_ = {position_.x, position_.y, w, h};
 }
 

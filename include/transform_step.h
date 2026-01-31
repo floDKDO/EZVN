@@ -1,6 +1,7 @@
 #pragma once
 
 #include "image.h"
+#include "duration.h"
 
 #include <variant>
 
@@ -11,28 +12,28 @@ class TransformStep
 	public:
 		TransformStep();
 
-		void show(Image& image, Uint64 duration = 0);
-		void hide(Image& image, Uint64 duration = 0);
-		void set_alpha(Image& image, Uint8 alpha, Uint64 duration = 0);
+		void show(Image& image, Duration duration = Duration());
+		void hide(Image& image, Duration duration = Duration());
+		void set_alpha(Image& image, Uint8 alpha, Duration duration = Duration());
 
-		void rotate(Image& image, double angle, Uint64 duration = 0);
+		void rotate(Image& image, double angle, Duration duration = Duration());
 
-		void zoom(Image& image, float zoom, Uint64 duration = 0);
-		void resize(Image& image, int w, int h, Uint64 duration = 0);
+		void zoom(Image& image, float zoom, Duration duration = Duration());
+		void resize(Image& image, int w, int h, Duration duration = Duration());
 
-		void set_position(Image& image, int x, int y, Uint64 duration = 0);
-		void set_position_xcenter(Image& image, int x, Uint64 duration = 0);
-		void set_position_ycenter(Image& image, int y, Uint64 duration = 0);
-	    void set_position_xycenter(Image& image, int x, int y, Uint64 duration = 0);
+		void set_position(Image& image, int x, int y, Duration duration = Duration());
+		void set_position_xcenter(Image& image, int x, Duration duration = Duration());
+		void set_position_ycenter(Image& image, int y, Duration duration = Duration());
+	    void set_position_xycenter(Image& image, int x, int y, Duration duration = Duration());
 
-		void set_position_xoffset(Image& image, int x, Uint64 duration = 0);
-		void set_position_yoffset(Image& image, int y, Uint64 duration = 0);
+		void set_position_xoffset(Image& image, int x, Duration duration = Duration());
+		void set_position_yoffset(Image& image, int y, Duration duration = Duration());
 
-		void set_center(Image& image, Uint64 duration = 0);
+		void set_center(Image& image, Duration duration = Duration());
 
-		void night_filter(Image& image, Uint64 duration = 0);
-		void afternoon_filter(Image& image, Uint64 duration = 0);
-		void own_filter(Image& image, Uint8 r, Uint8 g, Uint8 b, Uint64 duration = 0);
+		void night_filter(Image& image, Duration duration = Duration());
+		void afternoon_filter(Image& image, Duration duration = Duration());
+		void own_filter(Image& image, Uint8 r, Uint8 g, Uint8 b, Duration duration = Duration());
 
 		void reset(Image& image);
 
@@ -105,17 +106,24 @@ class TransformStep
 				Uint8 initial_b_;
 		};
 
+		enum class IsPositionOffset
+		{
+			X_OFFSET,
+			Y_OFFSET,
+			NONE
+		};
+
 		void no_modif_common(bool condition);
 
 		template<typename F>
-		void instant_modif_common(F instant_modif_fonc, Uint64 duration);
+		void instant_modif_common(F instant_modif_fonc, Duration duration);
 
 		template<typename Factory, typename F>
-		void each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Uint64 duration = 0);
+		void each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Duration duration = Duration());
 
-		void alpha_common(Uint8 alpha, Image& image, Uint64 duration = 0);
-		void set_position_common(Image& image, int x, int y, Uint64 duration = 0);
-		void filter_common(Image& image, Uint8 r, Uint8 g, Uint8 b, Uint64 duration = 0);
+		void alpha_common(Uint8 alpha, Image& image, Duration duration = Duration());
+		void set_position_common(Image& image, int x, int y, IsPositionOffset is_offset, Duration duration = Duration());
+		void filter_common(Image& image, Uint8 r, Uint8 g, Uint8 b, Duration duration = Duration());
 
 		bool is_init_;
 		std::variant<std::monostate, PositionStep, SizeStep, RotateStep, AlphaStep, FilterStep> step_;

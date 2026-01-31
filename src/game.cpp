@@ -28,11 +28,6 @@ void Game::init_game_states()
 	push_state(game_states_map_.at(constants::main_menu_unique_id_).get());
 }
 
-
-float lerp_temp(float a, float b, float t)
-{
-	return a + t * (b - a);
-}
 void Game::run()
 {
 	const Uint64 FPS = 60; //TODO : limitation arbitraire ? Je pourrais la retirer et faire des déplacements constants pour tous les FPS

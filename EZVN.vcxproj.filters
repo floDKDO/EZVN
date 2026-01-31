@@ -198,6 +198,9 @@
     <ClCompile Include="src\GUI\scrollbar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\duration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\image.h">
@@ -381,6 +384,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\scrollbar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\duration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -62,6 +62,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_dialogue("MC", "I...");
 	game.play_sound("sounds/door_open.ogg");
 	game.show_dialogue("Sayori", "Follow me!");
+	game.show_character("Sayori", "lhide");
 	game.show_background("img/backgrounds/club.png");
 	game.stop_sound();
 	game.play_music("sounds/3.ogg", 0, 500);

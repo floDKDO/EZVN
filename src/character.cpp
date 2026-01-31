@@ -22,7 +22,7 @@ void Character::set_transform(std::string transform_name)
 		properties_.is_visible_ = true;
 	}
 
-	std::cout << "Transfo: " << transform_name << ", " << properties_.transform_name_ << ", " << transform_.transform_name_ << ", " << std::boolalpha << properties_.is_visible_ << std::endl;
+	//std::cout << "Transfo: " << transform_name << ", " << properties_.transform_name_ << ", " << transform_.transform_name_ << ", " << std::boolalpha << properties_.is_visible_ << std::endl;
 
 	if(transform_.transform_name_ != transform_name)
 	{
