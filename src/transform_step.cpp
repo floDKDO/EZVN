@@ -3,12 +3,21 @@
 
 #include <iostream>
 
-//TODO : bug si plusieurs transformation d'une même step modifient les mêmes coordonnées (ex : zoom et set_position) ??
-//TODO : si zoom et set_position à la même step => fonctionne si zoom avant set_position mais pas si zoom est après set_position !!
+//TODO : gérer les easein/easeout 
 
 TransformStep::TransformStep()
 	: transform_step_finished_(false), is_init_(false)
 {}
+
+float lerp(float a, float b, float t)
+{
+	return a + t * (b - a);
+}
+
+double lerp(double a, double b, double t)
+{
+	return a + t * (b - a);
+}
 
 void TransformStep::no_modif_common(bool condition)
 {
@@ -20,10 +29,10 @@ void TransformStep::no_modif_common(bool condition)
 }
 
 template<typename F>
-void TransformStep::instant_modif_common(F instant_modif_fonc, Uint64 time)
+void TransformStep::instant_modif_common(F instant_modif_fonc, Uint64 duration)
 {
 	SDL_assert(std::is_invocable_v<F>);
-	if(time == 0 && !transform_step_finished_)
+	if(duration == 0 && !transform_step_finished_)
 	{
 		instant_modif_fonc();
 		transform_step_finished_ = true;
@@ -32,10 +41,10 @@ void TransformStep::instant_modif_common(F instant_modif_fonc, Uint64 time)
 }
 
 template<typename Factory, typename F> 
-void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Uint64 time)
+void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_modif_fonc, Uint64 duration)
 {
 	SDL_assert(std::is_invocable_v<Factory>);
-	if(!transform_step_finished_ && time != 0)
+	if(!transform_step_finished_ && duration != 0)
 	{
 		if(!is_init_)
 		{
@@ -44,17 +53,22 @@ void TransformStep::each_frame_modif_common(Factory step_object, F each_frame_mo
 		}
 
 		using step_t = std::decay_t<decltype(step_object())>; //get the type by removing first reference and const/volatile qualifiers to be compatible with the types of the std::variant step_
-		step_t& t = std::get<step_t>(step_);
+		step_t& current_step = std::get<step_t>(step_);
 
-		if(each_frame_modif_fonc(t)) 
+		current_step.elapsed_time_ = SDL_GetTicks64() - current_step.start_time_;
+		current_step.t_ = float(current_step.elapsed_time_) / float(duration);
+
+		if(current_step.t_ > 1.0f)
 		{
-			//std::cout << "FINISHED!\n";
+			current_step.t_ = 1.0f;
 			transform_step_finished_ = true;
 		}
+
+		each_frame_modif_fonc(current_step); 
 	}
 }
 
-void TransformStep::alpha_common(Uint8 alpha, Image& image, Uint64 time)
+void TransformStep::alpha_common(Uint8 alpha, Image& image, Uint64 duration)
 {
 	no_modif_common(image.color_.a_ == alpha);
 
@@ -62,38 +76,33 @@ void TransformStep::alpha_common(Uint8 alpha, Image& image, Uint64 time)
 	{
 		image.set_alpha(alpha);
 	}
-	, time);
+	, duration);
 
-	each_frame_modif_common([&](){ return AlphaStep(image.color_.a_, alpha); },
-	[&](AlphaStep& alpha_step) -> bool
+	each_frame_modif_common([&](){ return AlphaStep(image.color_.a_); },
+	[&](AlphaStep& alpha_step)
 	{
-		alpha_step.delta_alpha_frame_ = alpha_step.delta_alpha_ / (60.0f / (1000.0f / float(time)));
-		alpha_step.f_alpha_ += alpha_step.delta_alpha_frame_;
-
-		image.color_.a_ = Uint8(alpha_step.f_alpha_);
-		image.texture_->set_alpha_mod(image.color_.a_);
-
-		return (alpha_step.initial_alpha_ > alpha && image.color_.a_ <= alpha) || (alpha_step.initial_alpha_ < alpha && image.color_.a_ >= alpha);
+		Uint8 new_alpha_value = Uint8(lerp(float(alpha_step.initial_alpha_), float(alpha), alpha_step.t_));
+		image.set_alpha(new_alpha_value);
 	}
-	, time);
+	, duration);
 }
 
-void TransformStep::show(Image& image, Uint64 time)
+void TransformStep::show(Image& image, Uint64 duration)
 {
-	alpha_common(255, image, time);
+	alpha_common(255, image, duration);
 }
 
-void TransformStep::hide(Image& image, Uint64 time)
+void TransformStep::hide(Image& image, Uint64 duration)
 {
-	alpha_common(0, image, time);
+	alpha_common(0, image, duration);
 }
 
-void TransformStep::set_alpha(Image& image, Uint8 alpha, Uint64 time)
+void TransformStep::set_alpha(Image& image, Uint8 alpha, Uint64 duration)
 {
-	alpha_common(alpha, image, time);
+	alpha_common(alpha, image, duration);
 }
 
-void TransformStep::rotate(Image& image, double angle, Uint64 time)
+void TransformStep::rotate(Image& image, double angle, Uint64 duration)
 {
 	no_modif_common(image.angle_ == angle);
 
@@ -101,20 +110,18 @@ void TransformStep::rotate(Image& image, double angle, Uint64 time)
 	{
 		image.rotate(angle);
 	}
-	, time);
+	, duration);
 
-	each_frame_modif_common([&](){ return RotateStep(image.angle_, angle); },
-	[&](RotateStep& rotate_step) -> bool
+	each_frame_modif_common([&](){ return RotateStep(image.angle_); },
+	[&](RotateStep& rotate_step)
 	{
-		rotate_step.delta_angle_frame_ = rotate_step.delta_angle_ / (60.0f / (1000.0f / double(time)));
-		image.angle_ += rotate_step.delta_angle_frame_;
-
-		return (rotate_step.initial_angle_ < angle && image.angle_ >= angle) || (rotate_step.initial_angle_ > angle && image.angle_ <= angle);
+		double new_angle_value = lerp(rotate_step.initial_angle_, angle, double(rotate_step.t_));
+		image.rotate(new_angle_value);
 	}
-	, time);
+	, duration);
 }
 
-void TransformStep::set_position_common(Image& image, int x, int y, Uint64 time)
+void TransformStep::set_position_common(Image& image, int x, int y, Uint64 duration)
 {
 	no_modif_common(image.position_.x == x && image.position_.y == y);
 
@@ -122,61 +129,49 @@ void TransformStep::set_position_common(Image& image, int x, int y, Uint64 time)
 	{
 		image.set_position(x, y);
 	}
-	, time);
+	, duration);
 
-	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y, x, y); },
-	[&](PositionStep& position_step) -> bool
+	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y); },
+	[&](PositionStep& position_step)
 	{
-		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
-		position_step.f_position_x_ += position_step.delta_x_frame_;
-
-		position_step.delta_y_frame_ = position_step.delta_y_ / (60.0f / (1000.0f / float(time)));
-		position_step.f_position_y_ += position_step.delta_y_frame_;
-
-		image.position_.x = int(position_step.f_position_x_);
-		image.position_.y = int(position_step.f_position_y_);
-
-		//std::cout << "x: " << x << " et initial_x : " << position_step.initial_position_x_ << " et image_x : " << image.position_.x << std::endl;
-		//std::cout << "y: " << y << " et initial_y: " << position_step.initial_position_y_ << " et image_y: " << image.position_.y << std::endl;
-		//std::cout << "\n";
-
-		return ((position_step.initial_position_x_ <= x && image.position_.x >= x) || (position_step.initial_position_x_ > x && image.position_.x <= x))
-			&& ((position_step.initial_position_y_ <= y && image.position_.y >= y) || (position_step.initial_position_y_ > y && image.position_.y <= y));
+		int new_x_value = int(lerp(float(position_step.initial_position_x_), float(x), position_step.t_));
+		int new_y_value = int(lerp(float(position_step.initial_position_y_), float(y), position_step.t_));
+		image.set_position(new_x_value, new_y_value);
 	}
-	, time);
+	, duration);
 }
 
-void TransformStep::set_position(Image& image, int x, int y, Uint64 time)
+void TransformStep::set_position(Image& image, int x, int y, Uint64 duration)
 {
-	set_position_common(image, x, y, time);
+	set_position_common(image, x, y, duration);
 }
 
-void TransformStep::set_position_xcenter(Image& image, int x, Uint64 time)
+void TransformStep::set_position_xcenter(Image& image, int x, Uint64 duration)
 {
-	set_position_common(image, x - std::abs(image.get_xcenter()), image.position_.y, time);
+	set_position_common(image, x - std::abs(image.get_xcenter()), image.position_.y, duration);
 }
 
-void TransformStep::set_position_ycenter(Image& image, int y, Uint64 time)
+void TransformStep::set_position_ycenter(Image& image, int y, Uint64 duration)
 {
-	set_position_common(image, image.position_.x, y - std::abs(image.get_ycenter()), time);
+	set_position_common(image, image.position_.x, y - std::abs(image.get_ycenter()), duration);
 }
 
-void TransformStep::set_position_xycenter(Image& image, int x, int y, Uint64 time)
+void TransformStep::set_position_xycenter(Image& image, int x, int y, Uint64 duration)
 {
-	set_position_common(image, x - std::abs(image.get_xcenter()), y - std::abs(image.get_ycenter()), time); 
+	set_position_common(image, x - std::abs(image.get_xcenter()), y - std::abs(image.get_ycenter()), duration);
 }
 
-void TransformStep::set_position_xoffset(Image& image, int x, Uint64 time)
+void TransformStep::set_position_xoffset(Image& image, int x, Uint64 duration)
 {
-	set_position_common(image, image.initial_rect_.x + x, image.position_.y, time);
+	set_position_common(image, image.initial_rect_.x + x, image.position_.y, duration);
 }
 
-void TransformStep::set_position_yoffset(Image& image, int y, Uint64 time)
+void TransformStep::set_position_yoffset(Image& image, int y, Uint64 duration)
 {
-	set_position_common(image, image.position_.x, image.initial_rect_.y + y, time);
+	set_position_common(image, image.position_.x, image.initial_rect_.y + y, duration);
 }
 
-void TransformStep::set_center(Image& image, Uint64 time)
+void TransformStep::set_center(Image& image, Uint64 duration)
 {
 	no_modif_common(image.position_.x == (constants::window_width_ / 2 - std::abs(image.get_xcenter())) && image.position_.y == (constants::window_height_ / 2 - std::abs(image.get_ycenter())));
 
@@ -184,33 +179,19 @@ void TransformStep::set_center(Image& image, Uint64 time)
 	{
 		image.set_center();
 	}
-	, time);
+	, duration);
 
-	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y, constants::window_width_ / 2 - std::abs(image.get_xcenter()), constants::window_height_ / 2 - std::abs(image.get_ycenter())); },
-	[&](PositionStep& position_step) -> bool
+	each_frame_modif_common([&](){ return PositionStep(image.position_.x, image.position_.y); },
+	[&](PositionStep& position_step) 
 	{
-		position_step.delta_x_frame_ = position_step.delta_x_ / (60.0f / (1000.0f / float(time)));
-		position_step.f_position_x_ += position_step.delta_x_frame_;
-
-		position_step.delta_y_frame_ = position_step.delta_y_ / (60.0f / (1000.0f / float(time)));
-		position_step.f_position_y_ += position_step.delta_y_frame_;
-
-		image.position_.x = int(position_step.f_position_x_);
-		image.position_.y = int(position_step.f_position_y_);
-
-		//std::cout << "x: " << constants::window_width_ / 2 - std::abs(get_xcenter(image)) << " et initial_x : " << position_step.initial_position_x_ << " et image_x : " << image.position_.x << std::endl;
-		//std::cout << "y: " << constants::window_height_ / 2  - std::abs(get_ycenter(image)) << " et initial_y: " << position_step.initial_position_y_ << " et image_y: " << image.position_.y << std::endl;
-		//std::cout << "\n";
-
-		return ((position_step.initial_position_x_ <= constants::window_width_ / 2 - std::abs(image.get_xcenter()) && image.position_.x >= constants::window_width_ / 2 - std::abs(image.get_xcenter())) 
-			|| (position_step.initial_position_x_ > constants::window_width_ / 2 - std::abs(image.get_xcenter()) && image.position_.x <= constants::window_width_ / 2 - std::abs(image.get_xcenter())))
-			&& ((position_step.initial_position_y_ <= constants::window_height_ / 2 - std::abs(image.get_ycenter()) && image.position_.y >= constants::window_height_ / 2 - std::abs(image.get_ycenter())) 
-			|| (position_step.initial_position_y_ > constants::window_height_ / 2 - std::abs(image.get_ycenter()) && image.position_.y <= constants::window_height_ / 2 - std::abs(image.get_ycenter())));
+		int new_x_value = int(lerp(float(position_step.initial_position_x_), float(constants::window_width_ / 2 - std::abs(image.get_xcenter())), position_step.t_));
+		int new_y_value = int(lerp(float(position_step.initial_position_y_), float(constants::window_height_ / 2 - std::abs(image.get_ycenter())), position_step.t_));
+		image.set_position(new_x_value, new_y_value);
 	}
-	, time);
+	, duration);
 }
 
-void TransformStep::zoom(Image& image, float zoom, Uint64 time)
+void TransformStep::zoom(Image& image, float zoom, Uint64 duration)
 {
 	no_modif_common(zoom == 1.0f);
 
@@ -218,27 +199,19 @@ void TransformStep::zoom(Image& image, float zoom, Uint64 time)
 	{
 		image.zoom(zoom);
 	}
-	, time);
+	, duration);
 
-	each_frame_modif_common([&](){ return SizeStep(image.position_.w, image.position_.h, zoom); },
-	[&](SizeStep& size_step) -> bool
+	each_frame_modif_common([&](){ return SizeStep(image.position_.w, image.position_.h); },
+	[&](SizeStep& size_step)
 	{
-		size_step.delta_w_frame_ = size_step.delta_w_ / (60.0f / (1000.0f / float(time)));
-		size_step.f_size_w_ += size_step.delta_w_frame_;
-
-		size_step.delta_h_frame_ = size_step.delta_h_ / (60.0f / (1000.0f / float(time)));
-		size_step.f_size_h_ += size_step.delta_h_frame_;
-
-		image.position_.w = int(size_step.f_size_w_);
-		image.position_.h = int(size_step.f_size_h_);
-
-		return ((zoom <= 1.0f && image.position_.w <= size_step.initial_size_w_ + size_step.delta_w_) || (zoom > 1.0f && image.position_.w >= size_step.initial_size_w_ + size_step.delta_w_))
-			&& ((zoom <= 1.0f && image.position_.h <= size_step.initial_size_h_ + size_step.delta_h_) || (zoom > 1.0f && image.position_.h >= size_step.initial_size_h_ + size_step.delta_h_));
+		int new_w_value = int(lerp(float(size_step.initial_size_w_), float(size_step.initial_size_w_) * zoom, size_step.t_));
+		int new_h_value = int(lerp(float(size_step.initial_size_h_), float(size_step.initial_size_h_) * zoom, size_step.t_));
+		image.resize(new_w_value, new_h_value);
 	}
-	, time);
+	, duration);
 }
 
-void TransformStep::resize(Image& image, int w, int h, Uint64 time)
+void TransformStep::resize(Image& image, int w, int h, Uint64 duration)
 {
 	no_modif_common(image.position_.w == w && image.position_.h == h);
 
@@ -246,27 +219,19 @@ void TransformStep::resize(Image& image, int w, int h, Uint64 time)
 	{
 		image.resize(w, h);
 	}
-	, time);
+	, duration);
 
-	each_frame_modif_common([&](){ return SizeStep(image.position_.w, image.position_.h, w, h); },
-	[&](SizeStep& size_step) -> bool
+	each_frame_modif_common([&](){ return SizeStep(image.position_.w, image.position_.h); },
+	[&](SizeStep& size_step)
 	{
-		size_step.delta_w_frame_ = size_step.delta_w_ / (60.0f / (1000.0f / float(time)));
-		size_step.f_size_w_ += size_step.delta_w_frame_;
-
-		size_step.delta_h_frame_ = size_step.delta_h_ / (60.0f / (1000.0f / float(time)));
-		size_step.f_size_h_ += size_step.delta_h_frame_;
-
-		image.position_.w = int(size_step.f_size_w_);
-		image.position_.h = int(size_step.f_size_h_);
-
-		return ((size_step.initial_size_w_ <= w && image.position_.w >= w) || (size_step.initial_size_w_ > w && image.position_.w <= w))
-			&& ((size_step.initial_size_h_ <= h && image.position_.h >= h) || (size_step.initial_size_h_ > h && image.position_.h <= h));
+		int new_w_value = int(lerp(float(size_step.initial_size_w_), float(w), size_step.t_));
+		int new_h_value = int(lerp(float(size_step.initial_size_h_), float(h), size_step.t_));
+		image.resize(new_w_value, new_h_value);
 	}
-	, time);
+	, duration);
 }
 
-void TransformStep::filter_common(Image& image, Uint8 r, Uint8 g, Uint8 b, Uint64 time)
+void TransformStep::filter_common(Image& image, Uint8 r, Uint8 g, Uint8 b, Uint64 duration)
 {
 	no_modif_common(image.color_.r_ == r && image.color_.g_ == g && image.color_.b_ == b);
 
@@ -274,46 +239,32 @@ void TransformStep::filter_common(Image& image, Uint8 r, Uint8 g, Uint8 b, Uint6
 	{
 		image.change_color(Color::from_rgba8(r, g, b, image.color_.a_));
 	}
-	, time);
+	, duration);
 
-	each_frame_modif_common([&](){ return FilterStep(image.color_.r_, image.color_.g_, image.color_.b_, r, g, b); },
-	[&](FilterStep& filter_step) -> bool
+	each_frame_modif_common([&](){ return FilterStep(image.color_.r_, image.color_.g_, image.color_.b_); },
+	[&](FilterStep& filter_step)
 	{
-		filter_step.delta_r_frame_ = filter_step.delta_r_ / (60.0f / (1000.0f / float(time)));
-		filter_step.f_r_ += filter_step.delta_r_frame_;
-
-		filter_step.delta_g_frame_ = filter_step.delta_g_ / (60.0f / (1000.0f / float(time)));
-		filter_step.f_g_ += filter_step.delta_g_frame_;
-
-		filter_step.delta_b_frame_ = filter_step.delta_b_ / (60.0f / (1000.0f / float(time)));
-		filter_step.f_b_ += filter_step.delta_b_frame_;
-
-		image.color_.r_ = Uint8(filter_step.f_r_);
-		image.color_.g_ = Uint8(filter_step.f_g_);
-		image.color_.b_ = Uint8(filter_step.f_b_);
-
-		image.texture_->set_color_mod(image.color_.r_, image.color_.g_, image.color_.b_);
-
-		return ((filter_step.initial_r_ <= r && image.color_.r_ >= r) || (filter_step.initial_r_ > r && image.color_.r_ <= r))
-			&& ((filter_step.initial_g_ <= g && image.color_.g_ >= g) || (filter_step.initial_g_ > g && image.color_.g_ <= g))
-			&& ((filter_step.initial_b_ <= b && image.color_.b_ >= b) || (filter_step.initial_b_ > b && image.color_.b_ <= b));
+		Uint8 new_r_value = Uint8(lerp(float(filter_step.initial_r_), float(r), filter_step.t_));
+		Uint8 new_g_value = Uint8(lerp(float(filter_step.initial_g_), float(g), filter_step.t_));
+		Uint8 new_b_value = Uint8(lerp(float(filter_step.initial_b_), float(b), filter_step.t_));
+		image.change_color(Color::from_rgba8(new_r_value, new_g_value, new_b_value));
 	}
-	, time);
+	, duration);
 }
 
-void TransformStep::night_filter(Image& image, Uint64 time)
+void TransformStep::night_filter(Image& image, Uint64 duration)
 {
-	filter_common(image, 127, 127, 165, time);
+	filter_common(image, 127, 127, 165, duration);
 }
 
-void TransformStep::afternoon_filter(Image& image, Uint64 time)
+void TransformStep::afternoon_filter(Image& image, Uint64 duration)
 {
-	filter_common(image, 210, 150, 130, time);
+	filter_common(image, 210, 150, 130, duration);
 }
 
-void TransformStep::own_filter(Image& image, Uint8 r, Uint8 g, Uint8 b, Uint64 time)
+void TransformStep::own_filter(Image& image, Uint8 r, Uint8 g, Uint8 b, Uint64 duration)
 {
-	filter_common(image, r, g, b, time);
+	filter_common(image, r, g, b, duration);
 }
 
 //TODO : aussi sauvegarder angle, alpha etc ??

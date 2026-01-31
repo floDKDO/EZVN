@@ -15,7 +15,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 
 	//Second step : write your own story!
-
 	game.autofocus_enable();
 	game.autozorder_enable();
 	game.show_background("img/backgrounds/cafeteria.png");
@@ -78,7 +77,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 
 	//Third and last step : run the game
-
 	game.run();
 
 	return 0;
@@ -93,6 +91,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 //                        => retirer les membres et commentaires inutiles, utiliser using pour simplifier les types etc.
 
 //TODO : composition over inheritance
+
+//TODO : utiliser des const_iterator et cbegin() et cend() quand c'est possible
 
 //TODO : éventuellement remplacer les C-casts par static_cast
 
@@ -119,6 +119,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 //TODO : membre static => static inline ou static constexpr pour attribuer une valeur directement dans le .h
 
 //TODO : utiliser des free functions si possible
+
+//TODO : utiliser friend (méthode membre, non membre ou classe) si nécessaire
 
 //TODO : anonymous namespace au lieu de static pour des fonctions static et des variables globales static propres à une translation unit
 

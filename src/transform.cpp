@@ -479,10 +479,14 @@ void Transform::test(Image& image)
 	switch(transform_t.current_step_number_)
 	{
 		case 0:
-			//transform_t.transform_steps_[0].zoom(image, 0.5f, 3000);
-			transform_t.transform_steps_[1].set_position_yoffset(image, 100, 3000);
-			if(/*transform_t.transform_steps_[0].transform_step_finished_
-			&&*/ transform_t.transform_steps_[1].transform_step_finished_)
+			transform_t.transform_steps_[0].zoom(image, 0.5f, 1000);
+			transform_t.transform_steps_[1].set_center(image, 3000);
+			//transform_t.transform_steps_[2].rotate(image, 360, 3000);
+			//transform_t.transform_steps_[3].set_alpha(image, 100, 3000);
+			if(transform_t.transform_steps_[0].transform_step_finished_
+			&& transform_t.transform_steps_[1].transform_step_finished_
+			/*&& transform_t.transform_steps_[2].transform_step_finished_
+			&& transform_t.transform_steps_[3].transform_step_finished_*/)
 			{
 				transform_t.current_step_number_ += 1;
 				transform_t.transform_finished_ = true;

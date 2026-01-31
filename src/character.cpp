@@ -22,15 +22,16 @@ void Character::set_transform(std::string transform_name)
 		properties_.is_visible_ = true;
 	}
 
-	//std::cout << "Transfo: " << transform_name << ", " << properties_.transform_name_ << ", " << transform_.transform_name_ << std::endl;
+	std::cout << "Transfo: " << transform_name << ", " << properties_.transform_name_ << ", " << transform_.transform_name_ << ", " << std::boolalpha << properties_.is_visible_ << std::endl;
 
 	if(transform_.transform_name_ != transform_name)
 	{
 		transform_.create_transform(transform_name, properties_.is_visible_);
 
-		//TODO : si hide, mettre is_visible_ à false ?? => ne change rien car hide le personnage le supprime de active_characters_
+		//TODO : si hide, mettre is_visible_ à false ?? => ne change rien car hide le personnage le supprime de active_characters_ (plus maintenant, voir ligne 84 dans character_manager.cpp)
 		if(transform_name == "hide")
 		{
+			properties_.transform_name_ = "hide";
 			properties_.is_visible_ = false;
 		}
 		else

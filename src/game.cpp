@@ -3,6 +3,8 @@
 #include "main_menu.h"
 #include "settings_menu.h"
 
+#include <iostream>
+
 Game::Game()
 	: sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
 	window_(constants::game_name_, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
@@ -26,6 +28,11 @@ void Game::init_game_states()
 	push_state(game_states_map_.at(constants::main_menu_unique_id_).get());
 }
 
+
+float lerp_temp(float a, float b, float t)
+{
+	return a + t * (b - a);
+}
 void Game::run()
 {
 	const Uint64 FPS = 60; //TODO : limitation arbitraire ? Je pourrais la retirer et faire des déplacements constants pour tous les FPS

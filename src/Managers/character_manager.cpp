@@ -80,7 +80,13 @@ void CharacterManager::update(const Script::InfoCharacter& info_character)
 
 			case Script::CharacterCommandKind::IS_VISIBLE:
 				character.properties_.is_visible_ = std::get<bool>(command_value);
-				
+
+				if(!character.properties_.is_visible_)
+				{
+					character.set_transform("hide");
+				}
+
+				//TODO : ce code
 				/*if(!character.properties_.is_visible_)
 				{
 					active_characters_.erase(character_variable);
