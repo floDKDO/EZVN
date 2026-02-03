@@ -26,7 +26,10 @@ void Character::set_transform(std::string transform_name)
 
 	if(transform_.transform_name_ != transform_name)
 	{
-		transform_.create_transform(transform_name, properties_.is_visible_);
+		if(character_ != nullptr)
+		{
+			transform_.recreate_transform(*character_, transform_name, properties_.is_visible_);
+		}
 
 		//TODO : si hide, mettre is_visible_ à false ?? => ne change rien car hide le personnage le supprime de active_characters_ (plus maintenant, voir ligne 84 dans character_manager.cpp)
 		if(transform_name == "hide")
@@ -57,14 +60,14 @@ void Character::update()
 		if(properties_.is_speaking_)
 		{
 			set_transform(transform_.transform_to_focus());
-			//std::cout << properties_.name_ << " is speaking, " << properties_.transform_.transform_name_ << std::endl;
+			//std::cout << properties_.name_ << " is speaking, " << properties_.transform_name_ << std::endl;
 		}
 		else
 		{
 			set_transform(transform_.transform_to_unfocus());
 		}
 
-		//std::cout << " transform: " << properties_.transform_.transform_name_ << std::endl;
+		//std::cout << " transform: " << properties_.transform_name_ << std::endl;
 		transform_.show_transform(transform_.transform_name_, *character_);
 
 		character_->update();

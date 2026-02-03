@@ -42,14 +42,14 @@ class Drawable
 
 		Uint64 last_time_;
 		SDL_Rect position_;
+		SDL_Rect initial_rect_;
 		Color color_;
+		double angle_;
 		
 	protected:
 		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
 
 		std::unique_ptr<sdl::Texture> texture_;
-		SDL_Rect initial_rect_;
-		double angle_;
 		SDL_RendererFlip flip_;
 
 		sdl::Renderer& renderer_; 
