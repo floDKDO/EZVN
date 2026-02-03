@@ -58,112 +58,37 @@ Transform::Transform(std::string transform_name, int number_of_transform_steps, 
 	: is_character_visible_(is_character_visible) /*to choose between on show and on replace*/, transform_name_(transform_name), current_line_(0), is_finished_(false) 
 {}
 
-void Transform::fill_all_transforms(/*Image& image*/)
+void Transform::fill_all_transforms(std::string transform_name)
 {
-	if(all_build_methods_.size() > 0) //TODO : l'idéal serait de rendre all_build_methods_ static
+	/*if(all_build_methods_.size() > 0) //TODO : l'idéal serait de rendre all_build_methods_ static
 	{
 		return;
+	}*/
+
+	if(std::regex_match(transform_name, std::regex("^t[1-9][1-9]$")))
+	{
+		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ tcommon(transform_name, image); }});
 	}
-
-	//TODO : regex => à la place de t11 -> t55, regex t[1-5][1-5] etc. 
-	//std::regex t_transform("^t[1-9][1-9]$");
-	//if(std::regex_match(string, t_transform));
-
-	all_build_methods_.insert({"t11", [this](Image& image){ tcommon("t11", image); }});
-	all_build_methods_.insert({"t21", [this](Image& image){ tcommon("t21", image); }});
-	all_build_methods_.insert({"t22", [this](Image& image){ tcommon("t22", image); }});
-	all_build_methods_.insert({"t31", [this](Image& image){ tcommon("t31", image); }});
-	all_build_methods_.insert({"t32", [this](Image& image){ tcommon("t32", image); }});
-	all_build_methods_.insert({"t33", [this](Image& image){ tcommon("t33", image); }});
-	all_build_methods_.insert({"t41", [this](Image& image){ tcommon("t41", image); }});
-	all_build_methods_.insert({"t42", [this](Image& image){ tcommon("t42", image); }});
-	all_build_methods_.insert({"t43", [this](Image& image){ tcommon("t43", image); }});
-	all_build_methods_.insert({"t44", [this](Image& image){ tcommon("t44", image); }});
-	all_build_methods_.insert({"t51", [this](Image& image){ tcommon("t51", image); }});
-	all_build_methods_.insert({"t52", [this](Image& image){ tcommon("t52", image); }});
-	all_build_methods_.insert({"t53", [this](Image& image){ tcommon("t53", image); }});
-	all_build_methods_.insert({"t54", [this](Image& image){ tcommon("t54", image); }});
-	all_build_methods_.insert({"t55", [this](Image& image){ tcommon("t55", image); }});
-
-	all_build_methods_.insert({"f11", [this](Image& image){ focus_common("f11", image); }});
-	all_build_methods_.insert({"f21", [this](Image& image){ focus_common("f21", image); }});
-	all_build_methods_.insert({"f22", [this](Image& image){ focus_common("f22", image); }});
-	all_build_methods_.insert({"f31", [this](Image& image){ focus_common("f31", image); }});
-	all_build_methods_.insert({"f32", [this](Image& image){ focus_common("f32", image); }});
-	all_build_methods_.insert({"f33", [this](Image& image){ focus_common("f33", image); }});
-	all_build_methods_.insert({"f41", [this](Image& image){ focus_common("f41", image); }});
-	all_build_methods_.insert({"f42", [this](Image& image){ focus_common("f42", image); }});
-	all_build_methods_.insert({"f43", [this](Image& image){ focus_common("f43", image); }});
-	all_build_methods_.insert({"f44", [this](Image& image){ focus_common("f44", image); }});
-	all_build_methods_.insert({"f51", [this](Image& image){ focus_common("f51", image); }});
-	all_build_methods_.insert({"f52", [this](Image& image){ focus_common("f52", image); }});
-	all_build_methods_.insert({"f53", [this](Image& image){ focus_common("f53", image); }});
-	all_build_methods_.insert({"f54", [this](Image& image){ focus_common("f54", image); }});
-	all_build_methods_.insert({"f55", [this](Image& image){ focus_common("f55", image); }});
-
-	all_build_methods_.insert({"h11", [this](Image& image){ hop("h11", image); }});
-	all_build_methods_.insert({"h21", [this](Image& image){ hop("h21", image); }});
-	all_build_methods_.insert({"h22", [this](Image& image){ hop("h22", image); }});
-	all_build_methods_.insert({"h31", [this](Image& image){ hop("h31", image); }});
-	all_build_methods_.insert({"h32", [this](Image& image){ hop("h32", image); }});
-	all_build_methods_.insert({"h33", [this](Image& image){ hop("h33", image); }});
-	all_build_methods_.insert({"h41", [this](Image& image){ hop("h41", image); }});
-	all_build_methods_.insert({"h42", [this](Image& image){ hop("h42", image); }});
-	all_build_methods_.insert({"h43", [this](Image& image){ hop("h43", image); }});
-	all_build_methods_.insert({"h44", [this](Image& image){ hop("h44", image); }});
-	all_build_methods_.insert({"h51", [this](Image& image){ hop("h51", image); }});
-	all_build_methods_.insert({"h52", [this](Image& image){ hop("h52", image); }});
-	all_build_methods_.insert({"h53", [this](Image& image){ hop("h53", image); }});
-	all_build_methods_.insert({"h54", [this](Image& image){ hop("h54", image); }});
-	all_build_methods_.insert({"h55", [this](Image& image){ hop("h55", image); }});
-
-	all_build_methods_.insert({"hf11", [this](Image& image){ hop_focus("hf11", image); }});
-	all_build_methods_.insert({"hf21", [this](Image& image){ hop_focus("hf21", image); }});
-	all_build_methods_.insert({"hf22", [this](Image& image){ hop_focus("hf22", image); }});
-	all_build_methods_.insert({"hf31", [this](Image& image){ hop_focus("hf31", image); }});
-	all_build_methods_.insert({"hf32", [this](Image& image){ hop_focus("hf32", image); }});
-	all_build_methods_.insert({"hf33", [this](Image& image){ hop_focus("hf33", image); }});
-	all_build_methods_.insert({"hf41", [this](Image& image){ hop_focus("hf41", image); }});
-	all_build_methods_.insert({"hf42", [this](Image& image){ hop_focus("hf42", image); }});
-	all_build_methods_.insert({"hf43", [this](Image& image){ hop_focus("hf43", image); }});
-	all_build_methods_.insert({"hf44", [this](Image& image){ hop_focus("hf44", image); }});
-	all_build_methods_.insert({"hf51", [this](Image& image){ hop_focus("hf51", image); }});
-	all_build_methods_.insert({"hf52", [this](Image& image){ hop_focus("hf52", image); }});
-	all_build_methods_.insert({"hf53", [this](Image& image){ hop_focus("hf53", image); }});
-	all_build_methods_.insert({"hf54", [this](Image& image){ hop_focus("hf54", image); }});
-	all_build_methods_.insert({"hf55", [this](Image& image){ hop_focus("hf55", image); }});
-
-	all_build_methods_.insert({"s11", [this](Image& image){ sink("s11", image); }});
-	all_build_methods_.insert({"s21", [this](Image& image){ sink("s21", image); }});
-	all_build_methods_.insert({"s22", [this](Image& image){ sink("s22", image); }});
-	all_build_methods_.insert({"s31", [this](Image& image){ sink("s31", image); }});
-	all_build_methods_.insert({"s32", [this](Image& image){ sink("s32", image); }});
-	all_build_methods_.insert({"s33", [this](Image& image){ sink("s33", image); }});
-	all_build_methods_.insert({"s41", [this](Image& image){ sink("s41", image); }});
-	all_build_methods_.insert({"s42", [this](Image& image){ sink("s42", image); }});
-	all_build_methods_.insert({"s43", [this](Image& image){ sink("s43", image); }});
-	all_build_methods_.insert({"s44", [this](Image& image){ sink("s44", image); }});
-	all_build_methods_.insert({"s51", [this](Image& image){ sink("s51", image); }});
-	all_build_methods_.insert({"s52", [this](Image& image){ sink("s52", image); }});
-	all_build_methods_.insert({"s53", [this](Image& image){ sink("s53", image); }});
-	all_build_methods_.insert({"s54", [this](Image& image){ sink("s54", image); }});
-	all_build_methods_.insert({"s55", [this](Image& image){ sink("s55", image); }});
-
-	all_build_methods_.insert({"d11", [this](Image& image){ dip("d11", image); }});
-	all_build_methods_.insert({"d21", [this](Image& image){ dip("d21", image); }});
-	all_build_methods_.insert({"d22", [this](Image& image){ dip("d22", image); }});
-	all_build_methods_.insert({"d31", [this](Image& image){ dip("d31", image); }});
-	all_build_methods_.insert({"d32", [this](Image& image){ dip("d32", image); }});
-	all_build_methods_.insert({"d33", [this](Image& image){ dip("d33", image); }});
-	all_build_methods_.insert({"d41", [this](Image& image){ dip("d41", image); }});
-	all_build_methods_.insert({"d42", [this](Image& image){ dip("d42", image); }});
-	all_build_methods_.insert({"d43", [this](Image& image){ dip("d43", image); }});
-	all_build_methods_.insert({"d44", [this](Image& image){ dip("d44", image); }});
-	all_build_methods_.insert({"d51", [this](Image& image){ dip("d51", image); }});
-	all_build_methods_.insert({"d52", [this](Image& image){ dip("d52", image); }});
-	all_build_methods_.insert({"d53", [this](Image& image){ dip("d53", image); }});
-	all_build_methods_.insert({"d54", [this](Image& image){ dip("d54", image); }});
-	all_build_methods_.insert({"d55", [this](Image& image){ dip("d55", image); }});
+	else if(std::regex_match(transform_name, std::regex("^f[1-9][1-9]$")))
+	{
+		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ focus_common(transform_name, image); }});
+	}
+	else if(std::regex_match(transform_name, std::regex("^h[1-9][1-9]$")))
+	{
+		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ hop(transform_name, image); }});
+	}
+	else if(std::regex_match(transform_name, std::regex("^hf[1-9][1-9]$")))
+	{
+		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ hop_focus(transform_name, image); }});
+	}
+	else if(std::regex_match(transform_name, std::regex("^s[1-9][1-9]$")))
+	{
+		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ sink(transform_name, image); }});
+	}
+	else if(std::regex_match(transform_name, std::regex("^d[1-9][1-9]$")))
+	{
+		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ dip(transform_name, image); }});
+	}
 
 	all_build_methods_.insert({"hide", [this](Image& image){ hide(image); }});
 	all_build_methods_.insert({"lhide", [this](Image& image){ lhide(image); }});
@@ -213,7 +138,8 @@ void Transform::recreate_transform(Image& image, std::string transform_name, boo
 	is_finished_ = false;
 	current_line_ = 0;
 
-	fill_all_transforms();
+	//TODO : pas besoin de tout construire => uniquement la correspondance associée à transform_name suffirait ?
+	fill_all_transforms(transform_name);
 	all_build_methods_.at(transform_name)(image);
 }
 
@@ -225,10 +151,7 @@ void Transform::show_transform(std::string transform_name, Image& image)
 		if(!is_finished_)
 		{
 			std::vector<LineOfTransformSteps>& transform_steps = all_transforms_.at(transform_name);
-
 			bool line_finished = true; //TODO : nom pas ouf
-
-			//std::cout << "TRANSFO: " << transform_name << ", " << current_line_ << ", " << transform_steps.size() << std::endl;
 
 			for(Step& step : transform_steps[current_line_])
 			{
@@ -239,9 +162,10 @@ void Transform::show_transform(std::string transform_name, Image& image)
 					line_finished = false;
 				}
 			}
+
 			if(line_finished)
 			{
-				if(transform_steps.size() - 1 > current_line_)
+				if(transform_steps.size() > current_line_ + 1)
 				{
 					//std::cout << "NEXT\n";
 					current_line_ += 1;

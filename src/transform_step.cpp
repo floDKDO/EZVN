@@ -113,8 +113,8 @@ void alpha_common(TransformStep& step, Uint8 alpha, Image& image, Duration durat
 
 void show(TransformStep& step, Image& image, Duration duration)
 {
-	std::cout << "SHOW\n";
-	std::cout << int(step.initial_values_.a_) << ", " << int(image.color_.a_) << ", " << duration.duration_ << ", " << step.t_ << std::endl;
+	//std::cout << "SHOW\n";
+	//std::cout << int(step.initial_values_.a_) << ", " << int(image.color_.a_) << ", " << duration.duration_ << ", " << step.t_ << std::endl;
 	alpha_common(step, 255, image, duration);
 }
 
@@ -312,7 +312,7 @@ void own_filter(TransformStep& step, Image& image, Uint8 r, Uint8 g, Uint8 b, Du
 //TODO : aussi sauvegarder angle, alpha etc ??
 void reset(TransformStep& step, Image& image)
 {
-	std::cout << "RESET\n";
+	//std::cout << "RESET\n";
 	image.position_ = image.initial_rect_;
 	step.is_finished_ = true;
 }

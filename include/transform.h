@@ -25,7 +25,7 @@ class Transform
 		using Step = std::pair<TransformStep, std::function<void(TransformStep&)>>;
 		using LineOfTransformSteps = std::vector<Step>;
 
-		void fill_all_transforms();
+		void fill_all_transforms(std::string transform_name);
 
 		LineOfTransformSteps add_line(std::vector< std::function<void(TransformStep&)>> foncs);
 
