@@ -68,7 +68,7 @@ void Character::update()
 		}
 
 		//std::cout << " transform: " << properties_.transform_name_ << std::endl;
-		transform_.show_transform(transform_.transform_name_, *character_);
+		transform_.show_transform(transform_.transform_name_);
 
 		character_->update();
 	}
