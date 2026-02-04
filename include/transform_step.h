@@ -15,12 +15,12 @@ class TransformStep
 		{
 			InitialValues(const Image& image)
 				: x_pos_(image.position_.x), y_pos_(image.position_.y), w_size_(image.position_.w), h_size_(image.position_.h),
-				angle_(image.angle_), r_(image.color_.r_), g_(image.color_.g_), b_(image.color_.b_), a_(image.color_.a_)
+				angle_(image.angle_), zoom_(image.zoom_), r_(image.color_.r_), g_(image.color_.g_), b_(image.color_.b_), a_(image.color_.a_)
 			{}
 
 			InitialValues()
 				: x_pos_(0), y_pos_(0), w_size_(0), h_size_(0),
-				angle_(0.0), r_(0), g_(0), b_(0), a_(0)
+				angle_(0.0), zoom_(0.0f), r_(0), g_(0), b_(0), a_(0)
 			{}
 
 			int x_pos_;
@@ -29,6 +29,8 @@ class TransformStep
 			int h_size_;
 
 			double angle_;
+
+			float zoom_;
 
 			//TODO : utiliser Color ??
 			Uint8 r_;

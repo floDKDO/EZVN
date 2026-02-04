@@ -11,7 +11,7 @@ Character::Character(const CharacterDefinition& character_definition, sdl::Rende
 {
 	if(!character_definition_->character_path_.empty())
 	{
-		character_ = std::make_unique<Image>(character_definition.character_path_, 0, 0, renderer);
+		character_ = std::make_unique<Image>(character_definition.character_path_, 0, 0, renderer, 0, true);
 	}
 }
 
@@ -56,7 +56,11 @@ void Character::update()
 {
 	if(character_ != nullptr)
 	{
+		//std::cout << character_->position_.x << std::endl;
+
 		//std::cout << "Name: " << character_definition_->character_variable_ << ", transfo: " << transform_.transform_name_ << ", is_visible_: " << std::boolalpha << properties_.is_visible_ << std::endl;
+
+		//TODO : ne pas tout le temps le faire => uniquement si l'autofocus est activé
 		if(properties_.is_speaking_)
 		{
 			set_transform(transform_.transform_to_focus());

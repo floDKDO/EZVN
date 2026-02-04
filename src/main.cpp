@@ -6,7 +6,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 {
 	Game game;
 
-	//First stpe : character creation
+	//First step : character creation
 	game.create_character("Sayori", "???", "img/characters/sayori.png", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
 	game.create_character("Monika", "???", "img/characters/monika.png", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
 	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");
@@ -24,6 +24,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.play_music("sounds/2.ogg");
 	game.show_character("Sayori", "t11");
 	game.show_dialogue("Sayori", "No need, I'm already there!");
+	game.show_character("Sayori", "test");
 	game.show_dialogue("Sayori!");
 	game.show_dialogue("She almost scared me...");
 	game.rename_character("Sayori", "Sayori");

@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-//TODO : paramètre qui dit la fonction qu'on va utiliser
-
 TransformStep::TransformStep()
 	: t_(0.0f), start_time_(SDL_GetTicks64()), elapsed_time_(0), is_finished_(false), has_got_initial_values_(false)
 {}
@@ -103,9 +101,6 @@ void alpha_common(TransformStep& step, Uint8 alpha, Image& image, Duration durat
 	[&]()
 	{
 		Uint8 new_alpha_value = Uint8(lerp(float(step.initial_values_.a_), float(alpha), step.t_));
-
-		//std::cout << int(new_alpha_value) << ", " << int(step.initial_values_.a_) << ", " << int(alpha) << ", " << int(image.color_.a_) << std::endl;
-
 		image.set_alpha(new_alpha_value);
 	}
 	, duration);
@@ -113,8 +108,6 @@ void alpha_common(TransformStep& step, Uint8 alpha, Image& image, Duration durat
 
 void show(TransformStep& step, Image& image, Duration duration)
 {
-	//std::cout << "SHOW\n";
-	//std::cout << int(step.initial_values_.a_) << ", " << int(image.color_.a_) << ", " << duration.duration_ << ", " << step.t_ << std::endl;
 	alpha_common(step, 255, image, duration);
 }
 
@@ -155,7 +148,27 @@ void set_position_common(TransformStep& step, Image& image, int x, int y, IsPosi
 	instant_modif_common(step,
 	[&]()
 	{
-		image.set_position(x, y);
+		//image.set_position(x, y);
+
+		if(is_offset == IsPositionOffset::X_OFFSET)
+		{
+			std::cout << image.position_.x << ", " << step.initial_values_.x_pos_ << ", " << x << std::endl;
+			x = step.initial_values_.x_pos_ + x;
+		}
+		else if(is_offset == IsPositionOffset::Y_OFFSET)
+		{
+			y = step.initial_values_.y_pos_ + y;
+		}
+
+		if(image.position_.x != x)
+		{
+			image.from_transform_.x = x;
+		}
+
+		if(image.position_.y != y)
+		{
+			image.from_transform_.y = y;
+		}
 	}
 	, duration);
 
@@ -164,6 +177,7 @@ void set_position_common(TransformStep& step, Image& image, int x, int y, IsPosi
 	{
 		if(is_offset == IsPositionOffset::X_OFFSET)
 		{
+			std::cout << image.position_.x << ", " << step.initial_values_.x_pos_ << ", " << x << std::endl;
 			x = step.initial_values_.x_pos_ + x;
 		}
 		else if(is_offset == IsPositionOffset::Y_OFFSET)
@@ -171,10 +185,19 @@ void set_position_common(TransformStep& step, Image& image, int x, int y, IsPosi
 			y = step.initial_values_.y_pos_ + y;
 		}
 
-		int new_x_value = int(lerp(float(step.initial_values_.x_pos_), float(x), step.t_));
-		int new_y_value = int(lerp(float(step.initial_values_.y_pos_), float(y), step.t_));
+		if(image.position_.x != x)
+		{
+			int new_x_value = int(lerp(float(step.initial_values_.x_pos_), float(x), step.t_));
+			image.from_transform_.x = new_x_value;
+		}
 
-		image.set_position(new_x_value, new_y_value);
+		if(image.position_.y != y)
+		{
+			int new_y_value = int(lerp(float(step.initial_values_.y_pos_), float(y), step.t_));
+			image.from_transform_.y = new_y_value;
+		}
+
+		//image.set_position(new_x_value, new_y_value);
 	}
 	, duration);
 }
@@ -244,9 +267,8 @@ void zoom(TransformStep& step, Image& image, float zoom, Duration duration)
 	each_frame_modif_common(step, image,
 	[&]()
 	{
-		int new_w_value = int(lerp(float(step.initial_values_.w_size_), float(step.initial_values_.w_size_) * zoom, step.t_));
-		int new_h_value = int(lerp(float(step.initial_values_.h_size_), float(step.initial_values_.h_size_) * zoom, step.t_));
-		image.resize(new_w_value, new_h_value);
+		float new_zoom_value = lerp(float(step.initial_values_.zoom_), zoom, step.t_);
+		image.zoom(new_zoom_value);
 	}
 	, duration);
 }
@@ -312,7 +334,6 @@ void own_filter(TransformStep& step, Image& image, Uint8 r, Uint8 g, Uint8 b, Du
 //TODO : aussi sauvegarder angle, alpha etc ??
 void reset(TransformStep& step, Image& image)
 {
-	//std::cout << "RESET\n";
 	image.position_ = image.initial_rect_;
 	step.is_finished_ = true;
 }

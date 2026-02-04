@@ -353,6 +353,22 @@ void Transform::test(Image& image)
 		[&image](TransformStep& step){ step::rotate(step, image, 360.0, Duration(250, Duration::Kind::EASEOUT)); }
 	});
 
+	//std::cout << "POSITION: " << image.position_.x << ", " << image.from_transform_.x << std::endl;
+
+	//t11=>f11
+	/*lines.add_line({
+		[&image](TransformStep& step){ step::zoom(step, image, 0.84f, Duration(0, Duration::Kind::LINEAR)); },
+		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -65); },
+		[&image](TransformStep& step){ step::set_position_xcenter(step, image, 640); }
+	});*/
+
+	//f11=>t11
+	/*lines.add_line({
+		[&image](TransformStep& step){ step::zoom(step, image, 0.8f, Duration(0, Duration::Kind::LINEAR)); },
+		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); },
+		[&image](TransformStep& step){ step::set_position_xcenter(step, image, 640); }
+	});*/
+
 	all_transforms_.insert_or_assign("test", lines);
 }
 

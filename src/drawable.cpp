@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-Drawable::Drawable(sdl::Renderer& renderer, Color color)
-	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), color_(color), angle_(0.0), flip_(SDL_FLIP_NONE), renderer_(renderer)
+Drawable::Drawable(sdl::Renderer& renderer, Color color, bool has_transform)
+	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), color_(color), angle_(0.0), zoom_(1.0f), from_transform_(position_), has_transform_(has_transform), flip_(SDL_FLIP_NONE), renderer_(renderer)
 {}
 
 void Drawable::show()
@@ -55,27 +55,29 @@ void Drawable::flip_normal()
 int Drawable::get_xcenter() const
 {
 	//std::cout << "GET XCENTER ***********************************************************\n";
-	return position_.w / 2;
+	return (position_.w * zoom_) / 2;
 }
 
 int Drawable::get_ycenter() const
 {
 	//std::cout << "GET YCENTER ***********************************************************\n";
-	return position_.h / 2;
+	return (position_.h * zoom_) / 2;
 }
 
 void Drawable::zoom(float zoom)
 {
 	//std::cout << "ZOOM ***********************************************************\n";
 
-	float position_w = float(position_.w);
+	/*float position_w = float(position_.w);
 	float position_h = float(position_.h);
 
 	position_w *= zoom;
 	position_h *= zoom;
 
 	position_.w = int(position_w);
-	position_.h = int(position_h);
+	position_.h = int(position_h);*/
+
+	zoom_ = zoom;
 }
 
 void Drawable::resize(int w, int h)

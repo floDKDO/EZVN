@@ -86,7 +86,7 @@ void CharacterManager::update(const Script::InfoCharacter& info_character)
 					character.set_transform("hide");
 				}
 
-				//TODO : ce code
+				//TODO : garder ce code ??
 				/*if(!character.properties_.is_visible_)
 				{
 					active_characters_.erase(character_variable);
