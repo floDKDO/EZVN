@@ -11,7 +11,7 @@
 class Image : public Drawable
 {
 	public:
-		Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder = constants::default_zorder_, bool has_transform = false);
+		Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder = constants::default_zorder_);
 
 		void init_image(std::string_view new_path, int x, int y, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;

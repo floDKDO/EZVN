@@ -51,7 +51,7 @@ class Drawable
 		bool has_transform_;
 		
 	protected:
-		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255), bool has_transform = false);
+		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
 
 		std::unique_ptr<sdl::Texture> texture_;
 		SDL_RendererFlip flip_;

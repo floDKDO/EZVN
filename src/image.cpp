@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder, bool has_transform)
-	: Drawable(renderer, Color::from_rgba8(255, 255, 255, 255), has_transform), zorder_(zorder), animated_image_(create_animation(path)), path_(path), frame_index_(0)
+Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder)
+	: Drawable(renderer), zorder_(zorder), animated_image_(create_animation(path)), path_(path), frame_index_(0)
 {
 	init_image(path, x, y, renderer);
 }
@@ -66,17 +66,15 @@ void Image::init_image(std::string_view new_path, int x, int y, sdl::Renderer& r
 
 void Image::draw(sdl::Renderer& renderer)
 {
+	SDL_Rect draw_rect = {position_.x, position_.y, int(position_.w * zoom_), int(position_.h * zoom_)};
 	if(has_transform_)
 	{
-		SDL_Rect draw_rect = {from_transform_.x, from_transform_.y, int(position_.w * zoom_), int(position_.h * zoom_)};
+		draw_rect.x = from_transform_.x;
+		draw_rect.y = from_transform_.y;
 		position_.x = draw_rect.x;
 		position_.y = draw_rect.y;
-		renderer.copy(*texture_, nullptr, &(draw_rect), angle_, nullptr, flip_);
 	}
-	else
-	{
-		renderer.copy(*texture_, nullptr, &(position_), angle_, nullptr, flip_);
-	}
+	renderer.copy(*texture_, nullptr, &(draw_rect), angle_, nullptr, flip_);
 }
 
 void Image::update()

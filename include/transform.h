@@ -19,6 +19,7 @@ class Transform
 		void show_transform(std::string_view transform_name);
 
 		std::string transform_name_;
+		std::string previous_transform_name_;
 
 	private:
 		struct Step

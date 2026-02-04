@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-Drawable::Drawable(sdl::Renderer& renderer, Color color, bool has_transform)
-	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), color_(color), angle_(0.0), zoom_(1.0f), from_transform_(position_), has_transform_(has_transform), flip_(SDL_FLIP_NONE), renderer_(renderer)
+Drawable::Drawable(sdl::Renderer& renderer, Color color)
+	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), color_(color), angle_(0.0), zoom_(1.0f), from_transform_(position_), has_transform_(false), flip_(SDL_FLIP_NONE), renderer_(renderer)
 {}
 
 void Drawable::show()

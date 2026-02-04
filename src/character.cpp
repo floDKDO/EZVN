@@ -11,7 +11,8 @@ Character::Character(const CharacterDefinition& character_definition, sdl::Rende
 {
 	if(!character_definition_->character_path_.empty())
 	{
-		character_ = std::make_unique<Image>(character_definition.character_path_, 0, 0, renderer, 0, true);
+		character_ = std::make_unique<Image>(character_definition.character_path_, 0, 0, renderer);
+		character_->has_transform_ = true;
 	}
 }
 

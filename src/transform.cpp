@@ -53,7 +53,7 @@ Transform::Transform()
 {}
 
 Transform::Transform(std::string_view transform_name, bool is_character_visible)
-	: is_character_visible_(is_character_visible), transform_name_(transform_name)
+	: is_character_visible_(is_character_visible), transform_name_(transform_name), previous_transform_name_("none")
 {}
 
 void Transform::init_transform(Image& image, std::string transform_name)
@@ -135,6 +135,7 @@ std::string Transform::transform_to_unfocus()
 
 void Transform::recreate_transform(Image& image, std::string transform_name, bool is_visible)
 {
+	previous_transform_name_ = transform_name_;
 	transform_name_ = transform_name;
 	is_character_visible_ = is_visible; //to choose between "on show" and "on replace" 
 	init_transform(image, transform_name);
@@ -349,24 +350,26 @@ void Transform::test(Image& image)
 {
 	AllLinesOfSteps lines;
 
-	lines.add_line({
+	//std::cout << "PREVIOUS TRANSFORM: " << previous_transform_name_ << std::endl;
+
+	/*lines.add_line({
 		[&image](TransformStep& step){ step::rotate(step, image, 360.0, Duration(250, Duration::Kind::EASEOUT)); }
-	});
+	});*/
 
 	//std::cout << "POSITION: " << image.position_.x << ", " << image.from_transform_.x << std::endl;
 
 	//t11=>f11
-	/*lines.add_line({
+	lines.add_line({
 		[&image](TransformStep& step){ step::zoom(step, image, 0.84f, Duration(0, Duration::Kind::LINEAR)); },
 		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -65); },
-		[&image](TransformStep& step){ step::set_position_xcenter(step, image, 640); }
-	});*/
+		[this, &image](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(previous_transform_name_)); }
+	});
 
 	//f11=>t11
 	/*lines.add_line({
 		[&image](TransformStep& step){ step::zoom(step, image, 0.8f, Duration(0, Duration::Kind::LINEAR)); },
 		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); },
-		[&image](TransformStep& step){ step::set_position_xcenter(step, image, 640); }
+		[this, &image](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(previous_transform_name_)); }
 	});*/
 
 	all_transforms_.insert_or_assign("test", lines);
