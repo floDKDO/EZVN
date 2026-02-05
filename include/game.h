@@ -35,6 +35,7 @@ class Game
 
 		void update_fps_count(std::string_view fps) const;
 
+		void create_composite_image(int w, int h, std::initializer_list<CompositeImage> composite_images);
 		void create_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path="", Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
 		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 

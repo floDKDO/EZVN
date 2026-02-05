@@ -9,6 +9,12 @@ Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsig
 	init_image(path, x, y, renderer);
 }
 
+Image::Image(const Composite& composite, int x, int y, sdl::Renderer& renderer, unsigned int zorder)
+	: Drawable(renderer), zorder_(zorder), frame_index_(0)
+{
+
+}
+
 std::optional<sdl::Animation> Image::create_animation(std::string_view path)
 {
 	sdl::RWops rwops(path, "rb");
@@ -54,6 +60,24 @@ void Image::init_image(std::string_view new_path, int x, int y, sdl::Renderer& r
 	{
 		texture_ = std::make_unique<sdl::Texture>(renderer, new_path);
 	}
+
+	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
+
+	int w, h;
+	texture_->query(nullptr, nullptr, &w, &h);
+
+	position_ = {x, y, w, h};
+	initial_rect_ = position_;
+}
+
+void Image::create_image_from_composite(Composite& composite, int x, int y, sdl::Renderer& renderer)
+{
+	position_.x = x;
+	position_.y = y;
+
+	image_type_ = Kind::CHARACTER;
+
+	texture_ = std::make_unique<sdl::Texture>(renderer, composite.surface_);
 
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 

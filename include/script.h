@@ -106,6 +106,7 @@ class Script
 		std::vector<ScriptInformation> script_information_;
 		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
 
+
 	private:
 		sdl::Renderer& renderer_;
 };

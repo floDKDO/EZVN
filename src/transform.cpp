@@ -221,7 +221,7 @@ void Transform::tcommon(std::string transform_name, Image& image)
 		});*/
 
 		lines.add_line({
-			[&image](TransformStep& step){ step::show(step, image, Duration(250, Duration::Kind::LINEAR)); }
+			[&image](TransformStep& step){ step::show(step, image, Duration(250, Duration::Kind::EASEIN)); }
 		});
 	}
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::NORMAL));
@@ -262,7 +262,7 @@ void Transform::focus_common(std::string transform_name, Image& image)
 		});*/
 
 		lines.add_line({
-			[&image](TransformStep& step){ step::show(step, image, Duration(250, Duration::Kind::LINEAR)); }
+			[&image](TransformStep& step){ step::show(step, image, Duration(250, Duration::Kind::EASEIN)); }
 		});
 	}
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::FOCUSED));

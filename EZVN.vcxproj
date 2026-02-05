@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\composite.cpp" />
     <ClCompile Include="src\duration.cpp" />
     <ClCompile Include="src\GUI\scrollbar.cpp" />
     <ClCompile Include="src\Managers\background_manager.cpp" />
@@ -202,6 +203,7 @@
     <ClCompile Include="src\transition.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\composite.h" />
     <ClInclude Include="include\duration.h" />
     <ClInclude Include="include\GUI\scrollbar.h" />
     <ClInclude Include="include\Managers\background_manager.h" />

@@ -37,6 +37,9 @@ class Character
 		const CharacterDefinition* character_definition_; 
 		Editableproperties properties_;
 		Transform transform_;
+
+		std::vector<Image> character_images_;
+
 		std::unique_ptr<Image> character_; //TODO : juste pour tester => truc similaire à MPT par la suite
 
 	private:

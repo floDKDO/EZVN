@@ -7,6 +7,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	Game game;
 
 	//First step : character creation
+	game.create_composite_image(960, 960, {{"img/characters/monika_forward_uniform_left_waist.png", 0, 0}, {"img/characters/monika_forward_uniform_right_down.png", 0, 0}, { "img/characters/b.png", 0, 0 }});
+
 	game.create_character("Sayori", "???", "img/characters/sayori.png", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
 	game.create_character("Monika", "???", "img/characters/monika.png", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
 	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");

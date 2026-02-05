@@ -176,6 +176,11 @@ void Game::update_fps_count(std::string_view fps) const
 	window_.set_title(std::string(constants::game_name_) + std::string(fps));
 }
 
+void Game::create_composite_image(int w, int h, std::initializer_list<CompositeImage> composite_images)
+{
+
+}
+
 void Game::create_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path, Color namebox_text_color, std::string_view textbox_path, std::string_view namebox_path)
 {
 	script_.add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);

@@ -12,6 +12,7 @@ class Surface
 	public:
 		Surface(Font& font, std::string_view text, SDL_Color fg, Uint32 wrap_length); //TTF_RenderUTF8_Blended_Wrapped();
 		explicit Surface(std::string_view file); //IMG_Load
+		Surface(int width, int height); //SDL_CreateRGBSurfaceWithFormat
 		Surface(const Surface& surface) = delete;
 		Surface(Surface&& surface);
 		Surface& operator=(const Surface& surface) = delete;

@@ -21,6 +21,14 @@ Surface::Surface(std::string_view file)
 	}
 }
 
+Surface::Surface(int width, int height)
+{
+	if((surface_ = SDL_CreateRGBSurfaceWithFormat(0, width, height, 32, SDL_PIXELFORMAT_RGBA8888)) == nullptr)
+	{
+		SDL_Log("(SDL_CreateRGBSurfaceWithFormat) %s\n", SDL_GetError());
+	}
+}
+
 Surface::Surface(Surface&& surface)
 	: surface_(surface.surface_)
 {
