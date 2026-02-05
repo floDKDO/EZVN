@@ -64,12 +64,16 @@ void Character::update()
 		//TODO : ne pas tout le temps le faire => uniquement si l'autofocus est activé
 		if(properties_.is_speaking_)
 		{
-			set_transform(transform_.transform_to_focus());
+			//set_transform(transform_.transform_to_focus());
+			//set_transform("focus");
+			//transform_.show_transform("focus");
 			//std::cout << properties_.name_ << " is speaking, " << properties_.transform_name_ << std::endl;
 		}
 		else
 		{
-			set_transform(transform_.transform_to_unfocus());
+			//set_transform(transform_.transform_to_unfocus());
+			//set_transform("unfocus");
+			//transform_.show_transform("unfocus");
 		}
 
 		//std::cout << " transform: " << properties_.transform_name_ << std::endl;

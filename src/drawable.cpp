@@ -83,50 +83,117 @@ void Drawable::zoom(float zoom)
 void Drawable::resize(int w, int h)
 {
 	//std::cout << "RESIZE ***********************************************************\n";
-	
-	position_ = {position_.x, position_.y, w, h};
+
+	if(has_transform_)
+	{
+		from_transform_.w = w;
+		from_transform_.h = h;
+	}
+	else
+	{
+		position_ = {position_.x, position_.y, w, h};
+	}
 }
 
 void Drawable::set_position(int x, int y)
 {
 	//std::cout << "SET POS ***********************************************************\n";
-	position_ = {x, y, position_.w, position_.h};
+
+	if(has_transform_)
+	{
+		from_transform_.x = x;
+		from_transform_.y = y;
+	}
+	else 
+	{
+		position_ = {x, y, position_.w, position_.h};
+	}
 }
 
 void Drawable::set_position_xcenter(int x)
 {
 	//std::cout << "SET POS XCENTER ***********************************************************\n";
-	position_ = {x - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
+
+	if(has_transform_)
+	{
+		from_transform_.x = x - std::abs(get_xcenter());
+	}
+	else
+	{
+		position_ = {x - std::abs(get_xcenter()), position_.y, position_.w, position_.h};
+	}
 }
 
 void Drawable::set_position_ycenter(int y)
 {
 	//std::cout << "SET POS YCENTER ***********************************************************\n";
-	position_ = {position_.x, y - std::abs(get_ycenter()), position_.w, position_.h};
+
+	if(has_transform_)
+	{
+		from_transform_.y = y - std::abs(get_ycenter());
+	}
+	else
+	{
+		position_ = {position_.x, y - std::abs(get_ycenter()), position_.w, position_.h};
+	}
 }
 
 void Drawable::set_position_xycenter(int x, int y)
 {
 	//std::cout << "SET POS XYCENTER ***********************************************************\n";
-	position_ = {x - std::abs(get_xcenter()), y - std::abs(get_ycenter()), position_.w, position_.h};
+
+	if(has_transform_)
+	{
+		from_transform_.x = x - std::abs(get_xcenter());
+		from_transform_.y = y - std::abs(get_ycenter());
+	}
+	else
+	{
+		position_ = {x - std::abs(get_xcenter()), y - std::abs(get_ycenter()), position_.w, position_.h};
+	}
 }
 
 void Drawable::set_position_xoffset(int x)
 {
 	//std::cout << "SET POS XOFFSET ***********************************************************\n";
-	position_ = {initial_rect_.x + x, position_.y, position_.w, position_.h};
+
+	if(has_transform_)
+	{
+		from_transform_.x = initial_rect_.x + x;
+	}
+	else
+	{
+		position_ = {initial_rect_.x + x, position_.y, position_.w, position_.h};
+	}
 }
 
 void Drawable::set_position_yoffset(int y)
 {
 	//std::cout << "SET POS YOFFSET ***********************************************************\n";
-	position_ = {position_.x, initial_rect_.y + y, position_.w, position_.h};
+
+	if(has_transform_)
+	{
+		from_transform_.y = initial_rect_.y + y;
+	}
+	else
+	{
+		position_ = {position_.x, initial_rect_.y + y, position_.w, position_.h};
+	}
 }
 
 void Drawable::set_center()
 {
 	//std::cout << "SET CENTER ***********************************************************\n";
-	position_ = {constants::window_width_ / 2 - std::abs(get_xcenter()), constants::window_height_ / 2 - std::abs(get_ycenter()), position_.w, position_.h};
+
+	if(has_transform_)
+	{
+		from_transform_.x = constants::window_width_ / 2 - std::abs(get_xcenter());
+		from_transform_.y = constants::window_height_ / 2 - std::abs(get_ycenter());
+	}
+	else
+	{
+		position_ = {constants::window_width_ / 2 - std::abs(get_xcenter()), constants::window_height_ / 2 - std::abs(get_ycenter()), position_.w, position_.h};
+	}
 }
 
 void Drawable::night_filter()

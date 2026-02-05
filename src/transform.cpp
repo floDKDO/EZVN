@@ -98,6 +98,14 @@ void Transform::init_transform(Image& image, std::string transform_name)
 	{
 		all_build_methods_.insert({transform_name, [this](Image& image){ test(image); }});
 	}
+	else if(transform_name == "focus")
+	{
+		all_build_methods_.insert({transform_name, [this](Image& image){ focus(image); }});
+	}
+	else if(transform_name == "unfocus")
+	{
+		all_build_methods_.insert({transform_name, [this](Image& image){ unfocus(image); }});
+	}
 	else if(transform_name == "none")
 	{
 		all_build_methods_.insert({transform_name, nullptr}); //do nothing!
@@ -350,27 +358,13 @@ void Transform::test(Image& image)
 {
 	AllLinesOfSteps lines;
 
-	//std::cout << "PREVIOUS TRANSFORM: " << previous_transform_name_ << std::endl;
-
-	/*lines.add_line({
-		[&image](TransformStep& step){ step::rotate(step, image, 360.0, Duration(250, Duration::Kind::EASEOUT)); }
-	});*/
-
-	//std::cout << "POSITION: " << image.position_.x << ", " << image.from_transform_.x << std::endl;
-
-	//t11=>f11
 	lines.add_line({
-		[&image](TransformStep& step){ step::zoom(step, image, 0.84f, Duration(0, Duration::Kind::LINEAR)); },
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -65); },
-		[this, &image](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(previous_transform_name_)); }
+		[&image](TransformStep& step){ step::rotate(step, image, 360.0, Duration(250, Duration::Kind::EASEOUT)); }
 	});
 
-	//f11=>t11
-	/*lines.add_line({
-		[&image](TransformStep& step){ step::zoom(step, image, 0.8f, Duration(0, Duration::Kind::LINEAR)); },
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); },
-		[this, &image](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(previous_transform_name_)); }
-	});*/
+	lines.add_line({
+		[&image](TransformStep& step){ step::set_center(step, image, Duration(2500, Duration::Kind::EASEOUT)); }
+	});
 
 	all_transforms_.insert_or_assign("test", lines);
 }
@@ -384,4 +378,34 @@ void Transform::hide(Image& image) //TODO : paramètre optionnel time  => pas un 
 	});
 
 	all_transforms_.insert_or_assign("hide", lines);
+}
+
+void Transform::focus(Image& image)
+{
+	AllLinesOfSteps lines;
+
+	std::cout << "FOCUS CALLED\n";
+
+	lines.add_line({
+		[&image](TransformStep& step){ step::zoom(step, image, 0.84f, Duration(0, Duration::Kind::LINEAR)); },
+		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -65); },
+		[this, &image](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(previous_transform_name_)); }
+	});
+
+	all_transforms_.insert_or_assign("focus", lines);
+}
+
+void Transform::unfocus(Image& image)
+{
+	AllLinesOfSteps lines;
+
+	std::cout << "UNFOCUS CALLED\n";
+
+	lines.add_line({
+		[&image](TransformStep& step){ step::zoom(step, image, 0.8f, Duration(0, Duration::Kind::LINEAR)); },
+		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); },
+		[this, &image](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(previous_transform_name_)); }
+	});
+
+	all_transforms_.insert_or_assign("unfocus", lines);
 }

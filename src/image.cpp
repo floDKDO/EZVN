@@ -71,6 +71,15 @@ void Image::draw(sdl::Renderer& renderer)
 	{
 		draw_rect.x = from_transform_.x;
 		draw_rect.y = from_transform_.y;
+		//TODO : pas ouf
+		if(from_transform_.w != 0)
+		{
+			draw_rect.w = from_transform_.w * zoom_;
+		}
+		if(from_transform_.h != 0)
+		{
+			draw_rect.h = from_transform_.h * zoom_;
+		}
 		position_.x = draw_rect.x;
 		position_.y = draw_rect.y;
 	}

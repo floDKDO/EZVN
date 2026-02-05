@@ -96,6 +96,9 @@ class Transform
 		void test(Image& image);
 		void hide(Image& image); //TODO : time => pas un paramètre mais une variable globale / membre
 
+		void focus(Image& image);
+		void unfocus(Image& image);
+
 		bool is_character_visible_;
 		std::unordered_map<std::string, std::function<void(Image&)>> all_build_methods_;
 		std::unordered_map<std::string, AllLinesOfSteps> all_transforms_;
