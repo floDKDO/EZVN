@@ -24,7 +24,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.play_music("sounds/2.ogg");
 	game.show_character("Sayori", "t11");
 	game.show_dialogue("Sayori", "No need, I'm already there!");
-	game.show_character("Sayori", "test");
+	//game.show_character("Sayori", "test");
 	game.show_dialogue("Sayori!");
 	game.show_dialogue("She almost scared me...");
 	game.rename_character("Sayori", "Sayori");
@@ -68,7 +68,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.stop_sound();
 	game.play_music("sounds/3.ogg", 0, 500);
 	game.show_character("Yuri", "t41", 1);
-	game.show_character("Sayori", "t42", 0);
+	game.show_character("Sayori", "h42", 0);
 	game.show_character("Monika", "t43", 2);
 	game.show_character("Natsuki", "t44", 1);
 	game.show_dialogue("Sayori", "Look everyone, I brought a new member.");

@@ -29,6 +29,8 @@ class Drawable
 		void zoom(float zoom);
 		void resize(int w, int h);
 		void set_position(int x, int y);
+		void set_x_position(int x);
+		void set_y_position(int y);
 		void set_position_xcenter(int x);
 		void set_position_ycenter(int y);
 		void set_position_xycenter(int x, int y);

@@ -160,12 +160,12 @@ void set_position_common(TransformStep& step, Image& image, int x, int y, IsPosi
 
 		if(image.position_.x != x)
 		{
-			image.set_position(x, image.position_.y);
+			image.set_x_position(x);
 		}
 
 		if(image.position_.y != y)
 		{
-			image.set_position(image.position_.x, y);
+			image.set_y_position(y);
 		}
 	}
 	, duration);
@@ -187,14 +187,14 @@ void set_position_common(TransformStep& step, Image& image, int x, int y, IsPosi
 		{
 			int new_x_value = int(lerp(float(step.initial_values_.x_pos_), float(x), step.t_));
 			image.from_transform_.x = new_x_value;
-			image.set_position(new_x_value, image.position_.y);
+			image.set_x_position(new_x_value);
 		}
 
 		if(image.position_.y != y)
 		{
 			int new_y_value = int(lerp(float(step.initial_values_.y_pos_), float(y), step.t_));
 			image.from_transform_.y = new_y_value;
-			image.set_position(image.position_.x, new_y_value);
+			image.set_y_position(new_y_value);
 		}
 	}
 	, duration);

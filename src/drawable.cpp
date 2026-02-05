@@ -110,6 +110,30 @@ void Drawable::set_position(int x, int y)
 	}
 }
 
+void Drawable::set_x_position(int x)
+{
+	if(has_transform_)
+	{
+		from_transform_.x = x;
+	}
+	else
+	{
+		position_ = {x, position_.y, position_.w, position_.h};
+	}
+}
+
+void Drawable::set_y_position(int y)
+{
+	if(has_transform_)
+	{
+		from_transform_.y = y;
+	}
+	else
+	{
+		position_ = {position_.x, y, position_.w, position_.h};
+	}
+}
+
 void Drawable::set_position_xcenter(int x)
 {
 	//std::cout << "SET POS XCENTER ***********************************************************\n";
