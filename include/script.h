@@ -31,6 +31,7 @@ class Script
 
 		enum class CharacterCommandKind
 		{
+			COMPOSITE_IMAGE,
 			ZORDER,
 			NAME,
 			TRANSFORM_NAME,
@@ -40,7 +41,7 @@ class Script
 			NAMEBOX_TEXT_COLOR
 		};
 
-		using CharacterCommandValue = std::variant<unsigned int, std::string, bool, Color>; //zorder (unsigned int), name (std::string), transform_name (std::string), is_visible_ (bool), textbox_path_ (std::string), namebox_path_ (std::string), namebox_text_color_ (Color)
+		using CharacterCommandValue = std::variant<unsigned int, std::string, bool, Color>; //composite_image (std::string), zorder (unsigned int), name (std::string), transform_name (std::string), is_visible_ (bool), textbox_path_ (std::string), namebox_path_ (std::string), namebox_text_color_ (Color)
 		using CharacterCommands = std::unordered_map<CharacterCommandKind, CharacterCommandValue>;
 		using InfoCharacter = MyPair<CharacterCommands>;
 
@@ -80,11 +81,18 @@ class Script
 
 		void insert_dialogue(std::string_view character_variable, std::string_view dialogue);
 
-		void show_character(std::string_view character_variable, std::optional<std::string> transform_name = std::nullopt, std::optional<unsigned int> zorder = std::nullopt);
+		/*struct CharacterInfo
+		{
+			std::string character_variable_;
+			std::string composite_image_name_;
+		};*/
+
+		void show_character(std::string_view character_variable, std::optional<std::string_view> composite_image_name = std::nullopt, std::optional<std::string_view> transform_name = std::nullopt, std::optional<unsigned int> zorder = std::nullopt);
 		void hide_character(std::string_view character_variable);
 		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 
-		void add_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path, Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
+		void add_character(std::string_view character_variable, std::string_view character_name, Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
+		void add_composite_image(std::string_view character_variable, std::string_view composite_image_name, int w, int h, std::initializer_list<ImageInfo> images_info);
 
 		void insert_textbox(std::string_view character_variable, std::string_view textbox_path);
 		void insert_namebox(std::string_view character_variable, std::string_view namebox_path);

@@ -201,7 +201,7 @@
     <ClCompile Include="src\duration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\composite.cpp">
+    <ClCompile Include="src\composite_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -392,7 +392,7 @@
     <ClInclude Include="include\duration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\composite.h">
+    <ClInclude Include="include\composite_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

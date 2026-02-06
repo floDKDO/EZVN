@@ -15,8 +15,8 @@ class Transform
 
 		std::string transform_to_focus();
 		std::string transform_to_unfocus();
-		void recreate_transform(Image& image, std::string transform_name, bool is_visible);
-		void show_transform(std::string_view transform_name);
+		void recreate_transform(std::string transform_name, bool is_visible);
+		void show_transform(Image& image, std::string_view transform_name);
 
 		std::string transform_name_;
 		std::string previous_transform_name_;
@@ -25,7 +25,7 @@ class Transform
 		struct Step
 		{
 			TransformStep transform_step_;
-			std::function<void(TransformStep&)> fonc_;
+			std::function<void(TransformStep&, Image&)> fonc_;
 		};
 
 		struct LineOfSteps
@@ -51,10 +51,10 @@ class Transform
 				: current_line_(0), is_finished_(false)
 			{}
 
-			void add_line(std::vector<std::function<void(TransformStep&)>> foncs)
+			void add_line(std::vector<std::function<void(TransformStep&, Image&)>> foncs)
 			{
 				LineOfSteps line;
-				for(const std::function<void(TransformStep&)>& fonc : foncs)
+				for(const std::function<void(TransformStep&, Image&)>& fonc : foncs)
 				{
 					line.steps_.push_back({TransformStep(), fonc});
 				}
@@ -89,24 +89,24 @@ class Transform
 			FOCUSED
 		};
 
-		void init_transform(Image& image, std::string transform_name);
+		void init_transform(std::string transform_name);
 
-		void tcommon(std::string transform_name, Image& image);
-		void focus_common(std::string transform_name, Image& image);
-		void hop(std::string transform_name, Image& image);
-		void hop_focus(std::string transform_name, Image& image);
-		void sink(std::string transform_name, Image& image);
-		void dip(std::string transform_name, Image& image);
-		void lhide(Image& image);
-		void rhide(Image& image);
-		void test(Image& image);
-		void hide(Image& image); //TODO : time => pas un paramètre mais une variable globale / membre
+		void tcommon(std::string transform_name);
+		void focus_common(std::string transform_name);
+		void hop(std::string transform_name);
+		void hop_focus(std::string transform_name);
+		void sink(std::string transform_name);
+		void dip(std::string transform_name);
+		void lhide();
+		void rhide();
+		void test();
+		void hide(); //TODO : time => pas un paramètre mais une variable globale / membre
 
 		//void focus(Image& image);
 		//void unfocus(Image& image);
 
 		bool is_character_visible_;
-		std::unordered_map<std::string, std::function<void(Image&)>> all_build_methods_;
+		std::unordered_map<std::string, std::function<void()>> all_build_methods_;
 		std::unordered_map<std::string, std::pair<AllLinesOfSteps, TransformKind>> all_transforms_;
 };
 

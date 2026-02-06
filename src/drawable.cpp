@@ -55,13 +55,13 @@ void Drawable::flip_normal()
 int Drawable::get_xcenter() const
 {
 	//std::cout << "GET XCENTER ***********************************************************\n";
-	return (position_.w * zoom_) / 2;
+	return int((position_.w * zoom_) / 2);
 }
 
 int Drawable::get_ycenter() const
 {
 	//std::cout << "GET YCENTER ***********************************************************\n";
-	return (position_.h * zoom_) / 2;
+	return int((position_.h * zoom_) / 2);
 }
 
 void Drawable::zoom(float zoom)

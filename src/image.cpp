@@ -9,10 +9,10 @@ Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsig
 	init_image(path, x, y, renderer);
 }
 
-Image::Image(const Composite& composite, int x, int y, sdl::Renderer& renderer, unsigned int zorder)
+Image::Image(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer, unsigned int zorder)
 	: Drawable(renderer), zorder_(zorder), frame_index_(0)
 {
-
+	create_image_from_composite(composite_image, x, y, renderer);
 }
 
 std::optional<sdl::Animation> Image::create_animation(std::string_view path)
@@ -70,14 +70,14 @@ void Image::init_image(std::string_view new_path, int x, int y, sdl::Renderer& r
 	initial_rect_ = position_;
 }
 
-void Image::create_image_from_composite(Composite& composite, int x, int y, sdl::Renderer& renderer)
+void Image::create_image_from_composite(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer)
 {
 	position_.x = x;
 	position_.y = y;
 
 	image_type_ = Kind::CHARACTER;
 
-	texture_ = std::make_unique<sdl::Texture>(renderer, composite.surface_);
+	texture_ = std::make_unique<sdl::Texture>(renderer, composite_image.surface_);
 
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 
@@ -86,6 +86,12 @@ void Image::create_image_from_composite(Composite& composite, int x, int y, sdl:
 
 	position_ = {x, y, w, h};
 	initial_rect_ = position_;
+}
+
+void Image::change_image(const CompositeImage& composite_image, sdl::Renderer& renderer)
+{
+	texture_ = std::make_unique<sdl::Texture>(renderer, composite_image.surface_);
+	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 }
 
 void Image::draw(sdl::Renderer& renderer)
@@ -98,11 +104,11 @@ void Image::draw(sdl::Renderer& renderer)
 		//TODO : pas ouf
 		if(from_transform_.w != 0)
 		{
-			draw_rect.w = from_transform_.w * zoom_;
+			draw_rect.w = int(from_transform_.w * zoom_);
 		}
 		if(from_transform_.h != 0)
 		{
-			draw_rect.h = from_transform_.h * zoom_;
+			draw_rect.h = int(from_transform_.h * zoom_);
 		}
 		position_.x = draw_rect.x;
 		position_.y = draw_rect.y;

@@ -176,14 +176,14 @@ void Game::update_fps_count(std::string_view fps) const
 	window_.set_title(std::string(constants::game_name_) + std::string(fps));
 }
 
-void Game::create_composite_image(int w, int h, std::initializer_list<CompositeImage> composite_images)
+void Game::create_composite_image(std::string_view character_variable, std::string_view composite_image_name, int w, int h, std::initializer_list<ImageInfo> images_info)
 {
-
+	script_.add_composite_image(character_variable, composite_image_name, w, h, images_info);
 }
 
-void Game::create_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path, Color namebox_text_color, std::string_view textbox_path, std::string_view namebox_path)
+void Game::create_character(std::string_view character_variable, std::string_view character_name, Color namebox_text_color, std::string_view textbox_path, std::string_view namebox_path)
 {
-	script_.add_character(character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path);
+	script_.add_character(character_variable, character_name, namebox_text_color, textbox_path, namebox_path);
 }
 
 void Game::rename_character(std::string_view character_variable, std::string_view new_character_name)
@@ -191,19 +191,39 @@ void Game::rename_character(std::string_view character_variable, std::string_vie
 	script_.rename_character(character_variable, new_character_name);
 }
 
-void Game::show_character(std::string_view character_variable, std::string transform_name, unsigned int zorder)
+void Game::show_character(std::pair<std::string_view, std::string_view> character_info, std::string transform_name, unsigned int zorder)
 {
-	script_.show_character(character_variable, transform_name, zorder);
+	script_.show_character(character_info.first, character_info.second, transform_name, zorder);
 }
 
-void Game::show_character(std::string_view character_variable, std::string transform_name)
+void Game::show_character(std::string_view character_variable, std::string_view transform_name, unsigned int zorder)
 {
-	script_.show_character(character_variable, transform_name, std::nullopt);
+	script_.show_character(character_variable, std::nullopt, transform_name, zorder);
+}
+
+void Game::show_character(std::pair<std::string_view, std::string_view> character_info, std::string transform_name)
+{
+	script_.show_character(character_info.first, character_info.second, transform_name, std::nullopt);
+}
+
+void Game::show_character(std::string_view character_variable, std::string_view transform_name)
+{
+	script_.show_character(character_variable, std::nullopt, transform_name, std::nullopt);
+}
+
+void Game::show_character(std::pair<std::string_view, std::string_view> character_info, unsigned int zorder)
+{
+	script_.show_character(character_info.first, character_info.second, std::nullopt, zorder);
 }
 
 void Game::show_character(std::string_view character_variable, unsigned int zorder)
 {
-	script_.show_character(character_variable, std::nullopt, zorder);
+	script_.show_character(character_variable, std::nullopt, std::nullopt, zorder);
+}
+
+void Game::show_character(std::pair<std::string_view, std::string_view> character_info)
+{
+	script_.show_character(character_info.first, character_info.second, std::nullopt, std::nullopt);
 }
 
 void Game::show_character(std::string_view character_variable)

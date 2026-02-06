@@ -12,7 +12,7 @@ CharacterManager::CharacterManager(sdl::Renderer& renderer, std::unordered_map<s
 void CharacterManager::create_narrator()
 {
 	CharacterDefinition& character_definition = character_definitions_.at("Narrator");
-	active_characters_.insert(std::make_pair("Narrator", Character(character_definition, renderer_)));
+	active_characters_.insert(std::make_pair("Narrator", Character(character_definition)));
 }
 
 unsigned int CharacterManager::get_number_of_characters_with_image()
@@ -54,7 +54,7 @@ void CharacterManager::update(const Script::InfoCharacter& info_character)
 	if(!active_characters_.count(character_variable))
 	{
 		CharacterDefinition& character_definition = character_definitions_.at(character_variable);
-		active_characters_.insert(std::make_pair(character_variable, Character(character_definition, renderer_)));
+		active_characters_.insert(std::make_pair(character_variable, Character(character_definition)));
 		draw_characters_order_.push_back(character_variable);
 	}
 
@@ -64,6 +64,13 @@ void CharacterManager::update(const Script::InfoCharacter& info_character)
 	{
 		switch(command_kind)
 		{
+			case Script::CharacterCommandKind::COMPOSITE_IMAGE:
+				{
+					const CompositeImage& composite_image = character.character_definition_->composite_images_.at(std::get<std::string>(command_value));
+					character.change_composite_image(composite_image, renderer_);
+				}
+				break;
+
 			case Script::CharacterCommandKind::ZORDER:
 				character.properties_.zorder_ = std::get<unsigned int>(command_value);
 				//sort_characters_zorder();

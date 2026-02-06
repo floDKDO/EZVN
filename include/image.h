@@ -4,7 +4,7 @@
 #include "RAII_SDL2/renderer.h"
 #include "drawable.h"
 #include "constants.h"
-#include "composite.h"
+#include "composite_image.h"
 
 #include <optional>
 #include <string>
@@ -13,10 +13,11 @@ class Image : public Drawable
 {
 	public:
 		Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder = constants::default_zorder_);
-		Image(const Composite& composite, int x, int y, sdl::Renderer& renderer, unsigned int zorder = constants::default_zorder_);
+		Image(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer, unsigned int zorder = constants::default_zorder_);
 
 		void init_image(std::string_view new_path, int x, int y, sdl::Renderer& renderer);
-		void create_image_from_composite(Composite& composite, int x, int y, sdl::Renderer& renderer);
+		void create_image_from_composite(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer);
+		void change_image(const CompositeImage& composite_image, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 

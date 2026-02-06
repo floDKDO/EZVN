@@ -5,16 +5,10 @@
 
 //TODO : gérer les personnages sans image
 
-Character::Character(const CharacterDefinition& character_definition, sdl::Renderer& renderer)
+Character::Character(const CharacterDefinition& character_definition)
 	: character_definition_(&character_definition)
 	, properties_{character_definition.initial_name_, character_definition.initial_namebox_text_color_, character_definition.initial_textbox_path_, character_definition.initial_namebox_path_}
-{
-	if(!character_definition_->character_path_.empty())
-	{
-		character_ = std::make_unique<Image>(character_definition.character_path_, 0, 0, renderer);
-		character_->has_transform_ = true;
-	}
-}
+{}
 
 void Character::set_transform(std::string transform_name)
 {
@@ -29,13 +23,14 @@ void Character::set_transform(std::string transform_name)
 	{
 		if(character_ != nullptr)
 		{
-			transform_.recreate_transform(*character_, transform_name, properties_.is_visible_);
+			transform_.recreate_transform(transform_name, properties_.is_visible_);
 		}
 
 		//TODO : si hide, mettre is_visible_ à false ?? => ne change rien car hide le personnage le supprime de active_characters_ (plus maintenant, voir ligne 84 dans character_manager.cpp)
-		if(transform_name == "hide")
+		if(transform_name == "hide" || transform_name == "lhide" || transform_name == "rhide")
 		{
-			properties_.transform_name_ = "hide";
+			character_.reset();
+			properties_.transform_name_ = transform_name;
 			properties_.is_visible_ = false;
 		}
 		else
@@ -43,6 +38,19 @@ void Character::set_transform(std::string transform_name)
 			properties_.is_visible_ = true;
 		}
 	}
+}
+
+void Character::change_composite_image(const CompositeImage& composite_image, sdl::Renderer& renderer)
+{
+	if(character_ != nullptr)
+	{
+		character_->change_image(composite_image, renderer);
+	}
+	else 
+	{
+		character_ = std::make_unique<Image>(composite_image, 0, 0, renderer);
+	}
+	character_->has_transform_ = true;
 }
 
 void Character::draw(sdl::Renderer& renderer)
@@ -77,7 +85,7 @@ void Character::update()
 		}
 
 		//std::cout << " transform: " << properties_.transform_name_ << std::endl;
-		transform_.show_transform(transform_.transform_name_);
+		transform_.show_transform(*character_, transform_.transform_name_);
 
 		character_->update();
 	}

@@ -56,61 +56,61 @@ Transform::Transform(std::string_view transform_name, bool is_character_visible)
 	: transform_name_(transform_name), previous_transform_name_("none"), is_character_visible_(is_character_visible)
 {}
 
-void Transform::init_transform(Image& image, std::string transform_name)
+void Transform::init_transform(std::string transform_name)
 {
 	if(std::regex_match(transform_name, std::regex("^t[1-5][1-5]$")))
 	{
-		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ tcommon(transform_name, image); }});
+		all_build_methods_.insert({transform_name, [this, transform_name](){ tcommon(transform_name); }});
 	}
 	else if(std::regex_match(transform_name, std::regex("^f[1-5][1-5]$")))
 	{
-		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ focus_common(transform_name, image); }});
+		all_build_methods_.insert({transform_name, [this, transform_name](){ focus_common(transform_name); }});
 	}
 	else if(std::regex_match(transform_name, std::regex("^h[1-5][1-5]$")))
 	{
-		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ hop(transform_name, image); }});
+		all_build_methods_.insert({transform_name, [this, transform_name](){ hop(transform_name); }});
 	}
 	else if(std::regex_match(transform_name, std::regex("^hf[1-5][1-5]$")))
 	{
-		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ hop_focus(transform_name, image); }});
+		all_build_methods_.insert({transform_name, [this, transform_name](){ hop_focus(transform_name); }});
 	}
 	else if(std::regex_match(transform_name, std::regex("^s[1-5][1-5]$")))
 	{
-		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ sink(transform_name, image); }});
+		all_build_methods_.insert({transform_name, [this, transform_name](){ sink(transform_name); }});
 	}
 	else if(std::regex_match(transform_name, std::regex("^d[1-5][1-5]$")))
 	{
-		all_build_methods_.insert({transform_name, [this, transform_name](Image& image){ dip(transform_name, image); }});
+		all_build_methods_.insert({transform_name, [this, transform_name](){ dip(transform_name); }});
 	}
 	else if(transform_name == "hide")
 	{
-		all_build_methods_.insert({transform_name, [this](Image& image){ hide(image); }});
+		all_build_methods_.insert({transform_name, [this](){ hide(); }});
 	}
 	else if(transform_name == "lhide")
 	{
-		all_build_methods_.insert({transform_name, [this](Image& image){ lhide(image); }});
+		all_build_methods_.insert({transform_name, [this](){ lhide(); }});
 	}
 	else if(transform_name == "rhide")
 	{
-		all_build_methods_.insert({transform_name, [this](Image& image){ rhide(image); }});
+		all_build_methods_.insert({transform_name, [this](){ rhide(); }});
 	}
 	else if(transform_name == "test")
 	{
-		all_build_methods_.insert({transform_name, [this](Image& image){ test(image); }});
+		all_build_methods_.insert({transform_name, [this](){ test(); }});
 	}
 	/*else if(transform_name == "focus")
 	{
-		all_build_methods_.insert({transform_name, [this](Image& image){ focus(image); }});
+		all_build_methods_.insert({transform_name, [this](){ focus(); }});
 	}
 	else if(transform_name == "unfocus")
 	{
-		all_build_methods_.insert({transform_name, [this](Image& image){ unfocus(image); }});
+		all_build_methods_.insert({transform_name, [this](){ unfocus(); }});
 	}*/
 	else if(transform_name == "none")
 	{
 		all_build_methods_.insert({transform_name, nullptr}); //do nothing!
 	}
-	all_build_methods_.at(transform_name)(image);
+	//all_build_methods_.at(transform_name)(image); //TODO : ne pas l'appeler ici
 }
 
 //TODO : ne fonctionne pas pour hop etc.
@@ -151,17 +151,19 @@ std::string Transform::transform_to_unfocus()
 	}
 }
 
-void Transform::recreate_transform(Image& image, std::string transform_name, bool is_visible)
+void Transform::recreate_transform(std::string transform_name, bool is_visible)
 {
 	previous_transform_name_ = transform_name_;
 	transform_name_ = transform_name;
 	is_character_visible_ = is_visible; //to choose between "on show" and "on replace" 
-	init_transform(image, transform_name);
+	init_transform(transform_name);
+	all_build_methods_.at(transform_name)(); //la méthode appelée utilise insert_or_assign pour recréer TransformStep(), c-a-d rejouer une transformation même si on réutilise la même
 }
 
-void Transform::show_transform(std::string_view transform_name)
+void Transform::show_transform(Image& image, std::string_view transform_name)
 {
 	const std::string& str_transform_name = std::string(transform_name);
+
 	if(all_transforms_.count(str_transform_name))
 	{
 		AllLinesOfSteps& lines = all_transforms_.at(str_transform_name).first;
@@ -173,7 +175,7 @@ void Transform::show_transform(std::string_view transform_name)
 			{
 				if(!step.transform_step_.is_finished_)
 				{
-					step.fonc_(step.transform_step_);
+					step.fonc_(step.transform_step_, image);
 				}
 			}
 
@@ -189,28 +191,28 @@ void Transform::show_transform(std::string_view transform_name)
 	}
 }
 
-void Transform::tcommon(std::string transform_name, Image& image)
+void Transform::tcommon(std::string transform_name)
 {
 	AllLinesOfSteps lines;
 
 	if(is_character_visible_) //<=> on replace
 	{
 		lines.add_line({
-			[&image](TransformStep& step){ step::reset(step, image); },
-			[&image](TransformStep& step){ step::set_alpha(step, image, 255); },
-			[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); },
-			[&image](TransformStep& step){ step::zoom(step, image, 0.8f); },
-			[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
+			[](TransformStep& step, Image& image){ step::reset(step, image); },
+			[](TransformStep& step, Image& image){ step::set_alpha(step, image, 255); },
+			[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -26); },
+			[](TransformStep& step, Image& image){ step::zoom(step, image, 0.8f); },
+			[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
 		});
 	}
 	else //<=> on show
 	{
 		lines.add_line({
-			[&image](TransformStep& step){ step::reset(step, image); },
-			[&image](TransformStep& step){ step::hide(step, image); },
-			[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); },
-			[&image](TransformStep& step){ step::zoom(step, image, 0.8f); },
-			[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
+			[](TransformStep& step, Image& image){ step::reset(step, image); },
+			[](TransformStep& step, Image& image){ step::hide(step, image); },
+			[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -26); },
+			[](TransformStep& step, Image& image){ step::zoom(step, image, 0.8f); },
+			[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
 		});
 
 		//permet de focus
@@ -221,13 +223,13 @@ void Transform::tcommon(std::string transform_name, Image& image)
 		});*/
 
 		lines.add_line({
-			[&image](TransformStep& step){ step::show(step, image, Duration(250, Duration::Kind::EASEIN)); }
+			[](TransformStep& step, Image& image){ step::show(step, image, Duration(250, Duration::Kind::EASEIN)); }
 		});
 	}
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::NORMAL));
 }
 
-void Transform::focus_common(std::string transform_name, Image& image)
+void Transform::focus_common(std::string transform_name)
 {
 	//TODO : le bug disparaît quand la ligne du zoom est écrite en première, peu importe l'indice utilisé
 	//=> n'est pas un "bug" mais le comportement normal. Il est logique que si j'applique d'abord set_center et ensuite un zoom, l'image ne sera plus centré mais l'ordre inverse, l'image sera centrée (cas time > 0)
@@ -237,21 +239,21 @@ void Transform::focus_common(std::string transform_name, Image& image)
 	if(is_character_visible_) //<=> on replace
 	{
 		lines.add_line({
-			[&image](TransformStep& step){ step::reset(step, image); },
-			[&image](TransformStep& step){ step::set_alpha(step, image, 255); },
-			[&image](TransformStep& step){ step::set_position_yoffset(step, image, -65); },
-			[&image](TransformStep& step){ step::zoom(step, image, 0.84f); },
-			[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
+			[](TransformStep& step, Image& image){ step::reset(step, image); },
+			[](TransformStep& step, Image& image){ step::set_alpha(step, image, 255); },
+			[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -65); },
+			[](TransformStep& step, Image& image){ step::zoom(step, image, 0.84f); },
+			[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
 		});
 	}
 	else //<=> on show
 	{
 		lines.add_line({
-			[&image](TransformStep& step){ step::reset(step, image); },
-			[&image](TransformStep& step){ step::hide(step, image); },
-			[&image](TransformStep& step){ step::set_position_yoffset(step, image, -65); },
-			[&image](TransformStep& step){ step::zoom(step, image, 0.84f); },
-			[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
+			[](TransformStep& step, Image& image){ step::reset(step, image); },
+			[](TransformStep& step, Image& image){ step::hide(step, image); },
+			[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -65); },
+			[](TransformStep& step, Image& image){ step::zoom(step, image, 0.84f); },
+			[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); }
 		});
 
 		//permet d'unfocus
@@ -262,143 +264,143 @@ void Transform::focus_common(std::string transform_name, Image& image)
 		});*/
 
 		lines.add_line({
-			[&image](TransformStep& step){ step::show(step, image, Duration(250, Duration::Kind::EASEIN)); }
+			[](TransformStep& step, Image& image){ step::show(step, image, Duration(250, Duration::Kind::EASEIN)); }
 		});
 	}
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::FOCUSED));
 }
 
-void Transform::hop(std::string transform_name, Image& image)
+void Transform::hop(std::string transform_name)
 {
 	AllLinesOfSteps lines;
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::reset(step, image); },
-		[&image](TransformStep& step){ step::zoom(step, image, 0.8f); },
-		[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); }
+		[](TransformStep& step, Image& image){ step::reset(step, image); },
+		[](TransformStep& step, Image& image){ step::zoom(step, image, 0.8f); },
+		[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -26); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -20, Duration(100, Duration::Kind::EASEIN)); }
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -20, Duration(100, Duration::Kind::EASEIN)); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, +20, Duration(100, Duration::Kind::EASEOUT)); }
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, +20, Duration(100, Duration::Kind::EASEOUT)); }
 	});
 
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::NORMAL));
 }
 
-void Transform::hop_focus(std::string transform_name, Image& image)
+void Transform::hop_focus(std::string transform_name)
 {
 	AllLinesOfSteps lines;
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::reset(step, image); },
-		[&image](TransformStep& step){ step::zoom(step, image, 0.84f); },
-		[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -65); }
+		[](TransformStep& step, Image& image){ step::reset(step, image); },
+		[](TransformStep& step, Image& image){ step::zoom(step, image, 0.84f); },
+		[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -65); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -21, Duration(100, Duration::Kind::EASEIN)); }
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -21, Duration(100, Duration::Kind::EASEIN)); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, +21, Duration(100, Duration::Kind::EASEOUT)); }
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, +21, Duration(100, Duration::Kind::EASEOUT)); }
 	});
 
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::FOCUSED));
 }
 
-void Transform::sink(std::string transform_name, Image& image)
+void Transform::sink(std::string transform_name)
 {
 	AllLinesOfSteps lines;
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::reset(step, image); },
-		[&image](TransformStep& step){ step::zoom(step, image, 0.8f); },
-		[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); }
+		[](TransformStep& step, Image& image){ step::reset(step, image); },
+		[](TransformStep& step, Image& image){ step::zoom(step, image, 0.8f); },
+		[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -26); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, +20, Duration(500, Duration::Kind::EASEIN)); }
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, +20, Duration(500, Duration::Kind::EASEIN)); }
 	});
 
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::NORMAL));
 }
 
-void Transform::dip(std::string transform_name, Image& image)
+void Transform::dip(std::string transform_name)
 {
 	AllLinesOfSteps lines;
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::reset(step, image); },
-		[&image](TransformStep& step){ step::zoom(step, image, 0.8f); },
-		[&image, transform_name](TransformStep& step){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -26); }
+		[](TransformStep& step, Image& image){ step::reset(step, image); },
+		[](TransformStep& step, Image& image){ step::zoom(step, image, 0.8f); },
+		[transform_name](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, get_xpos(transform_name)); },
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -26); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, +25, Duration(250, Duration::Kind::EASEIN)); }
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, +25, Duration(250, Duration::Kind::EASEIN)); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_yoffset(step, image, -25, Duration(250, Duration::Kind::EASEOUT)); }
+		[](TransformStep& step, Image& image){ step::set_position_yoffset(step, image, -25, Duration(250, Duration::Kind::EASEOUT)); }
 	});
 
 	all_transforms_.insert_or_assign(transform_name, std::make_pair(lines, TransformKind::NORMAL));
 }
 
-void Transform::lhide(Image& image)
+void Transform::lhide()
 {
 	AllLinesOfSteps lines;
 
 	//TODO : inverser le sprite quand il va à gauche
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_xcenter(step, image, -300, Duration(250, Duration::Kind::EASEOUT)); }
+		[](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, -300, Duration(250, Duration::Kind::EASEOUT)); }
 	});
 
 	all_transforms_.insert_or_assign("lhide", std::make_pair(lines, TransformKind::NORMAL));
 }
 
-void Transform::rhide(Image& image)
+void Transform::rhide()
 {
 	AllLinesOfSteps lines;
 
 	//TODO : inverser le sprite quand il va à droite
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_position_xcenter(step, image, +2000, Duration(250, Duration::Kind::EASEOUT)); }
+		[](TransformStep& step, Image& image){ step::set_position_xcenter(step, image, +2000, Duration(250, Duration::Kind::EASEOUT)); }
 	});
 
 	all_transforms_.insert_or_assign("rhide", std::make_pair(lines, TransformKind::NORMAL));
 }
 
-void Transform::test(Image& image) 
+void Transform::test() 
 {
 	AllLinesOfSteps lines;
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::rotate(step, image, 360.0, Duration(250, Duration::Kind::EASEOUT)); }
+		[](TransformStep& step, Image& image){ step::rotate(step, image, 360.0, Duration(250, Duration::Kind::EASEOUT)); }
 	});
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::set_center(step, image, Duration(2500, Duration::Kind::EASEOUT)); }
+		[](TransformStep& step, Image& image){ step::set_center(step, image, Duration(2500, Duration::Kind::EASEOUT)); }
 	});
 
 	all_transforms_.insert_or_assign("test", std::make_pair(lines, TransformKind::NORMAL));
 }
 
-void Transform::hide(Image& image) //TODO : paramètre optionnel time  => pas un paramètre mais une variable globale / membre
+void Transform::hide() //TODO : paramètre optionnel time  => pas un paramètre mais une variable globale / membre
 {
 	AllLinesOfSteps lines;
 
 	lines.add_line({
-		[&image](TransformStep& step){ step::hide(step, image, Duration(250, Duration::Kind::LINEAR)); }
+		[](TransformStep& step, Image& image){ step::hide(step, image, Duration(250, Duration::Kind::LINEAR)); }
 	});
 
 	all_transforms_.insert_or_assign("hide", std::make_pair(lines, TransformKind::NORMAL));

@@ -35,13 +35,18 @@ class Game
 
 		void update_fps_count(std::string_view fps) const;
 
-		void create_composite_image(int w, int h, std::initializer_list<CompositeImage> composite_images);
-		void create_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path="", Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
+		void create_composite_image(std::string_view character_variable, std::string_view composite_image_name, int w, int h, std::initializer_list<ImageInfo> images_info);
+		void create_character(std::string_view character_variable, std::string_view character_name, Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
 		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 
-		void show_character(std::string_view character_variable, std::string transform_name, unsigned int zorder);
-		void show_character(std::string_view character_variable, std::string transform_name);
+		//std::pair<std::string_view, std::string_view> => first = character_variable, second = composite_image_name
+		void show_character(std::pair<std::string_view, std::string_view> character_info, std::string transform_name, unsigned int zorder);
+		void show_character(std::string_view character_variable, std::string_view transform_name, unsigned int zorder);
+		void show_character(std::pair<std::string_view, std::string_view> character_info, std::string transform_name);
+		void show_character(std::string_view character_variable, std::string_view transform_name);
+		void show_character(std::pair<std::string_view, std::string_view> character_info, unsigned int zorder);
 		void show_character(std::string_view character_variable, unsigned int zorder);
+		void show_character(std::pair<std::string_view, std::string_view> character_info);
 		void show_character(std::string_view character_variable);
 
 		void hide_character(std::string_view character_variable);

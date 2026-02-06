@@ -7,7 +7,8 @@
 namespace sdl
 {
 
-Texture::Texture(Renderer& renderer, Surface& surface) //SDL_CreateTextureFromSurface()
+//le const a été ajouté pour CompositeImage => fonctionne car c'est une copie du pointeur sur la SDL_Surface qui est passée dans SDL_CreateTextureFromSurface
+Texture::Texture(Renderer& renderer, const Surface& surface) //SDL_CreateTextureFromSurface()
 {
 	if((texture_ = SDL_CreateTextureFromSurface(renderer.fetch(), surface.fetch())) == nullptr)
 	{

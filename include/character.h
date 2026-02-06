@@ -26,9 +26,10 @@ class Character
 			bool is_visible_;
 		};
 
-		Character(const CharacterDefinition& character_definition, sdl::Renderer& renderer);
+		Character(const CharacterDefinition& character_definition);
 
 		void set_transform(std::string transform_name);
+		void change_composite_image(const CompositeImage& composite_image, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer);
 		void update();
 
@@ -38,9 +39,7 @@ class Character
 		Editableproperties properties_;
 		Transform transform_;
 
-		std::vector<Image> character_images_;
-
-		std::unique_ptr<Image> character_; //TODO : juste pour tester => truc similaire à MPT par la suite
+		std::unique_ptr<Image> character_; //je dois utiliser un pointeur car sinon, je ne pourrais pas recréer une image avec l'assignment operator
 
 	private:
 };

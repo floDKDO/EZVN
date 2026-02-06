@@ -7,13 +7,40 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	Game game;
 
 	//First step : character creation
-	game.create_composite_image(960, 960, {{"img/characters/monika_forward_uniform_left_waist.png", 0, 0}, {"img/characters/monika_forward_uniform_right_down.png", 0, 0}, { "img/characters/b.png", 0, 0 }});
-
-	game.create_character("Sayori", "???", "img/characters/sayori.png", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
-	game.create_character("Monika", "???", "img/characters/monika.png", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
-	game.create_character("Yuri", "???", "img/characters/yuri.png", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");
-	game.create_character("Natsuki", "???", "img/characters/natsuki.png", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
+	game.create_character("Sayori", "???", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
+	game.create_character("Monika", "???", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
+	game.create_character("Yuri", "???", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");
+	game.create_character("Natsuki", "???", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
 	game.create_character("MC", "MC");
+
+	game.create_composite_image("Sayori", "4x", 960, 960, {
+		ImageInfo("img/characters/sayori_turned_uniform_left_up.png", 0, 0),
+		ImageInfo("img/characters/sayori_turned_uniform_right_up.png", 0, 0),
+		ImageInfo("img/characters/x.png", 0, 0)
+	});
+
+	game.create_composite_image("Monika", "3b", 960, 960, {
+		ImageInfo("img/characters/monika_forward_uniform_left_waist.png", 0, 0),
+		ImageInfo("img/characters/monika_forward_uniform_right_down.png", 0, 0),
+		ImageInfo("img/characters/b.png", 0, 0)
+	});
+
+	game.create_composite_image("Monika", "2b", 960, 960, {
+		ImageInfo("img/characters/monika_forward_uniform_left_down.png", 0, 0),
+		ImageInfo("img/characters/monika_forward_uniform_right_waist.png", 0, 0),
+		ImageInfo("img/characters/b.png", 0, 0)
+	});
+
+	game.create_composite_image("Yuri", "3j", 960, 960, {
+		ImageInfo("img/characters/yuri_turned_uniform_left_up.png", 0, 0),
+		ImageInfo("img/characters/yuri_turned_uniform_right_up.png", 0, 0),
+		ImageInfo("img/characters/j.png", 0, 0)
+	});
+
+	game.create_composite_image("Natsuki", "5c", 960, 960, {
+		ImageInfo("img/characters/natsuki_crossed(ff)_uniform.png", 0, 0),
+		ImageInfo("img/characters/c.png", 18, 22)
+	});
 
 
 	//Second step : write your own story!
@@ -24,9 +51,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_dialogue("I am feeling quite lonely right now...");
 	game.show_dialogue("I know, I should try to find Sayori!");
 	game.play_music("sounds/2.ogg");
-	game.show_character("Sayori", "t11");
+	game.show_character({"Sayori", "4x"}, "t11");
 	game.show_dialogue("Sayori", "No need, I'm already there!");
-	//game.show_character("Sayori", "test");
 	game.show_dialogue("Sayori!");
 	game.show_dialogue("She almost scared me...");
 	game.rename_character("Sayori", "Sayori");
@@ -37,7 +63,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.hide_character("Sayori");
 	game.show_dialogue("I am following Sayori to her club not without feeling nervous.");
 	game.show_dialogue("I heard that her club is full of girls!");
-	game.show_character("Sayori", "t11");
+	game.show_character({"Sayori", "4x"}, "t11");
 	game.show_dialogue("Sayori", "We arrived!");
 	game.show_dialogue("Sayori", "Before entering, I have a question MC.");
 	game.show_dialogue("MC", "I'm listening.");
@@ -69,12 +95,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_background("img/backgrounds/club.png");
 	game.stop_sound();
 	game.play_music("sounds/3.ogg", 0, 500);
-	game.show_character("Yuri", "t41", 1);
-	game.show_character("Sayori", "h42", 0);
-	game.show_character("Monika", "t43", 2);
-	game.show_character("Natsuki", "t44", 1);
+	game.show_character({"Yuri", "3j"}, "t41", 1);
+	game.show_character({"Sayori", "4x"}, "h42", 0);
+	game.show_character({"Monika", "3b"}, "t43", 2);
+	game.show_character({"Natsuki", "5c"}, "t44", 1);
 	game.show_dialogue("Sayori", "Look everyone, I brought a new member.");
 	game.show_dialogue("Monika", "Hi there!");
+	game.show_character({"Monika", "2b"}); 
 	game.show_dialogue("Yuri", "Hello, nice to meet you");
 	game.show_dialogue("Natsuki", "Hey.");
 	game.show_dialogue("Gulp...");
@@ -86,6 +113,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
+//TODO : renommer Drawable en Displayable ?
+
+//TODO : sûrement remplacer les paramètres std::vector par std::initializer_list quand c'est possible
 
 //TODO : utiliser les bons types (ex : unsigned int, std::string_view...)
 

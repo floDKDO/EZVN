@@ -10,7 +10,7 @@ class Renderer;
 class Texture
 {
 	public:
-		Texture(Renderer& renderer, Surface& surface); //SDL_CreateTextureFromSurface()
+		Texture(Renderer& renderer, const Surface& surface); //SDL_CreateTextureFromSurface()
 		Texture(Renderer& renderer, SDL_Surface* surface); //SDL_CreateTextureFromSurface() with surface a frame from a IMG_Animation* => surface is not owned by the Texture class!!
 		Texture(Renderer& renderer, std::string_view file); //IMG_LoadTexture()
 		Texture(const Texture& texture) = delete;

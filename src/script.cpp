@@ -3,7 +3,7 @@
 Script::Script(sdl::Renderer& renderer)
 	: renderer_(renderer)
 {
-	add_character("Narrator", "", "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
+	add_character("Narrator", "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
 }
 
 void Script::insert_dialogue(std::string_view character_variable, std::string_view dialogue)
@@ -16,19 +16,24 @@ void Script::insert_dialogue(std::string_view character_variable, std::string_vi
 	script_information_.push_back(InfoTextbox(info_textbox));
 }
 
-void Script::show_character(std::string_view character_variable, std::optional<std::string> transform_name, std::optional<unsigned int> zorder)
+void Script::show_character(std::string_view character_variable, std::optional<std::string_view> composite_image_name, std::optional<std::string_view> transform_name, std::optional<unsigned int> zorder)
 {
 	InfoCharacter info_character;
 	info_character.character_variable_ = character_variable;
 
-	if(zorder.has_value())
+	if(composite_image_name.has_value())
 	{
-		info_character.t_.insert({CharacterCommandKind::ZORDER, zorder.value()});
+		info_character.t_.insert({CharacterCommandKind::COMPOSITE_IMAGE, std::string(composite_image_name.value())});
 	}
 
 	if(transform_name.has_value())
 	{
-		info_character.t_.insert({CharacterCommandKind::TRANSFORM_NAME, transform_name.value()});
+		info_character.t_.insert({CharacterCommandKind::TRANSFORM_NAME, std::string(transform_name.value())});
+	}
+
+	if(zorder.has_value())
+	{
+		info_character.t_.insert({CharacterCommandKind::ZORDER, zorder.value()});
 	}
 
 	info_character.t_.insert({CharacterCommandKind::IS_VISIBLE, true});
@@ -60,9 +65,15 @@ void Script::rename_character(std::string_view character_variable, std::string_v
 	script_information_.push_back(InfoCharacter(info_character));
 }
 
-void Script::add_character(std::string_view character_variable, std::string_view character_name, std::string_view character_path, Color namebox_text_color, std::string_view textbox_path, std::string_view namebox_path)
+void Script::add_character(std::string_view character_variable, std::string_view character_name, Color namebox_text_color, std::string_view textbox_path, std::string_view namebox_path)
 {
-	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, character_path, namebox_text_color, textbox_path, namebox_path}));
+	character_definitions_.insert(std::make_pair(std::string(character_variable), CharacterDefinition{character_variable, character_name, namebox_text_color, textbox_path, namebox_path}));
+}
+
+void Script::add_composite_image(std::string_view character_variable, std::string_view composite_image_name, int w, int h, std::initializer_list<ImageInfo> images_info)
+{
+	CharacterDefinition& character_definition = character_definitions_.at(std::string(character_variable));
+	character_definition.composite_images_.insert(std::make_pair(composite_image_name, CompositeImage(composite_image_name, w, h, images_info)));
 }
 
 void Script::insert_textbox(std::string_view character_variable, std::string_view textbox_path)
