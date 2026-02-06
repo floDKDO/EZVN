@@ -13,8 +13,10 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 - *fonts/*: the fonts used by the engine
 - *img/*: the images (backgrounds, character and GUI elements images) used by the engine
 - *sounds/*: the sounds and musics used by the engine
-- *include/* and *src/*: the project's header and source files, respectively. These folders are divided into the following three subfolders:
+- *include/* and *src/*: the project's header and source files, respectively. These folders are divided into multiple subfolders:
+  - *Color/*: classes that allow the use of multiple types of color representation (RGBA, RGBA8, HSVA, HSVA8 and hexadecimal)
   - *GUI/*: classes attached to the GUI system (buttons, textbuttons, texttoggles, checkboxes, inputfields, sliders)
+  - *Managers/*: classes of the various engine resource managers (audio, background, character, music, sound, textbox and UI)
   - *RAII_SDL2/*: SDL2 encapsulation according to the RAII principle
   - *./*: the remaining files
 - *src/main.cpp*: contains your story (an example is already written there)
@@ -22,6 +24,7 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 ## Current features: 
 - Main screen, options menu (windowed/full-screen mode, music/sound volume, dialogue display speed)
 - Display characters at the desired position with an animation (similar to Ren'Py's Transform)
+- Composite images to change the image of characters
 - Assign a text box, name box, and/or custom name color for each character independently
 - Auto (dialog scrolls automatically based on their length) or Skip (skip dialog at high speed) mode
 - Be able to return to previous dialogues using the mouse wheel
@@ -32,7 +35,6 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 
 ## Remaining features to be implemented: 
 - Background animation
-- Modify the characters' eyes, mouth, etc.
 - Add a scrollable area (for dialogues history for example)
 - Add a logging system to obtain information about the engine states
 - Save/load system and persistent variables
