@@ -37,6 +37,7 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 ## Remaining features to be implemented: 
 - Add other transitions for backgrounds (only fade for now) 
 - Add a scrollable area (for dialogues history for example)
+- Add a modal window for pop-ups
 - Add a logging system to obtain information about the engine states
 - Save/load system and persistent variables
 - Domain Specific Language like Ren'Py's
