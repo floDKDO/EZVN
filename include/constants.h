@@ -18,6 +18,8 @@ inline constexpr bool default_autozorder_ = false;
 inline constexpr int default_minimum_character_for_autofocus_ = 2;
 inline constexpr std::string_view default_textbox_position_ = "bottom";
 
+inline constexpr int default_fade_transition_length_ = 500; //ms
+
 inline constexpr int text_outline_size_ = 1;
 inline Color text_outline_color_ = Color::from_rgba8(255, 205, 230);
 

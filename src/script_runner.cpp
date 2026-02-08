@@ -1,5 +1,7 @@
 #include "script_runner.h"
 
+#include <iostream>
+
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 ScriptRunner::ScriptRunner(Game& game, sdl::Renderer& renderer)
@@ -34,7 +36,7 @@ std::optional<size_t> ScriptRunner::get_script_index_of_previous_dialogue()
 
 size_t ScriptRunner::get_script_index_of_first_dialogue()
 {
-	return *(dialogues_script_index_.begin());
+	return *(dialogues_script_index_.begin()); //TODO : pourquoi un itérateur => [0] fonctionnerait ?
 }
 
 void ScriptRunner::increment_script_index()
@@ -119,19 +121,20 @@ void ScriptRunner::init_to_first_dialogue()
 void ScriptRunner::handle_events(const SDL_Event& e)
 {
 	textbox_manager_.handle_events(e);
+	transition_manager_.handle_events(e);
 
 	if(e.type == AudioManager::END_MUSIC_EVENT_)
 	{
 		if(music_manager_.music_ != nullptr)
 		{
-			music_manager_.fade_in(*music_manager_.music_, music_manager_.audio_properties_);
+			music_manager_.fade_in(*music_manager_.music_, music_manager_.audio_properties_); //TODO : les deux paramètres sont-ils nécessaires car ce sont des membres ?
 		}
 	}
 	else if(e.type == AudioManager::END_CHANNEL_EVENT_)
 	{
 		if(sound_manager_.sound_ != nullptr && !sound_manager_.played_)
 		{
-			sound_manager_.fade_in(*sound_manager_.sound_, sound_manager_.audio_properties_);
+			sound_manager_.fade_in(*sound_manager_.sound_, sound_manager_.audio_properties_); //TODO : les deux paramètres sont-ils nécessaires car ce sont des membres ?
 		}
 	}
 }
@@ -140,7 +143,13 @@ void ScriptRunner::draw(sdl::Renderer& renderer)
 {
 	background_manager_.draw(renderer);
 	character_manager_.draw(renderer);
-	textbox_manager_.draw(renderer);
+
+	if(!transition_manager_.transition_playing_)
+	{
+		textbox_manager_.draw(renderer);
+	}
+
+	transition_manager_.draw(renderer);
 }
 
 //TODO : utiliser std::visit ??
@@ -174,6 +183,10 @@ void ScriptRunner::apply_line(size_t script_index)
 		character_manager_.update_characters_dialogue(info_textbox);
 		//textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::none, false, false};
 	}
+	else if(std::holds_alternative<Script::InfoTransition>(current_script_information))
+	{
+		transition_manager_.update(std::get<Script::InfoTransition>(current_script_information));
+	}
 }
 
 void ScriptRunner::update()
@@ -188,13 +201,29 @@ void ScriptRunner::update()
 	}
 
 	textbox_manager_.update_skip_auto_modes(); //car doit être exécuté avant move_dialogue()
-	move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
+
+	if(textbox_manager_.skip_mode_) //don't play background transition in skip mode
+	{
+		transition_manager_.reset();
+	}
+
+	if(!transition_manager_.transition_playing_)
+	{
+		move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
+	}
+	else if(transition_manager_.transition_playing_ && transition_manager_.transition_->first_part_finished_ && !transition_manager_.new_background_displayed_)
+	{
+		move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
+		transition_manager_.new_background_displayed_ = true;
+	}
 
 	init_to_first_dialogue(); //doit être après move_dialogue()
+
 	apply_line(current_script_index_);
 	//move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
 	
 	character_manager_.update_characters();
+	transition_manager_.update_transition();
 }
 
 void ScriptRunner::play_all_sounds_before_previous_dialogue(size_t target_script_index)
@@ -242,6 +271,7 @@ void ScriptRunner::rebuild()
 	textbox_manager_.reset();
 	sound_manager_.reset();
 	background_manager_.reset();
+	transition_manager_.reset();
 
 	//TODO : mettre dans une fonction
 	size_t target_script_index = get_script_index_of_previous_dialogue().value();
@@ -278,6 +308,7 @@ void ScriptRunner::rebuild()
 			}
 			character_manager_.update_characters_dialogue(info_textbox);
 		}
+		//ne pas rejouer les transitions
 	}
 	save_current_script_index_when_scroll_back();
 	play_all_sounds_before_previous_dialogue(target_script_index);

@@ -110,9 +110,35 @@ void Script::move_textbox(std::string_view where)
 	script_information_.push_back(InfoTextbox(info_textbox));
 }
 
+void Script::insert_background(std::string_view background_path, std::string_view transition_name, std::optional<int> length_to_black, std::optional<int> length_black, std::optional<int> length_to_clear)
+{
+	if(length_to_black.has_value() && length_black.has_value() && length_to_clear.has_value())
+	{
+		script_information_.push_back(InfoTransition(transition_name, length_to_black.value(), length_black.value(), length_to_clear.value()));
+	}
+	else
+	{
+		script_information_.push_back(InfoTransition(transition_name));
+	}
+	script_information_.push_back(InfoBackground(Background(background_path, renderer_)));
+}
+
 void Script::insert_background(std::string_view background_path)
 {
 	script_information_.push_back(InfoBackground(Background(background_path, renderer_)));
+}
+
+void Script::insert_background(Color color, std::string_view transition_name, std::optional<int> length_to_black, std::optional<int> length_black, std::optional<int> length_to_clear)
+{
+	if(length_to_black.has_value() && length_black.has_value() && length_to_clear.has_value())
+	{
+		script_information_.push_back(InfoTransition(transition_name, length_to_black.value(), length_black.value(), length_to_clear.value()));
+	}
+	else
+	{
+		script_information_.push_back(InfoTransition(transition_name));
+	}
+	script_information_.push_back(InfoBackground(Background(color)));
 }
 
 void Script::insert_background(Color color)

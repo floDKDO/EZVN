@@ -4,7 +4,7 @@
 #include <iostream>
 
 TextboxManager::TextboxManager(sdl::Renderer& renderer, Game& game)
-	: last_time_(0), dialogue_instruction_({Where::NONE, false, false}), skip_mode_(false), auto_mode_(false), hide_ui_textbox_(false), where_(constants::default_textbox_position_), 
+	: dialogue_instruction_({Where::NONE, false, false}), skip_mode_(false), last_time_(0), auto_mode_(false), hide_ui_textbox_(false), where_(constants::default_textbox_position_),
 	textbox_(renderer), ui_manager_(game.audio_manager_), history_button_(nullptr), skip_toggle_(nullptr), auto_toggle_(nullptr), save_button_(nullptr), 
 	load_button_(nullptr), settings_button_(nullptr), game_(game), renderer_(renderer)
 {

@@ -46,7 +46,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	//Second step : write your own story!
 	game.autofocus_enable();
 	game.autozorder_enable();
-	game.show_background("img/backgrounds/cafeteria.png");
+	game.show_background("img/backgrounds/cafeteria.png", "fade");
 	game.play_sound("sounds/school_bell.ogg");
 	game.show_dialogue("I am feeling quite lonely right now...");
 	game.show_dialogue("I know, I should try to find Sayori!");
@@ -59,8 +59,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_dialogue("Sayori", "Come to my club! You will feel less lonely there.");
 	game.show_character("MC"); //mandatory for now even if the MC has no image
 	game.show_dialogue("MC", "If you say so...");
-	game.show_background("img/backgrounds/corridor.png");
 	game.hide_character("Sayori");
+	game.show_background("img/backgrounds/corridor.png", {"fade", 500, 500, 500});
 	game.show_dialogue("I am following Sayori to her club not without feeling nervous.");
 	game.show_dialogue("I heard that her club is full of girls!");
 	game.show_character({"Sayori", "4x"}, "t11");
@@ -92,7 +92,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.play_sound("sounds/door_open.ogg");
 	game.show_dialogue("Sayori", "Follow me!");
 	game.show_character("Sayori", "lhide");
-	game.show_background("img/backgrounds/club.png");
+	game.show_background("img/backgrounds/club.png", "fade");
 	game.stop_sound();
 	game.play_music("sounds/3.ogg", 0, 500);
 	game.show_character({"Yuri", "3j"}, "t41", 1);

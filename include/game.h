@@ -54,7 +54,12 @@ class Game
 		void show_dialogue(std::string_view character_variable, std::string_view dialogue);
 		void show_dialogue(std::string_view dialogue);
 
+		//(fade): std::tuple<std::string_view, int, int, int> => string_view = transition_name, int(0) = length_to_black, int(1) = length_black, int(2) = length_to_clear
+		void show_background(std::string_view background_path, std::tuple<std::string_view, int, int, int> transition_info);
+		void show_background(std::string_view background_path, std::string_view transition_name);
 		void show_background(std::string_view background_path);
+		void show_background(Color color, std::tuple<std::string_view, int, int, int> transition_info);
+		void show_background(Color color, std::string_view transition_name);
 		void show_background(Color color);
 
 		void hide_background();

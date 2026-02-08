@@ -75,17 +75,27 @@ class Script
 		};
 		using InfoAutofocus = AutofocusCommands;
 
-		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoAutofocus>;
+		struct InfoTransition
+		{
+			InfoTransition(std::string_view transition_name, int length_to_black, int length_black, int length_to_clear)
+				: transition_name_(transition_name), length_to_black_(length_to_black), length_black_(length_black), length_to_clear_(length_to_clear)
+			{}
+
+			InfoTransition(std::string_view transition_name)
+				: transition_name_(transition_name), length_to_black_(std::nullopt), length_black_(std::nullopt), length_to_clear_(std::nullopt)
+			{}
+
+			std::string transition_name_;
+			std::optional<int> length_to_black_;
+			std::optional<int> length_black_;
+			std::optional<int> length_to_clear_;
+		};
+
+		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoAutofocus, InfoTransition>;
 
 		Script(sdl::Renderer& renderer);
 
 		void insert_dialogue(std::string_view character_variable, std::string_view dialogue);
-
-		/*struct CharacterInfo
-		{
-			std::string character_variable_;
-			std::string composite_image_name_;
-		};*/
 
 		void show_character(std::string_view character_variable, std::optional<std::string_view> composite_image_name = std::nullopt, std::optional<std::string_view> transform_name = std::nullopt, std::optional<unsigned int> zorder = std::nullopt);
 		void hide_character(std::string_view character_variable);
@@ -99,7 +109,9 @@ class Script
 		void insert_namebox_text_color(std::string_view character_variable, Color namebox_text_color);
 		void move_textbox(std::string_view where);
 
+		void insert_background(std::string_view background_path, std::string_view transition_name, std::optional<int> length_to_black = std::nullopt, std::optional<int> length_black = std::nullopt, std::optional<int> length_to_clear = std::nullopt);
 		void insert_background(std::string_view background_path);
+		void insert_background(Color color, std::string_view transition_name, std::optional<int> length_to_black = std::nullopt, std::optional<int> length_black = std::nullopt, std::optional<int> length_to_clear = std::nullopt);
 		void insert_background(Color color);
 
 		void play_sound(std::string_view sound_path, int fadein_length, int fadeout_length, float volume_multiplier, int channel, bool loop);

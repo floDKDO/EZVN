@@ -161,6 +161,7 @@
     <ClCompile Include="src\GUI\inputfield.cpp" />
     <ClCompile Include="src\in_game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Managers\transition_manager.cpp" />
     <ClCompile Include="src\Managers\ui_manager.cpp" />
     <ClCompile Include="src\main_menu.cpp" />
     <ClCompile Include="src\music.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="src\GUI\ui.cpp" />
     <ClCompile Include="src\transform_step.cpp" />
     <ClCompile Include="src\transition.cpp" />
+    <ClCompile Include="src\utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\composite_image.h" />
@@ -226,6 +228,7 @@
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\GUI\inputfield.h" />
     <ClInclude Include="include\in_game.h" />
+    <ClInclude Include="include\Managers\transition_manager.h" />
     <ClInclude Include="include\Managers\ui_manager.h" />
     <ClInclude Include="include\main_menu.h" />
     <ClInclude Include="include\music.h" />
@@ -266,6 +269,7 @@
     <ClInclude Include="include\GUI\ui.h" />
     <ClInclude Include="include\transform_step.h" />
     <ClInclude Include="include\transition.h" />
+    <ClInclude Include="include\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

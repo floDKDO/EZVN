@@ -2,6 +2,7 @@
 #include "in_game.h"
 #include "main_menu.h"
 #include "settings_menu.h"
+#include "utils.h"
 
 #include <iostream>
 
@@ -246,9 +247,29 @@ void Game::show_dialogue(std::string_view dialogue)
 	script_.insert_dialogue("Narrator", dialogue);
 }
 
+void Game::show_background(std::string_view background_path, std::tuple<std::string_view, int, int, int> transition_info)
+{
+	script_.insert_background(background_path, utils::string_to_lower(std::get<0>(transition_info)), std::get<1>(transition_info), std::get<2>(transition_info), std::get<3>(transition_info));
+}
+
+void Game::show_background(std::string_view background_path, std::string_view transition_name)
+{
+	script_.insert_background(background_path, utils::string_to_lower(transition_name), std::nullopt, std::nullopt, std::nullopt);
+}
+
 void Game::show_background(std::string_view background_path)
 {
 	script_.insert_background(background_path);
+}
+
+void Game::show_background(Color color, std::tuple<std::string_view, int, int, int> transition_info)
+{
+	script_.insert_background(color, utils::string_to_lower(std::get<0>(transition_info)), std::get<1>(transition_info), std::get<2>(transition_info), std::get<3>(transition_info));
+}
+
+void Game::show_background(Color color, std::string_view transition_name)
+{
+	script_.insert_background(color, utils::string_to_lower(transition_name));
 }
 
 void Game::show_background(Color color)

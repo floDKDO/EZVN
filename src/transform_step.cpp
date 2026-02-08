@@ -1,21 +1,12 @@
 #include "transform_step.h"
 #include "constants.h"
+#include "utils.h"
 
 #include <iostream>
 
 TransformStep::TransformStep()
 	: t_(0.0f), start_time_(SDL_GetTicks64()), elapsed_time_(0), is_finished_(false), has_got_initial_values_(false)
 {}
-
-float lerp(float a, float b, float t)
-{
-	return a + t * (b - a);
-}
-
-double lerp(double a, double b, double t)
-{
-	return a + t * (b - a);
-}
 
 namespace step
 {
@@ -100,7 +91,7 @@ void alpha_common(TransformStep& step, Uint8 alpha, Image& image, Duration durat
 	each_frame_modif_common(step, image,
 	[&]()
 	{
-		Uint8 new_alpha_value = Uint8(lerp(float(step.initial_values_.a_), float(alpha), step.t_));
+		Uint8 new_alpha_value = Uint8(utils::lerp(step.initial_values_.a_, alpha, step.t_));
 		image.set_alpha(new_alpha_value);
 	}
 	, duration);
@@ -135,7 +126,7 @@ void rotate(TransformStep& step, Image& image, double angle, Duration duration)
 	each_frame_modif_common(step, image,
 	[&]()
 	{
-		double new_angle_value = lerp(step.initial_values_.angle_, angle, double(step.t_));
+		double new_angle_value = utils::lerp(step.initial_values_.angle_, angle, step.t_);
 		image.rotate(new_angle_value);
 	}
 	, duration);
@@ -185,14 +176,14 @@ void set_position_common(TransformStep& step, Image& image, int x, int y, IsPosi
 
 		if(image.position_.x != x)
 		{
-			int new_x_value = int(lerp(float(step.initial_values_.x_pos_), float(x), step.t_));
+			int new_x_value = int(utils::lerp(step.initial_values_.x_pos_, x, step.t_));
 			image.from_transform_.x = new_x_value;
 			image.set_x_position(new_x_value);
 		}
 
 		if(image.position_.y != y)
 		{
-			int new_y_value = int(lerp(float(step.initial_values_.y_pos_), float(y), step.t_));
+			int new_y_value = int(utils::lerp(step.initial_values_.y_pos_, y, step.t_));
 			image.from_transform_.y = new_y_value;
 			image.set_y_position(new_y_value);
 		}
@@ -244,8 +235,8 @@ void set_center(TransformStep& step, Image& image, Duration duration)
 	each_frame_modif_common(step, image,
 	[&]()
 	{
-		int new_x_value = int(lerp(float(step.initial_values_.x_pos_), float(constants::window_width_ / 2 - std::abs(image.get_xcenter())), step.t_));
-		int new_y_value = int(lerp(float(step.initial_values_.y_pos_), float(constants::window_height_ / 2 - std::abs(image.get_ycenter())), step.t_));
+		int new_x_value = int(utils::lerp(step.initial_values_.x_pos_, constants::window_width_ / 2 - std::abs(image.get_xcenter()), step.t_));
+		int new_y_value = int(utils::lerp(step.initial_values_.y_pos_, constants::window_height_ / 2 - std::abs(image.get_ycenter()), step.t_));
 		image.set_position(new_x_value, new_y_value);
 	}
 	, duration);
@@ -265,7 +256,7 @@ void zoom(TransformStep& step, Image& image, float zoom, Duration duration)
 	each_frame_modif_common(step, image,
 	[&]()
 	{
-		float new_zoom_value = lerp(float(step.initial_values_.zoom_), zoom, step.t_);
+		float new_zoom_value = float(utils::lerp(step.initial_values_.zoom_, zoom, step.t_));
 		image.zoom(new_zoom_value);
 	}
 	, duration);
@@ -285,8 +276,8 @@ void resize(TransformStep& step, Image& image, int w, int h, Duration duration)
 	each_frame_modif_common(step, image,
 	[&]()
 	{
-		int new_w_value = int(lerp(float(step.initial_values_.w_size_), float(w), step.t_));
-		int new_h_value = int(lerp(float(step.initial_values_.h_size_), float(h), step.t_));
+		int new_w_value = int(utils::lerp(step.initial_values_.w_size_, w, step.t_));
+		int new_h_value = int(utils::lerp(step.initial_values_.h_size_, h, step.t_));
 		image.resize(new_w_value, new_h_value);
 	}
 	, duration);
@@ -306,9 +297,9 @@ void filter_common(TransformStep& step, Image& image, Uint8 r, Uint8 g, Uint8 b,
 	each_frame_modif_common(step, image,
 	[&]()
 	{
-		Uint8 new_r_value = Uint8(lerp(float(step.initial_values_.r_), float(r), step.t_));
-		Uint8 new_g_value = Uint8(lerp(float(step.initial_values_.g_), float(g), step.t_));
-		Uint8 new_b_value = Uint8(lerp(float(step.initial_values_.b_), float(b), step.t_));
+		Uint8 new_r_value = Uint8(utils::lerp(step.initial_values_.r_, r, step.t_));
+		Uint8 new_g_value = Uint8(utils::lerp(step.initial_values_.g_, g, step.t_));
+		Uint8 new_b_value = Uint8(utils::lerp(step.initial_values_.b_, b, step.t_));
 		image.change_color(Color::from_rgba8(new_r_value, new_g_value, new_b_value));
 	}
 	, duration);

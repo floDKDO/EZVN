@@ -5,6 +5,7 @@
 #include "Managers/music_manager.h"
 #include "Managers/sound_manager.h"
 #include "Managers/background_manager.h"
+#include "Managers/transition_manager.h"
 
 #include <set>
 
@@ -54,5 +55,6 @@ class ScriptRunner
 		MusicManager music_manager_;  
 		SoundManager sound_manager_;
 		TextboxManager textbox_manager_;
+		TransitionManager transition_manager_;
 };
 

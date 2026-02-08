@@ -43,11 +43,11 @@ class TextboxManager
 		void reset();
 
 		DialogueInstruction dialogue_instruction_;
+		bool skip_mode_;
 
 	private:
 		Uint64 last_time_;
 
-		bool skip_mode_;
 		bool auto_mode_;
 		bool hide_ui_textbox_;
 

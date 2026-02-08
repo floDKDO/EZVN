@@ -1,6 +1,7 @@
 #include "Color/color.h"
 #include "Color/conversion.h"
 #include "Color/str.h"
+#include "utils.h"
 
 #include <iostream>
 
@@ -42,11 +43,7 @@ Color Color::from_hex(std::string_view hex_color)
 
 Color Color::from_string(std::string_view string_color)
 {
-    std::string string_color_lower = std::string(string_color);
-    for(char& c : string_color_lower)
-    {
-        c = char(std::tolower(c));
-    }
+    std::string string_color_lower = utils::string_to_lower(string_color);
 
     if(str::colors_.count(string_color_lower))
     {
