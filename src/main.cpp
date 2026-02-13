@@ -4,6 +4,7 @@
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory to use argc and argv for SDL2
 {
+	//Step 0 : create a Game object
 	Game game;
 
 	//First step : character creation
@@ -114,6 +115,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 }
 
 //TODO : renommer Drawable en Displayable ?
+
+//TODO : créer un dossier States pour main_menu, settings_menu et in_game ?
 
 //TODO : sûrement remplacer les paramètres std::vector par std::initializer_list quand c'est possible
 

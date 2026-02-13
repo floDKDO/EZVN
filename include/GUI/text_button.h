@@ -21,6 +21,7 @@ class TextButton : public Ui
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 		SDL_Rect get_rect() const override;
+		void set_rect(SDL_Rect rect) override;
 
 	private:
 		static const unsigned int index_rect_textbutton_;

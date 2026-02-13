@@ -3,6 +3,8 @@
 #include "game_state.h"
 #include "image.h"
 #include "GUI/scrollbar.h"
+#include "GUI/scrollable_area.h"
+#include "GUI/text_button.h" //TODO : à retirer
 
 class MainMenu : public GameState
 {
@@ -17,6 +19,13 @@ class MainMenu : public GameState
 		void play_function(Ui* ui);
 		void settings_function(Ui* ui);
 		void confirmationpopup_quit_function(Ui* ui);
+
+		std::unique_ptr<ScrollableArea> scroll_;
+		TextButton* button_0_;
+		TextButton* button_1_;
+		TextButton* button_2_;
+		TextButton* button_3_;
+		TextButton* button_4_;
 
 		Scrollbar* scrollbar_;
 

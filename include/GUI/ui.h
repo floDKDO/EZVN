@@ -80,6 +80,7 @@ class Ui
 
 		virtual std::vector<Ui*> get_navigation_nodes();
 		virtual SDL_Rect get_rect() const { return {0, 0, 0, 0}; }; 
+		virtual void set_rect(SDL_Rect rect) {};
 
 		Ui* select_on_up_;
 		Ui* select_on_down_;

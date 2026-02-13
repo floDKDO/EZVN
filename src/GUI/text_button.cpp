@@ -84,3 +84,8 @@ SDL_Rect TextButton::get_rect() const
 {
 	return text_.position_;
 }
+
+void TextButton::set_rect(SDL_Rect rect)
+{
+	text_.position_ = rect;
+}
