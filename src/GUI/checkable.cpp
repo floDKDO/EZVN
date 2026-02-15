@@ -4,7 +4,7 @@
 #include <iostream>
 
 Checkable::Checkable(bool is_checked, sdl::Renderer& renderer)
-	: Ui(renderer), is_checked_(is_checked), previous_checked_(is_checked), checkable_group_(nullptr)
+	: UiWidget(renderer), is_checked_(is_checked), previous_checked_(is_checked), checkable_group_(nullptr)
 {}
 
 void Checkable::reverse_checked()

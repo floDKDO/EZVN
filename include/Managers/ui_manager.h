@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GUI/ui.h"
+#include "GUI/ui_widget.h"
 #include "Managers/audio_manager.h"
 
 #include <vector>
@@ -18,9 +18,9 @@ class UiManager
 		void draw(sdl::Renderer& renderer);
 		void update();
 
-		bool is_mouse_on_ui(PointerEventData pointer_event_data);
+		bool is_mouse_on_widget(PointerEventData pointer_event_data);
 
-		bool is_mouse_on_ui_;
+		bool is_mouse_on_widget_;
 
 	private:
 		enum class Axis
@@ -29,23 +29,23 @@ class UiManager
 			Y
 		};
 
-		bool is_ui1_facing_ui2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode) const;
-		bool is_candidate_closer(const Ui* ui, const Ui* candidate, const Ui* current_best, Axis mode) const;
-		Ui* get_ui_facing(const Ui* ui, Ui* candidate_ui, Ui* current_best_ui, Axis mode) const;
-		void assign_ui_on_moving() const;
-		void select_new(Ui* ui);
-		void unselect_previous(Ui* ui, PointerEventData pointer_event_data);
+		bool is_widget1_facing_widget2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode) const;
+		bool is_candidate_closer(const UiWidget* widget, const UiWidget* candidate_widget, const UiWidget* current_best_widget, Axis mode) const;
+		UiWidget* get_widget_facing(const UiWidget* widget, UiWidget* candidate_widget, UiWidget* current_best_widget, Axis mode) const;
+		void assign_widget_on_moving() const;
+		void select_new(UiWidget* widget);
+		void unselect_previous(UiWidget* widget, PointerEventData pointer_event_data);
 
-		bool is_mouse_on_specific_ui(Ui* ui, PointerEventData pointer_event_data);
+		bool is_mouse_on_specific_widget(UiWidget* widget, PointerEventData pointer_event_data);
 
 		void on_input_pressed(const SDL_Event& e);
 		void on_input_released(const SDL_Event& e);
 
-		std::vector<Ui*> navigation_list_;
+		std::vector<UiWidget*> navigation_list_;
 		std::vector<std::unique_ptr<Ui>> ui_elements_;
 
-		Ui* previous_selected_;
-		Ui* current_selected_;
+		UiWidget* previous_selected_;
+		UiWidget* current_selected_;
 		bool is_mouse_left_button_held_down_;
 		//bool is_pop_up_visible_;
 

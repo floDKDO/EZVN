@@ -3,11 +3,12 @@
 #include "GUI/inputfield.h"
 //#include "GUI/confirmation_popup.h"
 #include "constants.h"
+#include "GUI/ui_container.h"
 
 #include <iostream>
 
 UiManager::UiManager(AudioManager& audio_manager)
-	: is_mouse_on_ui_(false), previous_selected_(nullptr), current_selected_(nullptr), is_mouse_left_button_held_down_(false),
+	: is_mouse_on_widget_(false), previous_selected_(nullptr), current_selected_(nullptr), is_mouse_left_button_held_down_(false),
 	audio_manager_(audio_manager), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
@@ -19,35 +20,46 @@ void UiManager::add_element(std::unique_ptr<Ui>&& ui)
 
 void UiManager::set_elements()
 {
-	for(const std::unique_ptr<Ui>& ui_element : ui_elements_)
+	for(const std::unique_ptr<Ui>& ui : ui_elements_)
 	{
-		std::vector<Ui*> nodes = ui_element->get_navigation_nodes();
+		std::vector<UiWidget*> nodes;
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(ui.get()); widget != nullptr)
+		{
+			nodes = widget->get_navigation_nodes();
+		}
+		else if(UiContainer* ui_container = dynamic_cast<UiContainer*>(ui.get()); ui_container != nullptr)
+		{
+			nodes = ui_container->get_navigation_nodes();
+		}
 
-		navigation_list_.insert(navigation_list_.end(), nodes.begin(), nodes.end());
+		for(UiWidget* widget : nodes)
+		{
+			navigation_list_.push_back(widget);
+		}
 
 		/*TextButton* textbutton = nullptr; 
-		if((textbutton = dynamic_cast<TextButton*>(ui_element.get())) != nullptr && textbutton->confirmationpopup_ != nullptr)
+		if((textbutton = dynamic_cast<TextButton*>(ui.get())) != nullptr && textbutton->confirmationpopup_ != nullptr)
 		{
 			std::vector<Ui*> textbuttons_popup = textbutton->confirmationpopup_->get_navigation_nodes(); 
 			navigation_list_.insert(navigation_list_.end(), textbuttons_popup.begin(), textbuttons_popup.end()); //Also add the textbuttons of the ConfirmationPopUp
 		}*/
 	}
 
-	assign_ui_on_moving();
+	assign_widget_on_moving();
 
-	for(Ui* ui : navigation_list_)
+	for(UiWidget* widget : navigation_list_)
 	{
-		if(ui->state_ == Ui::State::SELECTED)
+		if(widget->state_ == UiWidget::State::SELECTED)
 		{
-			current_selected_ = ui;
+			current_selected_ = widget;
 			return;
 		}
 	}
 	current_selected_ = navigation_list_[0];
-	current_selected_->state_ = Ui::State::SELECTED;
+	current_selected_->state_ = UiWidget::State::SELECTED;
 }
 
-bool UiManager::is_ui1_facing_ui2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode) const
+bool UiManager::is_widget1_facing_widget2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode) const
 {
 	SDL_assert(mode == Axis::X || mode == Axis::Y);
 
@@ -67,14 +79,14 @@ bool UiManager::is_ui1_facing_ui2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode)
 	}
 }
 
-bool UiManager::is_candidate_closer(const Ui* ui, const Ui* candidate, const Ui* current_best, Axis mode) const
+bool UiManager::is_candidate_closer(const UiWidget* widget, const UiWidget* candidate_widget, const UiWidget* current_best_widget, Axis mode) const
 {
 	SDL_assert(mode == Axis::X || mode == Axis::Y);
 
-	const int diff_best_x = std::abs(ui->get_rect().x - current_best->get_rect().x);
-	const int diff_candidate_x = std::abs(ui->get_rect().x - candidate->get_rect().x);
-	const int diff_best_y = std::abs(ui->get_rect().y - current_best->get_rect().y);
-	const int diff_candidate_y = std::abs(ui->get_rect().y - candidate->get_rect().y);
+	const int diff_best_x = std::abs(widget->rect_.x - current_best_widget->rect_.x);
+	const int diff_candidate_x = std::abs(widget->rect_.x - candidate_widget->rect_.x);
+	const int diff_best_y = std::abs(widget->rect_.y - current_best_widget->rect_.y);
+	const int diff_candidate_y = std::abs(widget->rect_.y - candidate_widget->rect_.y);
 
 	if(mode == Axis::X)
 	{
@@ -90,140 +102,142 @@ bool UiManager::is_candidate_closer(const Ui* ui, const Ui* candidate, const Ui*
 	}
 }
 
-//ui = ui to which we assign a "select_on_*"
-//candidate = the current ui in the inner for loop
-//current_best = the "select_on_*" we try to assign to ui (up, down, left or right)
-Ui* UiManager::get_ui_facing(const Ui* ui, Ui* candidate, Ui* current_best, Axis mode) const
+//widget = widget to which we assign a "select_on_*"
+//candidate = the current widget in the inner for loop
+//current_best = the "select_on_*" we try to assign to widget (up, down, left or right)
+// 
+//TODO : pas ouf d'à la fois modifier et retourner current_best_widget 
+UiWidget* UiManager::get_widget_facing(const UiWidget* widget, UiWidget* candidate_widget, UiWidget* current_best_widget, Axis mode) const
 {
-	if(current_best == nullptr)
+	if(current_best_widget == nullptr)
 	{
-		current_best = candidate;
+		current_best_widget = candidate_widget;
 	}
 	else
 	{
-		const bool ui_facing_current_best = is_ui1_facing_ui2(ui->get_rect(), current_best->get_rect(), mode);
-		const bool ui_facing_candidate = is_ui1_facing_ui2(ui->get_rect(), candidate->get_rect(), mode);
-		const bool ui_facing_both = ui_facing_current_best && ui_facing_candidate;
-		const bool ui_facing_neither = !ui_facing_current_best && !ui_facing_candidate;
+		const bool widget_facing_current_best = is_widget1_facing_widget2(widget->rect_, current_best_widget->rect_, mode);
+		const bool widget_facing_candidate = is_widget1_facing_widget2(widget->rect_, candidate_widget->rect_, mode);
+		const bool widget_facing_both = widget_facing_current_best && widget_facing_candidate;
+		const bool widget_facing_neither = !widget_facing_current_best && !widget_facing_candidate;
 
-		//if the two ui are facing each other ou if neither of them are facing each other, take the one with the lowest diff* 
-		//if current_best is not facing ui but candidate is facing ui, take candidate
-		if(ui_facing_both || ui_facing_neither)
+		//if the two widget are facing each other ou if neither of them are facing each other, take the one with the lowest diff* 
+		//if current_best is not facing widget but candidate is facing widget, take candidate
+		if(widget_facing_both || widget_facing_neither)
 		{
-			if(is_candidate_closer(ui, candidate, current_best, mode))
+			if(is_candidate_closer(widget, candidate_widget, current_best_widget, mode))
 			{
-				current_best = candidate;
+				current_best_widget = candidate_widget;
 			}
 		}
-		else if(!ui_facing_current_best && ui_facing_candidate)
+		else if(!widget_facing_current_best && widget_facing_candidate)
 		{
-			current_best = candidate;
+			current_best_widget = candidate_widget;
 		}
 	}
-	return current_best;
+	return current_best_widget;
 }
 
-void UiManager::assign_ui_on_moving() const
+void UiManager::assign_widget_on_moving() const
 {
-	for(Ui* ui : navigation_list_)
+	for(UiWidget* widget : navigation_list_)
 	{
-		Ui* current_best_up = nullptr;
-		Ui* current_best_down = nullptr;
-		Ui* current_best_left = nullptr;
-		Ui* current_best_right = nullptr;
+		UiWidget* current_best_up = nullptr;
+		UiWidget* current_best_down = nullptr;
+		UiWidget* current_best_left = nullptr;
+		UiWidget* current_best_right = nullptr;
 
-		for(Ui* candidate : navigation_list_)
+		for(UiWidget* candidate : navigation_list_)
 		{
-			if(candidate == ui) { continue; }
+			if(candidate == widget) { continue; }
 
-			const SDL_Rect candidate_pos = candidate->get_rect();
-			const SDL_Rect ui_pos = ui->get_rect();
+			const SDL_Rect candidate_pos = candidate->rect_;
+			const SDL_Rect widget_pos = widget->rect_;
 
-			if(candidate_pos.y + candidate_pos.h <= ui_pos.y)
+			if(candidate_pos.y + candidate_pos.h <= widget_pos.y)
 			{
-				current_best_up = get_ui_facing(ui, candidate, current_best_up, Axis::X);
+				current_best_up = get_widget_facing(widget, candidate, current_best_up, Axis::X);
 			}
-			if(candidate_pos.y >= ui_pos.y + ui_pos.h)
+			if(candidate_pos.y >= widget_pos.y + widget_pos.h)
 			{
-				current_best_down = get_ui_facing(ui, candidate, current_best_down, Axis::X);
+				current_best_down = get_widget_facing(widget, candidate, current_best_down, Axis::X);
 			}
-			if(candidate_pos.x + candidate_pos.w <= ui_pos.x)
+			if(candidate_pos.x + candidate_pos.w <= widget_pos.x)
 			{
-				current_best_left = get_ui_facing(ui, candidate, current_best_left, Axis::Y);
+				current_best_left = get_widget_facing(widget, candidate, current_best_left, Axis::Y);
 			}
-			if(candidate_pos.x >= ui_pos.x + ui_pos.w)
+			if(candidate_pos.x >= widget_pos.x + widget_pos.w)
 			{
-				current_best_right = get_ui_facing(ui, candidate, current_best_right, Axis::Y);
+				current_best_right = get_widget_facing(widget, candidate, current_best_right, Axis::Y);
 			}
 		}
-		ui->select_on_up_ = current_best_up;
-		ui->select_on_down_ = current_best_down;
-		ui->select_on_left_ = current_best_left;
-		ui->select_on_right_ = current_best_right;
+		widget->select_on_up_ = current_best_up;
+		widget->select_on_down_ = current_best_down;
+		widget->select_on_left_ = current_best_left;
+		widget->select_on_right_ = current_best_right;
 	}
 }
 
-void UiManager::select_new(Ui* ui)
+void UiManager::select_new(UiWidget* widget)
 {
 	audio_manager_.play_sound(ui_select_sound_, -1, false);
 	
 	previous_selected_ = current_selected_;
-	previous_selected_->state_ = Ui::State::NORMAL;
+	previous_selected_->state_ = UiWidget::State::NORMAL;
 
-	current_selected_ = ui;
-	current_selected_->state_ = Ui::State::SELECTED;
+	current_selected_ = widget;
+	current_selected_->state_ = UiWidget::State::SELECTED;
 }
 
-void UiManager::unselect_previous(Ui* ui, PointerEventData pointer_event_data)
+void UiManager::unselect_previous(UiWidget* widget, PointerEventData pointer_event_data)
 {
-	if(is_mouse_on_specific_ui(ui, pointer_event_data))
+	if(is_mouse_on_specific_widget(widget, pointer_event_data))
 	{
-		if(current_selected_ != ui && !is_mouse_left_button_held_down_)
+		if(current_selected_ != widget && !is_mouse_left_button_held_down_)
 		{
 			previous_selected_ = current_selected_;
-			previous_selected_->state_ = Ui::State::NORMAL;
-			current_selected_ = ui;
-			if(dynamic_cast<Slider*>(previous_selected_) != nullptr)
+			previous_selected_->state_ = UiWidget::State::NORMAL;
+			current_selected_ = widget;
+			if(Slider* slider = dynamic_cast<Slider*>(previous_selected_); slider != nullptr)
 			{
-				dynamic_cast<Slider*>(previous_selected_)->disable_keyboard_focus();
+				slider->disable_keyboard_focus();
 			}
-			else if(dynamic_cast<Inputfield*>(previous_selected_) != nullptr)
+			else if(Inputfield* inputfield = dynamic_cast<Inputfield*>(previous_selected_); inputfield != nullptr)
 			{
-				dynamic_cast<Inputfield*>(previous_selected_)->quit_editing();
+				inputfield->quit_editing();
 			}
 		}
 	}
 }
 
-bool UiManager::is_mouse_on_ui(PointerEventData pointer_event_data)
+bool UiManager::is_mouse_on_widget(PointerEventData pointer_event_data)
 {
 	bool result = false;
-	for(Ui* ui_element : navigation_list_)
+	for(UiWidget* widget : navigation_list_)
 	{
-		result = is_mouse_on_specific_ui(ui_element, pointer_event_data);
+		result = is_mouse_on_specific_widget(widget, pointer_event_data);
 	}
-	is_mouse_on_ui_ = false;
+	is_mouse_on_widget_ = false;
 	return result;
 }
 
-bool UiManager::is_mouse_on_specific_ui(Ui* ui, PointerEventData pointer_event_data)
+bool UiManager::is_mouse_on_specific_widget(UiWidget* widget, PointerEventData pointer_event_data)
 {
-	std::vector<Ui*> all_ui = ui->get_navigation_nodes();
+	std::vector<UiWidget*> all_widgets = widget->get_navigation_nodes();
 
-	for(size_t i = 0; i < all_ui.size(); ++i)
+	for(size_t i = 0; i < all_widgets.size(); ++i)
 	{
-		const SDL_Rect& rect = all_ui[i]->get_rect();
+		const SDL_Rect& rect = all_widgets[i]->rect_;
 
 		if(rect.y + rect.h > pointer_event_data.mouse_y_
 		&& rect.y < pointer_event_data.mouse_y_
 		&& rect.x + rect.w > pointer_event_data.mouse_x_
 		&& rect.x < pointer_event_data.mouse_x_)
 		{
-			is_mouse_on_ui_ = true;
+			is_mouse_on_widget_ = true;
 			return true;
 		}
 	}
-	is_mouse_on_ui_ = false;
+	is_mouse_on_widget_ = false;
 	return false;
 }
 
@@ -312,12 +326,12 @@ void UiManager::on_input_released(const SDL_Event& e)
 
 void UiManager::handle_events(const SDL_Event& e)
 {
-	for(Ui* ui : navigation_list_)
+	for(UiWidget* widget : navigation_list_)
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
 			PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
-			unselect_previous(ui, pointer_event_data);
+			unselect_previous(widget, pointer_event_data);
 		}
 	}
 
@@ -337,7 +351,7 @@ void UiManager::handle_events(const SDL_Event& e)
 			if(e.button.button == SDL_BUTTON_LEFT)
 			{
 				PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
-				if(is_mouse_on_specific_ui(current_selected_, pointer_event_data) && !is_mouse_left_button_held_down_)
+				if(is_mouse_on_specific_widget(current_selected_, pointer_event_data) && !is_mouse_left_button_held_down_)
 				{
 					is_mouse_left_button_held_down_ = true;
 					current_selected_->mouse_was_on_ui_before_drag_ = true;
@@ -351,10 +365,10 @@ void UiManager::handle_events(const SDL_Event& e)
 			{
 				PointerEventData pointer_event_data = {SDL_BUTTON_LEFT, e.motion.x, e.motion.y};
 
-				if(is_mouse_left_button_held_down_ && (current_selected_->state_ == Ui::State::SELECTED || current_selected_->state_ == Ui::State::PRESSED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
+				if(is_mouse_left_button_held_down_ && (current_selected_->state_ == UiWidget::State::SELECTED || current_selected_->state_ == UiWidget::State::PRESSED)) //cas "state == State::SELECTED" uniquement pour pouvoir bouger la poignée du Slider sans que la souris soit sur la poignée
 				{
 					is_mouse_left_button_held_down_ = false;
-					if((current_selected_->pointer_on_ui_when_pointer_up_ && is_mouse_on_specific_ui(current_selected_, pointer_event_data)) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
+					if((current_selected_->pointer_on_ui_when_pointer_up_ && is_mouse_on_specific_widget(current_selected_, pointer_event_data)) //first condition: the callback function is called only if the pointer is on the UI when it is released/up
 					|| !current_selected_->pointer_on_ui_when_pointer_up_) //second conditon: the callback function is called even if the pointer is not on the UI when it is released/up
 					{
 						audio_manager_.play_sound(ui_press_sound_, -1, false);
@@ -368,10 +382,10 @@ void UiManager::handle_events(const SDL_Event& e)
 		case SDL_MOUSEMOTION:
 			{
 				PointerEventData pointer_event_data = {0, e.motion.x, e.motion.y};
-				if(is_mouse_on_specific_ui(current_selected_, pointer_event_data))
+				if(is_mouse_on_specific_widget(current_selected_, pointer_event_data))
 				{
 					current_selected_->mouse_entered_ = true;
-					if(!is_mouse_left_button_held_down_ && current_selected_->state_ == Ui::State::NORMAL)
+					if(!is_mouse_left_button_held_down_ && current_selected_->state_ == UiWidget::State::NORMAL)
 					{
 						audio_manager_.play_sound(ui_select_sound_, -1, false);
 						current_selected_->on_pointer_enter(pointer_event_data);
@@ -407,16 +421,16 @@ void UiManager::handle_events(const SDL_Event& e)
 
 void UiManager::draw(sdl::Renderer& renderer)
 {
-	for(const std::unique_ptr<Ui>& ui_element : ui_elements_) 
+	for(const std::unique_ptr<Ui>& ui : ui_elements_) 
 	{
-		ui_element->draw(renderer);
+		ui->draw(renderer);
 	}
 }
 
 void UiManager::update()
 {
-	for(const std::unique_ptr<Ui>& ui_element : ui_elements_)  
+	for(const std::unique_ptr<Ui>& ui : ui_elements_) 
 	{
-		ui_element->update();
+		ui->update();
 	}
 }

@@ -6,11 +6,13 @@
 const unsigned int TextToggle::index_rect_texttoggle_ = 0;
 
 TextToggle::TextToggle(std::string_view text, int x, int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, Kind texttoggle_kind)
-	: Checkable(is_checked, renderer), 
+	: Checkable(is_checked, renderer),
 	text_(text, is_checked ? constants::texttoggle_normal_checked_color_ : constants::texttoggle_normal_unchecked_color_, constants::texttoggle_font_, texttoggle_kind == Kind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : constants::texttoggle_text_size_, x, y, renderer)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
+
+	rect_ = text_.position_;
 }
 
 void TextToggle::draw(sdl::Renderer& renderer)
@@ -93,7 +95,10 @@ void TextToggle::update()
 	}
 }
 
-SDL_Rect TextToggle::get_rect() const
+void TextToggle::change_position(int x, int y)
 {
-	return text_.position_;
+	text_.position_.x = x;
+	text_.position_.y = y;
+
+	rect_ = text_.position_;
 }

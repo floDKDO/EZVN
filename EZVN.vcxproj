@@ -142,6 +142,7 @@
     <ClCompile Include="src\duration.cpp" />
     <ClCompile Include="src\GUI\scrollable_area.cpp" />
     <ClCompile Include="src\GUI\scrollbar.cpp" />
+    <ClCompile Include="src\GUI\ui_widget.cpp" />
     <ClCompile Include="src\Managers\background_manager.cpp" />
     <ClCompile Include="src\Managers\audio_manager.cpp" />
     <ClCompile Include="src\background.cpp" />
@@ -154,7 +155,6 @@
     <ClCompile Include="src\drawable.cpp" />
     <ClCompile Include="src\GUI\button.cpp" />
     <ClCompile Include="src\character.cpp" />
-    <ClCompile Include="src\GUI\button_group.cpp" />
     <ClCompile Include="src\GUI\checkable.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\game_state.cpp" />
@@ -195,21 +195,21 @@
     <ClCompile Include="src\textbox.cpp" />
     <ClCompile Include="src\GUI\text_button.cpp" />
     <ClCompile Include="src\GUI\text_toggle.cpp" />
-    <ClCompile Include="src\GUI\text_toggle_group.cpp" />
     <ClCompile Include="src\GUI\checkbox.cpp" />
-    <ClCompile Include="src\GUI\checkbox_group.cpp" />
     <ClCompile Include="src\GUI\checkable_group.cpp" />
     <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\GUI\ui.cpp" />
     <ClCompile Include="src\transform_step.cpp" />
     <ClCompile Include="src\transition.cpp" />
     <ClCompile Include="src\utils.cpp" />
+    <ClCompile Include="src\GUI\ui_container.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\composite_image.h" />
     <ClInclude Include="include\duration.h" />
     <ClInclude Include="include\GUI\scrollable_area.h" />
     <ClInclude Include="include\GUI\scrollbar.h" />
+    <ClInclude Include="include\GUI\ui_widget.h" />
     <ClInclude Include="include\Managers\background_manager.h" />
     <ClInclude Include="include\Managers\audio_manager.h" />
     <ClInclude Include="include\background.h" />
@@ -223,7 +223,6 @@
     <ClInclude Include="include\drawable.h" />
     <ClInclude Include="include\GUI\button.h" />
     <ClInclude Include="include\character.h" />
-    <ClInclude Include="include\GUI\button_group.h" />
     <ClInclude Include="include\GUI\checkable.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\game_state.h" />
@@ -263,15 +262,17 @@
     <ClInclude Include="include\textbox.h" />
     <ClInclude Include="include\GUI\text_button.h" />
     <ClInclude Include="include\GUI\text_toggle.h" />
-    <ClInclude Include="include\GUI\text_toggle_group.h" />
     <ClInclude Include="include\GUI\checkbox.h" />
-    <ClInclude Include="include\GUI\checkbox_group.h" />
     <ClInclude Include="include\GUI\checkable_group.h" />
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\GUI\ui.h" />
     <ClInclude Include="include\transform_step.h" />
     <ClInclude Include="include\transition.h" />
     <ClInclude Include="include\utils.h" />
+    <ClInclude Include="include\GUI\ui_container.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

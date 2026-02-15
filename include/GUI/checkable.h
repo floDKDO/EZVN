@@ -1,10 +1,10 @@
 #pragma once
 
-#include "GUI/ui.h"
+#include "GUI/ui_widget.h"
 
 class CheckableGroup;
 
-class Checkable : public Ui
+class Checkable : public UiWidget
 {
 	public:
 		virtual ~Checkable() = default;

@@ -16,7 +16,7 @@ class TextToggle : public Checkable
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		SDL_Rect get_rect() const override;
+		void change_position(int x, int y) override;
 
 		Text text_;
 

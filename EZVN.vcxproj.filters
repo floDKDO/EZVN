@@ -111,12 +111,6 @@
     <ClCompile Include="src\RAII_SDL2\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\checkbox_group.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GUI\text_toggle_group.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\GUI\checkable_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -130,9 +124,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\transform_step.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GUI\button_group.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\drawable.cpp">
@@ -211,6 +202,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\scrollable_area.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\ui_container.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI\ui_widget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -308,12 +305,6 @@
     <ClInclude Include="include\RAII_SDL2\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\GUI\checkbox_group.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GUI\text_toggle_group.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\GUI\checkable_group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -327,9 +318,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\transform_step.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GUI\button_group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\constants.h">
@@ -413,5 +401,14 @@
     <ClInclude Include="include\GUI\scrollable_area.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\GUI\ui_container.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\ui_widget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

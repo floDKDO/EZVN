@@ -7,11 +7,13 @@
 const unsigned int TextButton::index_rect_textbutton_ = 0;
 
 TextButton::TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, Kind textbutton_kind)
-	: Ui(renderer), 
-	  text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == Kind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == Kind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer)
+	: UiWidget(renderer),
+	text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == Kind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == Kind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
+
+	rect_ = text_.position_;
 }
 
 /*TextButton::TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::string_view text_popup, std::function<void(Ui* ui)> callback_function, TextButtonKind textbutton_kind)
@@ -80,12 +82,10 @@ void TextButton::update()
 	}*/
 }
 
-SDL_Rect TextButton::get_rect() const
+void TextButton::change_position(int x, int y)
 {
-	return text_.position_;
-}
+	text_.position_.x = x;
+	text_.position_.y = y;
 
-void TextButton::set_rect(SDL_Rect rect)
-{
-	text_.position_ = rect;
+	rect_ = text_.position_;
 }

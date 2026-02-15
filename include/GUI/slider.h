@@ -1,9 +1,9 @@
 #pragma once
 
-#include "GUI/ui.h"
+#include "GUI/ui_widget.h"
 #include "text.h"
 
-class Slider : public Ui
+class Slider : public UiWidget
 {
 	public:
 		Slider(unsigned int min_value, unsigned int max_value, int x, int y, std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
@@ -25,7 +25,7 @@ class Slider : public Ui
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		SDL_Rect get_rect() const override;
+		void change_position(int x, int y) override;
 
 	private:
 		static const unsigned int index_rect_container_;

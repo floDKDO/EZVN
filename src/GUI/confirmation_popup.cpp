@@ -4,7 +4,7 @@
 #include <iostream>
 
 ConfirmationPopUp::ConfirmationPopUp(std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), is_confirmationpopup_visible_(false),
+	: UiWidget(renderer), is_confirmationpopup_visible_(false),
 	yes_("Yes", 200, 500, renderer_, callback_function, TextButton::Kind::ON_FRAME), //TODO : hardcodé
 	no_("No", 500, 500, renderer_, 
 	[&]([[maybe_unused]] Ui* ui)
@@ -20,6 +20,7 @@ ConfirmationPopUp::ConfirmationPopUp(std::string_view text, sdl::Renderer& rende
 	frame_.set_center();
 	text_.set_center();
 	text_.position_.x -= constants::confirmationpopup_text_x_delta_;
+	rect_ = frame_.position_;
 }
 
 void ConfirmationPopUp::draw(sdl::Renderer& renderer)
@@ -46,10 +47,15 @@ void ConfirmationPopUp::update()
 	}
 }
 
-std::vector<Ui*> ConfirmationPopUp::get_navigation_nodes()
+std::vector<UiWidget*> ConfirmationPopUp::get_navigation_nodes()
 {
-	std::vector<Ui*> vector;	
+	std::vector<UiWidget*> vector;
 	vector.push_back(&yes_);
 	vector.push_back(&no_);
 	return vector;
+}
+
+void ConfirmationPopUp::change_position(int x, int y)
+{
+	//TODO : ne fait rien ??
 }

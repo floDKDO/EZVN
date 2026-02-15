@@ -6,7 +6,7 @@
 const unsigned int Inputfield::index_rect_inputfield_ = 0;
 
 Inputfield::Inputfield(std::string_view text_placeholder, unsigned int character_limit, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), 
+	: UiWidget(renderer), 
 	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),
 	  container_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
 	  container_outline_({x, y, constants::inputfield_container_width_, constants::inputfield_container_height_}),
@@ -20,6 +20,8 @@ Inputfield::Inputfield(std::string_view text_placeholder, unsigned int character
 
 	wants_text_input_ = true;
 	pointer_on_ui_when_pointer_up_ = true;
+
+	rect_ = container_;
 }
 
 void Inputfield::quit_editing()
@@ -46,7 +48,7 @@ void Inputfield::on_left_pressed()
 	}
 	else
 	{
-		Ui::on_left_pressed();
+		UiWidget::on_left_pressed();
 	}
 }
 
@@ -64,7 +66,7 @@ void Inputfield::on_right_pressed()
 	}
 	else
 	{
-		Ui::on_right_pressed();
+		UiWidget::on_right_pressed();
 	}
 }
 
@@ -127,11 +129,11 @@ void Inputfield::draw(sdl::Renderer& renderer)
 		{
 			text_placeholder_.draw(renderer);
 		}
-		text_caret_.position_.x = get_rect().x;
+		text_caret_.position_.x = container_.x;
 	}
 	else 
 	{
-		text_caret_.position_.x = get_rect().x + text_.position_.w + offset_caret_;
+		text_caret_.position_.x = container_.x + text_.position_.w + offset_caret_;
 	}
 
 	if(has_keyboard_focus_)
@@ -187,7 +189,22 @@ void Inputfield::set_character_limit(unsigned int character_limit)
 	character_limit_ = character_limit;
 }
 
-SDL_Rect Inputfield::get_rect() const 
+void Inputfield::change_position(int x, int y)
 {
-	return container_;
+	text_.position_.x = x + constants::inputfield_text_x_delta_;
+	text_.position_.y = y + constants::inputfield_text_y_delta_;
+
+	container_.x = x;
+	container_.y = y;
+
+	container_outline_.x = x;
+	container_outline_.y = y;
+
+	text_caret_.position_.x = x + constants::inputfield_text_x_delta_;
+	text_caret_.position_.y = y + constants::inputfield_text_y_delta_;
+
+	text_placeholder_.position_.x = x + constants::inputfield_text_x_delta_;
+	text_placeholder_.position_.y = y + constants::inputfield_text_y_delta_;
+
+	rect_ = container_;
 }

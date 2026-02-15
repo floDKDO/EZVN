@@ -4,7 +4,7 @@
 #include <iostream>
 
 Scrollbar::Scrollbar(int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), current_value_(0.0f), min_value_(0.0f), max_value_(1.0f),
+	: UiWidget(renderer), current_value_(0.0f), min_value_(0.0f), max_value_(1.0f),
 	container_({x, y, constants::slider_container_height_, constants::slider_container_width_}), 
 	container_outline_({x, y, constants::slider_container_height_, constants::slider_container_width_}),
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
@@ -18,6 +18,8 @@ Scrollbar::Scrollbar(int x, int y, sdl::Renderer& renderer, std::function<void(U
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = false;
 	callback_called_when_pointer_up_ = false; //= down
+
+	rect_ = container_;
 }
 
 //TODO : pas possible d'agir sur la scrollbar avec le clavier
@@ -87,7 +89,7 @@ void Scrollbar::on_up_pressed()
 	}
 	else
 	{
-		Ui::on_up_pressed();
+		UiWidget::on_up_pressed();
 	}
 }
 
@@ -105,7 +107,7 @@ void Scrollbar::on_down_pressed()
 	}
 	else
 	{
-		Ui::on_down_pressed();
+		UiWidget::on_down_pressed();
 	}
 }
 
@@ -113,7 +115,7 @@ void Scrollbar::on_left_pressed()
 {
 	if(!has_keyboard_focus_)
 	{
-		Ui::on_left_pressed();
+		UiWidget::on_left_pressed();
 	}
 }
 
@@ -121,7 +123,7 @@ void Scrollbar::on_right_pressed()
 {
 	if(!has_keyboard_focus_)
 	{
-		Ui::on_right_pressed();
+		UiWidget::on_right_pressed();
 	}
 }
 
@@ -172,7 +174,19 @@ void Scrollbar::update()
 	}
 }
 
-SDL_Rect Scrollbar::get_rect() const
+void Scrollbar::change_position(int x, int y)
 {
-	return container_; //handle_ n'est normalement pas utile
+	container_.x = x;
+	container_.y = y;
+
+	container_outline_.x = x;
+	container_outline_.y = y;
+
+	handle_.x = x;
+	handle_.y = y + constants::slider_handle_y_delta_;
+
+	handle_outline_.x = x;
+	handle_outline_.y = y + constants::slider_handle_y_delta_;
+
+	rect_ = container_;
 }

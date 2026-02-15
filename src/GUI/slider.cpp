@@ -10,7 +10,7 @@ Slider::Slider(unsigned int min_value, unsigned int max_value, int x, int y, std
 {}
 
 Slider::Slider(unsigned int min_value, unsigned int max_value, unsigned int current_value, int x, int y, std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Ui(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
+	: UiWidget(renderer), container_({x, y, constants::slider_container_width_, constants::slider_container_height_}), container_outline_({x, y, constants::slider_container_width_, constants::slider_container_height_}),
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_handle_size_, constants::slider_handle_size_}),
 	text_(text, constants::slider_text_color_, constants::slider_font_, constants::slider_text_size_, x, y + constants::slider_text_y_delta_, renderer),
@@ -21,6 +21,8 @@ Slider::Slider(unsigned int min_value, unsigned int max_value, unsigned int curr
 	handle_.x += int((float(current_value_ - min_value_) / float(max_value_ - min_value_)) * (container_.w - handle_.w));
 	handle_outline_.x = handle_.x;
 	text_.position_.x += (container_.w - text_.position_.w) / 2;
+
+	rect_ = container_;
 }
 
 bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y) const
@@ -75,7 +77,7 @@ void Slider::on_up_pressed()
 {
 	if(!has_keyboard_focus_)
 	{
-		Ui::on_up_pressed();
+		UiWidget::on_up_pressed();
 	}
 }
 
@@ -83,7 +85,7 @@ void Slider::on_down_pressed()
 {
 	if(!has_keyboard_focus_)
 	{
-		Ui::on_down_pressed();
+		UiWidget::on_down_pressed();
 	}
 }
 
@@ -101,7 +103,7 @@ void Slider::on_left_pressed()
 	}
 	else
 	{
-		Ui::on_left_pressed();
+		UiWidget::on_left_pressed();
 	}
 }
 
@@ -119,7 +121,7 @@ void Slider::on_right_pressed()
 	}
 	else
 	{
-		Ui::on_right_pressed();
+		UiWidget::on_right_pressed();
 	}
 }
 
@@ -189,7 +191,22 @@ void Slider::update()
 	}
 }*/
 
-SDL_Rect Slider::get_rect() const
+void Slider::change_position(int x, int y)
 {
-	return container_; //handle_ n'est normalement pas utile
+	container_.x = x;
+	container_.y = y;
+
+	container_outline_.x = x;
+	container_outline_.y = y;
+
+	handle_.x = x;
+	handle_.y = y + constants::slider_handle_y_delta_;
+
+	handle_outline_.x = x;
+	handle_outline_.y = y + constants::slider_handle_y_delta_;
+
+	text_.position_.x = x;
+	text_.position_.y = y + constants::slider_text_y_delta_;
+
+	rect_ = container_;
 }

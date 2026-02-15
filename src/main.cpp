@@ -116,6 +116,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 //TODO : renommer Drawable en Displayable ?
 
+//TODO : créer des variables dans des if si utile
+
 //TODO : créer un dossier States pour main_menu, settings_menu et in_game ?
 
 //TODO : sûrement remplacer les paramètres std::vector par std::initializer_list quand c'est possible

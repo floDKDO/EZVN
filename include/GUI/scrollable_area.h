@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ui.h"
-#include "scrollbar.h"
+#include "GUI/ui_widget.h"
+#include "GUI/scrollbar.h"
 
 #include <memory>
 #include <utility>
 
-class ScrollableArea : public Ui
+class ScrollableArea : public UiWidget
 {
 	public:
 		ScrollableArea(int x, int y, int w, int h, sdl::Renderer& renderer);
@@ -14,14 +14,16 @@ class ScrollableArea : public Ui
 		void callback_function(Ui* ui);
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		SDL_Rect get_rect() const override;
-		std::vector<Ui*> get_navigation_nodes() override;
-		void add_ui_element(Ui* ui);
+		std::vector<UiWidget*> get_navigation_nodes() override;
+		void change_position(int x, int y) override;
+
+		int get_scroll_offset(int ui_height);
+		void add_ui_element(UiWidget* widget);
 
 	private:
 		SDL_Rect frame_;
-		std::unique_ptr<Scrollbar> scrollbar_;
-		std::vector<std::pair<Ui*, int /* init y position */ >> ui_elements_;
+		Scrollbar scrollbar_; 
+		std::vector<std::pair<UiWidget*, int/* init y position */>> ui_elements_;
 		sdl::Renderer& renderer_;
 };
 

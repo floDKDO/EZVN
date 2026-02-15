@@ -1,34 +1,23 @@
 #pragma once
 
-#include "GUI/ui.h"
+#include "GUI/ui_container.h"
 #include "GUI/checkable.h"
 #include "text.h"
 
 #include <memory>
 
-class CheckableGroup : public Ui
+class CheckableGroup : public UiContainer
 {
 	public:
-		virtual ~CheckableGroup() = default;
+		CheckableGroup(std::string_view title, int x, int y, bool only_one_has_to_be_checked, sdl::Renderer& renderer);
+
+		void add_ui_element(UiWidget* widget) override;
 
 		void uncheck_all_others(const Checkable* checkable_to_not_uncheck);
 		void handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck);
 		void on_press(Checkable* c);
 
-		void draw(sdl::Renderer& renderer) override;
-		void update() override;
-		//void handle_events(const SDL_Event& e) override;
-		std::vector<Ui*> get_navigation_nodes() override;
-		
-	protected:
-		CheckableGroup(size_t number_of_checkables, bool only_one_has_to_be_checked, std::string_view top_text, int x, int y, sdl::Renderer& renderer);
-
-		std::vector<std::unique_ptr<Checkable>> checkables_;
-		Text top_text_;
-
 	private:
-		size_t number_of_checkables_;
-		Checkable* selected_checkable_;
 		bool only_one_has_to_be_checked_;
 };
 

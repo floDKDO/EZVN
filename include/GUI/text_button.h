@@ -1,11 +1,11 @@
 #pragma once
 
-#include "GUI/ui.h"
+#include "GUI/ui_widget.h"
 #include "text.h"
 
 //class ConfirmationPopUp;
 
-class TextButton : public Ui
+class TextButton : public UiWidget
 {
 	public:
 		enum class Kind
@@ -20,8 +20,7 @@ class TextButton : public Ui
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		SDL_Rect get_rect() const override;
-		void set_rect(SDL_Rect rect) override;
+		void change_position(int x, int y) override;
 
 	private:
 		static const unsigned int index_rect_textbutton_;

@@ -11,6 +11,7 @@ TextboxManager::TextboxManager(sdl::Renderer& renderer, Game& game)
 	build_ui_elements(renderer);
 }
 
+//TODO : pas ouf avec tous les cast...
 void TextboxManager::build_ui_elements(sdl::Renderer& renderer)
 {
 	std::unique_ptr<Ui> history_ui = std::make_unique<TextButton>("History", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
@@ -51,28 +52,22 @@ void TextboxManager::set_position_ui_textbox(std::string_view where)
 	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
 	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
 
-	history_button_->text_.position_.x = x_textbutton;
-	history_button_->text_.position_.y = y_textbutton;
+	history_button_->change_position(x_textbutton, y_textbutton);
 	x_textbutton += history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	skip_toggle_->text_.position_.x = x_textbutton;
-	skip_toggle_->text_.position_.y = y_textbutton;
+	skip_toggle_->change_position(x_textbutton, y_textbutton);
 	x_textbutton += skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	auto_toggle_->text_.position_.x = x_textbutton;
-	auto_toggle_->text_.position_.y = y_textbutton;
+	auto_toggle_->change_position(x_textbutton, y_textbutton);
 	x_textbutton += auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	save_button_->text_.position_.x = x_textbutton;
-	save_button_->text_.position_.y = y_textbutton;
+	save_button_->change_position(x_textbutton, y_textbutton);
 	x_textbutton += save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	load_button_->text_.position_.x = x_textbutton;
-	load_button_->text_.position_.y = y_textbutton;
+	load_button_->change_position(x_textbutton, y_textbutton);
 	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	settings_button_->text_.position_.x = x_textbutton;
-	settings_button_->text_.position_.y = y_textbutton;
+	settings_button_->change_position(x_textbutton, y_textbutton);
 }
 
 void TextboxManager::handle_events_mouse_wheel(const SDL_Event& e)
@@ -120,7 +115,7 @@ void TextboxManager::handle_events(const SDL_Event& e)
 	{
 		handle_events_mouse_wheel(e);
 		ui_manager_.handle_events(e);
-		if(ui_manager_.is_mouse_on_ui_)
+		if(ui_manager_.is_mouse_on_widget_)
 		{
 			return; //si collision avec un textbutton, ne pas gérer les événements "clic" et "espace" de la Textbox (= ne pas passer au prochain dialogue)
 		}

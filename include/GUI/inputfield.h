@@ -1,9 +1,9 @@
 #pragma once
 
-#include "GUI/ui.h"
+#include "GUI/ui_widget.h"
 #include "text.h"
 
-class Inputfield : public Ui
+class Inputfield : public UiWidget
 {
 	public:
 		Inputfield(std::string_view text_placeholder, unsigned int character_limit, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
@@ -19,7 +19,7 @@ class Inputfield : public Ui
 		void on_delete_pressed() override;
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		SDL_Rect get_rect() const override;
+		void change_position(int x, int y) override;
 
 		void on_typing(std::string_view text) override;
 		void set_character_limit(unsigned int character_limit);

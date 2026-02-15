@@ -1,10 +1,10 @@
 #pragma once
 
-#include "GUI/ui.h"
+#include "GUI/ui_widget.h"
 
 //Pour l'instant, que de haut en bas
 
-class Scrollbar : public Ui
+class Scrollbar : public UiWidget
 {
 	public:
 		Scrollbar(int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
@@ -25,7 +25,7 @@ class Scrollbar : public Ui
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		SDL_Rect get_rect() const override;
+		void change_position(int x, int y) override;
 
 		float current_value_;
 		float min_value_;

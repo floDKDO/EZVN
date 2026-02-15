@@ -11,7 +11,7 @@ class Checkbox : public Checkable
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
-		SDL_Rect get_rect() const override;
+		void change_position(int x, int y) override;
 
 	private:
 		static const unsigned int index_rect_checkbox_;
