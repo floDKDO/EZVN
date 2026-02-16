@@ -21,9 +21,12 @@ class ScrollableArea : public UiWidget
 		void add_ui_element(UiWidget* widget);
 
 	private:
+		int get_max_y() const;
+
 		SDL_Rect frame_;
 		Scrollbar scrollbar_; 
 		std::vector<std::pair<UiWidget*, int/* init y position */>> ui_elements_;
+		int max_y_;
 		sdl::Renderer& renderer_;
 };
 

@@ -1,6 +1,10 @@
 #pragma once
 
 #include "GUI/ui.h"
+#include "pointer_event_data.h"
+
+#include <functional>
+#include <vector>
 
 class UiWidget : public Ui
 {

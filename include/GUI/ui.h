@@ -1,10 +1,6 @@
 #pragma once
 
-#include "pointer_event_data.h"
 #include "RAII_SDL2/renderer.h"
-
-#include <functional>
-#include <vector>
 
 class Ui
 {
