@@ -196,13 +196,12 @@
     <ClCompile Include="src\GUI\text_button.cpp" />
     <ClCompile Include="src\GUI\text_toggle.cpp" />
     <ClCompile Include="src\GUI\checkbox.cpp" />
-    <ClCompile Include="src\GUI\checkable_group.cpp" />
     <ClCompile Include="src\transform.cpp" />
     <ClCompile Include="src\GUI\ui.cpp" />
     <ClCompile Include="src\transform_step.cpp" />
     <ClCompile Include="src\transition.cpp" />
     <ClCompile Include="src\utils.cpp" />
-    <ClCompile Include="src\GUI\ui_container.cpp" />
+    <ClCompile Include="src\GUI\ui_group.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\composite_image.h" />
@@ -263,13 +262,12 @@
     <ClInclude Include="include\GUI\text_button.h" />
     <ClInclude Include="include\GUI\text_toggle.h" />
     <ClInclude Include="include\GUI\checkbox.h" />
-    <ClInclude Include="include\GUI\checkable_group.h" />
     <ClInclude Include="include\transform.h" />
     <ClInclude Include="include\GUI\ui.h" />
     <ClInclude Include="include\transform_step.h" />
     <ClInclude Include="include\transition.h" />
     <ClInclude Include="include\utils.h" />
-    <ClInclude Include="include\GUI\ui_container.h" />
+    <ClInclude Include="include\GUI\ui_group.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

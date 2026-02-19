@@ -1,8 +1,7 @@
 #pragma once
 
 #include "GUI/ui_widget.h"
-
-class CheckableGroup;
+#include "GUI/ui_group.h"
 
 class Checkable : public UiWidget
 {
@@ -16,7 +15,7 @@ class Checkable : public UiWidget
 
 		bool is_checked_;
 		bool previous_checked_;
-		CheckableGroup* checkable_group_;
+		UiGroup* checkable_group_;
 
 	protected:
 		Checkable(bool is_checked, sdl::Renderer& renderer);

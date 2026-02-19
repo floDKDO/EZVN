@@ -3,7 +3,7 @@
 #include "GUI/inputfield.h"
 //#include "GUI/confirmation_popup.h"
 #include "constants.h"
-#include "GUI/ui_container.h"
+#include "GUI/ui_group.h"
 
 #include <iostream>
 
@@ -27,9 +27,9 @@ void UiManager::set_elements()
 		{
 			nodes = widget->get_navigation_nodes();
 		}
-		else if(UiContainer* ui_container = dynamic_cast<UiContainer*>(ui.get()); ui_container != nullptr)
+		else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(ui.get()); ui_group != nullptr)
 		{
-			nodes = ui_container->get_navigation_nodes();
+			nodes = ui_group->get_navigation_nodes();
 		}
 
 		for(UiWidget* widget : nodes)

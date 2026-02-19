@@ -33,10 +33,11 @@ inline const Color button_text_color_ = Color::from_rgba8(255, 255, 255);
 inline constexpr int checkboxgroup_y_spacing_ = 150;
 inline constexpr int texttogglegroup_y_spacing_ = 60;
 
-inline constexpr int checkablegroup_top_text_y_delta_ = -70;
+//TODO : inutilisés
+/*inline constexpr int checkablegroup_top_text_y_delta_ = -70;
 inline constexpr std::string_view checkablegroup_font_ = "fonts/Aller_Rg.ttf";
 inline constexpr int checkablegroup_text_size_ = 40;
-inline const Color checkablegroup_text_color_ = Color::from_rgba8(255, 255, 255);
+inline const Color checkablegroup_text_color_ = Color::from_rgba8(255, 255, 255);*/
 
 inline constexpr std::string_view checkbox_normal_ = "img/gui/checkbox_normal.png";
 inline constexpr std::string_view checkbox_selected_ = "img/gui/checkbox_selected.png";

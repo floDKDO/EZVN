@@ -2,7 +2,6 @@
 #include "GUI/text_button.h"
 #include "GUI/text_toggle.h"
 #include "GUI/slider.h"
-#include "GUI/checkable_group.h"
 #include "game.h"
 
 #include <iostream>
@@ -23,11 +22,10 @@ void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 	//ui_manager_.add_element(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 
 	//TODO : essayer de trouver un meilleur moyen que d'utiliser "new"
-	std::unique_ptr<UiContainer> ui_container_ = std::make_unique<CheckableGroup>("Display", 50, 100, true, renderer);
-	ui_container_->add_ui_element(new TextToggle("Windowed", 0, 0, true, renderer, std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1)));
-	ui_container_->add_ui_element(new TextToggle("Fullscreen", 0, 0, false, renderer, std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)));
-
-	ui_manager_.add_element(std::move(ui_container_));
+	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>("Display", 50, 100, renderer);
+	ui_group->add_ui_element(new TextToggle("Windowed", 0, 0, true, renderer, std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1)));
+	ui_group->add_ui_element(new TextToggle("Fullscreen", 0, 0, false, renderer, std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)));
+	ui_manager_.add_element(std::move(ui_group));
 
 	ui_manager_.set_elements();
 }

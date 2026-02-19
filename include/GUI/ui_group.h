@@ -7,13 +7,15 @@
 #include <string>
 #include <string_view>
 
-class UiContainer : public Ui
+class UiGroup : public Ui
 {
-	public:
-		UiContainer(int x, int y);
-		UiContainer(std::string_view title, int x, int y, sdl::Renderer& renderer);
+	friend class Checkable;
 
-		virtual ~UiContainer() = default;
+	public:
+		UiGroup(int x, int y);
+		UiGroup(std::string_view title, int x, int y, sdl::Renderer& renderer);
+
+		virtual ~UiGroup() = default;
 		virtual void draw(sdl::Renderer& renderer) override;
 		virtual void update() override;
 		virtual std::vector<UiWidget*> get_navigation_nodes();
@@ -23,10 +25,14 @@ class UiContainer : public Ui
 
 		std::vector<UiWidget*> ui_elements_;
 		std::unique_ptr<Text> title_;
+		bool only_one_has_to_be_checked_;
 
 	protected:
 		SDL_Rect frame_;
 
 	private:
+		void uncheck_all_others(const Checkable* checkable_to_not_uncheck);
+		void handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck);
+		void on_press(Checkable* c);
 };
 

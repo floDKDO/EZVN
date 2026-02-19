@@ -114,6 +114,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
+//TODO : quand une méthode prend un pointeur en paramètre (ex : UiWidget*), vérifier que celui-ci ne vaut pas nullptr
+
 //TODO : renommer Drawable en Displayable ?
 
 //TODO : créer des variables dans des if si utile
