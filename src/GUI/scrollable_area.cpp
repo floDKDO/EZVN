@@ -29,7 +29,7 @@ void ScrollableArea::draw(sdl::Renderer& renderer)
 	//renderer.fill_rect(&frame_);
 	for(auto& pair : ui_elements_)
 	{
-		if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+		//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
 		{
 			pair.first->draw(renderer);
 		}
@@ -42,7 +42,7 @@ void ScrollableArea::update()
 {
 	for(auto& pair : ui_elements_)
 	{
-		if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+		//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
 		{
 			pair.first->update();
 		}

@@ -28,6 +28,8 @@ class Window
 		void maximize(); //SDL_MaximizeWindow
 		void set_full_screen(); //SDL_SetWindowFullscreen
 		void set_windowed(); //SDL_SetWindowFullscreen
+		void get_display_mode(SDL_DisplayMode* mode); //SDL_GetWindowDisplayMode
+		void set_display_mode(const SDL_DisplayMode* mode); //SDL_SetWindowDisplayMode
 
 	private:
 		SDL_Window* window_;

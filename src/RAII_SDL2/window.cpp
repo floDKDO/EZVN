@@ -104,4 +104,20 @@ void Window::set_windowed() //SDL_SetWindowFullscreen
 	}
 }
 
+void Window::get_display_mode(SDL_DisplayMode* mode) //SDL_GetWindowDisplayMode
+{
+	if(SDL_GetWindowDisplayMode(window_, mode) < 0)
+	{
+		SDL_Log("(SDL_GetWindowDisplayMode) %s\n", SDL_GetError());
+	}
+}
+
+void Window::set_display_mode(const SDL_DisplayMode* mode) //SDL_SetWindowDisplayMode
+{
+	if(SDL_SetWindowDisplayMode(window_, mode) < 0)
+	{
+		SDL_Log("(SDL_SetWindowDisplayMode) %s\n", SDL_GetError());
+	}
+}
+
 }

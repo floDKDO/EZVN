@@ -5,10 +5,42 @@
 #include "game.h"
 
 #include <iostream>
+#include <sstream>
+#include <set>
 
 SettingsMenu::SettingsMenu(Game& game, std::string_view background_path, sdl::Renderer& renderer)
 	: GameState(game), background_(background_path, 0, 0, renderer)
 {
+
+	//std::cout << SDL_GetNumVideoDisplays() << std::endl; //nombre d'écrans
+	//std::cout << SDL_GetNumDisplayModes(0) << std::endl; //nombre de display modes
+
+	scroll_ = std::make_unique<ScrollableArea>(600, 400, 300, 400, renderer);
+
+	SDL_DisplayMode mode;
+	SDL_GetWindowDisplayMode(game.window_.fetch(), &mode); //taille du contenu dans la fenêtre
+	//std::cout << mode.h << ", " << mode.w << ", " << mode.refresh_rate << "FPS" << std::endl;
+
+	SDL_GetCurrentDisplayMode(0, &mode); //résolution
+	//std::cout << mode.h << ", " << mode.w << ", " << mode.refresh_rate << "FPS" << std::endl;
+
+	std::cout << std::endl;
+	int num = SDL_GetNumDisplayModes(0);
+	std::set<std::pair<int, int>> resolutions;
+	for(int i = 0; i < num; ++i)
+	{
+		SDL_GetDisplayMode(0, i, &mode);
+		if(!resolutions.count({mode.h, mode.w}))
+		{
+			resolutions.insert({mode.h, mode.w});
+			std::string resolution = std::to_string(mode.h) + 'x' + std::to_string(mode.w);
+			scroll_->add_ui_element(new TextButton(resolution, 600, 400 + i * 10, renderer, std::bind(&SettingsMenu::textbutton_resolution_function, this, std::placeholders::_1)));
+			std::cout << mode.h << ", " << mode.w << ", " << mode.refresh_rate << "FPS" << std::endl;
+		}
+	}
+	std::cout << "Number: " << resolutions.size() << std::endl;
+	std::cout << std::endl;
+
 	build_ui_elements(renderer);
 }
 
@@ -25,7 +57,10 @@ void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>("Display", 50, 100, renderer);
 	ui_group->add_ui_element(new TextToggle("Windowed", 0, 0, true, renderer, std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1)));
 	ui_group->add_ui_element(new TextToggle("Fullscreen", 0, 0, false, renderer, std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)));
+
 	ui_manager_.add_element(std::move(ui_group));
+
+	ui_manager_.add_element(std::move(scroll_));
 
 	ui_manager_.set_elements();
 }
@@ -87,4 +122,36 @@ void SettingsMenu::texttoggle_windowed_function(Ui* ui)
 	{
 		game_.window_.set_windowed();
 	}
+}
+
+void SettingsMenu::textbutton_resolution_function(Ui* ui)
+{
+	std::cout << "CHANGE RESOLUTION\n";
+	TextButton* textbutton_resolution = dynamic_cast<TextButton*>(ui);
+
+	SDL_DisplayMode display_mode;
+	SDL_GetWindowDisplayMode(game_.window_.fetch(), &display_mode);
+
+	//TODO : std::istringstream ??
+	std::stringstream stream(textbutton_resolution->text_.text_);
+	std::string h_res, w_res;
+
+	//ne marche que si textbutton_resolution->text_.text_ est de la forme h x w !
+	std::getline(stream, h_res, 'x');
+	std::getline(stream, w_res, 'x');
+	std::cout << h_res << ", " << w_res << std::endl;
+
+	display_mode.h = std::stoi(h_res);
+	display_mode.w = std::stoi(w_res);
+	std::cout << display_mode.h << ", " << display_mode.w << ", " << display_mode.refresh_rate << std::endl;
+
+	//TODO : créer des méthodes is_fullscreen etc.
+	if(SDL_GetWindowFlags(game_.window_.fetch()) & SDL_WINDOW_FULLSCREEN) //modif uniquement si la fenêtre est en plein écran
+	{
+		game_.window_.set_windowed();
+		game_.window_.set_display_mode(&display_mode);
+		game_.window_.set_full_screen();
+	}
+	
+	std::cout << "Clicked on " << textbutton_resolution->text_.text_ << std::endl;
 }
