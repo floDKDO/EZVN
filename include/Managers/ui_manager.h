@@ -12,6 +12,7 @@ class UiManager
 		UiManager(AudioManager& audio_manager);
 
 		void add_element(std::unique_ptr<Ui>&& ui);
+		//Ui* get_last_element();
 		void set_elements();
 
 		void handle_events(const SDL_Event& e);

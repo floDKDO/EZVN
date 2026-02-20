@@ -19,11 +19,11 @@ class UiGroup : public Ui
 		virtual void draw(sdl::Renderer& renderer) override;
 		virtual void update() override;
 		virtual std::vector<UiWidget*> get_navigation_nodes();
-		virtual void add_ui_element(UiWidget* widget);
+		virtual void add_ui_element(std::unique_ptr<UiWidget> widget);
 
 		void set_title(std::string_view title);
 
-		std::vector<UiWidget*> ui_elements_;
+		std::vector<std::unique_ptr<UiWidget>> ui_elements_;
 		std::unique_ptr<Text> title_;
 		bool only_one_has_to_be_checked_;
 

@@ -18,6 +18,11 @@ void UiManager::add_element(std::unique_ptr<Ui>&& ui)
 	ui_elements_.push_back(std::move(ui));
 }
 
+/*Ui* UiManager::get_last_element()
+{
+	return ui_elements_.back().get();
+}*/
+
 void UiManager::set_elements()
 {
 	for(const std::unique_ptr<Ui>& ui : ui_elements_)

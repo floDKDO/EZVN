@@ -10,15 +10,32 @@ ScrollableArea::ScrollableArea(int x, int y, int w, int h, sdl::Renderer& render
 
 void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 {
-	for(auto& pair : ui_elements_)
+	for(auto& pair : ui_widgets_)
 	{
-		UiWidget* widget = pair.first;
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
+		{
+			int scroll_offset = get_scroll_offset(widget->rect_.h);
 
-		int scroll_offset = get_scroll_offset(widget->rect_.h);
+			SDL_Rect rect = widget->rect_;
+			rect.y = pair.second + scroll_offset; // + pour monter, - pour descendre
+			widget->change_position(rect.x, rect.y);
+		}
+		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
+		{
+			std::cout << "LALALALA\n";
+			std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();
+			for(UiWidget* widget : widgets)
+			{
+				int scroll_offset = get_scroll_offset(widget->rect_.h);
 
-		SDL_Rect rect = widget->rect_;
-		rect.y = pair.second + scroll_offset; // + pour monter, - pour descendre
-		widget->change_position(rect.x, rect.y);
+				SDL_Rect rect = widget->rect_;
+				rect.y = pair.second + scroll_offset; // + pour monter, - pour descendre
+
+				std::cout << scroll_offset << ", " << rect.y << std::endl;
+
+				widget->change_position(rect.x, rect.y);
+			}
+		}*/
 	}
 }
 
@@ -27,12 +44,17 @@ void ScrollableArea::draw(sdl::Renderer& renderer)
 	renderer.set_clip_rect(&frame_);
 	//renderer.set_draw_color(255, 255, 255, 255); //TODO : hardcodé
 	//renderer.fill_rect(&frame_);
-	for(auto& pair : ui_elements_)
+	for(auto& pair : ui_widgets_)
 	{
-		//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
 		{
-			pair.first->draw(renderer);
+			//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+			widget->draw(renderer);
 		}
+		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
+		{
+			ui_group->draw(renderer);
+		}*/
 	}
 	scrollbar_.draw(renderer);
 	renderer.set_clip_rect(nullptr);
@@ -40,12 +62,17 @@ void ScrollableArea::draw(sdl::Renderer& renderer)
 
 void ScrollableArea::update()
 {
-	for(auto& pair : ui_elements_)
+	for(auto& pair : ui_widgets_)
 	{
-		//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
 		{
-			pair.first->update();
+			//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+			widget->update();
 		}
+		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
+		{
+			ui_group->update();
+		}*/
 	}
 	scrollbar_.update();
 }
@@ -53,9 +80,20 @@ void ScrollableArea::update()
 std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 {
 	std::vector<UiWidget*> vector;
-	for(auto& pair : ui_elements_)
+	for(auto& pair : ui_widgets_)
 	{
-		vector.push_back(pair.first);
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
+		{
+			vector.push_back(widget);
+		}
+		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
+		{
+			std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();
+			for(UiWidget* widget : widgets)
+			{
+				vector.push_back(widget);
+			}
+		}*/
 	}
 	vector.push_back(&scrollbar_);
 	return vector;
@@ -68,21 +106,52 @@ int ScrollableArea::get_scroll_offset(int ui_height)
 	return int(t * max_offset);
 }
 
-void ScrollableArea::add_ui_element(UiWidget* widget)
+void ScrollableArea::add_ui_element(std::unique_ptr<UiWidget> widget)
 {
-	ui_elements_.push_back({widget, widget->rect_.y});
+	ui_elements_.push_back(std::move(widget));
+	UiWidget* w = dynamic_cast<UiWidget*>(ui_elements_.back().get());
+	ui_widgets_.push_back({w, w->rect_.y});
+	max_y_ = get_max_y();
+}
+
+void ScrollableArea::add_ui_element(std::unique_ptr<UiGroup> ui_group)
+{
+	/*UiGroup* ui_groupp = ui_group.release(); //fonctionne mais fuite de mémoire
+	ui_elements_.push_back({ui_groupp, 0});*/
+
+	std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();
+	for(UiWidget* widget : widgets)
+	{
+		ui_widgets_.push_back({widget, widget->rect_.y});
+	}
+	ui_elements_.push_back(std::move(ui_group)); 
+
 	max_y_ = get_max_y();
 }
 
 int ScrollableArea::get_max_y() const
 {
 	int max_y = 0;
-	for(auto& pair : ui_elements_)
+	for(auto& pair : ui_widgets_)
 	{
-		if(pair.first->rect_.y > max_y_)
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
 		{
-			max_y = pair.first->rect_.y;
+			if(widget->rect_.y > max_y_)
+			{
+				max_y = widget->rect_.y;
+			}
 		}
+		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
+		{
+			std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();
+			for(UiWidget* widget : widgets)
+			{
+				if(widget->rect_.y > max_y_)
+				{
+					max_y = widget->rect_.y;
+				}
+			}
+		}*/
 	}
 	return max_y;
 }

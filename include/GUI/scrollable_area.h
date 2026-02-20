@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GUI/ui_widget.h"
+#include "GUI/ui_group.h"
 #include "GUI/scrollbar.h"
 
 #include <memory>
@@ -18,14 +19,16 @@ class ScrollableArea : public UiWidget
 		void change_position(int x, int y) override;
 
 		int get_scroll_offset(int ui_height);
-		void add_ui_element(UiWidget* widget);
+		void add_ui_element(std::unique_ptr<UiWidget> widget);
+		void add_ui_element(std::unique_ptr<UiGroup> ui_group);
 
 	private:
 		int get_max_y() const;
 
 		SDL_Rect frame_;
 		Scrollbar scrollbar_; 
-		std::vector<std::pair<UiWidget*, int/* init y position */>> ui_elements_;
+		std::vector<std::unique_ptr<Ui>> ui_elements_;
+		std::vector<std::pair<UiWidget*, int/* init y position */>> ui_widgets_;
 		int max_y_;
 		sdl::Renderer& renderer_;
 };

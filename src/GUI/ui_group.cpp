@@ -14,9 +14,9 @@ UiGroup::UiGroup(std::string_view title, int x, int y, sdl::Renderer& renderer)
 
 void UiGroup::draw(sdl::Renderer& renderer)
 {
-	for(Ui* ui : ui_elements_)
+	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
 	{
-		ui->draw(renderer);
+		ui_widget->draw(renderer);
 	}
 
 	if(title_ != nullptr)
@@ -27,9 +27,9 @@ void UiGroup::draw(sdl::Renderer& renderer)
 
 void UiGroup::update()
 {
-	for(Ui* ui : ui_elements_)
+	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
 	{
-		ui->update();
+		ui_widget->update();
 	}
 
 	if(title_ != nullptr)
@@ -40,12 +40,18 @@ void UiGroup::update()
 
 std::vector<UiWidget*> UiGroup::get_navigation_nodes()
 {
-	return ui_elements_;
+	std::vector<UiWidget*> widgets;
+	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
+	{
+		widgets.push_back(ui_widget.get());
+	}
+
+	return widgets;
 }
 
-void UiGroup::add_ui_element(UiWidget* widget)
+void UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 {
-	if(Checkable* c = dynamic_cast<Checkable*>(widget); c != nullptr)
+	if(Checkable* c = dynamic_cast<Checkable*>(widget.get()); c != nullptr)
 	{
 		c->checkable_group_ = this;
 	}
@@ -62,7 +68,7 @@ void UiGroup::add_ui_element(UiWidget* widget)
 	}
 	widget->change_position(rect.x, rect.y);
 
-	ui_elements_.push_back(widget);
+	ui_elements_.push_back(std::move(widget));
 }
 
 void UiGroup::set_title(std::string_view title)
@@ -75,9 +81,9 @@ void UiGroup::set_title(std::string_view title)
 
 void UiGroup::uncheck_all_others(const Checkable* checkable_to_not_uncheck)
 {
-	for(Ui* ui : ui_elements_)
+	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
 	{
-		Checkable* c = dynamic_cast<Checkable*>(ui);
+		Checkable* c = dynamic_cast<Checkable*>(ui_widget.get());
 		if(c != nullptr && c != checkable_to_not_uncheck)
 		{
 			c->change_checked(false);
