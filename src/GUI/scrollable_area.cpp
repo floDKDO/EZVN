@@ -1,9 +1,10 @@
 #include "GUI/scrollable_area.h"
+#include "constants.h"
 
 #include <iostream>
 
 ScrollableArea::ScrollableArea(int x, int y, int w, int h, sdl::Renderer& renderer)
-	: UiWidget(renderer), frame_({x, y, w, h}), scrollbar_(x + 150, y + 20, renderer, std::bind(&ScrollableArea::callback_function, this, std::placeholders::_1)), max_y_(0), renderer_(renderer) //TODO : hardcodé
+	: UiWidget(renderer), frame_({x, y, w, h}), scrollbar_(x + w - constants::slider_handle_size_, y + (constants::slider_handle_size_ / 2), h - constants::slider_handle_size_, renderer, std::bind(&ScrollableArea::callback_function, this, std::placeholders::_1)), max_y_(0), renderer_(renderer)
 {
 	rect_ = frame_;
 }
@@ -42,8 +43,8 @@ void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 void ScrollableArea::draw(sdl::Renderer& renderer)
 {
 	renderer.set_clip_rect(&frame_);
-	//renderer.set_draw_color(255, 255, 255, 255); //TODO : hardcodé
-	//renderer.fill_rect(&frame_);
+	renderer.set_draw_color(200, 200, 200, 255); //TODO : hardcodé
+	renderer.fill_rect(&frame_);
 	for(auto& pair : ui_widgets_)
 	{
 		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
@@ -102,7 +103,13 @@ std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 int ScrollableArea::get_scroll_offset(int ui_height)
 {
 	float t = float((scrollbar_.current_value_ - scrollbar_.min_value_) / (scrollbar_.max_value_ - scrollbar_.min_value_));
-	int max_offset = ui_height - max_y_; 
+	int max_scroll = max_y_ - (frame_.y + frame_.h); //si on a le curseur de la scrollbar tout en haut et qu'on le descend au max, ceci est la valeur (max) en y dont on a monté les éléments de la ScrollableArea
+	int max_offset = 0;
+	if(max_scroll > 0) //on peut scroll uniquement si la zone à scroller est plus grande que frame_.h 
+	{
+		max_offset = -max_scroll - ui_height;
+	}
+	//std::cout << "max_scroll: " << max_scroll << ", " << "max_offset: " << max_offset << std::endl;
 	return int(t * max_offset);
 }
 
@@ -120,8 +127,14 @@ void ScrollableArea::add_ui_element(std::unique_ptr<UiGroup> ui_group)
 	ui_elements_.push_back({ui_groupp, 0});*/
 
 	std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();
+	bool first = false;
 	for(UiWidget* widget : widgets)
 	{
+		if(!first)
+		{
+			std::cout << "FIRST Y : " << widget->rect_.y << std::endl;
+			first = true;
+		}
 		ui_widgets_.push_back({widget, widget->rect_.y});
 	}
 	ui_elements_.push_back(std::move(ui_group)); 

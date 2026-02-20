@@ -7,13 +7,14 @@
 class Scrollbar : public UiWidget
 {
 	public:
-		Scrollbar(int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Scrollbar(int x, int y, int h, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		bool is_mouse_on_handle(int mouse_x, int mouse_y) const;
 		void disable_keyboard_focus();
-		void handle_movement(int mouse_y);
+		void handle_movement(int mouse_x, int mouse_y);
 
 		void on_pointer_down_hook_end(PointerEventData pointer_event_data) override;
+		void on_pointer_up_hook_end(PointerEventData pointer_event_data) override;
 
 		void on_drag(PointerEventData pointer_event_data) override;
 
@@ -40,5 +41,23 @@ class Scrollbar : public UiWidget
 		SDL_Rect handle_outline_;
 
 		int delta_mouse_handle_y_; //y position of the mouse in comparison to the y position of the handle
+		
+		enum WhereWasMouse
+		{
+			ABOVE, 
+			ON,
+			BELOW
+		};
+
+		struct InfoWhenClick
+		{
+			int mouse_y_pos_;
+			int handle_y_pos_;
+			bool mouse_was_on_handle_;
+			WhereWasMouse where_was_mouse_;
+			bool mouse_is_on_handle_; //lors du clic, la souris n'était pas sur l'handle mais à force de la déplpacer en cliquant/déplaçant la souris, cette dernière est sur l'handle
+			bool saved_;
+		};
+		InfoWhenClick info_when_click_;
 };
 

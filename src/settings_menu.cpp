@@ -15,8 +15,8 @@ SettingsMenu::SettingsMenu(Game& game, std::string_view background_path, sdl::Re
 	//std::cout << SDL_GetNumVideoDisplays() << std::endl; //nombre d'écrans
 	//std::cout << SDL_GetNumDisplayModes(0) << std::endl; //nombre de display modes
 
-	scroll_ = std::make_unique<ScrollableArea>(600, 400, 300, 400, renderer);
-	ui_group_ = std::make_unique<UiGroup>(600, 400);
+	scroll_ = std::make_unique<ScrollableArea>(400, 200, 200, 500, renderer);
+	ui_group_ = std::make_unique<UiGroup>(400, 200);
 
 	SDL_DisplayMode mode;
 	SDL_GetWindowDisplayMode(game.window_.fetch(), &mode); //taille du contenu dans la fenêtre
@@ -34,13 +34,13 @@ SettingsMenu::SettingsMenu(Game& game, std::string_view background_path, sdl::Re
 		if(!resolutions.count({mode.h, mode.w}))
 		{
 			resolutions.insert({mode.h, mode.w});
-			std::string resolution = std::to_string(mode.h) + 'x' + std::to_string(mode.w);
+			std::string resolution = std::to_string(mode.w) + 'x' + std::to_string(mode.h);
 			bool checked = false;
 			if(mode.h == constants::window_height_ && mode.w == constants::window_width_)
 			{
 				checked = true;
 			}
-			ui_group_->add_ui_element(std::make_unique<TextToggle>(resolution, 600, 400 + i * 10, checked, renderer, std::bind(&SettingsMenu::texttoggle_resolution_function, this, std::placeholders::_1)));
+			ui_group_->add_ui_element(std::make_unique<TextToggle>(resolution, 0, 0, checked, renderer, std::bind(&SettingsMenu::texttoggle_resolution_function, this, std::placeholders::_1)));
 			std::cout << mode.h << ", " << mode.w << ", " << mode.refresh_rate << "FPS" << std::endl;
 		}
 	}
@@ -142,9 +142,9 @@ void SettingsMenu::texttoggle_resolution_function(Ui* ui)
 	std::stringstream stream(texttoggle_resolution->text_.text_);
 	std::string h_res, w_res;
 
-	//ne marche que si texttoggle_resolution->text_.text_ est de la forme h x w !
-	std::getline(stream, h_res, 'x');
+	//ne marche que si texttoggle_resolution->text_.text_ est de la forme w x h !
 	std::getline(stream, w_res, 'x');
+	std::getline(stream, h_res, 'x');
 	std::cout << h_res << ", " << w_res << std::endl;
 
 	display_mode.h = std::stoi(h_res);

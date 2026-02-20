@@ -114,6 +114,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
+//TODO : pour la collision entre un SDL_Rect et la souris, utiliser SDL_PointInRect()
+
 //TODO : quand une méthode prend un pointeur en paramètre (ex : UiWidget*), vérifier que celui-ci ne vaut pas nullptr
 
 //TODO : renommer Drawable en Displayable ?

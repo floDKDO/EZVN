@@ -60,7 +60,14 @@ void UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 	rect.x = frame_.x;
 	if(ui_elements_.size() == 0)
 	{
-		rect.y = frame_.y + 80; //TODO : hardcodé (80 = espace entre le premier checkable et le titre)
+		if(title_ == nullptr)
+		{
+			rect.y = frame_.y;
+		}
+		else
+		{
+			rect.y = frame_.y + 80; //TODO : hardcodé (80 = espace entre le premier checkable et le titre)
+		}
 	}
 	else
 	{

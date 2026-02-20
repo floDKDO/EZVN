@@ -1,6 +1,7 @@
 #include "Managers/ui_manager.h"
 #include "GUI/slider.h"
 #include "GUI/inputfield.h"
+#include "GUI/scrollbar.h"
 //#include "GUI/confirmation_popup.h"
 #include "constants.h"
 #include "GUI/ui_group.h"
@@ -209,6 +210,10 @@ void UiManager::unselect_previous(UiWidget* widget, PointerEventData pointer_eve
 			else if(Inputfield* inputfield = dynamic_cast<Inputfield*>(previous_selected_); inputfield != nullptr)
 			{
 				inputfield->quit_editing();
+			}
+			else if(Scrollbar* scrollbar = dynamic_cast<Scrollbar*>(previous_selected_); scrollbar != nullptr)
+			{
+				scrollbar->disable_keyboard_focus();
 			}
 		}
 	}
