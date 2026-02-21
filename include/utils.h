@@ -2,6 +2,7 @@
 
 #include <string>
 #include <string_view>
+#include <SDL2/SDL.h>
 
 namespace utils
 {
@@ -17,5 +18,7 @@ double lerp(Arithmetic1 a, Arithmetic2 b, Arithmetic3 t) //TODO : à terme, rempl
 }
 
 std::string string_to_lower(std::string_view string);
+
+bool is_point_in_rect(SDL_Point mouse, SDL_Rect rect);
 
 }

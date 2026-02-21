@@ -78,6 +78,11 @@ void Window::set_position(int x, int y) //SDL_SetWindowPosition
 	SDL_SetWindowPosition(window_, x, y);
 }
 
+void Window::set_center() //SDL_SetWindowPosition(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED)
+{
+	set_position(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+}
+
 void Window::maximize() //SDL_MaximizeWindow
 {
 	get_size(&previous_width_, &previous_height_);

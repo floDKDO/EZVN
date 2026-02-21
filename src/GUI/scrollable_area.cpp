@@ -4,8 +4,20 @@
 #include <iostream>
 
 ScrollableArea::ScrollableArea(int x, int y, int w, int h, sdl::Renderer& renderer)
-	: UiWidget(renderer), frame_({x, y, w, h}), scrollbar_(x + w - constants::slider_handle_size_, y + (constants::slider_handle_size_ / 2), h - constants::slider_handle_size_, renderer, std::bind(&ScrollableArea::callback_function, this, std::placeholders::_1)), max_y_(0), renderer_(renderer)
+	: ScrollableArea("", x, y, w, h, renderer)
+{}
+
+ScrollableArea::ScrollableArea(std::string_view title, int x, int y, int w, int h, sdl::Renderer& renderer)
+	: UiWidget(renderer), frame_({x, y, w, h}), scrollbar_(x + w - constants::slider_handle_size_, y + (constants::slider_handle_size_ / 2), h - constants::slider_handle_size_, h / constants::slider_step_count_, renderer, std::bind(&ScrollableArea::callback_function, this, std::placeholders::_1)), 
+	title_(!title.empty() ? std::make_unique<Text>(title, constants::textbutton_normal_color_, constants::textbutton_font_, constants::textbutton_text_size_, x, y, renderer) : nullptr),
+	max_y_(0), renderer_(renderer)
 {
+	if(title_ != nullptr)
+	{
+		title_->position_.x += (frame_.w - title_->get_width_text()) / 2;
+		title_->position_.y -= title_->get_height_text();
+	}
+
 	rect_ = frame_;
 }
 
@@ -61,6 +73,11 @@ void ScrollableArea::draw(sdl::Renderer& renderer)
 	}
 	scrollbar_.draw(renderer);
 	renderer.set_clip_rect(nullptr);
+
+	if(title_ != nullptr)
+	{
+		title_->draw(renderer);
+	}
 }
 
 void ScrollableArea::update()
@@ -78,6 +95,11 @@ void ScrollableArea::update()
 		}*/
 	}
 	scrollbar_.update();
+
+	if(title_ != nullptr)
+	{
+		title_->update();
+	}
 }
 
 std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
@@ -104,7 +126,7 @@ std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 
 int ScrollableArea::get_scroll_offset(int ui_height)
 {
-	float t = float((scrollbar_.current_value_ - scrollbar_.min_value_) / (scrollbar_.max_value_ - scrollbar_.min_value_)); //TODO : <=> juste marquer current_value 
+	float t = float((scrollbar_.current_value_ - scrollbar_.min_value_) / (scrollbar_.max_value_ - scrollbar_.min_value_)); 
 	//std::cout << "t: " << t << ", value: " << scrollbar_.current_value_ << std::endl;
 	int max_scroll = max_y_ - (frame_.y + frame_.h); //si on a le curseur de la scrollbar tout en haut et qu'on le descend au max, ceci est la valeur (max) en y dont on a monté les éléments de la ScrollableArea
 	int max_offset = 0;
@@ -172,7 +194,7 @@ int ScrollableArea::get_max_y() const
 	return max_y;
 }
 
-void ScrollableArea::change_position(int x, int y)
+void ScrollableArea::change_position([[maybe_unused]] int x, [[maybe_unused]] int y)
 {
 	//TODO : ne fait rien ??
 }

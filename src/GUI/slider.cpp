@@ -1,5 +1,6 @@
 #include "GUI/slider.h"
 #include "constants.h"
+#include "utils.h"
 
 #include <iostream>
 
@@ -23,17 +24,6 @@ Slider::Slider(unsigned int min_value, unsigned int max_value, unsigned int curr
 	text_.position_.x += (container_.w - text_.position_.w) / 2;
 
 	rect_ = container_;
-}
-
-bool Slider::is_mouse_on_handle(int mouse_x, int mouse_y) const
-{
-	float logical_x, logical_y;
-	renderer_.window_to_logical(mouse_x, mouse_y, &logical_x, &logical_y);
-
-	return (handle_.y + handle_.h > logical_y
-		 && handle_.y < logical_y
-		 && handle_.x + handle_.w > logical_x
-		 && handle_.x < logical_x);
 }
 
 void Slider::disable_keyboard_focus()
@@ -184,7 +174,7 @@ void Slider::update()
 	get_logical_mouse_position(&logical_mouse_x, &logical_mouse_y);
 	if(e.type == SDL_MOUSEBUTTONDOWN)
 	{
-		if(e.button.button == SDL_BUTTON_LEFT && is_mouse_on_handle(logical_mouse_x, logical_mouse_y))
+		if(e.button.button == SDL_BUTTON_LEFT && utils::is_point_in_rect({logical_mouse_x, logical_mouse_y}, handle_))
 		{
 			on_drag();
 		}

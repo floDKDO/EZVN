@@ -17,6 +17,7 @@ inline constexpr bool default_autofocus_ = false;
 inline constexpr bool default_autozorder_ = false;
 inline constexpr int default_minimum_character_for_autofocus_ = 2;
 inline constexpr std::string_view default_textbox_position_ = "bottom";
+inline constexpr std::string_view default_menu_background_ = "img/backgrounds/night.png";
 
 inline constexpr int default_fade_transition_length_ = 500; //ms
 
@@ -86,6 +87,16 @@ inline constexpr int slider_text_y_delta_ = -60;
 inline constexpr int slider_text_size_ = 40;
 inline const Color slider_text_color_ = Color::from_rgba8(174, 84, 135);
 inline constexpr int slider_step_count_ = 10;
+
+inline constexpr int scrollbar_container_width_ = 18;
+inline constexpr int scrollbar_handle_width_ = scrollbar_container_width_ - 2;
+inline const Color scrollbar_container_color_ = Color::from_rgba8(255, 255, 255);
+inline const Color scrollbar_container_outline_color_ = Color::from_rgba8(174, 84, 135);
+inline const Color scrollbar_handle_normal_color_ = Color::from_rgba8(174, 84, 135);
+inline const Color scrollbar_handle_selected_color_ = Color::from_rgba8(255, 147, 210);
+inline const Color scrollbar_handle_pressed_color_ = Color::from_rgba8(255, 191, 228);
+inline const Color scrollbar_handle_outline_color_ = Color::from_rgba8(255, 255, 255);
+inline constexpr int scrollbar_step_count_ = 10;
 
 inline const Color textbutton_normal_color_ = Color::from_rgba8(174, 84, 135);
 inline const Color textbutton_selected_color_ = Color::from_rgba8(255, 147, 210);

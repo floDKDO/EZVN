@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\RAII_SDL2\display.cpp" />
     <ClCompile Include="src\composite_image.cpp" />
     <ClCompile Include="src\duration.cpp" />
     <ClCompile Include="src\GUI\scrollable_area.cpp" />
@@ -190,7 +191,6 @@
     <ClCompile Include="src\settings_menu.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\Managers\sound_manager.cpp" />
-    <ClCompile Include="src\test.cpp" />
     <ClCompile Include="src\text.cpp" />
     <ClCompile Include="src\textbox.cpp" />
     <ClCompile Include="src\GUI\text_button.cpp" />
@@ -238,6 +238,7 @@
     <ClInclude Include="include\RAII_SDL2\animation.h" />
     <ClInclude Include="include\RAII_SDL2\channel.h" />
     <ClInclude Include="include\RAII_SDL2\chunk.h" />
+    <ClInclude Include="include\RAII_SDL2\display.h" />
     <ClInclude Include="include\RAII_SDL2\events.h" />
     <ClInclude Include="include\RAII_SDL2\font.h" />
     <ClInclude Include="include\RAII_SDL2\game_controller.h" />

@@ -55,7 +55,7 @@ std::vector<UiWidget*> ConfirmationPopUp::get_navigation_nodes()
 	return vector;
 }
 
-void ConfirmationPopUp::change_position(int x, int y)
+void ConfirmationPopUp::change_position([[maybe_unused]] int x, [[maybe_unused]] int y)
 {
 	//TODO : ne fait rien ??
 }

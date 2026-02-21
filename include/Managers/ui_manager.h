@@ -11,7 +11,7 @@ class UiManager
 	public:
 		UiManager(AudioManager& audio_manager);
 
-		void add_element(std::unique_ptr<Ui>&& ui);
+		void add_element(std::unique_ptr<Ui> ui);
 		//Ui* get_last_element();
 		void set_elements();
 

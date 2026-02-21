@@ -4,8 +4,8 @@
 
 #include <iostream>
 
-MainMenu::MainMenu(Game& game, std::string_view background_path, sdl::Renderer& renderer)
-	: GameState(game), background_(background_path, 0, 0, renderer)
+MainMenu::MainMenu(Game& game, sdl::Renderer& renderer)
+	: GameState(game), background_(constants::default_menu_background_, 0, 0, renderer)
 {
 	build_ui_elements(renderer);
 }

@@ -45,7 +45,6 @@ std::vector<UiWidget*> UiGroup::get_navigation_nodes()
 	{
 		widgets.push_back(ui_widget.get());
 	}
-
 	return widgets;
 }
 

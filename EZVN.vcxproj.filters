@@ -135,9 +135,6 @@
     <ClCompile Include="src\transition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -205,6 +202,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\ui_widget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RAII_SDL2\display.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -399,6 +399,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\ui_widget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RAII_SDL2\display.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

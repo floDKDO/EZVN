@@ -25,6 +25,7 @@ class Window
 		void set_size(int w, int h); //SDL_SetWindowSize
 		void get_position(int* x, int* y); //SDL_GetWindowPosition
 		void set_position(int x, int y); //SDL_SetWindowPosition
+		void set_center(); //SDL_SetWindowPosition(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED)
 		void maximize(); //SDL_MaximizeWindow
 		void set_full_screen(); //SDL_SetWindowFullscreen
 		void set_windowed(); //SDL_SetWindowFullscreen

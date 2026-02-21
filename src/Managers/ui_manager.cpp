@@ -4,6 +4,7 @@
 #include "GUI/scrollbar.h"
 //#include "GUI/confirmation_popup.h"
 #include "constants.h"
+#include "utils.h"
 #include "GUI/ui_group.h"
 
 #include <iostream>
@@ -13,8 +14,7 @@ UiManager::UiManager(AudioManager& audio_manager)
 	audio_manager_(audio_manager), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
-//TODO : rvalue ref ??
-void UiManager::add_element(std::unique_ptr<Ui>&& ui)
+void UiManager::add_element(std::unique_ptr<Ui> ui)
 {
 	ui_elements_.push_back(std::move(ui));
 }
@@ -111,13 +111,12 @@ bool UiManager::is_candidate_closer(const UiWidget* widget, const UiWidget* cand
 //widget = widget to which we assign a "select_on_*"
 //candidate = the current widget in the inner for loop
 //current_best = the "select_on_*" we try to assign to widget (up, down, left or right)
-// 
-//TODO : pas ouf d'à la fois modifier et retourner current_best_widget 
 UiWidget* UiManager::get_widget_facing(const UiWidget* widget, UiWidget* candidate_widget, UiWidget* current_best_widget, Axis mode) const
 {
+	UiWidget* new_best_widget = nullptr;
 	if(current_best_widget == nullptr)
 	{
-		current_best_widget = candidate_widget;
+		new_best_widget = candidate_widget;
 	}
 	else
 	{
@@ -126,21 +125,27 @@ UiWidget* UiManager::get_widget_facing(const UiWidget* widget, UiWidget* candida
 		const bool widget_facing_both = widget_facing_current_best && widget_facing_candidate;
 		const bool widget_facing_neither = !widget_facing_current_best && !widget_facing_candidate;
 
-		//if the two widget are facing each other ou if neither of them are facing each other, take the one with the lowest diff* 
-		//if current_best is not facing widget but candidate is facing widget, take candidate
+		//if the two widgets are facing each other or if neither of them are facing each other, take the one with the lowest diff* 
+		//if current_best is not facing widget but candidate_widget is facing widget, take candidate_widget
 		if(widget_facing_both || widget_facing_neither)
 		{
 			if(is_candidate_closer(widget, candidate_widget, current_best_widget, mode))
 			{
-				current_best_widget = candidate_widget;
+				new_best_widget = candidate_widget;
 			}
 		}
 		else if(!widget_facing_current_best && widget_facing_candidate)
 		{
-			current_best_widget = candidate_widget;
+			new_best_widget = candidate_widget;
 		}
 	}
-	return current_best_widget;
+
+	if(new_best_widget == nullptr)
+	{
+		new_best_widget = current_best_widget;
+	}
+
+	return new_best_widget;
 }
 
 void UiManager::assign_widget_on_moving() const
@@ -238,10 +243,7 @@ bool UiManager::is_mouse_on_specific_widget(UiWidget* widget, PointerEventData p
 	{
 		const SDL_Rect& rect = all_widgets[i]->rect_;
 
-		if(rect.y + rect.h > pointer_event_data.mouse_y_
-		&& rect.y < pointer_event_data.mouse_y_
-		&& rect.x + rect.w > pointer_event_data.mouse_x_
-		&& rect.x < pointer_event_data.mouse_x_)
+		if(utils::is_point_in_rect({pointer_event_data.mouse_x_, pointer_event_data.mouse_y_}, rect))
 		{
 			is_mouse_on_widget_ = true;
 			return true;

@@ -11,6 +11,7 @@ class ScrollableArea : public UiWidget
 {
 	public:
 		ScrollableArea(int x, int y, int w, int h, sdl::Renderer& renderer);
+		ScrollableArea(std::string_view title, int x, int y, int w, int h, sdl::Renderer& renderer);
 
 		void callback_function(Ui* ui);
 		void draw(sdl::Renderer& renderer) override;
@@ -27,6 +28,8 @@ class ScrollableArea : public UiWidget
 
 		SDL_Rect frame_;
 		Scrollbar scrollbar_; 
+		std::unique_ptr<Text> title_;
+
 		std::vector<std::unique_ptr<Ui>> ui_elements_;
 		std::vector<std::pair<UiWidget*, int/* init y position */>> ui_widgets_;
 		int max_y_;

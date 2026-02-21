@@ -13,4 +13,9 @@ std::string string_to_lower(std::string_view string)
 	return string_lower;
 }
 
+bool is_point_in_rect(SDL_Point mouse, SDL_Rect rect)
+{
+	return SDL_PointInRect(&mouse, &rect);
+}
+
 }

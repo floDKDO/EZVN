@@ -9,7 +9,6 @@ class Slider : public UiWidget
 		Slider(unsigned int min_value, unsigned int max_value, int x, int y, std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 		Slider(unsigned int min_value, unsigned int max_value, unsigned int current_value, int x, int y, std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
-		bool is_mouse_on_handle(int mouse_x, int mouse_y) const;
 		void disable_keyboard_focus();
 		void handle_movement(int mouse_x);
 

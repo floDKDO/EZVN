@@ -24,8 +24,8 @@ Game::Game()
 void Game::init_game_states()
 {
 	game_states_map_.insert({constants::ingame_unique_id_, std::make_unique<InGame>(*this, renderer_)});
-	game_states_map_.insert({constants::main_menu_unique_id_, std::make_unique<MainMenu>(*this, "img/backgrounds/night.png", renderer_)}); //TODO : pas ouf le paramètre de l'image dans le constructeur
-	game_states_map_.insert({constants::settings_menu_unique_id_, std::make_unique<SettingsMenu>(*this, "img/backgrounds/night.png", renderer_)}); //TODO : pas ouf le paramètre de l'image dans le constructeur
+	game_states_map_.insert({constants::main_menu_unique_id_, std::make_unique<MainMenu>(*this, renderer_)}); 
+	game_states_map_.insert({constants::settings_menu_unique_id_, std::make_unique<SettingsMenu>(*this, renderer_)}); 
 	push_state(game_states_map_.at(constants::main_menu_unique_id_).get());
 }
 

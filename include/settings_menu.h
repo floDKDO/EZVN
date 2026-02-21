@@ -8,8 +8,9 @@
 class SettingsMenu : public GameState
 {
 	public:
-		SettingsMenu(Game& game, std::string_view background_path, sdl::Renderer& renderer);
+		SettingsMenu(Game& game, sdl::Renderer& renderer);
 
+		void create_resolutions_scroll_area(sdl::Renderer& renderer);
 		void build_ui_elements(sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

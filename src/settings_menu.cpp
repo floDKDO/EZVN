@@ -3,65 +3,58 @@
 #include "GUI/text_toggle.h"
 #include "GUI/slider.h"
 #include "game.h"
+#include "RAII_SDL2/display.h"
 
 #include <iostream>
 #include <sstream>
 #include <set>
 
-SettingsMenu::SettingsMenu(Game& game, std::string_view background_path, sdl::Renderer& renderer)
-	: GameState(game), background_(background_path, 0, 0, renderer)
+SettingsMenu::SettingsMenu(Game& game, sdl::Renderer& renderer)
+	: GameState(game), background_(constants::default_menu_background_, 0, 0, renderer)
 {
+	create_resolutions_scroll_area(renderer);
+	build_ui_elements(renderer);
+}
 
-	//std::cout << SDL_GetNumVideoDisplays() << std::endl; //nombre d'écrans
-	//std::cout << SDL_GetNumDisplayModes(0) << std::endl; //nombre de display modes
+void SettingsMenu::create_resolutions_scroll_area(sdl::Renderer& renderer)
+{
+	scroll_ = std::make_unique<ScrollableArea>("Resolutions", 950, 170, 200, 500, renderer);
+	ui_group_ = std::make_unique<UiGroup>(950, 170);
 
-	scroll_ = std::make_unique<ScrollableArea>(250, 200, 200, 500, renderer);
-	ui_group_ = std::make_unique<UiGroup>(250, 200);
-
-	SDL_DisplayMode mode;
-	SDL_GetWindowDisplayMode(game.window_.fetch(), &mode); //taille du contenu dans la fenêtre
-	//std::cout << mode.h << ", " << mode.w << ", " << mode.refresh_rate << "FPS" << std::endl;
-
-	SDL_GetCurrentDisplayMode(0, &mode); //résolution
-	//std::cout << mode.h << ", " << mode.w << ", " << mode.refresh_rate << "FPS" << std::endl;
-
-	std::cout << std::endl;
-	int num = SDL_GetNumDisplayModes(0);
 	std::set<std::pair<int, int>> resolutions;
+	int num = sdl::display::get_num_display_modes();
 	for(int i = 0; i < num; ++i)
 	{
-		SDL_GetDisplayMode(0, i, &mode);
+		SDL_DisplayMode mode;
+		sdl::display::get_display_mode(i, &mode);
+
 		if(!resolutions.count({mode.h, mode.w}))
 		{
 			resolutions.insert({mode.h, mode.w});
-			std::string resolution = std::to_string(mode.w) + 'x' + std::to_string(mode.h);
+
 			bool checked = false;
-			if(mode.h == constants::window_height_ && mode.w == constants::window_width_)
+			if(mode.h == constants::window_height_ && mode.w == constants::window_width_) //TODO : éventuellement utiliser SDL_GetCurrentDisplayMode(0, &mode); à la place
 			{
 				checked = true;
 			}
+
+			std::string resolution = std::to_string(mode.w) + 'x' + std::to_string(mode.h);
 			ui_group_->add_ui_element(std::make_unique<TextToggle>(resolution, 0, 0, checked, renderer, std::bind(&SettingsMenu::texttoggle_resolution_function, this, std::placeholders::_1)));
-			std::cout << mode.h << ", " << mode.w << ", " << mode.refresh_rate << "FPS" << std::endl;
 		}
 	}
 	scroll_->add_ui_element(std::move(ui_group_));
-	std::cout << "Number: " << resolutions.size() << std::endl;
-	std::cout << std::endl;
-
-	build_ui_elements(renderer);
 }
 
 void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 {
-	ui_manager_.add_element(std::make_unique<TextButton>("Return", 200, 500, renderer, std::bind(&SettingsMenu::previous_menu_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(0, 100, 100, 800, 200, "Sound effect", renderer, std::bind(&SettingsMenu::slider_sound_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(0, 100, 100, 450, 200, "Music effect", renderer, std::bind(&SettingsMenu::slider_music_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(30, 60, Text::global_text_divisor_, 625, 350, "Text speed", renderer, std::bind(&SettingsMenu::slider_text_function, this, std::placeholders::_1)));
+	ui_manager_.add_element(std::make_unique<TextButton>("Return", 100, 550, renderer, std::bind(&SettingsMenu::previous_menu_function, this, std::placeholders::_1)));
+	ui_manager_.add_element(std::make_unique<Slider>(0, 100, 100, 450, 170, "Music effect", renderer, std::bind(&SettingsMenu::slider_music_function, this, std::placeholders::_1)));
+	ui_manager_.add_element(std::make_unique<Slider>(0, 100, 100, 450, 300, "Sound effect", renderer, std::bind(&SettingsMenu::slider_sound_function, this, std::placeholders::_1)));
+	ui_manager_.add_element(std::make_unique<Slider>(30, 60, Text::global_text_divisor_, 450, 430, "Text speed", renderer, std::bind(&SettingsMenu::slider_text_function, this, std::placeholders::_1)));
 	//ui_manager_.add_element(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 	//ui_manager_.add_element(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
 
-	//TODO : essayer de trouver un meilleur moyen que d'utiliser "new"
-	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>("Display", 50, 100, renderer);
+	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>("Display", 100, 100, renderer);
 	ui_group->add_ui_element(std::make_unique<TextToggle>("Windowed", 0, 0, true, renderer, std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1)));
 	ui_group->add_ui_element(std::make_unique<TextToggle>("Fullscreen", 0, 0, false, renderer, std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::move(ui_group));
@@ -136,20 +129,19 @@ void SettingsMenu::texttoggle_resolution_function(Ui* ui)
 	TextToggle* texttoggle_resolution = dynamic_cast<TextToggle*>(ui);
 
 	SDL_DisplayMode display_mode;
-	SDL_GetWindowDisplayMode(game_.window_.fetch(), &display_mode);
+	game_.window_.get_display_mode(&display_mode);
 
-	//TODO : std::istringstream ??
-	std::stringstream stream(texttoggle_resolution->text_.text_);
+	std::istringstream stream(texttoggle_resolution->text_.text_);
 	std::string h_res, w_res;
 
 	//ne marche que si texttoggle_resolution->text_.text_ est de la forme w x h !
 	std::getline(stream, w_res, 'x');
 	std::getline(stream, h_res, 'x');
-	std::cout << h_res << ", " << w_res << std::endl;
+	//std::cout << h_res << ", " << w_res << std::endl;
 
 	display_mode.h = std::stoi(h_res);
 	display_mode.w = std::stoi(w_res);
-	std::cout << display_mode.h << ", " << display_mode.w << ", " << display_mode.refresh_rate << std::endl;
+	//std::cout << display_mode.h << ", " << display_mode.w << ", " << display_mode.refresh_rate << std::endl;
 
 	//TODO : créer des méthodes is_fullscreen etc.
 	if(SDL_GetWindowFlags(game_.window_.fetch()) & SDL_WINDOW_FULLSCREEN) //modif uniquement si la fenêtre est en plein écran
@@ -161,7 +153,7 @@ void SettingsMenu::texttoggle_resolution_function(Ui* ui)
 	else if(!(SDL_GetWindowFlags(game_.window_.fetch()) & SDL_WINDOW_FULLSCREEN)) //si pas plein écran => redimensionner la fenêtre
 	{
 		game_.window_.set_size(display_mode.w, display_mode.h);
-		game_.window_.set_position(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED); //centrer la fenêtre après qu'elle ait été redimensionnée
+		game_.window_.set_center(); //centrer la fenêtre après qu'elle ait été redimensionnée
 	}
 	
 	std::cout << "Clicked on " << texttoggle_resolution->text_.text_ << std::endl;

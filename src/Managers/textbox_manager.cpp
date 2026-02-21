@@ -11,31 +11,30 @@ TextboxManager::TextboxManager(sdl::Renderer& renderer, Game& game)
 	build_ui_elements(renderer);
 }
 
-//TODO : pas ouf avec tous les cast...
 void TextboxManager::build_ui_elements(sdl::Renderer& renderer)
 {
-	std::unique_ptr<Ui> history_ui = std::make_unique<TextButton>("History", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	history_button_ = dynamic_cast<TextButton*>(history_ui.get());
+	std::unique_ptr<TextButton> history_ui = std::make_unique<TextButton>("History", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
+	history_button_ = history_ui.get();
 	ui_manager_.add_element(std::move(history_ui));
 
-	std::unique_ptr<Ui> skip_ui = std::make_unique<TextToggle>("Skip", 0, 0, false, renderer, std::bind(&TextboxManager::skip_function, this, std::placeholders::_1), TextToggle::Kind::ON_TEXTBOX);
-	skip_toggle_ = dynamic_cast<TextToggle*>(skip_ui.get());
+	std::unique_ptr<TextToggle> skip_ui = std::make_unique<TextToggle>("Skip", 0, 0, false, renderer, std::bind(&TextboxManager::skip_function, this, std::placeholders::_1), TextToggle::Kind::ON_TEXTBOX);
+	skip_toggle_ = skip_ui.get();
 	ui_manager_.add_element(std::move(skip_ui));
 
-	std::unique_ptr<Ui> auto_ui = std::make_unique<TextToggle>("Auto", 0, 0, false, renderer, std::bind(&TextboxManager::auto_function, this, std::placeholders::_1), TextToggle::Kind::ON_TEXTBOX);
-	auto_toggle_ = dynamic_cast<TextToggle*>(auto_ui.get());
+	std::unique_ptr<TextToggle> auto_ui = std::make_unique<TextToggle>("Auto", 0, 0, false, renderer, std::bind(&TextboxManager::auto_function, this, std::placeholders::_1), TextToggle::Kind::ON_TEXTBOX);
+	auto_toggle_ = auto_ui.get();
 	ui_manager_.add_element(std::move(auto_ui));
 
-	std::unique_ptr<Ui> save_ui = std::make_unique<TextButton>("Save", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	save_button_ = dynamic_cast<TextButton*>(save_ui.get());
+	std::unique_ptr<TextButton> save_ui = std::make_unique<TextButton>("Save", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
+	save_button_ = save_ui.get();
 	ui_manager_.add_element(std::move(save_ui));
 
-	std::unique_ptr<Ui> load_ui = std::make_unique<TextButton>("Load", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	load_button_ = dynamic_cast<TextButton*>(load_ui.get());
+	std::unique_ptr<TextButton> load_ui = std::make_unique<TextButton>("Load", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
+	load_button_ = load_ui.get();
 	ui_manager_.add_element(std::move(load_ui));
 
-	std::unique_ptr<Ui> settings_ui = std::make_unique<TextButton>("Settings", 0, 0, renderer, std::bind(&TextboxManager::settings_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	settings_button_ = dynamic_cast<TextButton*>(settings_ui.get());
+	std::unique_ptr<TextButton> settings_ui = std::make_unique<TextButton>("Settings", 0, 0, renderer, std::bind(&TextboxManager::settings_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
+	settings_button_ = settings_ui.get();
 	ui_manager_.add_element(std::move(settings_ui));
 
 	set_position_ui_textbox(constants::default_textbox_position_); 
@@ -208,7 +207,7 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 		textbox_.show_new_dialogue(info_textbox.t_.textbox_command_value_, character.properties_.name_, skip_mode_, dialogue_instruction_.wait_for_end_of_dialogue_);
 		textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 		textbox_.change_namebox(character.properties_.namebox_path_, renderer_);
-		textbox_.change_namebox_text_color(character.properties_.namebox_text_color_); //TODO : problème => les couleurs sont pas forcément justes et le retour en arrière peut afficher une mauvaise couleur
+		textbox_.change_namebox_text_color(character.properties_.namebox_text_color_); 
 		//dialogue_instruction_ = {Where::none, false, false};
 
 		if(!skip_mode_)

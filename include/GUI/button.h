@@ -8,7 +8,7 @@ class Button : public UiWidget
 {
 	public:
 		Button(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
-		Button(std::string_view path_normal, std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Button(std::string_view path_normal, std::string_view path_selected, std::string_view path_clicked, std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
@@ -16,11 +16,7 @@ class Button : public UiWidget
 
 	private:
 		static const unsigned int index_rect_button_;
-
-	public:
-		Text text_; //TODO : public = temporaire pour tester les choice menu dans buttongroup.h
-
-	private:
+		Text text_; 
 		Image normal_;
 		Image selected_;
 		Image pressed_;
