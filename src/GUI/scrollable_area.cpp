@@ -11,11 +11,13 @@ ScrollableArea::ScrollableArea(int x, int y, int w, int h, sdl::Renderer& render
 
 void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 {
+	//std::cout << "APPEL!\n";
 	for(auto& pair : ui_widgets_)
 	{
 		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
 		{
 			int scroll_offset = get_scroll_offset(widget->rect_.h);
+			//std::cout << scroll_offset << std::endl;
 
 			SDL_Rect rect = widget->rect_;
 			rect.y = pair.second + scroll_offset; // + pour monter, - pour descendre
@@ -102,7 +104,8 @@ std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 
 int ScrollableArea::get_scroll_offset(int ui_height)
 {
-	float t = float((scrollbar_.current_value_ - scrollbar_.min_value_) / (scrollbar_.max_value_ - scrollbar_.min_value_));
+	float t = float((scrollbar_.current_value_ - scrollbar_.min_value_) / (scrollbar_.max_value_ - scrollbar_.min_value_)); //TODO : <=> juste marquer current_value 
+	//std::cout << "t: " << t << ", value: " << scrollbar_.current_value_ << std::endl;
 	int max_scroll = max_y_ - (frame_.y + frame_.h); //si on a le curseur de la scrollbar tout en haut et qu'on le descend au max, ceci est la valeur (max) en y dont on a monté les éléments de la ScrollableArea
 	int max_offset = 0;
 	if(max_scroll > 0) //on peut scroll uniquement si la zone à scroller est plus grande que frame_.h 
@@ -132,7 +135,7 @@ void ScrollableArea::add_ui_element(std::unique_ptr<UiGroup> ui_group)
 	{
 		if(!first)
 		{
-			std::cout << "FIRST Y : " << widget->rect_.y << std::endl;
+			//std::cout << "FIRST Y : " << widget->rect_.y << std::endl;
 			first = true;
 		}
 		ui_widgets_.push_back({widget, widget->rect_.y});

@@ -15,8 +15,8 @@ SettingsMenu::SettingsMenu(Game& game, std::string_view background_path, sdl::Re
 	//std::cout << SDL_GetNumVideoDisplays() << std::endl; //nombre d'écrans
 	//std::cout << SDL_GetNumDisplayModes(0) << std::endl; //nombre de display modes
 
-	scroll_ = std::make_unique<ScrollableArea>(400, 200, 200, 500, renderer);
-	ui_group_ = std::make_unique<UiGroup>(400, 200);
+	scroll_ = std::make_unique<ScrollableArea>(250, 200, 200, 500, renderer);
+	ui_group_ = std::make_unique<UiGroup>(250, 200);
 
 	SDL_DisplayMode mode;
 	SDL_GetWindowDisplayMode(game.window_.fetch(), &mode); //taille du contenu dans la fenêtre

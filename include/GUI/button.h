@@ -8,6 +8,7 @@ class Button : public UiWidget
 {
 	public:
 		Button(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		Button(std::string_view path_normal, std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

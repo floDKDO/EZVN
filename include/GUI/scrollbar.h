@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GUI/ui_widget.h"
+#include "GUI/button.h"
 
 //Pour l'instant, que de haut en bas
 
@@ -12,6 +13,7 @@ class Scrollbar : public UiWidget
 		bool is_mouse_on_handle(int mouse_x, int mouse_y) const;
 		void disable_keyboard_focus();
 		void handle_movement(int mouse_x, int mouse_y);
+		std::vector<UiWidget*> get_navigation_nodes() override;
 
 		void on_pointer_down_hook_end(PointerEventData pointer_event_data) override;
 		void on_pointer_up_hook_end(PointerEventData pointer_event_data) override;
@@ -39,6 +41,9 @@ class Scrollbar : public UiWidget
 		SDL_Rect container_outline_;
 		SDL_Rect handle_;
 		SDL_Rect handle_outline_;
+
+		Button up_triangle_;
+		Button down_triangle_;
 
 		int delta_mouse_handle_y_; //y position of the mouse in comparison to the y position of the handle
 		

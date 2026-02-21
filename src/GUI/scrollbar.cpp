@@ -6,10 +6,12 @@
 
 Scrollbar::Scrollbar(int x, int y, int h, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: UiWidget(renderer), current_value_(0.0f), min_value_(0.0f), max_value_(1.0f),
-	container_({x, y, constants::slider_container_height_, h}), 
+	container_({x, y, constants::slider_container_height_, h}),
 	container_outline_({x, y, constants::slider_container_height_, h}),
 	handle_({x, y + constants::slider_handle_y_delta_, constants::slider_container_height_ - 2, 100}), //TODO : hardcodé
 	handle_outline_({x, y + constants::slider_handle_y_delta_, constants::slider_container_height_ - 2, 100}), //TODO : hardcodé
+	up_triangle_("img/gui/triangle_scrollbar.png", "", x + 4, y - 10, renderer, callback_function), //TODO : hardcodé
+	down_triangle_("img/gui/triangle_scrollbar_reversed.png", "", x + 4, y + h + 3, renderer, callback_function), //TODO : hardcodé
 	delta_mouse_handle_y_(0), info_when_click_({0, 0, false, WhereWasMouse::ABOVE, false, false})
 {
 	handle_.y = container_.y;
@@ -83,7 +85,7 @@ void Scrollbar::handle_movement(int mouse_x, int mouse_y)
 				{
 					if(!info_when_click_.mouse_is_on_handle_)
 					{
-						handle_.y -= 20; //TODO : hardcodé
+						handle_.y = std::clamp(handle_.y - 20, low, high); //TODO : hardcodé
 					}
 					else
 					{
@@ -107,7 +109,7 @@ void Scrollbar::handle_movement(int mouse_x, int mouse_y)
 				{
 					if(!info_when_click_.mouse_is_on_handle_)
 					{
-						handle_.y += 20; //TODO : hardcodé
+						handle_.y = std::clamp(handle_.y + 20, low, high); //TODO : hardcodé
 					}
 					else
 					{
@@ -124,6 +126,15 @@ void Scrollbar::handle_movement(int mouse_x, int mouse_y)
 		}
 	}
 	delta_mouse_handle_y_ = logical_mouse_y - handle_.y;
+}
+
+std::vector<UiWidget*> Scrollbar::get_navigation_nodes()
+{
+	std::vector<UiWidget*> widgets;
+	widgets.push_back(this); //TODO : pas ouf => this contient déjà up_triangle_ et down_triangle_
+	widgets.push_back(&up_triangle_);
+	widgets.push_back(&down_triangle_);
+	return widgets;
 }
 
 void Scrollbar::on_pointer_down_hook_end(PointerEventData pointer_event_data)
@@ -152,6 +163,8 @@ void Scrollbar::on_pointer_down_hook_end(PointerEventData pointer_event_data)
 		info_when_click_ = {pointer_event_data.mouse_y_, handle_.y, mouse_on_handle, where_was_mouse, false, true};
 	}
 	handle_movement(pointer_event_data.mouse_x_, pointer_event_data.mouse_y_);
+	update(); //TODO : ce qu'il faudrait faire => modifier les valeurs ici car update() modifie current_value_ trop tard...
+	callback_function_(this);
 }
 
 void Scrollbar::on_pointer_up_hook_end(PointerEventData pointer_event_data)
@@ -161,14 +174,16 @@ void Scrollbar::on_pointer_up_hook_end(PointerEventData pointer_event_data)
 
 void Scrollbar::on_drag(PointerEventData pointer_event_data)
 {
-	callback_function_(this);
 	handle_movement(pointer_event_data.mouse_x_, pointer_event_data.mouse_y_);
+	update(); //TODO : ce qu'il faudrait faire => modifier les valeurs ici car update() modifie current_value_ trop tard...
+	callback_function_(this);
 }
 
 void Scrollbar::on_up_pressed()
 {
 	if(has_keyboard_focus_)
 	{
+		//update();
 		//callback_function_(this); //TODO : ok (pour que les éléments de la zone à scroller se déplacent en temps réel) mais deux appels à callback_function_ (=> dans on_enter_released() aussi)
 		handle_.y -= container_.h / constants::slider_step_count_;
 		handle_outline_.y = handle_.y;
@@ -188,6 +203,7 @@ void Scrollbar::on_down_pressed()
 {
 	if(has_keyboard_focus_)
 	{
+		//update();
 		//callback_function_(this); //TODO : ok (pour que les éléments de la zone à scroller se déplacent en temps réel) mais deux appels à callback_function_ (=> dans on_enter_released() aussi)
 		handle_.y += container_.h / constants::slider_step_count_;
 		handle_outline_.y = handle_.y;
@@ -248,6 +264,9 @@ void Scrollbar::draw(sdl::Renderer& renderer)
 
 	renderer.set_draw_color(constants::slider_handle_outline_color_.r_, constants::slider_handle_outline_color_.g_, constants::slider_handle_outline_color_.b_, constants::slider_handle_outline_color_.a_);
 	renderer.draw_rect(&handle_outline_);
+
+	up_triangle_.draw(renderer);
+	down_triangle_.draw(renderer);
 }
 
 void Scrollbar::update()
@@ -264,6 +283,11 @@ void Scrollbar::update()
 	{
 		current_value_ = min_value_ + float((handle_.y - container_.y)) / (container_.h - handle_.h) * (max_value_ - min_value_);
 	}
+
+	//std::cout << current_value_ << std::endl;
+
+	up_triangle_.update();
+	down_triangle_.update();
 }
 
 void Scrollbar::change_position(int x, int y)
