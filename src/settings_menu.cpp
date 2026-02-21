@@ -161,6 +161,7 @@ void SettingsMenu::texttoggle_resolution_function(Ui* ui)
 	else if(!(SDL_GetWindowFlags(game_.window_.fetch()) & SDL_WINDOW_FULLSCREEN)) //si pas plein écran => redimensionner la fenêtre
 	{
 		game_.window_.set_size(display_mode.w, display_mode.h);
+		game_.window_.set_position(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED); //centrer la fenêtre après qu'elle ait été redimensionnée
 	}
 	
 	std::cout << "Clicked on " << texttoggle_resolution->text_.text_ << std::endl;
