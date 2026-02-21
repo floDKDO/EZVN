@@ -179,6 +179,23 @@ void Scrollbar::on_drag(PointerEventData pointer_event_data)
 	callback_function_(this);
 }
 
+void Scrollbar::on_mouse_wheel(Sint32 mouse_wheel_y)
+{
+	std::cout << "MOUSE WHEEL : " << mouse_wheel_y << std::endl;
+	if(mouse_wheel_y > 0) //scroll vers l'avant => 
+	{
+		handle_.y = std::clamp(handle_.y - 20, container_.y, container_.y + container_.h - handle_.h); //TODO : hardcodé
+	}
+	else //scroll vers l'arrière => 
+	{
+		handle_.y = std::clamp(handle_.y + 20, container_.y, container_.y + container_.h - handle_.h); //TODO : hardcodé
+	}
+	handle_outline_.y = handle_.y;
+
+	update(); //TODO : ce qu'il faudrait faire => modifier les valeurs ici car update() modifie current_value_ trop tard...
+	callback_function_(this);
+}
+
 void Scrollbar::on_up_pressed()
 {
 	if(has_keyboard_focus_)

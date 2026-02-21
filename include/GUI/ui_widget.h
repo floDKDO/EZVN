@@ -74,6 +74,8 @@ class UiWidget : public Ui
 
 		virtual void on_typing([[maybe_unused]] std::string_view text) {}
 
+		virtual void on_mouse_wheel([[maybe_unused]] Sint32 mouse_wheel_y) {}
+
 		virtual std::vector<UiWidget*> get_navigation_nodes();
 		virtual void change_position(int x, int y) = 0;
 

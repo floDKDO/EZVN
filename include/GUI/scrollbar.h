@@ -20,6 +20,8 @@ class Scrollbar : public UiWidget
 
 		void on_drag(PointerEventData pointer_event_data) override;
 
+		void on_mouse_wheel(Sint32 mouse_wheel_y) override;
+
 		void on_up_pressed() override;
 		void on_down_pressed() override;
 		void on_left_pressed() override;

@@ -417,6 +417,17 @@ void UiManager::handle_events(const SDL_Event& e)
 			}
 			break;
 
+		case SDL_MOUSEWHEEL:
+			{
+				//PointerEventData pointer_event_data = {0, e.motion.x, e.motion.y};
+				//if(is_mouse_on_specific_widget(current_selected_, pointer_event_data))
+				{
+					//std::cout << "EVENT MOUSE WHEEL\n";
+					current_selected_->on_mouse_wheel(e.wheel.y);
+				}
+			}
+			break;
+
 		case SDL_TEXTINPUT:
 			if(current_selected_->wants_text_input_)
 			{
