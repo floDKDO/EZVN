@@ -51,11 +51,13 @@ class Drawable
 
 		SDL_Rect from_transform_;
 		bool has_transform_;
+
+		std::unique_ptr<sdl::Texture> texture_;
 		
 	protected:
 		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
 
-		std::unique_ptr<sdl::Texture> texture_;
+		
 		SDL_RendererFlip flip_;
 
 		sdl::Renderer& renderer_; 

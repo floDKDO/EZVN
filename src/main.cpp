@@ -114,6 +114,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
+//TODO : les paramètres "inutiles" des fonctions de la SDL pourraient être préremplis (valeur fixée pour ces paramètres) => ex : les 2 premiers paramètres de sdl::Texture::query()
+
 //TODO : utiliser std::clamp pour s'assurer qu'une valeur soit dans un intervalle
 
 //TODO : pour la collision entre un SDL_Rect et la souris, utiliser SDL_PointInRect() (=> créer une fonction dans utils.h ??)

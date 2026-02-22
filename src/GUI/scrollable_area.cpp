@@ -232,9 +232,36 @@ void ScrollableArea::add_ui_element(std::unique_ptr<UiGroup> ui_group)
 void ScrollableArea::add_text(std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>> text)
 {
 	//std::cout << "RESULTAT: " << text.first->text_ << ", " << text.second->text_ << std::endl;
+
+	int last_text_y = 0;
+	int last_height = 0;
+	for(auto it = elements_value_.crbegin(); it != elements_value_.crend(); ++it)
+	{
+		if(std::holds_alternative<std::pair<Text*, Text*>>(it->first))
+		{
+			Text* previous_dialogue = std::get<std::pair<Text*, Text*>>(it->first).second;
+			last_text_y = previous_dialogue->position_.y;
+			last_text_y += 20; //TODO : hardcodé => espace entre chaque dialogue
+			previous_dialogue->texture_->query(nullptr, nullptr, nullptr, &last_height); //height du dialogue précédent
+			break;
+		}
+	}
+
+	if(last_text_y == 0)
+	{
+		last_text_y += 20; //TODO : hardcodé => espace entre le premier dialogue et le haut de la ScrollableArea
+	}
+
+	//std::cout << "LAST TEXT Y: " << last_text_y << std::endl;
+
 	elements_.push_back(std::move(text));
 	Text* character_name = dynamic_cast<Text*>(std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).first.get());
 	Text* dialogue = dynamic_cast<Text*>(std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).second.get());
+
+	character_name->position_.y = last_text_y + last_height; 
+	dialogue->position_.y = last_text_y + last_height; 
+	//std::cout << "FINAL POSITION Y: " << character_name->position_.y << ", " << dialogue->position_.y << std::endl;
+
 	elements_value_.push_back(std::make_pair(std::make_pair(character_name, dialogue), dialogue->position_.y)); //character_name et dialogue ont la même valeur pour y
 	max_y_ = get_max_y();
 }

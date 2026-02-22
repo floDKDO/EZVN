@@ -48,12 +48,13 @@ void HistoryMenu::add_dialogue_to_history(std::string_view character_name, std::
 
 	//std::cout << "Color: " << int(namebox_text_color.r_) << ", " << int(namebox_text_color.g_) << ", " << int(namebox_text_color.b_) << ", " << int(namebox_text_color.a_) << std::endl;
 
+	//TODO : j'ai dû mettre la taille "constants::textbox_text_size_" pour la nom des personnages pour garder l'alignement
 	scroll_ptr_->add_text({
-		std::make_unique<Text>(character_name, namebox_text_color, constants::namebox_font_, constants::namebox_text_size_, 380, y_spacing_between_each_text, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2)),
-		std::make_unique<Text>(dialogue, constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 500, y_spacing_between_each_text, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2))
+		std::make_unique<Text>(character_name, namebox_text_color, constants::namebox_font_, constants::textbox_text_size_, 380, 0, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2)),
+		std::make_unique<Text>(dialogue, constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 500, 0, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2))
 	});
 
-	y_spacing_between_each_text += 80; //TODO : hardcodé et ne marche pas => il faudrait que cette valeur dépende de la taille de chaque dialogue
+	y_spacing_between_each_text += 80; //TODO : hardcodé et ne marche pas => il faudrait que cette valeur dépende de la taille de chaque dialogue (récupérer la taille de la texture ?, TTF 3.0 => TTF_GetStringSizeWrapped())
 }
 
 void HistoryMenu::previous_menu_function(Ui* ui)
