@@ -13,7 +13,7 @@ HistoryMenu::HistoryMenu(Game& game, sdl::Renderer& renderer)
 
 void HistoryMenu::create_history_scroll_area(sdl::Renderer& renderer)
 {
-	scroll_ = std::make_unique<ScrollableArea>("Resolutions", 200, 0, 1000, 720, renderer);
+	scroll_ = std::make_unique<ScrollableArea>("Resolutions", 370, 0, 900, 720, renderer); //dialogue, x = 500, character_name = 380
 	scroll_ptr_ = scroll_.get();
 }
 
@@ -36,7 +36,7 @@ void HistoryMenu::update()
 	GameState::update();
 }
 
-void HistoryMenu::add_dialogue_to_history(std::string_view character_name, std::string_view dialogue, Color namebox_text_color, sdl::Renderer& renderer)
+void HistoryMenu::add_dialogue_to_history(std::string_view character_name, std::string_view dialogue, Color namebox_text_color, int textbox_width, sdl::Renderer& renderer)
 {
 	//std::cout << "Character: " << character_name << ", dialogue: " << dialogue << ", color: r:" << int(namebox_text_color.r_) << ", g:" << int(namebox_text_color.g_) << ", b:" << int(namebox_text_color.b_) << ", a: " << int(namebox_text_color.a_) << std::endl;
 	/*texts_.push_back({
@@ -49,11 +49,11 @@ void HistoryMenu::add_dialogue_to_history(std::string_view character_name, std::
 	//std::cout << "Color: " << int(namebox_text_color.r_) << ", " << int(namebox_text_color.g_) << ", " << int(namebox_text_color.b_) << ", " << int(namebox_text_color.a_) << std::endl;
 
 	scroll_ptr_->add_text({
-		std::make_unique<Text>(character_name, namebox_text_color, constants::namebox_font_, 50, 50, y_spacing_between_each_text, renderer),
-		std::make_unique<Text>(dialogue, constants::textbox_text_color_, constants::textbox_font_, 50, 200, y_spacing_between_each_text, renderer)
+		std::make_unique<Text>(character_name, namebox_text_color, constants::namebox_font_, constants::namebox_text_size_, 380, y_spacing_between_each_text, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2)),
+		std::make_unique<Text>(dialogue, constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 500, y_spacing_between_each_text, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2))
 	});
 
-	y_spacing_between_each_text += 80; //TODO : hardcodé
+	y_spacing_between_each_text += 80; //TODO : hardcodé et ne marche pas => il faudrait que cette valeur dépende de la taille de chaque dialogue
 }
 
 void HistoryMenu::previous_menu_function(Ui* ui)

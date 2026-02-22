@@ -221,6 +221,7 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 		}
 
 		//std::cout << "PERSO: " << textbox_.get_speaker_name() << ", texte: " << textbox_.get_dialogue() << std::endl;
+		
 
 		//std::cout << "PERSO: " << character.properties_.name_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
 		textbox_.show_new_dialogue(info_textbox.t_.textbox_command_value_, character.properties_.name_, skip_mode_, dialogue_instruction_.wait_for_end_of_dialogue_);
@@ -230,7 +231,7 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 		//dialogue_instruction_ = {Where::none, false, false};
 
 		HistoryMenu* history_menu = dynamic_cast<HistoryMenu*>(game_.get_state(constants::history_menu_unique_id_));
-		history_menu->add_dialogue_to_history(get_speaker_name(), get_dialogue(), character.properties_.namebox_text_color_, renderer_);
+		history_menu->add_dialogue_to_history(get_speaker_name(), get_dialogue(), character.properties_.namebox_text_color_, textbox_.textbox_.position_.w, renderer_);
 
 		if(!skip_mode_)
 		{

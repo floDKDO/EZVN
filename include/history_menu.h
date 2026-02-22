@@ -14,7 +14,7 @@ class HistoryMenu : public GameState
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 
-		void add_dialogue_to_history(std::string_view character_name, std::string_view dialogue, Color namebox_text_color, sdl::Renderer& renderer);
+		void add_dialogue_to_history(std::string_view character_name, std::string_view dialogue, Color namebox_text_color, int textbox_width, sdl::Renderer& renderer);
 
 		void previous_menu_function(Ui* ui);
 
