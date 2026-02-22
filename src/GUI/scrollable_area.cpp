@@ -24,10 +24,12 @@ ScrollableArea::ScrollableArea(std::string_view title, int x, int y, int w, int 
 void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 {
 	//std::cout << "APPEL!\n";
-	for(auto& pair : ui_widgets_)
+	for(auto& pair : elements_value_)
 	{
-		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
+		if(std::holds_alternative<UiWidget*>(pair.first))
 		{
+			UiWidget* widget = std::get<UiWidget*>(pair.first);
+
 			int scroll_offset = get_scroll_offset(widget->rect_.h);
 			//std::cout << scroll_offset << std::endl;
 
@@ -35,6 +37,34 @@ void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 			rect.y = pair.second + scroll_offset; // + pour monter, - pour descendre
 			widget->change_position(rect.x, rect.y);
 		}
+		else if(std::holds_alternative<std::pair<Text*, Text*>>(pair.first))
+		{
+			Text* character_name = std::get<std::pair<Text*, Text*>>(pair.first).first;
+			Text* dialogue = std::get<std::pair<Text*, Text*>>(pair.first).second;
+
+			int scroll_offset_character_name = get_scroll_offset(character_name->position_.h);
+			int scroll_offset_dialogue = get_scroll_offset(dialogue->position_.h);
+
+			SDL_Rect rect_character_name = character_name->position_;
+			SDL_Rect rect_dialogue = dialogue->position_;
+
+			rect_character_name.y = pair.second + scroll_offset_character_name; // + pour monter, - pour descendre
+			rect_dialogue.y = pair.second + scroll_offset_dialogue; // + pour monter, - pour descendre
+
+			character_name->position_.y = rect_character_name.y;
+			dialogue->position_.y = rect_dialogue.y;
+		}
+
+
+		/*if(UiWidget* widget = dynamic_cast<UiWidget*>(std::get<UiWidget*>(pair.first)); widget != nullptr)
+		{
+			int scroll_offset = get_scroll_offset(widget->rect_.h);
+			//std::cout << scroll_offset << std::endl;
+
+			SDL_Rect rect = widget->rect_;
+			rect.y = pair.second + scroll_offset; // + pour monter, - pour descendre
+			widget->change_position(rect.x, rect.y);
+		}*/
 		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
 		{
 			std::cout << "LALALALA\n";
@@ -56,23 +86,37 @@ void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 
 void ScrollableArea::draw(sdl::Renderer& renderer)
 {
-	renderer.set_clip_rect(&frame_);
+	//renderer.set_clip_rect(&frame_);
 	renderer.set_draw_color(200, 200, 200, 255); //TODO : hardcodé
 	renderer.fill_rect(&frame_);
-	for(auto& pair : ui_widgets_)
+	for(auto& pair : elements_value_)
 	{
-		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
+		if(std::holds_alternative<UiWidget*>(pair.first))
+		{
+			//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+			UiWidget* widget = std::get<UiWidget*>(pair.first);
+			widget->draw(renderer);
+		}
+		else if(std::holds_alternative<std::pair<Text*, Text*>>(pair.first))
+		{
+			Text* character_name = std::get<std::pair<Text*, Text*>>(pair.first).first;
+			Text* dialogue = std::get<std::pair<Text*, Text*>>(pair.first).second;
+			character_name->draw(renderer);
+			dialogue->draw(renderer);
+		}
+
+		/*if(UiWidget* widget = dynamic_cast<UiWidget*>(std::get<UiWidget*>(pair.first)); widget != nullptr)
 		{
 			//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
 			widget->draw(renderer);
-		}
+		}*/
 		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
 		{
 			ui_group->draw(renderer);
 		}*/
 	}
 	scrollbar_.draw(renderer);
-	renderer.set_clip_rect(nullptr);
+	//renderer.set_clip_rect(nullptr);
 
 	if(title_ != nullptr)
 	{
@@ -82,13 +126,28 @@ void ScrollableArea::draw(sdl::Renderer& renderer)
 
 void ScrollableArea::update()
 {
-	for(auto& pair : ui_widgets_)
+	for(auto& pair : elements_value_)
 	{
-		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
+		if(std::holds_alternative<UiWidget*>(pair.first))
+		{
+			//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
+			UiWidget* widget = std::get<UiWidget*>(pair.first);
+			widget->update();
+		}
+		else if(std::holds_alternative<std::pair<Text*, Text*>>(pair.first))
+		{
+			Text* character_name = std::get<std::pair<Text*, Text*>>(pair.first).first;
+			Text* dialogue = std::get<std::pair<Text*, Text*>>(pair.first).second;
+			character_name->update();
+			dialogue->update();
+		}
+
+
+		/*if(UiWidget* widget = dynamic_cast<UiWidget*>(std::get<UiWidget*>(pair.first)); widget != nullptr)
 		{
 			//if(SDL_HasIntersection(&pair.first->rect_, &frame_))
 			widget->update();
-		}
+		}*/
 		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
 		{
 			ui_group->update();
@@ -105,12 +164,18 @@ void ScrollableArea::update()
 std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 {
 	std::vector<UiWidget*> vector;
-	for(auto& pair : ui_widgets_)
+	for(auto& pair : elements_value_)
 	{
-		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
+		if(std::holds_alternative<UiWidget*>(pair.first))
 		{
+			UiWidget* widget = std::get<UiWidget*>(pair.first);
 			vector.push_back(widget);
 		}
+
+		/*if(UiWidget* widget = dynamic_cast<UiWidget*>(std::get<UiWidget*>(pair.first)); widget != nullptr)
+		{
+			vector.push_back(widget);
+		}*/
 		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
 		{
 			std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();
@@ -140,17 +205,14 @@ int ScrollableArea::get_scroll_offset(int ui_height)
 
 void ScrollableArea::add_ui_element(std::unique_ptr<UiWidget> widget)
 {
-	ui_elements_.push_back(std::move(widget));
-	UiWidget* w = dynamic_cast<UiWidget*>(ui_elements_.back().get());
-	ui_widgets_.push_back({w, w->rect_.y});
+	elements_.push_back(std::move(widget));
+	UiWidget* w = dynamic_cast<UiWidget*>(std::get<std::unique_ptr<Ui>>(elements_.back()).get());
+	elements_value_.push_back({w, w->rect_.y});
 	max_y_ = get_max_y();
 }
 
 void ScrollableArea::add_ui_element(std::unique_ptr<UiGroup> ui_group)
 {
-	/*UiGroup* ui_groupp = ui_group.release(); //fonctionne mais fuite de mémoire
-	ui_elements_.push_back({ui_groupp, 0});*/
-
 	std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();
 	bool first = false;
 	for(UiWidget* widget : widgets)
@@ -160,25 +222,59 @@ void ScrollableArea::add_ui_element(std::unique_ptr<UiGroup> ui_group)
 			//std::cout << "FIRST Y : " << widget->rect_.y << std::endl;
 			first = true;
 		}
-		ui_widgets_.push_back({widget, widget->rect_.y});
+		elements_value_.push_back({widget, widget->rect_.y});
 	}
-	ui_elements_.push_back(std::move(ui_group)); 
+	elements_.push_back(std::move(ui_group)); 
 
+	max_y_ = get_max_y();
+}
+
+void ScrollableArea::add_text(std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>> text)
+{
+	//std::cout << "RESULTAT: " << text.first->text_ << ", " << text.second->text_ << std::endl;
+	elements_.push_back(std::move(text));
+	Text* character_name = dynamic_cast<Text*>(std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).first.get());
+	Text* dialogue = dynamic_cast<Text*>(std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).second.get());
+	elements_value_.push_back(std::make_pair(std::make_pair(character_name, dialogue), dialogue->position_.y)); //character_name et dialogue ont la même valeur pour y
 	max_y_ = get_max_y();
 }
 
 int ScrollableArea::get_max_y() const
 {
 	int max_y = 0;
-	for(auto& pair : ui_widgets_)
+	for(auto& pair : elements_value_)
 	{
-		if(UiWidget* widget = dynamic_cast<UiWidget*>(pair.first); widget != nullptr)
+		if(std::holds_alternative<UiWidget*>(pair.first))
 		{
+			UiWidget* widget = std::get<UiWidget*>(pair.first);
 			if(widget->rect_.y > max_y_)
 			{
 				max_y = widget->rect_.y;
 			}
 		}
+		else if(std::holds_alternative<std::pair<Text*, Text*>>(pair.first))
+		{
+			Text* character_name = std::get<std::pair<Text*, Text*>>(pair.first).first;
+			Text* dialogue = std::get<std::pair<Text*, Text*>>(pair.first).second;
+
+			if(character_name->position_.y > max_y_)
+			{
+				max_y = character_name->position_.y;
+			}
+			else if(dialogue->position_.y > max_y_)
+			{
+				max_y = dialogue->position_.y;
+			}
+		}
+
+
+		/*if(UiWidget* widget = dynamic_cast<UiWidget*>(std::get<UiWidget*>(pair.first)); widget != nullptr)
+		{
+			if(widget->rect_.y > max_y_)
+			{
+				max_y = widget->rect_.y;
+			}
+		}*/
 		/*else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(pair.first.get()); ui_group != nullptr)
 		{
 			std::vector<UiWidget*> widgets = ui_group->get_navigation_nodes();

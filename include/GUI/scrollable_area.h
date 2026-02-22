@@ -6,6 +6,7 @@
 
 #include <memory>
 #include <utility>
+#include <variant>
 
 class ScrollableArea : public UiWidget
 {
@@ -22,7 +23,7 @@ class ScrollableArea : public UiWidget
 		int get_scroll_offset(int ui_height);
 		void add_ui_element(std::unique_ptr<UiWidget> widget);
 		void add_ui_element(std::unique_ptr<UiGroup> ui_group);
-		void add_text(std::string_view text); //TODO
+		void add_text(std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>> text); //TODO
 
 	private:
 		int get_max_y() const;
@@ -31,8 +32,16 @@ class ScrollableArea : public UiWidget
 		Scrollbar scrollbar_; 
 		std::unique_ptr<Text> title_;
 
-		std::vector<std::unique_ptr<Ui>> ui_elements_;
-		std::vector<std::pair<UiWidget*, int/* init y position */>> ui_widgets_;
+		//using Dialogue = std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>;
+		
+		//ancien ui_elements_
+		std::vector<std::variant<std::unique_ptr<Ui>, std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>> elements_;
+
+		//TODO : utiliser using pour simplifier les types
+
+		//ancien ui_widgets_
+		std::vector<std::pair<std::variant<UiWidget*, std::pair<Text*, Text*>>, int/*init y position*/>> elements_value_;
+
 		int max_y_;
 		sdl::Renderer& renderer_;
 };
