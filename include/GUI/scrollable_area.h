@@ -22,6 +22,7 @@ class ScrollableArea : public UiWidget
 		int get_scroll_offset(int ui_height);
 		void add_ui_element(std::unique_ptr<UiWidget> widget);
 		void add_ui_element(std::unique_ptr<UiGroup> ui_group);
+		void add_text(std::string_view text); //TODO
 
 	private:
 		int get_max_y() const;

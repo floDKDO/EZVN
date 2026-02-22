@@ -16,6 +16,8 @@ class Textbox
 		void show_new_dialogue(std::string_view new_dialogue, std::string speaker, bool in_skip_mode=false, bool wait_for_end_of_dialogue = true);
 
 		Uint64 get_text_delay();
+		std::string get_dialogue();
+		std::string get_speaker_name();
 
 		void draw(sdl::Renderer& renderer);
 		void update();

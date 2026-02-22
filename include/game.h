@@ -25,6 +25,7 @@ class Game
 		void init_game_states();
 		void run();
 
+		GameState* get_state(std::string_view unique_id);
 		void request_push_state(std::string_view unique_id);
 		void request_pop_state();
 		void quit_game();

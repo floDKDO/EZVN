@@ -1,5 +1,6 @@
 #include "Managers/textbox_manager.h"
 #include "game.h"
+#include "history_menu.h"
 
 #include <iostream>
 
@@ -13,7 +14,7 @@ TextboxManager::TextboxManager(sdl::Renderer& renderer, Game& game)
 
 void TextboxManager::build_ui_elements(sdl::Renderer& renderer)
 {
-	std::unique_ptr<TextButton> history_ui = std::make_unique<TextButton>("History", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
+	std::unique_ptr<TextButton> history_ui = std::make_unique<TextButton>("History", 0, 0, renderer, std::bind(&TextboxManager::history_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
 	history_button_ = history_ui.get();
 	ui_manager_.add_element(std::move(history_ui));
 
@@ -67,6 +68,16 @@ void TextboxManager::set_position_ui_textbox(std::string_view where)
 	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
 	settings_button_->change_position(x_textbutton, y_textbutton);
+}
+
+std::string TextboxManager::get_dialogue()
+{
+	return textbox_.get_dialogue();
+}
+
+std::string TextboxManager::get_speaker_name()
+{
+	return textbox_.get_speaker_name();
 }
 
 void TextboxManager::handle_events_mouse_wheel(const SDL_Event& e)
@@ -137,6 +148,12 @@ void TextboxManager::draw(sdl::Renderer& renderer)
 }
 
 //Fonctions de callback///////////////////////////////////////////
+void TextboxManager::history_function(Ui* ui)
+{
+	std::cout << "Pressed History!" << std::endl;
+	game_.request_push_state(constants::history_menu_unique_id_);
+}
+
 void TextboxManager::auto_function([[maybe_unused]] Ui* ui)
 {
 	auto_mode_ = !auto_mode_;
@@ -203,7 +220,11 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 			return;
 		}
 
-		//std::cout << "*************************PERSO: " << info_textbox.character_variable_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
+		//std::cout << "PERSO: " << textbox_.get_speaker_name() << ", texte: " << textbox_.get_dialogue() << std::endl;
+		HistoryMenu* history_menu = dynamic_cast<HistoryMenu*>(game_.get_state(constants::history_menu_unique_id_));
+		history_menu->add_dialogue_to_history(get_speaker_name(), get_dialogue(), character.properties_.namebox_text_color_);
+
+		//std::cout << "PERSO: " << character.properties_.name_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
 		textbox_.show_new_dialogue(info_textbox.t_.textbox_command_value_, character.properties_.name_, skip_mode_, dialogue_instruction_.wait_for_end_of_dialogue_);
 		textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 		textbox_.change_namebox(character.properties_.namebox_path_, renderer_);

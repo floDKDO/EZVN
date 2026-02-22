@@ -2,6 +2,7 @@
 #include "in_game.h"
 #include "main_menu.h"
 #include "settings_menu.h"
+#include "history_menu.h"
 #include "utils.h"
 
 #include <iostream>
@@ -26,6 +27,7 @@ void Game::init_game_states()
 	game_states_map_.insert({constants::ingame_unique_id_, std::make_unique<InGame>(*this, renderer_)});
 	game_states_map_.insert({constants::main_menu_unique_id_, std::make_unique<MainMenu>(*this, renderer_)}); 
 	game_states_map_.insert({constants::settings_menu_unique_id_, std::make_unique<SettingsMenu>(*this, renderer_)}); 
+	game_states_map_.insert({constants::history_menu_unique_id_, std::make_unique<HistoryMenu>(*this, renderer_)});
 	push_state(game_states_map_.at(constants::main_menu_unique_id_).get());
 }
 
@@ -69,6 +71,11 @@ void Game::run()
 			SDL_Delay(Uint32(delay)); 
 		}
 	}
+}
+
+GameState* Game::get_state(std::string_view unique_id)
+{
+	return game_states_map_.at(unique_id).get();
 }
 
 void Game::request_push_state(std::string_view unique_id) //pour ne pas que les fonctions de callback rendent invalide current_selected_ via un appel direct à push_state qui vide le vector navigation_list_ dans lequel current_selected_ prend sa valeur

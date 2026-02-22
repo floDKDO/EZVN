@@ -24,6 +24,9 @@ class TextboxManager
 
 		TextboxManager(sdl::Renderer& renderer, Game& game);
 
+		std::string get_dialogue();
+		std::string get_speaker_name();
+
 		void build_ui_elements(sdl::Renderer& renderer);
 		void set_position_ui_textbox(std::string_view where);
 
@@ -32,6 +35,7 @@ class TextboxManager
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 
+		void history_function(Ui* ui);
 		void auto_function(Ui* ui);
 		void skip_function(Ui* ui);
 		void settings_function(Ui* ui);

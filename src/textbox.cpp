@@ -116,6 +116,16 @@ Uint64 Textbox::get_text_delay()
 	return std::clamp(static_cast<Uint64>(Textbox::base_delay_ + (float(text_.text_.length()) / (Text::global_text_divisor_ / 2) * 1000)), Textbox::minimum_time_, Textbox::maximum_time_);
 }
 
+std::string Textbox::get_dialogue()
+{
+	return text_.text_;
+}
+
+std::string Textbox::get_speaker_name()
+{
+	return current_speaker_;
+}
+
 void Textbox::draw(sdl::Renderer& renderer)
 {
 	if(!current_speaker_.empty())

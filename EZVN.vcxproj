@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\history_menu.cpp" />
     <ClCompile Include="src\RAII_SDL2\display.cpp" />
     <ClCompile Include="src\composite_image.cpp" />
     <ClCompile Include="src\duration.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="include\GUI\scrollable_area.h" />
     <ClInclude Include="include\GUI\scrollbar.h" />
     <ClInclude Include="include\GUI\ui_widget.h" />
+    <ClInclude Include="include\history_menu.h" />
     <ClInclude Include="include\Managers\background_manager.h" />
     <ClInclude Include="include\Managers\audio_manager.h" />
     <ClInclude Include="include\background.h" />
