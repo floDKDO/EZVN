@@ -36,6 +36,7 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 - History menu that displays dialogue history
 
 ## Remaining features to be implemented: 
+- Add choice menus
 - Add other transitions for backgrounds (only fade for now) 
 - Add a modal window for pop-ups
 - Add a logging system to obtain information about the engine states
