@@ -30,7 +30,7 @@ void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 		{
 			UiWidget* widget = std::get<UiWidget*>(pair.first);
 
-			int scroll_offset = get_scroll_offset(widget->rect_.h);
+			int scroll_offset = get_scroll_offset();
 			//std::cout << scroll_offset << std::endl;
 
 			SDL_Rect rect = widget->rect_;
@@ -42,8 +42,8 @@ void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 			Text* character_name = std::get<std::pair<Text*, Text*>>(pair.first).first;
 			Text* dialogue = std::get<std::pair<Text*, Text*>>(pair.first).second;
 
-			int scroll_offset_character_name = get_scroll_offset(character_name->position_.h);
-			int scroll_offset_dialogue = get_scroll_offset(dialogue->position_.h);
+			int scroll_offset_character_name = get_scroll_offset();
+			int scroll_offset_dialogue = get_scroll_offset();
 
 			SDL_Rect rect_character_name = character_name->position_;
 			SDL_Rect rect_dialogue = dialogue->position_;
@@ -86,7 +86,7 @@ void ScrollableArea::callback_function([[maybe_unused]] Ui* ui)
 
 void ScrollableArea::draw(sdl::Renderer& renderer)
 {
-	//renderer.set_clip_rect(&frame_);
+	renderer.set_clip_rect(&frame_);
 	renderer.set_draw_color(200, 200, 200, 255); //TODO : hardcodé
 	renderer.fill_rect(&frame_);
 	for(auto& pair : elements_value_)
@@ -116,7 +116,7 @@ void ScrollableArea::draw(sdl::Renderer& renderer)
 		}*/
 	}
 	scrollbar_.draw(renderer);
-	//renderer.set_clip_rect(nullptr);
+	renderer.set_clip_rect(nullptr);
 
 	if(title_ != nullptr)
 	{
@@ -189,7 +189,7 @@ std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 	return vector;
 }
 
-int ScrollableArea::get_scroll_offset(int ui_height)
+int ScrollableArea::get_scroll_offset()
 {
 	float t = float((scrollbar_.current_value_ - scrollbar_.min_value_) / (scrollbar_.max_value_ - scrollbar_.min_value_)); 
 	//std::cout << "t: " << t << ", value: " << scrollbar_.current_value_ << std::endl;
@@ -197,7 +197,7 @@ int ScrollableArea::get_scroll_offset(int ui_height)
 	int max_offset = 0;
 	if(max_scroll > 0) //on peut scroll uniquement si la zone à scroller est plus grande que frame_.h 
 	{
-		max_offset = -max_scroll - ui_height;
+		max_offset = -max_scroll;
 	}
 	//std::cout << "max_scroll: " << max_scroll << ", " << "max_offset: " << max_offset << std::endl;
 	return int(t * max_offset);
@@ -252,18 +252,50 @@ void ScrollableArea::add_text(std::pair<std::unique_ptr<Text>, std::unique_ptr<T
 		last_text_y += 20; //TODO : hardcodé => espace entre le premier dialogue et le haut de la ScrollableArea
 	}
 
-	//std::cout << "LAST TEXT Y: " << last_text_y << std::endl;
+	std::cout << "LAST TEXT Y: " << last_text_y << std::endl;
 
 	elements_.push_back(std::move(text));
-	Text* character_name = dynamic_cast<Text*>(std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).first.get());
-	Text* dialogue = dynamic_cast<Text*>(std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).second.get());
+	Text* character_name = std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).first.get();
+	Text* dialogue = std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(elements_.back()).second.get();
 
 	character_name->position_.y = last_text_y + last_height; 
 	dialogue->position_.y = last_text_y + last_height; 
-	//std::cout << "FINAL POSITION Y: " << character_name->position_.y << ", " << dialogue->position_.y << std::endl;
+	std::cout << "FINAL POSITION Y: " << character_name->position_.y << ", " << dialogue->position_.y << std::endl;
 
 	elements_value_.push_back(std::make_pair(std::make_pair(character_name, dialogue), dialogue->position_.y)); //character_name et dialogue ont la même valeur pour y
 	max_y_ = get_max_y();
+}
+
+void ScrollableArea::remove_last_text()
+{
+	//supprimer le dialogue courant et le dialogue précédent dans le cas d'un scrollback
+	elements_.pop_back();
+	elements_.pop_back();
+	elements_value_.pop_back();
+	elements_value_.pop_back();
+
+	/*for(auto it = elements_.rbegin(); it != elements_.rend(); ++it)
+	{
+		if(std::holds_alternative<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(*it))
+		{
+			std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>& pair = std::get<std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>(*it);
+			pair.first.reset();
+			pair.second.reset();
+			break;
+		}
+	}
+
+	for(auto it = elements_value_.rbegin(); it != elements_value_.rend(); ++it)
+	{
+		if(std::holds_alternative<std::pair<Text*, Text*>>(it->first))
+		{
+			Text* character_name = std::get<std::pair<Text*, Text*>>(it->first).first;
+			character_name = nullptr;
+			Text* dialogue = std::get<std::pair<Text*, Text*>>(it->first).second;
+			dialogue = nullptr;
+			break;
+		}
+	}*/
 }
 
 int ScrollableArea::get_max_y() const

@@ -20,10 +20,11 @@ class ScrollableArea : public UiWidget
 		std::vector<UiWidget*> get_navigation_nodes() override;
 		void change_position(int x, int y) override;
 
-		int get_scroll_offset(int ui_height);
+		int get_scroll_offset();
 		void add_ui_element(std::unique_ptr<UiWidget> widget);
 		void add_ui_element(std::unique_ptr<UiGroup> ui_group);
-		void add_text(std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>> text); //TODO
+		void add_text(std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>> text); 
+		void remove_last_text();
 
 	private:
 		int get_max_y() const;

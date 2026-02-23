@@ -254,4 +254,6 @@ void TextboxManager::reset()
 	textbox_.text_.text_.clear();
 	textbox_.is_first_dialogue_ = true;
 	where_.clear();
+	HistoryMenu* history_menu = dynamic_cast<HistoryMenu*>(game_.get_state(constants::history_menu_unique_id_));
+	history_menu->scroll_ptr_->remove_last_text();
 }
