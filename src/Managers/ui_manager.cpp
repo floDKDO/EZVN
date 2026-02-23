@@ -61,8 +61,16 @@ void UiManager::set_elements()
 			return;
 		}
 	}
-	current_selected_ = navigation_list_[0];
-	current_selected_->state_ = UiWidget::State::SELECTED;
+
+	if(navigation_list_.size() > 0)
+	{
+		current_selected_ = navigation_list_[0];
+		current_selected_->state_ = UiWidget::State::SELECTED;
+	}
+	else
+	{
+		current_selected_ = nullptr;
+	}
 }
 
 bool UiManager::is_widget1_facing_widget2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode) const

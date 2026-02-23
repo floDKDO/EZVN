@@ -71,6 +71,9 @@ class Game
 		void play_music(std::string_view music_path, int fadein_length=0, int fadeout_length=0, float volume_multiplier = 1.0, bool loop = true);
 		void stop_music(int fadeout_length=0);
 
+		void show_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::string> texts);
+		void show_choice_menu(std::string_view dialogue, std::initializer_list<std::string> texts);
+
 		void autofocus_enable();
 		void autofocus_disable();
 

@@ -7,6 +7,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	//Step 0 : create a Game object
 	Game game;
 
+
 	//First step : character creation
 	game.create_character("Sayori", "???", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
 	game.create_character("Monika", "???", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
@@ -89,7 +90,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 224, 255));
 	game.move_textbox("bottom");
 	game.show_dialogue("Sayori", "Or blue?");
-	game.show_dialogue("MC", "I...");
+	game.show_choice_menu("MC", "I...", {"Green", "Purple", "Pink", "Blue"});
 	game.play_sound("sounds/door_open.ogg");
 	game.show_dialogue("Sayori", "Follow me!");
 	game.show_character("Sayori", "lhide");
@@ -114,11 +115,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
+//TODO : ne pas écrire "Narrator" => créer une constante
+
 //TODO : les paramètres "inutiles" des fonctions de la SDL pourraient être préremplis (valeur fixée pour ces paramètres) => ex : les 2 premiers paramètres de sdl::Texture::query()
 
 //TODO : utiliser std::clamp pour s'assurer qu'une valeur soit dans un intervalle
 
-//TODO : pour la collision entre un SDL_Rect et la souris, utiliser SDL_PointInRect() (=> créer une fonction dans utils.h ??)
+//TODO : pour la collision entre un SDL_Rect et la souris, utiliser SDL_PointInRect()
 
 //TODO : quand une méthode prend un pointeur en paramètre (ex : UiWidget*), vérifier que celui-ci ne vaut pas nullptr
 
@@ -126,7 +129,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 //TODO : créer des variables dans des if si utile
 
-//TODO : créer un dossier States pour main_menu, settings_menu et in_game ?
+//TODO : créer un dossier States pour main_menu, settings_menu, history_menu et in_game ?
 
 //TODO : sûrement remplacer les paramètres std::vector par std::initializer_list quand c'est possible
 

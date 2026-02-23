@@ -7,6 +7,7 @@ class BackgroundManager
 	public:
 		explicit BackgroundManager(sdl::Renderer& renderer);
 
+		void build_ui_elements(sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer);
 		void update(const Script::InfoBackground& info_background);
 		void reset();
@@ -14,6 +15,5 @@ class BackgroundManager
 	private:
 		Background background_;
 		sdl::Renderer& renderer_;
-
 };
 

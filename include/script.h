@@ -62,6 +62,16 @@ class Script
 		using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
 		using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
 
+		struct ChoiceMenu
+		{
+			ChoiceMenu(std::initializer_list<std::string> texts)
+				: texts_(texts)
+			{}
+
+			std::vector<std::string> texts_;
+		};
+		using InfoChoiceMenu = ChoiceMenu;
+
 		enum class AutofocusCommandKind
 		{
 			AUTOFOCUS,
@@ -91,7 +101,7 @@ class Script
 			std::optional<int> length_to_clear_;
 		};
 
-		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoAutofocus, InfoTransition>;
+		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoChoiceMenu, InfoAutofocus, InfoTransition>;
 
 		Script(sdl::Renderer& renderer);
 
@@ -119,6 +129,8 @@ class Script
 
 		void play_music(std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop);
 		void stop_music(int fadeout_length);
+
+		void insert_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::string> texts);
 
 		void insert_autofocus(bool autofocus);
 		void insert_autozorder(bool autozorder);

@@ -5,8 +5,8 @@
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 ScriptRunner::ScriptRunner(Game& game, sdl::Renderer& renderer)
-	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false),
-	character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(renderer, game)
+	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false), is_choice_menu_visible_(false), is_dialogue_of_choice_menu_visible_(false),
+	character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(renderer, game), choice_menu_manager_(renderer, game)
 {
 	character_manager_.create_narrator();
 	init_dialogues_script_index();
@@ -120,8 +120,17 @@ void ScriptRunner::init_to_first_dialogue()
 
 void ScriptRunner::handle_events(const SDL_Event& e)
 {
-	textbox_manager_.handle_events(e);
+	if(is_dialogue_of_choice_menu_visible_)
+	{
+		textbox_manager_.ui_manager_.handle_events(e); //TODO : ne pas accéder à ui_manager_ directement => créer une méthode
+	}
+	else
+	{
+		textbox_manager_.handle_events(e);
+	}
+
 	transition_manager_.handle_events(e);
+	choice_menu_manager_.handle_events(e);
 
 	if(e.type == AudioManager::END_MUSIC_EVENT_)
 	{
@@ -143,6 +152,7 @@ void ScriptRunner::draw(sdl::Renderer& renderer)
 {
 	background_manager_.draw(renderer);
 	character_manager_.draw(renderer);
+	choice_menu_manager_.draw(renderer);
 
 	if(!transition_manager_.transition_playing_)
 	{
@@ -178,14 +188,25 @@ void ScriptRunner::apply_line(size_t script_index)
 	}
 	else if(std::holds_alternative<Script::InfoTextbox>(current_script_information))
 	{
+		if(is_choice_menu_visible_)
+		{
+			is_dialogue_of_choice_menu_visible_ = true;
+		}
+
 		Script::InfoTextbox& info_textbox = std::get<Script::InfoTextbox>(current_script_information);
 		textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_)); //TODO : erreur si le personnage n'a pas déjà été show alors que cela devrait marcher dans ce cas là
 		character_manager_.update_characters_dialogue(info_textbox);
+
 		//textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::none, false, false};
 	}
 	else if(std::holds_alternative<Script::InfoTransition>(current_script_information))
 	{
 		transition_manager_.update(std::get<Script::InfoTransition>(current_script_information));
+	}
+	else if(std::holds_alternative<Script::InfoChoiceMenu>(current_script_information))
+	{
+		choice_menu_manager_.update(std::get<Script::InfoChoiceMenu>(current_script_information));
+		is_choice_menu_visible_ = true;
 	}
 }
 
@@ -207,6 +228,13 @@ void ScriptRunner::update()
 		transition_manager_.reset();
 	}
 
+	if(is_choice_menu_visible_ && choice_menu_manager_.choice_made_)
+	{
+		is_choice_menu_visible_ = false;
+		is_dialogue_of_choice_menu_visible_ = false;
+		textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NEXT, false, false};
+	}
+
 	if(!transition_manager_.transition_playing_)
 	{
 		move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
@@ -219,7 +247,7 @@ void ScriptRunner::update()
 
 	init_to_first_dialogue(); //doit être après move_dialogue()
 
-	apply_line(current_script_index_);
+	apply_line(current_script_index_); //TODO : aucun intérêt de passer un membre en paramètre...
 	//move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
 	
 	character_manager_.update_characters();
@@ -307,6 +335,10 @@ void ScriptRunner::rebuild()
 				textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
 			}
 			character_manager_.update_characters_dialogue(info_textbox);
+		}
+		else if(std::holds_alternative<Script::InfoChoiceMenu>(current_script_information))
+		{
+			choice_menu_manager_.update(std::get<Script::InfoChoiceMenu>(current_script_information));
 		}
 		//ne pas rejouer les transitions
 	}

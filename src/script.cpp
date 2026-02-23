@@ -168,6 +168,17 @@ void Script::stop_music(int fadeout_length)
 	script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{0, fadeout_length, true}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
+void Script::insert_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::string> texts)
+{
+	script_information_.push_back(InfoChoiceMenu(texts));
+
+	InfoTextbox info_textbox;
+	info_textbox.character_variable_ = character_variable;
+	info_textbox.t_.textbox_command_kind_ = TextboxCommandKind::DIALOGUE;
+	info_textbox.t_.textbox_command_value_ = std::string(dialogue);
+	script_information_.push_back(InfoTextbox(info_textbox));
+}
+
 void Script::insert_autofocus(bool autofocus)
 {
 	script_information_.push_back(InfoAutofocus({AutofocusCommandKind::AUTOFOCUS, autofocus}));

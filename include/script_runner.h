@@ -6,6 +6,7 @@
 #include "Managers/sound_manager.h"
 #include "Managers/background_manager.h"
 #include "Managers/transition_manager.h"
+#include "Managers/choice_menu_manager.h"
 
 #include <set>
 
@@ -49,6 +50,8 @@ class ScriptRunner
 		std::set<size_t> dialogues_script_index_;
 
 		bool init_;
+		bool is_choice_menu_visible_;
+		bool is_dialogue_of_choice_menu_visible_;
 
 		CharacterManager character_manager_;
 		BackgroundManager background_manager_;
@@ -56,5 +59,6 @@ class ScriptRunner
 		SoundManager sound_manager_;
 		TextboxManager textbox_manager_;
 		TransitionManager transition_manager_;
+		ChoiceMenuManager choice_menu_manager_;
 };
 

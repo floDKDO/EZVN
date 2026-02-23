@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\history_menu.cpp" />
+    <ClCompile Include="src\Managers\choice_menu_manager.cpp" />
     <ClCompile Include="src\RAII_SDL2\display.cpp" />
     <ClCompile Include="src\composite_image.cpp" />
     <ClCompile Include="src\duration.cpp" />
@@ -220,6 +221,7 @@
     <ClInclude Include="include\Color\conversion.h" />
     <ClInclude Include="include\Color\str.h" />
     <ClInclude Include="include\constants.h" />
+    <ClInclude Include="include\Managers\choice_menu_manager.h" />
     <ClInclude Include="include\Managers\textbox_manager.h" />
     <ClInclude Include="include\drawable.h" />
     <ClInclude Include="include\GUI\button.h" />

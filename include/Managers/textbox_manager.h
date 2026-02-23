@@ -49,6 +49,8 @@ class TextboxManager
 		DialogueInstruction dialogue_instruction_;
 		bool skip_mode_;
 
+		UiManager ui_manager_; //TODO : remettre en private
+
 	private:
 		Uint64 last_time_;
 
@@ -58,7 +60,7 @@ class TextboxManager
 		std::string where_;
 
 		Textbox textbox_;
-		UiManager ui_manager_;
+		
 
 		TextButton* history_button_;
 		TextToggle* skip_toggle_;

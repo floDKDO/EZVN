@@ -311,6 +311,16 @@ void Game::stop_music(int fadeout_length)
 	script_.stop_music(fadeout_length);
 }
 
+void Game::show_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::string> texts)
+{
+	script_.insert_choice_menu(character_variable, dialogue, texts);
+}
+
+void Game::show_choice_menu(std::string_view dialogue, std::initializer_list<std::string> texts)
+{
+	script_.insert_choice_menu("Narrator", dialogue, texts);
+}
+
 void Game::autofocus_enable()
 {
 	script_.insert_autofocus(true);
