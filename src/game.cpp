@@ -115,10 +115,12 @@ void Game::handle_requests()
 void Game::push_state(GameState* state)
 {
 	game_states_stack_.push(state);
+	state->on_show();
 }
 
 void Game::pop_state()
 {
+	game_states_stack_.top()->on_hide();
 	game_states_stack_.pop();
 }
 

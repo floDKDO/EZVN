@@ -230,8 +230,11 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 		textbox_.change_namebox_text_color(character.properties_.namebox_text_color_); 
 		//dialogue_instruction_ = {Where::none, false, false};
 
-		HistoryMenu* history_menu = dynamic_cast<HistoryMenu*>(game_.get_state(constants::history_menu_unique_id_));
-		history_menu->add_dialogue_to_history(get_speaker_name(), get_dialogue(), character.properties_.namebox_text_color_, textbox_.textbox_.position_.w, renderer_);
+		//if(dialogue_instruction_.is_from_mouse_wheel_ && dialogue_instruction_.where_ == Where::PREV || !dialogue_instruction_.is_from_mouse_wheel_)
+		{
+			HistoryMenu* history_menu = dynamic_cast<HistoryMenu*>(game_.get_state(constants::history_menu_unique_id_));
+			history_menu->add_dialogue_to_history(get_speaker_name(), get_dialogue(), character.properties_.namebox_text_color_, textbox_.textbox_.position_.w, renderer_);
+		}
 
 		if(!skip_mode_)
 		{

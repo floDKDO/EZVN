@@ -14,6 +14,8 @@ class GameState
 		virtual void handle_events(const SDL_Event& e);
 		virtual void draw(sdl::Renderer& renderer);
 		virtual void update();
+		virtual void on_show() {};
+		virtual void on_hide() {};
 
 	protected:
 		GameState(Game& game);

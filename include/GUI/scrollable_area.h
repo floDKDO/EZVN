@@ -11,9 +11,13 @@
 class ScrollableArea : public UiWidget
 {
 	public:
+		using DialoguePtr = std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>;
+		using Dialogue = std::pair<Text*, Text*>;
+
 		ScrollableArea(int x, int y, int w, int h, sdl::Renderer& renderer);
 		ScrollableArea(std::string_view title, int x, int y, int w, int h, sdl::Renderer& renderer);
 
+		void scroll_elements();
 		void callback_function(Ui* ui);
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
@@ -23,7 +27,7 @@ class ScrollableArea : public UiWidget
 		int get_scroll_offset();
 		void add_ui_element(std::unique_ptr<UiWidget> widget);
 		void add_ui_element(std::unique_ptr<UiGroup> ui_group);
-		void add_text(std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>> text); 
+		void add_text(DialoguePtr text);
 		void remove_last_text();
 
 	private:
@@ -32,18 +36,12 @@ class ScrollableArea : public UiWidget
 		SDL_Rect frame_;
 		Scrollbar scrollbar_; 
 		std::unique_ptr<Text> title_;
-
-		//using Dialogue = std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>;
 		
-		//ancien ui_elements_
-		std::vector<std::variant<std::unique_ptr<Ui>, std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>>> elements_;
-
 		//TODO : utiliser using pour simplifier les types
 
-		//ancien ui_widgets_
-		std::vector<std::pair<std::variant<UiWidget*, std::pair<Text*, Text*>>, int/*init y position*/>> elements_value_;
+		std::vector<std::variant<std::unique_ptr<Ui>, DialoguePtr>> elements_;
+		std::vector<std::pair<std::variant<UiWidget*, Dialogue>, int/*init y position*/>> elements_value_;
 
-		int max_y_;
 		sdl::Renderer& renderer_;
 };
 
