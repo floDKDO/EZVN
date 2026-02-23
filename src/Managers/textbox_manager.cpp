@@ -148,7 +148,7 @@ void TextboxManager::draw(sdl::Renderer& renderer)
 }
 
 //Fonctions de callback///////////////////////////////////////////
-void TextboxManager::history_function(Ui* ui)
+void TextboxManager::history_function([[maybe_unused]] Ui* ui)
 {
 	std::cout << "Pressed History!" << std::endl;
 	game_.request_push_state(constants::history_menu_unique_id_);
@@ -222,7 +222,6 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 
 		//std::cout << "PERSO: " << textbox_.get_speaker_name() << ", texte: " << textbox_.get_dialogue() << std::endl;
 		
-
 		//std::cout << "PERSO: " << character.properties_.name_ << ", texte: " << info_textbox.t_.textbox_command_value_ << std::endl;
 		textbox_.show_new_dialogue(info_textbox.t_.textbox_command_value_, character.properties_.name_, skip_mode_, dialogue_instruction_.wait_for_end_of_dialogue_);
 		textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
@@ -257,6 +256,7 @@ void TextboxManager::reset()
 	textbox_.text_.text_.clear();
 	textbox_.is_first_dialogue_ = true;
 	where_.clear();
+
 	HistoryMenu* history_menu = dynamic_cast<HistoryMenu*>(game_.get_state(constants::history_menu_unique_id_));
 	history_menu->scroll_ptr_->remove_last_text();
 }

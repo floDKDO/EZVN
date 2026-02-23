@@ -30,8 +30,8 @@ class Text : public Drawable
 
 		int get_width_one_char(char c) const;
 		int get_width_text() const;
-		int get_height_one_char(char c) const;
-		int get_height_text() const;
+		int get_height_one_char(char c) const; 
+		int get_height_text() const; //TODO : attention : ne marche pas si le texte est wrapped !
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

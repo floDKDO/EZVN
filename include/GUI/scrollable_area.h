@@ -29,6 +29,8 @@ class ScrollableArea : public UiWidget
 		void add_ui_element(std::unique_ptr<UiGroup> ui_group);
 		void add_text(DialoguePtr text);
 		void remove_last_text();
+		Text* get_last_dialogue();
+		int get_last_dialogue_initial_y_pos();
 
 	private:
 		int get_max_y() const;

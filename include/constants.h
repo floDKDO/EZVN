@@ -141,6 +141,11 @@ inline const Color namebox_text_color_ = Color::from_rgba8(255, 255, 255);
 inline constexpr int buttongroup_y_spacing_ = 60; //= choice menu
 inline constexpr int buttongroup_width_ = 400; //= choice menu
 
+inline constexpr int history_menu_y_spacing_between_dialogues_ = 20;
+inline constexpr int history_menu_y_spacing_at_top_ = 20;
+inline constexpr int history_menu_x_spacing_character_name_ = 380;
+inline constexpr int history_menu_x_spacing_dialogue_ = 500;
+
 inline constexpr std::string_view window_icon_ = "img/gui/window_icon.png";
 inline constexpr std::string_view game_name_ = "EZVN";
 

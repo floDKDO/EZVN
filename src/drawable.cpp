@@ -52,6 +52,20 @@ void Drawable::flip_normal()
 	flip_ = SDL_FLIP_NONE;
 }
 
+int Drawable::get_width() const
+{
+	int width;
+	texture_->query(nullptr, nullptr, nullptr, &width);
+	return width;
+}
+
+int Drawable::get_height() const
+{
+	int height;
+	texture_->query(nullptr, nullptr, nullptr, &height);
+	return height;
+}
+
 int Drawable::get_xcenter() const
 {
 	//std::cout << "GET XCENTER ***********************************************************\n";
