@@ -22,7 +22,7 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 - *src/main.cpp*: contains your story (an example is already written there)
 
 ## Current features: 
-- Main screen, options menu (windowed/full-screen mode, music/sound volume, dialogue display speed)
+- Main screen, options menu (windowed/full-screen mode, music/sound volume, dialogue display speed, resolution change)
 - Display characters at the desired position with an animation (similar to Ren'Py's Transform)
 - Composite images to change the image of characters
 - Fade transition for backgrounds
@@ -33,10 +33,10 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 - Hide the textbox by clicking or scrolling the mouse wheel
 - Rename characters
 - Autofocus that highlights a character who is speaking by changing their size and zorder
+- History menu that displays dialogue history
 
 ## Remaining features to be implemented: 
 - Add other transitions for backgrounds (only fade for now) 
-- Add a scrollable area (for dialogues history for example)
 - Add a modal window for pop-ups
 - Add a logging system to obtain information about the engine states
 - Save/load system and persistent variables
