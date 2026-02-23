@@ -57,11 +57,8 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 
 void ChoiceMenuManager::reset()
 {
-	//TODO
-	/*ui_manager_.ui_elements_.clear();
-	ui_manager_.navigation_list_.clear();
-
-	build_ui_elements(renderer_);*/
+	ui_manager_.reset();
+	build_ui_elements(renderer_);
 
 	choice_made_ = false;
 }

@@ -123,7 +123,7 @@ void ScriptRunner::handle_events(const SDL_Event& e)
 	if(is_dialogue_of_choice_menu_visible_)
 	{
 		textbox_manager_.ui_manager_.handle_events(e); //TODO : ne pas accéder à ui_manager_ directement => créer une méthode
-		textbox_manager_.handle_events_mouse_wheel(e); //TODO : doit être là
+		textbox_manager_.handle_events_mouse_wheel(e); 
 	}
 	else
 	{

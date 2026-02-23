@@ -14,6 +14,17 @@ UiManager::UiManager(AudioManager& audio_manager)
 	audio_manager_(audio_manager), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
+void UiManager::reset()
+{
+	for(std::unique_ptr<Ui>& ui : ui_elements_)
+	{
+		ui.reset();
+	}
+	ui_elements_.clear();
+
+	navigation_list_.clear();
+}
+
 void UiManager::add_element(std::unique_ptr<Ui> ui)
 {
 	ui_elements_.push_back(std::move(ui));
