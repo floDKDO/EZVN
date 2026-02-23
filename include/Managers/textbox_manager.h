@@ -27,6 +27,9 @@ class TextboxManager
 		std::string get_dialogue();
 		std::string get_speaker_name();
 
+		void uncheck_skip_toggle();
+		void uncheck_auto_toggle();
+
 		void build_ui_elements(sdl::Renderer& renderer);
 		void set_position_ui_textbox(std::string_view where);
 

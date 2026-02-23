@@ -123,6 +123,7 @@ void ScriptRunner::handle_events(const SDL_Event& e)
 	if(is_dialogue_of_choice_menu_visible_)
 	{
 		textbox_manager_.ui_manager_.handle_events(e); //TODO : ne pas accéder à ui_manager_ directement => créer une méthode
+		textbox_manager_.handle_events_mouse_wheel(e); //TODO : doit être là
 	}
 	else
 	{
@@ -191,6 +192,8 @@ void ScriptRunner::apply_line(size_t script_index)
 		if(is_choice_menu_visible_)
 		{
 			is_dialogue_of_choice_menu_visible_ = true;
+			textbox_manager_.uncheck_auto_toggle();
+			textbox_manager_.uncheck_skip_toggle();
 		}
 
 		Script::InfoTextbox& info_textbox = std::get<Script::InfoTextbox>(current_script_information);
@@ -221,7 +224,10 @@ void ScriptRunner::update()
 		rebuild();
 	}
 
-	textbox_manager_.update_skip_auto_modes(); //car doit être exécuté avant move_dialogue()
+	if(!is_choice_menu_visible_)
+	{
+		textbox_manager_.update_skip_auto_modes(); //car doit être exécuté avant move_dialogue()
+	}
 
 	if(textbox_manager_.skip_mode_) //don't play background transition in skip mode
 	{
@@ -300,6 +306,10 @@ void ScriptRunner::rebuild()
 	sound_manager_.reset();
 	background_manager_.reset();
 	transition_manager_.reset();
+	choice_menu_manager_.reset();
+	is_choice_menu_visible_ = false;
+	is_dialogue_of_choice_menu_visible_ = false;
+
 
 	//TODO : mettre dans une fonction
 	size_t target_script_index = get_script_index_of_previous_dialogue().value();

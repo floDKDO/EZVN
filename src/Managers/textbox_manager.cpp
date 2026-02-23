@@ -80,16 +80,25 @@ std::string TextboxManager::get_speaker_name()
 	return textbox_.get_speaker_name();
 }
 
+void TextboxManager::uncheck_skip_toggle()
+{
+	skip_toggle_->change_checked(false);
+	skip_mode_ = false;
+}
+
+void TextboxManager::uncheck_auto_toggle()
+{
+	auto_toggle_->change_checked(false);
+	auto_mode_ = false;
+}
+
 void TextboxManager::handle_events_mouse_wheel(const SDL_Event& e)
 {
 	if(e.type == SDL_MOUSEWHEEL) //condition placée en premier pour que le scroll de la mouse wheel sur un textbutton fonctionne
 	{
 		if(e.wheel.y > 0) //scroll vers l'avant => reculer d'un dialogue
 		{
-			//annuler le mode skip
-			skip_toggle_->change_checked(false); 
-			skip_mode_ = false;
-
+			uncheck_skip_toggle();
 			dialogue_instruction_ = {Where::PREV, true, false};
 		}
 		else //scroll vers l'arrière => avancer d'un dialogue
@@ -104,9 +113,7 @@ void TextboxManager::handle_events_keyboard_mouse(const SDL_Event& e)
 	if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 	|| (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT))
 	{
-		//annuler le mode auto
-		auto_toggle_->change_checked(false); 
-		auto_mode_ = false;
+		uncheck_auto_toggle();
 
 		if(textbox_.text_.is_finished_)
 		{
