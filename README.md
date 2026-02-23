@@ -30,7 +30,7 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
 - Auto (dialog scrolls automatically based on their length) or Skip (skip dialog at high speed) mode
 - Be able to return to previous dialogues using the mouse wheel
 - Play music and sounds (possibly on different channels) while supporting volume changes and fade-in or fade-out effects
-- Hide the textbox by clicking or scrolling the mouse wheel
+- Hide the textbox by right-clicking or clicking the mouse wheel button
 - Rename characters
 - Autofocus that highlights a character who is speaking by changing their size and zorder
 - History menu that displays dialogue history
