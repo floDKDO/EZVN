@@ -33,6 +33,7 @@ class TextboxManager
 		void build_ui_elements(sdl::Renderer& renderer);
 		void set_position_ui_textbox(std::string_view where);
 
+		void handle_events_ui_manager(const SDL_Event& e);
 		void handle_events_mouse_wheel(const SDL_Event& e);
 		void handle_events_keyboard_mouse(const SDL_Event& e);
 		void handle_events(const SDL_Event& e);
@@ -52,8 +53,6 @@ class TextboxManager
 		DialogueInstruction dialogue_instruction_;
 		bool skip_mode_;
 
-		UiManager ui_manager_; //TODO : remettre en private
-
 	private:
 		Uint64 last_time_;
 
@@ -64,6 +63,7 @@ class TextboxManager
 
 		Textbox textbox_;
 		
+		UiManager ui_manager_; 
 
 		TextButton* history_button_;
 		TextToggle* skip_toggle_;

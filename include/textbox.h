@@ -7,7 +7,7 @@
 class Textbox
 {
 	public:
-		Textbox(sdl::Renderer& renderer);
+		explicit Textbox(sdl::Renderer& renderer);
 
 		void change_textbox(std::string_view new_textbox_path, sdl::Renderer& renderer);
 		void change_namebox(std::string_view new_namebox_path, sdl::Renderer& renderer);

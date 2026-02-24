@@ -11,8 +11,9 @@ CharacterManager::CharacterManager(sdl::Renderer& renderer, std::unordered_map<s
 
 void CharacterManager::create_narrator()
 {
-	CharacterDefinition& character_definition = character_definitions_.at("Narrator");
-	active_characters_.insert(std::make_pair("Narrator", Character(character_definition)));
+	std::string narrator_string = std::string(constants::default_narrator_name_);
+	CharacterDefinition& character_definition = character_definitions_.at(narrator_string);
+	active_characters_.insert(std::make_pair(narrator_string, Character(character_definition)));
 }
 
 unsigned int CharacterManager::get_number_of_characters_with_image()
@@ -20,7 +21,7 @@ unsigned int CharacterManager::get_number_of_characters_with_image()
 	unsigned int counter = 0;
 	for(auto& [key_character_variable, value_character] : active_characters_)
 	{
-		if(key_character_variable != "Narrator" && value_character.has_image())
+		if(key_character_variable != constants::default_narrator_name_ && value_character.has_image())
 		{
 			counter += 1;
 		}

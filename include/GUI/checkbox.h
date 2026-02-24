@@ -14,8 +14,6 @@ class Checkbox : public Checkable
 		void change_position(int x, int y) override;
 
 	private:
-		static const unsigned int index_rect_checkbox_;
-
 		Image normal_;
 		Image selected_;
 		Image pressed_;

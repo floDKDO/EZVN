@@ -90,7 +90,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 224, 255));
 	game.move_textbox("bottom");
 	game.show_dialogue("Sayori", "Or blue?");
-	game.show_choice_menu("MC", "I...", {"Green", "Purple", "Pink", "Blue"});
+	game.show_dialogue("MC", "I...");
+	//game.show_choice_menu("MC", "I...", {"Green", "Purple", "Pink", "Blue"}); //pas encore complètement fonctionnel
 	game.play_sound("sounds/door_open.ogg");
 	game.show_dialogue("Sayori", "Follow me!");
 	game.show_character("Sayori", "lhide");
@@ -115,8 +116,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
-//TODO : ne pas écrire "Narrator" => créer une constante
-
 //TODO : les paramètres "inutiles" des fonctions de la SDL pourraient être préremplis (valeur fixée pour ces paramètres) => ex : les 2 premiers paramètres de sdl::Texture::query()
 
 //TODO : utiliser std::clamp pour s'assurer qu'une valeur soit dans un intervalle
@@ -125,11 +124,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 //TODO : quand une méthode prend un pointeur en paramètre (ex : UiWidget*), vérifier que celui-ci ne vaut pas nullptr
 
-//TODO : renommer Drawable en Displayable ?
-
 //TODO : créer des variables dans des if si utile
-
-//TODO : créer un dossier States pour main_menu, settings_menu, history_menu et in_game ?
 
 //TODO : sûrement remplacer les paramètres std::vector par std::initializer_list quand c'est possible
 
@@ -141,8 +136,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 //                        => retirer les membres et commentaires inutiles, utiliser using pour simplifier les types etc.
 
 //TODO : composition over inheritance
-
-//TODO : utiliser des const_iterator et cbegin() et cend() quand c'est possible
 
 //TODO : éventuellement remplacer les C-casts par static_cast
 
@@ -162,8 +155,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 //TODO : si valeur de wrap_length pas connue dans le constructeur ?
 
-//TODO : supprimer les .cpp inutiles où tout le code est dans le header à cause des templates ?
-
 //TODO : si je garde la scrollbar, créer une classe intermédiaire (ex : Scrollable) pour ne pas répéter le code du Slider
 
 //TODO : membre static => static inline ou static constexpr pour attribuer une valeur directement dans le .h
@@ -182,7 +173,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 //TODO : il ne faudrait pas utiliser std::string_view en tant que clef dans une std::map ou std::unordered_map
 
-//TODO : pouvoir modifier la résolution du jeu quand il est en mode plein écran (voir les fonctions "display" de la SDL2) + ajouter d'autres options utiles ?
+//TODO : ajouter d'autres options utiles dans le menu Settings ?
 
 //TODO : améliorer le système de UI pour qu'un UI puisse contenir plusieurs UI membres
 

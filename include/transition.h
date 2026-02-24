@@ -1,11 +1,7 @@
 #pragma once
 
 #include "RAII_SDL2/renderer.h"
-#include "transform_step.h"
 #include "script.h"
-
-#include <string>
-#include <string_view>
 
 /*
 * Transitions : 
@@ -23,7 +19,7 @@
 class Transition
 {
 	public:
-		Transition(const Script::InfoTransition& info_transition);
+		explicit Transition(const Script::InfoTransition& info_transition);
 
 		void draw(sdl::Renderer& renderer);
 		void update();

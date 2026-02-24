@@ -1,7 +1,7 @@
 #pragma once
 
 #include "constants.h"
-#include "game_state.h"
+#include "GameStates/game_state.h"
 #include "Managers/ui_manager.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"

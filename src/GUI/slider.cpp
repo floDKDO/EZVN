@@ -1,10 +1,7 @@
 #include "GUI/slider.h"
 #include "constants.h"
-#include "utils.h"
 
 #include <iostream>
-
-const unsigned int Slider::index_rect_container_ = 0;
 
 Slider::Slider(unsigned int min_value, unsigned int max_value, int x, int y, std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Slider(min_value, max_value, (max_value + min_value) / 2, x, y, text, renderer, callback_function)

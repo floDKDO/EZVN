@@ -28,6 +28,7 @@ class Window
 		void set_center(); //SDL_SetWindowPosition(SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED)
 		void maximize(); //SDL_MaximizeWindow
 		void set_full_screen(); //SDL_SetWindowFullscreen
+		bool is_full_screen() const;
 		void set_windowed(); //SDL_SetWindowFullscreen
 		void get_display_mode(SDL_DisplayMode* mode); //SDL_GetWindowDisplayMode
 		void set_display_mode(const SDL_DisplayMode* mode); //SDL_SetWindowDisplayMode

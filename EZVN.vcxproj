@@ -138,7 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\history_menu.cpp" />
+    <ClCompile Include="src\GameStates\history_menu.cpp" />
     <ClCompile Include="src\Managers\choice_menu_manager.cpp" />
     <ClCompile Include="src\RAII_SDL2\display.cpp" />
     <ClCompile Include="src\composite_image.cpp" />
@@ -155,19 +155,19 @@
     <ClCompile Include="src\Color\conversion.cpp" />
     <ClCompile Include="src\Color\str.cpp" />
     <ClCompile Include="src\Managers\textbox_manager.cpp" />
-    <ClCompile Include="src\drawable.cpp" />
+    <ClCompile Include="src\displayable.cpp" />
     <ClCompile Include="src\GUI\button.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\GUI\checkable.cpp" />
     <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\game_state.cpp" />
+    <ClCompile Include="src\GameStates\game_state.cpp" />
     <ClCompile Include="src\image.cpp" />
     <ClCompile Include="src\GUI\inputfield.cpp" />
-    <ClCompile Include="src\in_game.cpp" />
+    <ClCompile Include="src\GameStates\in_game.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Managers\transition_manager.cpp" />
     <ClCompile Include="src\Managers\ui_manager.cpp" />
-    <ClCompile Include="src\main_menu.cpp" />
+    <ClCompile Include="src\GameStates\main_menu.cpp" />
     <ClCompile Include="src\music.cpp" />
     <ClCompile Include="src\GUI\confirmation_popup.cpp" />
     <ClCompile Include="src\Managers\music_manager.cpp" />
@@ -190,7 +190,7 @@
     <ClCompile Include="src\GUI\slider.cpp" />
     <ClCompile Include="src\script.cpp" />
     <ClCompile Include="src\script_runner.cpp" />
-    <ClCompile Include="src\settings_menu.cpp" />
+    <ClCompile Include="src\GameStates\settings_menu.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\Managers\sound_manager.cpp" />
     <ClCompile Include="src\text.cpp" />
@@ -211,7 +211,7 @@
     <ClInclude Include="include\GUI\scrollable_area.h" />
     <ClInclude Include="include\GUI\scrollbar.h" />
     <ClInclude Include="include\GUI\ui_widget.h" />
-    <ClInclude Include="include\history_menu.h" />
+    <ClInclude Include="include\GameStates\history_menu.h" />
     <ClInclude Include="include\Managers\background_manager.h" />
     <ClInclude Include="include\Managers\audio_manager.h" />
     <ClInclude Include="include\background.h" />
@@ -223,18 +223,18 @@
     <ClInclude Include="include\constants.h" />
     <ClInclude Include="include\Managers\choice_menu_manager.h" />
     <ClInclude Include="include\Managers\textbox_manager.h" />
-    <ClInclude Include="include\drawable.h" />
+    <ClInclude Include="include\displayable.h" />
     <ClInclude Include="include\GUI\button.h" />
     <ClInclude Include="include\character.h" />
     <ClInclude Include="include\GUI\checkable.h" />
     <ClInclude Include="include\game.h" />
-    <ClInclude Include="include\game_state.h" />
+    <ClInclude Include="include\GameStates\game_state.h" />
     <ClInclude Include="include\image.h" />
     <ClInclude Include="include\GUI\inputfield.h" />
-    <ClInclude Include="include\in_game.h" />
+    <ClInclude Include="include\GameStates\in_game.h" />
     <ClInclude Include="include\Managers\transition_manager.h" />
     <ClInclude Include="include\Managers\ui_manager.h" />
-    <ClInclude Include="include\main_menu.h" />
+    <ClInclude Include="include\GameStates\main_menu.h" />
     <ClInclude Include="include\music.h" />
     <ClInclude Include="include\GUI\confirmation_popup.h" />
     <ClInclude Include="include\Managers\music_manager.h" />
@@ -259,7 +259,7 @@
     <ClInclude Include="include\GUI\slider.h" />
     <ClInclude Include="include\script.h" />
     <ClInclude Include="include\script_runner.h" />
-    <ClInclude Include="include\settings_menu.h" />
+    <ClInclude Include="include\GameStates\settings_menu.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\Managers\sound_manager.h" />
     <ClInclude Include="include\text.h" />

@@ -18,6 +18,7 @@ inline constexpr bool default_autozorder_ = false;
 inline constexpr int default_minimum_character_for_autofocus_ = 2;
 inline constexpr std::string_view default_textbox_position_ = "bottom";
 inline constexpr std::string_view default_menu_background_ = "img/backgrounds/night.png";
+inline constexpr std::string_view default_narrator_name_ = "Narrator";
 
 inline constexpr int default_fade_transition_length_ = 500; //ms
 
@@ -131,6 +132,9 @@ inline constexpr int textbox_text_y_delta_ = 25;
 inline constexpr int textbox_end_dialogue_indicator_x_delta_ = -30;
 inline constexpr int textbox_end_dialogue_indicator_y_delta_ = 115;
 inline constexpr std::string_view textbox_end_dialogue_indicator_ = "img/gui/textbox_end_dialogue_indicator.png";
+
+inline constexpr int ui_group_y_spacing_at_top_ = 80;
+inline constexpr int ui_group_y_spacing_between_ui_ = 20;
 
 inline constexpr int namebox_textbox_x_delta_ = 37;
 inline constexpr std::string_view namebox_image_ = "img/gui/namebox.png";

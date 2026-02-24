@@ -26,7 +26,7 @@ class Character
 			bool is_visible_;
 		};
 
-		Character(const CharacterDefinition& character_definition);
+		explicit Character(const CharacterDefinition& character_definition);
 
 		void set_transform(std::string transform_name);
 		void change_composite_image(const CompositeImage& composite_image, sdl::Renderer& renderer);

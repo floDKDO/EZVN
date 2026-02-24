@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-const unsigned int TextButton::index_rect_textbutton_ = 0;
-
 TextButton::TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, Kind textbutton_kind)
 	: UiWidget(renderer),
 	text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == Kind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == Kind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer)

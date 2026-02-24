@@ -99,6 +99,11 @@ void Window::set_full_screen() //SDL_SetWindowFullscreen
 	}
 }
 
+bool Window::is_full_screen() const
+{
+	return SDL_GetWindowFlags(window_) & SDL_WINDOW_FULLSCREEN;
+}
+
 void Window::set_windowed() //SDL_SetWindowFullscreen
 {
 	set_size(previous_width_, previous_height_);

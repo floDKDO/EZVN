@@ -1,6 +1,6 @@
 #include "Managers/textbox_manager.h"
 #include "game.h"
-#include "history_menu.h"
+#include "GameStates/history_menu.h"
 
 #include <iostream>
 
@@ -92,6 +92,11 @@ void TextboxManager::uncheck_auto_toggle()
 	auto_mode_ = false;
 }
 
+void TextboxManager::handle_events_ui_manager(const SDL_Event& e)
+{
+	ui_manager_.handle_events(e);
+}
+
 void TextboxManager::handle_events_mouse_wheel(const SDL_Event& e)
 {
 	if(e.type == SDL_MOUSEWHEEL) //condition placée en premier pour que le scroll de la mouse wheel sur un textbutton fonctionne
@@ -131,7 +136,7 @@ void TextboxManager::handle_events(const SDL_Event& e)
 	if(!hide_ui_textbox_)
 	{
 		handle_events_mouse_wheel(e);
-		ui_manager_.handle_events(e);
+		handle_events_ui_manager(e);
 		if(ui_manager_.is_mouse_on_widget_)
 		{
 			return; //si collision avec un textbutton, ne pas gérer les événements "clic" et "espace" de la Textbox (= ne pas passer au prochain dialogue)

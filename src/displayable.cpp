@@ -1,84 +1,84 @@
-#include "drawable.h"
+#include "displayable.h"
 #include "constants.h"
 
 #include <iostream>
 
-Drawable::Drawable(sdl::Renderer& renderer, Color color)
+Displayable::Displayable(sdl::Renderer& renderer, Color color)
 	: last_time_(0), position_({0, 0, 0, 0}), initial_rect_(position_), color_(color), angle_(0.0), zoom_(1.0f), from_transform_(position_), has_transform_(false), flip_(SDL_FLIP_NONE), renderer_(renderer)
 {}
 
-void Drawable::show()
+void Displayable::show()
 {
 	//std::cout << "SHOW ***********************************************************\n";
 	color_.a_ = 255;
 	texture_->set_alpha_mod(color_.a_);
 }
 
-void Drawable::hide()
+void Displayable::hide()
 {
 	//std::cout << "HIDE ***********************************************************\n";
 	color_.a_ = 0;
 	texture_->set_alpha_mod(color_.a_);
 }
 
-void Drawable::set_alpha(Uint8 alpha)
+void Displayable::set_alpha(Uint8 alpha)
 {
 	//std::cout << "SET ALPHA ***********************************************************\n";
 	color_.a_ = alpha;
 	texture_->set_alpha_mod(color_.a_);
 }
 
-void Drawable::rotate(double angle)
+void Displayable::rotate(double angle)
 {
 	//std::cout << "ROTATE ***********************************************************\n";
 	angle_ = angle;
 }
 
-void Drawable::flip_vertically()
+void Displayable::flip_vertically()
 {
 	//std::cout << "FLIP V ***********************************************************\n";
 	flip_ = SDL_FLIP_VERTICAL;
 }
 
-void Drawable::flip_horizontally()
+void Displayable::flip_horizontally()
 {
 	//std::cout << "FLIP H ***********************************************************\n";
 	flip_ = SDL_FLIP_HORIZONTAL;
 }
 
-void Drawable::flip_normal()
+void Displayable::flip_normal()
 {
 	//std::cout << "FLIP N ***********************************************************\n";
 	flip_ = SDL_FLIP_NONE;
 }
 
-int Drawable::get_width() const
+int Displayable::get_width() const
 {
 	int width;
 	texture_->query(nullptr, nullptr, nullptr, &width);
 	return width;
 }
 
-int Drawable::get_height() const
+int Displayable::get_height() const
 {
 	int height;
 	texture_->query(nullptr, nullptr, nullptr, &height);
 	return height;
 }
 
-int Drawable::get_xcenter() const
+int Displayable::get_xcenter() const
 {
 	//std::cout << "GET XCENTER ***********************************************************\n";
 	return int((position_.w * zoom_) / 2);
 }
 
-int Drawable::get_ycenter() const
+int Displayable::get_ycenter() const
 {
 	//std::cout << "GET YCENTER ***********************************************************\n";
 	return int((position_.h * zoom_) / 2);
 }
 
-void Drawable::zoom(float zoom)
+void Displayable::zoom(float zoom)
 {
 	//std::cout << "ZOOM ***********************************************************\n";
 
@@ -94,7 +94,7 @@ void Drawable::zoom(float zoom)
 	zoom_ = zoom;
 }
 
-void Drawable::resize(int w, int h)
+void Displayable::resize(int w, int h)
 {
 	//std::cout << "RESIZE ***********************************************************\n";
 
@@ -109,7 +109,7 @@ void Drawable::resize(int w, int h)
 	}
 }
 
-void Drawable::set_position(int x, int y)
+void Displayable::set_position(int x, int y)
 {
 	//std::cout << "SET POS ***********************************************************\n";
 
@@ -124,7 +124,7 @@ void Drawable::set_position(int x, int y)
 	}
 }
 
-void Drawable::set_x_position(int x)
+void Displayable::set_x_position(int x)
 {
 	if(has_transform_)
 	{
@@ -136,7 +136,7 @@ void Drawable::set_x_position(int x)
 	}
 }
 
-void Drawable::set_y_position(int y)
+void Displayable::set_y_position(int y)
 {
 	if(has_transform_)
 	{
@@ -148,7 +148,7 @@ void Drawable::set_y_position(int y)
 	}
 }
 
-void Drawable::set_position_xcenter(int x)
+void Displayable::set_position_xcenter(int x)
 {
 	//std::cout << "SET POS XCENTER ***********************************************************\n";
 
@@ -162,7 +162,7 @@ void Drawable::set_position_xcenter(int x)
 	}
 }
 
-void Drawable::set_position_ycenter(int y)
+void Displayable::set_position_ycenter(int y)
 {
 	//std::cout << "SET POS YCENTER ***********************************************************\n";
 
@@ -176,7 +176,7 @@ void Drawable::set_position_ycenter(int y)
 	}
 }
 
-void Drawable::set_position_xycenter(int x, int y)
+void Displayable::set_position_xycenter(int x, int y)
 {
 	//std::cout << "SET POS XYCENTER ***********************************************************\n";
 
@@ -191,7 +191,7 @@ void Drawable::set_position_xycenter(int x, int y)
 	}
 }
 
-void Drawable::set_position_xoffset(int x)
+void Displayable::set_position_xoffset(int x)
 {
 	//std::cout << "SET POS XOFFSET ***********************************************************\n";
 
@@ -205,7 +205,7 @@ void Drawable::set_position_xoffset(int x)
 	}
 }
 
-void Drawable::set_position_yoffset(int y)
+void Displayable::set_position_yoffset(int y)
 {
 	//std::cout << "SET POS YOFFSET ***********************************************************\n";
 
@@ -219,7 +219,7 @@ void Drawable::set_position_yoffset(int y)
 	}
 }
 
-void Drawable::set_center()
+void Displayable::set_center()
 {
 	//std::cout << "SET CENTER ***********************************************************\n";
 
@@ -234,21 +234,21 @@ void Drawable::set_center()
 	}
 }
 
-void Drawable::night_filter()
+void Displayable::night_filter()
 {
 	//std::cout << "N FILTER ***********************************************************\n";
 	color_ = Color::from_rgba8(127, 127, 165, color_.a_);
 	texture_->set_color_mod(color_.r_, color_.g_, color_.b_);
 }
 
-void Drawable::afternoon_filter()
+void Displayable::afternoon_filter()
 {
 	//std::cout << "A FILTER ***********************************************************\n";
 	color_ = Color::from_rgba8(210, 150, 130, color_.a_);
 	texture_->set_color_mod(color_.r_, color_.g_, color_.b_);
 }
 
-void Drawable::change_color(Color color)
+void Displayable::change_color(Color color)
 {
 	//std::cout << "CHANGE COLOR ***********************************************************\n";
 

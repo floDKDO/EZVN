@@ -22,10 +22,6 @@ class TextButton : public UiWidget
 		void update() override;
 		void change_position(int x, int y) override;
 
-	private:
-		static const unsigned int index_rect_textbutton_;
-
-	public:
 		Text text_;
 		//std::unique_ptr<ConfirmationPopUp> confirmationpopup_;
 };

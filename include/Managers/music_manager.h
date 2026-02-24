@@ -9,6 +9,7 @@ class MusicManager
 		explicit MusicManager(AudioManager& audio_manager);
 
 		void fade_in(Music& music, Script::AudioProperties& music_properties);
+		void fade_out(Script::AudioProperties& music_properties);
 		void play(Script::InfoMusic& info_music);
 		void stop(Script::InfoMusic& info_music);
 		void stop(int fadeout_length);

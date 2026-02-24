@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-const unsigned int Inputfield::index_rect_inputfield_ = 0;
-
 Inputfield::Inputfield(std::string_view text_placeholder, unsigned int character_limit, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: UiWidget(renderer), 
 	  text_("", constants::inputfield_text_color_, constants::inputfield_font_, constants::inputfield_text_size_, x + constants::inputfield_text_x_delta_, y + constants::inputfield_text_y_delta_, renderer),

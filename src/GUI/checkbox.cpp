@@ -3,8 +3,6 @@
 
 #include <iostream>
 
-const unsigned int Checkbox::index_rect_checkbox_ = 0;
-
 Checkbox::Checkbox(std::string_view text, int x, int y, bool is_checked, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Checkable(is_checked, renderer), 
 	  normal_(constants::checkbox_normal_, x, y, renderer), 

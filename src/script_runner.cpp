@@ -36,7 +36,7 @@ std::optional<size_t> ScriptRunner::get_script_index_of_previous_dialogue()
 
 size_t ScriptRunner::get_script_index_of_first_dialogue()
 {
-	return *(dialogues_script_index_.begin()); //TODO : pourquoi un itérateur => [0] fonctionnerait ?
+	return *(dialogues_script_index_.begin()); 
 }
 
 void ScriptRunner::increment_script_index()
@@ -122,7 +122,7 @@ void ScriptRunner::handle_events(const SDL_Event& e)
 {
 	if(is_dialogue_of_choice_menu_visible_)
 	{
-		textbox_manager_.ui_manager_.handle_events(e); //TODO : ne pas accéder à ui_manager_ directement => créer une méthode
+		textbox_manager_.handle_events_ui_manager(e);
 		textbox_manager_.handle_events_mouse_wheel(e); 
 	}
 	else
@@ -137,14 +137,14 @@ void ScriptRunner::handle_events(const SDL_Event& e)
 	{
 		if(music_manager_.music_ != nullptr)
 		{
-			music_manager_.fade_in(*music_manager_.music_, music_manager_.audio_properties_); //TODO : les deux paramètres sont-ils nécessaires car ce sont des membres ?
+			music_manager_.fade_in(*music_manager_.music_, music_manager_.audio_properties_); 
 		}
 	}
 	else if(e.type == AudioManager::END_CHANNEL_EVENT_)
 	{
 		if(sound_manager_.sound_ != nullptr && !sound_manager_.played_)
 		{
-			sound_manager_.fade_in(*sound_manager_.sound_, sound_manager_.audio_properties_); //TODO : les deux paramètres sont-ils nécessaires car ce sont des membres ?
+			sound_manager_.fade_in(*sound_manager_.sound_, sound_manager_.audio_properties_); 
 		}
 	}
 }
@@ -164,9 +164,9 @@ void ScriptRunner::draw(sdl::Renderer& renderer)
 }
 
 //TODO : utiliser std::visit ??
-void ScriptRunner::apply_line(size_t script_index)
+void ScriptRunner::apply_line()
 {
-	Script::ScriptInformation& current_script_information = script_.script_information_[script_index];
+	Script::ScriptInformation& current_script_information = script_.script_information_[current_script_index_];
 	if(std::holds_alternative<Script::InfoBackground>(current_script_information))
 	{
 		background_manager_.update(std::get<Script::InfoBackground>(current_script_information));
@@ -253,7 +253,7 @@ void ScriptRunner::update()
 
 	init_to_first_dialogue(); //doit être après move_dialogue()
 
-	apply_line(current_script_index_); //TODO : aucun intérêt de passer un membre en paramètre...
+	apply_line(); 
 	//move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
 	
 	character_manager_.update_characters();

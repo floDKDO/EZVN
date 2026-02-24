@@ -3,7 +3,7 @@
 Script::Script(sdl::Renderer& renderer)
 	: renderer_(renderer)
 {
-	add_character("Narrator", "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
+	add_character(constants::default_narrator_name_, "", constants::namebox_text_color_, constants::textbox_image_, constants::namebox_image_);
 }
 
 void Script::insert_dialogue(std::string_view character_variable, std::string_view dialogue)
@@ -103,7 +103,7 @@ void Script::insert_namebox_text_color(std::string_view character_variable, Colo
 void Script::move_textbox(std::string_view where)
 {
 	InfoTextbox info_textbox;
-	info_textbox.character_variable_ = "Narrator"; //TODO : garder Narrator ??
+	info_textbox.character_variable_ = constants::default_narrator_name_; //TODO : garder Narrator ??
 	info_textbox.t_.textbox_command_kind_ = TextboxCommandKind::MOVE_TEXTBOX;
 	info_textbox.t_.textbox_command_value_ = std::string(where);
 

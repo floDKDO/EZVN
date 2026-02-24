@@ -9,17 +9,22 @@ void MusicManager::fade_in(Music& music, Script::AudioProperties& music_properti
 	audio_manager_.fade_in_music(music, music_properties.loop_, music_properties.fadein_length_);
 }
 
+void MusicManager::fade_out(Script::AudioProperties& music_properties)
+{
+	audio_manager_.fade_out_music(music_properties.fadeout_length_);
+}
+
 void MusicManager::play(Script::InfoMusic& info_music)
 {
-	const Script::AudioProperties& music_properties = info_music.first;
+	Script::AudioProperties& music_properties = info_music.first;
 	Music& music = info_music.second.value();
 	if(!sdl::music::playing())
 	{
-		audio_manager_.fade_in_music(music, music_properties.loop_, music_properties.fadein_length_);
+		fade_in(music, music_properties);
 	}
 	else if(music_ != nullptr && music_ != &music)
 	{
-		audio_manager_.fade_out_music(music_properties.fadeout_length_);
+		fade_out(music_properties);
 	}
 	audio_properties_ = music_properties;
 	music_ = &music;
@@ -27,8 +32,8 @@ void MusicManager::play(Script::InfoMusic& info_music)
 
 void MusicManager::stop(Script::InfoMusic& info_music)
 {
-	const Script::AudioProperties& music_properties = info_music.first;
-	audio_manager_.fade_out_music(music_properties.fadeout_length_);
+	Script::AudioProperties& music_properties = info_music.first;
+	fade_out(music_properties);
 	music_ = nullptr;
 }
 

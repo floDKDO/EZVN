@@ -18,7 +18,7 @@ class GameState
 		virtual void on_hide() {};
 
 	protected:
-		GameState(Game& game);
+		explicit GameState(Game& game);
 		Game& game_;
 		UiManager ui_manager_;
 };

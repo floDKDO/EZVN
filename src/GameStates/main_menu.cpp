@@ -1,4 +1,4 @@
-#include "main_menu.h"
+#include "GameStates/main_menu.h"
 #include "GUI/text_button.h"
 #include "game.h"
 

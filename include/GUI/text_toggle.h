@@ -19,8 +19,5 @@ class TextToggle : public Checkable
 		void change_position(int x, int y) override;
 
 		Text text_;
-
-	private:
-		static const unsigned int index_rect_texttoggle_;
 };
 

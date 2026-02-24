@@ -25,8 +25,6 @@ class Inputfield : public UiWidget
 		void set_character_limit(unsigned int character_limit);
 
 	private:
-		static const unsigned int index_rect_inputfield_;
-
 		Text text_;
 
 		SDL_Rect container_;

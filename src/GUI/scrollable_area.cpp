@@ -4,6 +4,7 @@
 #include <iostream>
 
 //TODO : pas ouf que je gère en même temps Ui et Text sachant qu'il devrait y avoir soit un type ou l'autre mais pas les deux en même temps
+//TODO : faire en sorte que lorsqu'on descend/monte avec les touches du clavier en étant sur les ui, la scrollbar défile en même temps
 
 ScrollableArea::ScrollableArea(int x, int y, int w, int h, sdl::Renderer& renderer)
 	: ScrollableArea("", x, y, w, h, renderer)

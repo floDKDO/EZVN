@@ -29,7 +29,7 @@ class ScriptRunner
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
-		void apply_line(size_t script_index);
+		void apply_line();
 		void update();
 		void rebuild();
 		void play_all_sounds_before_previous_dialogue(size_t target_script_index);

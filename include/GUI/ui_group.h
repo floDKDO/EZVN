@@ -4,7 +4,6 @@
 #include "text.h"
 
 #include <vector>
-#include <string>
 #include <string_view>
 
 class UiGroup : public Ui

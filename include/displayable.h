@@ -6,7 +6,7 @@
 
 #include <memory>
 
-class Drawable
+class Displayable
 {
 	friend class TransformStep;
 
@@ -56,7 +56,7 @@ class Drawable
 		bool has_transform_;
 		
 	protected:
-		Drawable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
+		explicit Displayable(sdl::Renderer& renderer, Color color = Color::from_rgba8(255, 255, 255));
 
 		std::unique_ptr<sdl::Texture> texture_;
 

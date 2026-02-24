@@ -4,13 +4,13 @@
 #include <iostream>
 
 Image::Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder)
-	: Drawable(renderer), zorder_(zorder), animated_image_(create_animation(path)), path_(path), frame_index_(0)
+	: Displayable(renderer), zorder_(zorder), animated_image_(create_animation(path)), path_(path), frame_index_(0)
 {
 	init_image(path, x, y, renderer);
 }
 
 Image::Image(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer, unsigned int zorder)
-	: Drawable(renderer), zorder_(zorder), frame_index_(0)
+	: Displayable(renderer), zorder_(zorder), frame_index_(0)
 {
 	create_image_from_composite(composite_image, x, y, renderer);
 }

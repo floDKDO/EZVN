@@ -54,7 +54,7 @@
     <ClCompile Include="src\game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\game_state.cpp">
+    <ClCompile Include="src\GameStates\game_state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\slider.cpp">
@@ -114,7 +114,7 @@
     <ClCompile Include="src\GUI\checkable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\in_game.cpp">
+    <ClCompile Include="src\GameStates\in_game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GUI\confirmation_popup.cpp">
@@ -123,13 +123,13 @@
     <ClCompile Include="src\transform_step.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\drawable.cpp">
+    <ClCompile Include="src\displayable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\main_menu.cpp">
+    <ClCompile Include="src\GameStates\main_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\settings_menu.cpp">
+    <ClCompile Include="src\GameStates\settings_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\transition.cpp">
@@ -207,7 +207,7 @@
     <ClCompile Include="src\RAII_SDL2\display.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\history_menu.cpp">
+    <ClCompile Include="src\GameStates\history_menu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Managers\choice_menu_manager.cpp">
@@ -251,7 +251,7 @@
     <ClInclude Include="include\game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\game_state.h">
+    <ClInclude Include="include\GameStates\game_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\slider.h">
@@ -311,7 +311,7 @@
     <ClInclude Include="include\GUI\checkable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\in_game.h">
+    <ClInclude Include="include\GameStates\in_game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\confirmation_popup.h">
@@ -323,13 +323,13 @@
     <ClInclude Include="include\constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\drawable.h">
+    <ClInclude Include="include\displayable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\main_menu.h">
+    <ClInclude Include="include\GameStates\main_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\settings_menu.h">
+    <ClInclude Include="include\GameStates\settings_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\transition.h">
@@ -410,7 +410,7 @@
     <ClInclude Include="include\RAII_SDL2\display.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\history_menu.h">
+    <ClInclude Include="include\GameStates\history_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Managers\choice_menu_manager.h">

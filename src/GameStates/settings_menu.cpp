@@ -1,4 +1,4 @@
-#include "settings_menu.h"
+#include "GameStates/settings_menu.h"
 #include "GUI/text_button.h"
 #include "GUI/text_toggle.h"
 #include "GUI/slider.h"
@@ -21,6 +21,9 @@ void SettingsMenu::create_resolutions_scroll_area(sdl::Renderer& renderer)
 	scroll_ = std::make_unique<ScrollableArea>("Resolutions", 950, 170, 200, 500, renderer);
 	ui_group_ = std::make_unique<UiGroup>(950, 170);
 
+	SDL_DisplayMode window_mode;
+	game_.window_.get_display_mode(&window_mode);
+
 	std::set<std::pair<int, int>> resolutions;
 	int num = sdl::display::get_num_display_modes();
 	for(int i = 0; i < num; ++i)
@@ -33,7 +36,8 @@ void SettingsMenu::create_resolutions_scroll_area(sdl::Renderer& renderer)
 			resolutions.insert({mode.h, mode.w});
 
 			bool checked = false;
-			if(mode.h == constants::window_height_ && mode.w == constants::window_width_) //TODO : éventuellement utiliser SDL_GetCurrentDisplayMode(0, &mode); à la place
+
+			if(mode.h == window_mode.h && mode.w == window_mode.w) 
 			{
 				checked = true;
 			}
@@ -143,14 +147,13 @@ void SettingsMenu::texttoggle_resolution_function(Ui* ui)
 	display_mode.w = std::stoi(w_res);
 	//std::cout << display_mode.h << ", " << display_mode.w << ", " << display_mode.refresh_rate << std::endl;
 
-	//TODO : créer des méthodes is_fullscreen etc.
-	if(SDL_GetWindowFlags(game_.window_.fetch()) & SDL_WINDOW_FULLSCREEN) //modif uniquement si la fenêtre est en plein écran
+	if(game_.window_.is_full_screen()) //modif uniquement si la fenêtre est en plein écran
 	{
 		game_.window_.set_windowed();
 		game_.window_.set_display_mode(&display_mode);
 		game_.window_.set_full_screen();
 	}
-	else if(!(SDL_GetWindowFlags(game_.window_.fetch()) & SDL_WINDOW_FULLSCREEN)) //si pas plein écran => redimensionner la fenêtre
+	else  //si pas plein écran => redimensionner la fenêtre
 	{
 		game_.window_.set_size(display_mode.w, display_mode.h);
 		game_.window_.set_center(); //centrer la fenêtre après qu'elle ait été redimensionnée

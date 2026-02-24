@@ -3,8 +3,6 @@
 #include "image.h"
 #include "duration.h"
 
-#include <variant>
-
 class TransformStep
 {
 	friend class Transform;
@@ -13,7 +11,7 @@ class TransformStep
 
 		struct InitialValues
 		{
-			InitialValues(const Image& image)
+			explicit InitialValues(const Image& image)
 				: x_pos_(image.position_.x), y_pos_(image.position_.y), w_size_(image.position_.w), h_size_(image.position_.h),
 				angle_(image.angle_), zoom_(image.zoom_), r_(image.color_.r_), g_(image.color_.g_), b_(image.color_.b_), a_(image.color_.a_)
 			{}

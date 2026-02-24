@@ -1,8 +1,8 @@
 #include "game.h"
-#include "in_game.h"
-#include "main_menu.h"
-#include "settings_menu.h"
-#include "history_menu.h"
+#include "GameStates/in_game.h"
+#include "GameStates/main_menu.h"
+#include "GameStates/settings_menu.h"
+#include "GameStates/history_menu.h"
 #include "utils.h"
 
 #include <iostream>
@@ -253,7 +253,7 @@ void Game::show_dialogue(std::string_view character_variable, std::string_view d
 
 void Game::show_dialogue(std::string_view dialogue)
 {
-	script_.insert_dialogue("Narrator", dialogue);
+	script_.insert_dialogue(constants::default_narrator_name_, dialogue);
 }
 
 void Game::show_background(std::string_view background_path, std::tuple<std::string_view, int, int, int> transition_info)
@@ -318,7 +318,7 @@ void Game::show_choice_menu(std::string_view character_variable, std::string_vie
 
 void Game::show_choice_menu(std::string_view dialogue, std::initializer_list<std::string> texts)
 {
-	script_.insert_choice_menu("Narrator", dialogue, texts);
+	script_.insert_choice_menu(constants::default_narrator_name_, dialogue, texts);
 }
 
 void Game::autofocus_enable()

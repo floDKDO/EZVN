@@ -15,7 +15,6 @@ class Button : public UiWidget
 		void change_position(int x, int y) override;
 
 	private:
-		static const unsigned int index_rect_button_;
 		Text text_; 
 		Image normal_;
 		Image selected_;

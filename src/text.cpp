@@ -11,7 +11,7 @@ Text::Text(std::string_view text, Color color, std::string_view font_path, int f
 {}
 
 Text::Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer, bool is_animated, Uint32 wrap_length)
-	: Drawable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
+	: Displayable(renderer, color), text_(text), text_dialogue_(""), index_dialogue_(0), is_finished_(false), wrap_length_(wrap_length),
 	font_size_(font_size), font_style_(0), previous_font_style_(0), font_path_(font_path), font_(font_path_, font_size_),
 	outline_size_(constants::text_outline_size_), font_outline_(create_outline()), outline_visible_(false),
 	previous_text_(""), is_animated_(is_animated),
@@ -123,7 +123,7 @@ void Text::unset_all()
 
 void Text::change_color(Color color)
 {
-	Drawable::change_color(color);
+	Displayable::change_color(color);
 	recreate_surfaces_texture();
 }
 

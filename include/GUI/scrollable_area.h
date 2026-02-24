@@ -12,7 +12,9 @@ class ScrollableArea : public UiWidget
 {
 	public:
 		using DialoguePtr = std::pair<std::unique_ptr<Text>, std::unique_ptr<Text>>;
+		using ElementPtr = std::variant<std::unique_ptr<Ui>, DialoguePtr>;
 		using Dialogue = std::pair<Text*, Text*>;
+		using Element = std::variant<UiWidget*, Dialogue>;
 
 		ScrollableArea(int x, int y, int w, int h, sdl::Renderer& renderer);
 		ScrollableArea(std::string_view title, int x, int y, int w, int h, sdl::Renderer& renderer);
@@ -38,11 +40,9 @@ class ScrollableArea : public UiWidget
 		SDL_Rect frame_;
 		Scrollbar scrollbar_; 
 		std::unique_ptr<Text> title_;
-		
-		//TODO : utiliser using pour simplifier les types
 
-		std::vector<std::variant<std::unique_ptr<Ui>, DialoguePtr>> elements_;
-		std::vector<std::pair<std::variant<UiWidget*, Dialogue>, int/*init y position*/>> elements_value_;
+		std::vector<ElementPtr> elements_;
+		std::vector<std::pair<Element, int/*init y position*/>> elements_value_;
 
 		sdl::Renderer& renderer_;
 };

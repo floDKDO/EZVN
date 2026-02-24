@@ -9,7 +9,7 @@
 class UiManager
 {
 	public:
-		UiManager(AudioManager& audio_manager);
+		explicit UiManager(AudioManager& audio_manager);
 
 		void reset();
 		void add_element(std::unique_ptr<Ui> ui);

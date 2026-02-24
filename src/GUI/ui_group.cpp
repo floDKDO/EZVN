@@ -56,7 +56,14 @@ void UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 	}
 
 	SDL_Rect rect = widget->rect_;
-	rect.x = frame_.x;
+
+	int x_offset = 0;
+	if(title_ != nullptr)
+	{
+		x_offset = std::abs(widget->rect_.w - title_->position_.w) / 2; //centrer les ui par rapport au titre
+	}
+	rect.x = frame_.x - x_offset;
+
 	if(ui_elements_.size() == 0)
 	{
 		if(title_ == nullptr)
@@ -65,12 +72,12 @@ void UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 		}
 		else
 		{
-			rect.y = frame_.y + 80; //TODO : hardcodé (80 = espace entre le premier checkable et le titre)
+			rect.y = frame_.y + constants::ui_group_y_spacing_at_top_; // + espace entre le premier ui et le titre
 		}
 	}
 	else
 	{
-		rect.y = ui_elements_.back()->rect_.y + rect.h + 20; //TODO : hardcodé (20 = espace entre chaque checkable)
+		rect.y = ui_elements_.back()->rect_.y + rect.h + constants::ui_group_y_spacing_between_ui_; // + espace entre chaque ui
 	}
 	widget->change_position(rect.x, rect.y);
 

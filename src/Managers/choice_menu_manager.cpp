@@ -9,7 +9,7 @@ ChoiceMenuManager::ChoiceMenuManager(sdl::Renderer& renderer, Game& game)
 	build_ui_elements(renderer);
 }
 
-void ChoiceMenuManager::build_ui_elements(sdl::Renderer& renderer)
+void ChoiceMenuManager::build_ui_elements([[maybe_unused]] sdl::Renderer& renderer)
 {
 	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>(550, 80);
 	ui_group_ = ui_group.get();
@@ -41,7 +41,7 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 		choice_made_ = false;
 		for(int i = 0; i < info_choice_menu.texts_.size(); ++i)
 		{
-			ui_group_->add_ui_element(std::make_unique<Button>(info_choice_menu.texts_[i], 0, 0, renderer_, [this, info_choice_menu, i](Ui* ui){std::cout << info_choice_menu.texts_[i] << std::endl; choice_made_ = true; })); //TODO : hardcodé
+			ui_group_->add_ui_element(std::make_unique<Button>(info_choice_menu.texts_[i], 0, 0, renderer_, [this, info_choice_menu, i]([[maybe_unused]] Ui* ui){std::cout << info_choice_menu.texts_[i] << std::endl; choice_made_ = true; })); //TODO : hardcodé
 		}
 		ui_manager_.set_elements();
 	}

@@ -64,7 +64,7 @@ class Script
 
 		struct ChoiceMenu
 		{
-			ChoiceMenu(std::initializer_list<std::string> texts)
+			explicit ChoiceMenu(std::initializer_list<std::string> texts)
 				: texts_(texts)
 			{}
 
@@ -91,7 +91,7 @@ class Script
 				: transition_name_(transition_name), length_to_black_(length_to_black), length_black_(length_black), length_to_clear_(length_to_clear)
 			{}
 
-			InfoTransition(std::string_view transition_name)
+			explicit InfoTransition(std::string_view transition_name)
 				: transition_name_(transition_name), length_to_black_(std::nullopt), length_black_(std::nullopt), length_to_clear_(std::nullopt)
 			{}
 
@@ -103,7 +103,7 @@ class Script
 
 		using ScriptInformation = std::variant<InfoCharacter, InfoTextbox, InfoBackground, InfoMusic, InfoSound, InfoChoiceMenu, InfoAutofocus, InfoTransition>;
 
-		Script(sdl::Renderer& renderer);
+		explicit Script(sdl::Renderer& renderer);
 
 		void insert_dialogue(std::string_view character_variable, std::string_view dialogue);
 

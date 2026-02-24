@@ -96,7 +96,7 @@ class UiWidget : public Ui
 		bool callback_called_when_pointer_up_;
 
 	protected:
-		UiWidget(sdl::Renderer& renderer);
+		explicit UiWidget(sdl::Renderer& renderer);
 
 		Uint64 last_time_;
 

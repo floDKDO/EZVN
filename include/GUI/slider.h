@@ -27,9 +27,6 @@ class Slider : public UiWidget
 		void change_position(int x, int y) override;
 
 	private:
-		static const unsigned int index_rect_container_;
-		//static const unsigned int index_rect_handle_ = 1; //TODO : n'est normalement pas utile
-
 		SDL_Rect container_;
 		SDL_Rect container_outline_;
 		SDL_Rect handle_;

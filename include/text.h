@@ -3,11 +3,11 @@
 #include "RAII_SDL2/surface.h"
 #include "RAII_SDL2/font.h"
 #include "RAII_SDL2/renderer.h"
-#include "drawable.h"
+#include "displayable.h"
 
 #include <string>
 
-class Text : public Drawable
+class Text : public Displayable
 {
 	public:
 		Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer);

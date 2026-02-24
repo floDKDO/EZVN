@@ -1,4 +1,4 @@
-#include "history_menu.h"
+#include "GameStates/history_menu.h"
 #include "game.h"
 #include "GUI/text_button.h"
 

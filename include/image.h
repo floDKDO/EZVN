@@ -2,14 +2,14 @@
 
 #include "RAII_SDL2/animation.h"
 #include "RAII_SDL2/renderer.h"
-#include "drawable.h"
+#include "displayable.h"
 #include "constants.h"
 #include "composite_image.h"
 
 #include <optional>
 #include <string>
 
-class Image : public Drawable
+class Image : public Displayable
 {
 	public:
 		Image(std::string_view path, int x, int y, sdl::Renderer& renderer, unsigned int zorder = constants::default_zorder_);

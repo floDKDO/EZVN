@@ -1,8 +1,6 @@
 #include "GUI/button.h"
 #include "constants.h"
 
-const unsigned int Button::index_rect_button_ = 0;
-
 Button::Button(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: Button(constants::button_normal_, constants::button_selected_, constants::button_pressed_, text, x, y, renderer, callback_function)
 {}
