@@ -36,7 +36,7 @@ void ChoiceMenuManager::draw(sdl::Renderer& renderer)
 void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 {
 	//if(ui_group_ == nullptr)
-	if(ui_group_->ui_elements_.size() == 0)
+	if(ui_group_->ui_elements_.size() == 0) 
 	{
 		choice_made_ = false;
 		for(int i = 0; i < info_choice_menu.texts_.size(); ++i)

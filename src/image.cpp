@@ -35,15 +35,15 @@ void Image::init_image(std::string_view new_path, int x, int y, sdl::Renderer& r
 	position_.x = x;
 	position_.y = y;
 
-	if(path_.find("img/characters/") != std::string_view::npos)
+	if(path_.find("resources/img/characters/") != std::string_view::npos)
 	{
 		image_type_ = Kind::CHARACTER;
 	}
-	else if(path_.find("img/gui/") != std::string_view::npos)
+	else if(path_.find("resources/img/gui/") != std::string_view::npos)
 	{
 		image_type_ = Kind::GUI;
 	}
-	else if(path_.find("img/backgrounds/") != std::string_view::npos)
+	else if(path_.find("resources/img/backgrounds/") != std::string_view::npos)
 	{
 		image_type_ = Kind::BACKGROUND;
 	}

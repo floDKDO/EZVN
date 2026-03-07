@@ -30,7 +30,7 @@ Texture::Texture(Renderer& renderer, std::string_view file) //IMG_LoadTexture()
 	if(texture_ == nullptr) //TODO: gérer le cas pour les backgrounds
 	{
 		std::cerr << "The image at the path " << file << " was not found...\n";
-		if((texture_ = IMG_LoadTexture(renderer.fetch(), "img/characters/image_not_found.png")) == nullptr)
+		if((texture_ = IMG_LoadTexture(renderer.fetch(), "resources/img/characters/image_not_found.png")) == nullptr)
 		{
 			SDL_Log("(IMG_LoadTexture) %s\n", IMG_GetError());
 		}

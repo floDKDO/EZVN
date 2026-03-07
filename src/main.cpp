@@ -9,50 +9,50 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 
 
 	//First step : character creation
-	game.create_character("Sayori", "???", Color::from_rgba8(168, 224, 255), "img/gui/sayori_textbox.png", "img/gui/sayori_namebox.png");
-	game.create_character("Monika", "???", Color::from_rgba8(168, 255, 169), "img/gui/monika_textbox.png", "img/gui/monika_namebox.png");
-	game.create_character("Yuri", "???", Color::from_rgba8(184, 168, 255), "img/gui/yuri_textbox.png", "img/gui/yuri_namebox.png");
-	game.create_character("Natsuki", "???", Color::from_rgba8(255, 203, 228), "img/gui/natsuki_textbox.png", "img/gui/natsuki_namebox.png");
+	game.create_character("Sayori", "???", Color::from_rgba8(168, 224, 255), "resources/img/gui/sayori_textbox.png", "resources/img/gui/sayori_namebox.png");
+	game.create_character("Monika", "???", Color::from_rgba8(168, 255, 169), "resources/img/gui/monika_textbox.png", "resources/img/gui/monika_namebox.png");
+	game.create_character("Yuri", "???", Color::from_rgba8(184, 168, 255), "resources/img/gui/yuri_textbox.png", "resources/img/gui/yuri_namebox.png");
+	game.create_character("Natsuki", "???", Color::from_rgba8(255, 203, 228), "resources/img/gui/natsuki_textbox.png", "resources/img/gui/natsuki_namebox.png");
 	game.create_character("MC", "MC");
 
 	game.create_composite_image("Sayori", "4x", 960, 960, {
-		ImageInfo("img/characters/sayori_turned_uniform_left_up.png", 0, 0),
-		ImageInfo("img/characters/sayori_turned_uniform_right_up.png", 0, 0),
-		ImageInfo("img/characters/x.png", 0, 0)
+		ImageInfo("resources/img/characters/sayori_turned_uniform_left_up.png", 0, 0),
+		ImageInfo("resources/img/characters/sayori_turned_uniform_right_up.png", 0, 0),
+		ImageInfo("resources/img/characters/x.png", 0, 0)
 	});
 
 	game.create_composite_image("Monika", "3b", 960, 960, {
-		ImageInfo("img/characters/monika_forward_uniform_left_waist.png", 0, 0),
-		ImageInfo("img/characters/monika_forward_uniform_right_down.png", 0, 0),
-		ImageInfo("img/characters/b.png", 0, 0)
+		ImageInfo("resources/img/characters/monika_forward_uniform_left_waist.png", 0, 0),
+		ImageInfo("resources/img/characters/monika_forward_uniform_right_down.png", 0, 0),
+		ImageInfo("resources/img/characters/b.png", 0, 0)
 	});
 
 	game.create_composite_image("Monika", "2b", 960, 960, {
-		ImageInfo("img/characters/monika_forward_uniform_left_down.png", 0, 0),
-		ImageInfo("img/characters/monika_forward_uniform_right_waist.png", 0, 0),
-		ImageInfo("img/characters/b.png", 0, 0)
+		ImageInfo("resources/img/characters/monika_forward_uniform_left_down.png", 0, 0),
+		ImageInfo("resources/img/characters/monika_forward_uniform_right_waist.png", 0, 0),
+		ImageInfo("resources/img/characters/b.png", 0, 0)
 	});
 
 	game.create_composite_image("Yuri", "3j", 960, 960, {
-		ImageInfo("img/characters/yuri_turned_uniform_left_up.png", 0, 0),
-		ImageInfo("img/characters/yuri_turned_uniform_right_up.png", 0, 0),
-		ImageInfo("img/characters/j.png", 0, 0)
+		ImageInfo("resources/img/characters/yuri_turned_uniform_left_up.png", 0, 0),
+		ImageInfo("resources/img/characters/yuri_turned_uniform_right_up.png", 0, 0),
+		ImageInfo("resources/img/characters/j.png", 0, 0)
 	});
 
 	game.create_composite_image("Natsuki", "5c", 960, 960, {
-		ImageInfo("img/characters/natsuki_crossed(ff)_uniform.png", 0, 0),
-		ImageInfo("img/characters/c.png", 18, 22)
+		ImageInfo("resources/img/characters/natsuki_crossed(ff)_uniform.png", 0, 0),
+		ImageInfo("resources/img/characters/c.png", 18, 22)
 	});
 
 
 	//Second step : write your own story!
 	game.autofocus_enable();
 	game.autozorder_enable();
-	game.show_background("img/backgrounds/cafeteria.png", "fade");
-	game.play_sound("sounds/school_bell.ogg");
+	game.show_background("resources/img/backgrounds/cafeteria.png", "fade");
+	game.play_sound("resources/sounds/school_bell.ogg");
 	game.show_dialogue("I am feeling quite lonely right now...");
 	game.show_dialogue("I know, I should try to find Sayori!");
-	game.play_music("sounds/2.ogg");
+	game.play_music("resources/sounds/2.ogg");
 	game.show_character({"Sayori", "4x"}, "t11");
 	game.show_dialogue("Sayori", "No need, I'm already there!");
 	game.show_dialogue("Sayori!");
@@ -62,7 +62,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character("MC"); //mandatory for now even if the MC has no image
 	game.show_dialogue("MC", "If you say so...");
 	game.hide_character("Sayori");
-	game.show_background("img/backgrounds/corridor.png", {"fade", 500, 500, 500});
+	game.show_background("resources/img/backgrounds/corridor.png", {"fade", 500, 500, 500});
 	game.show_dialogue("I am following Sayori to her club not without feeling nervous.");
 	game.show_dialogue("I heard that her club is full of girls!");
 	game.show_character({"Sayori", "4x"}, "t11");
@@ -70,34 +70,34 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_dialogue("Sayori", "Before entering, I have a question MC.");
 	game.show_dialogue("MC", "I'm listening.");
 	game.show_dialogue("Sayori", "What is your favorite color?");
-	game.change_textbox("Sayori", "img/gui/monika_textbox.png");
-	game.change_namebox("Sayori", "img/gui/monika_namebox.png");
+	game.change_textbox("Sayori", "resources/img/gui/monika_textbox.png");
+	game.change_namebox("Sayori", "resources/img/gui/monika_namebox.png");
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 255, 169));
 	game.move_textbox("bottomleft");
 	game.show_dialogue("Sayori", "Green?");
-	game.change_textbox("Sayori", "img/gui/yuri_textbox.png");
-	game.change_namebox("Sayori", "img/gui/yuri_namebox.png");
+	game.change_textbox("Sayori", "resources/img/gui/yuri_textbox.png");
+	game.change_namebox("Sayori", "resources/img/gui/yuri_namebox.png");
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(184, 168, 255));
 	game.move_textbox("topright");
 	game.show_dialogue("Sayori", "Purple?");
-	game.change_textbox("Sayori", "img/gui/natsuki_textbox.png");
-	game.change_namebox("Sayori", "img/gui/natsuki_namebox.png");
+	game.change_textbox("Sayori", "resources/img/gui/natsuki_textbox.png");
+	game.change_namebox("Sayori", "resources/img/gui/natsuki_namebox.png");
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(255, 203, 228));
 	game.move_textbox("bottomright");
 	game.show_dialogue("Sayori", "Pink?");
-	game.change_textbox("Sayori", "img/gui/sayori_textbox.png");
-	game.change_namebox("Sayori", "img/gui/sayori_namebox.png");
+	game.change_textbox("Sayori", "resources/img/gui/sayori_textbox.png");
+	game.change_namebox("Sayori", "resources/img/gui/sayori_namebox.png");
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 224, 255));
 	game.move_textbox("bottom");
 	game.show_dialogue("Sayori", "Or blue?");
 	game.show_dialogue("MC", "I...");
 	//game.show_choice_menu("MC", "I...", {"Green", "Purple", "Pink", "Blue"}); //pas encore complètement fonctionnel
-	game.play_sound("sounds/door_open.ogg");
+	game.play_sound("resources/sounds/door_open.ogg");
 	game.show_dialogue("Sayori", "Follow me!");
 	game.show_character("Sayori", "lhide");
-	game.show_background("img/backgrounds/club.png", "fade");
+	game.show_background("resources/img/backgrounds/club.png", "fade");
 	game.stop_sound();
-	game.play_music("sounds/3.ogg", 0, 500);
+	game.play_music("resources/sounds/3.ogg", 0, 500);
 	game.show_character({"Yuri", "3j"}, "t41", 1);
 	game.show_character({"Sayori", "4x"}, "h42", 0);
 	game.show_character({"Monika", "3b"}, "t43", 2);

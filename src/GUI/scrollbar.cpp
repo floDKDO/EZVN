@@ -11,8 +11,8 @@ Scrollbar::Scrollbar(int x, int y, int container_h, int handle_h, sdl::Renderer&
 	container_outline_({x, y, constants::scrollbar_container_width_, container_h}),
 	handle_({x, y, constants::scrollbar_handle_width_, handle_h}), 
 	handle_outline_({x, y, constants::scrollbar_handle_width_, handle_h}), 
-	up_triangle_("img/gui/triangle_scrollbar.png", "img/gui/triangle_scrollbar.png", "img/gui/triangle_scrollbar.png", "", x + 4, y - 10, renderer, callback_function), //TODO : hardcodé
-	down_triangle_("img/gui/triangle_scrollbar_reversed.png", "img/gui/triangle_scrollbar_reversed.png", "img/gui/triangle_scrollbar_reversed.png", "", x + 4, y + container_h + 2, renderer, callback_function), //TODO : hardcodé
+	up_triangle_("resources/img/gui/triangle_scrollbar.png", "resources/img/gui/triangle_scrollbar.png", "resources/img/gui/triangle_scrollbar.png", "", x + 4, y - 10, renderer, callback_function), //TODO : hardcodé
+	down_triangle_("resources/img/gui/triangle_scrollbar_reversed.png", "resources/img/gui/triangle_scrollbar_reversed.png", "resources/img/gui/triangle_scrollbar_reversed.png", "", x + 4, y + container_h + 2, renderer, callback_function), //TODO : hardcodé
 	delta_mouse_handle_y_(0), step_y_(container_h / constants::scrollbar_step_count_), info_when_click_({0, 0, InfoWhenClick::WhereWasMouse::ABOVE, false}),
 	mouse_is_on_handle_(false)
 {
