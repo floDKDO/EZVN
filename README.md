@@ -1,9 +1,9 @@
 # EaZy Visual Novel (EZVN) engine
 EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL2 library, that allows you to create visual novels easily while still having the freedom to modify many elements of the engine.
 
-<p float="left">
-  <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image1.png" alt="Image 1" width="500"/>
-  <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image2.png" alt="Image 2" width="500"/>
+<p align="center">
+  <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image1.png" alt="Image 1" width="350"/>
+  <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image2.png" alt="Image 2" width="350"/>
 </p>
 
 ## Build & install
