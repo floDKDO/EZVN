@@ -1,25 +1,26 @@
 # EaZy Visual Novel (EZVN) engine
 EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL2 library, that allows you to create visual novels easily while still having the freedom to modify many elements of the engine.
 
-<p align="center">
+<p float="left">
   <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image1.png" alt="Image 1" width="500"/>
-</p>
-
-<p align="center">
   <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image2.png" alt="Image 2" width="500"/>
 </p>
 
 ## Build & install
 For now, the engine is not yet complete: not all features have been implemented and bugs may still be present.
 If you would like to test the current version (on Windows only for now), you can:
-- open the *.sln* file with Visual Studio and run the program
+1. Download the Release
+2. Inside the folder you just downloaded, type ```cmake -B build``` and ```cmake --build build```
+3. Open *build/EZVN.sln* with Visual Studio 2022 and launch the project. You can also take *EZVN.exe* from *build/Release*, put it inside *build/* and run it
 
 ## Project architecture: 
-- *fonts/*: the fonts used by the engine
-- *img/*: the images (backgrounds, character and GUI elements images) used by the engine
-- *sounds/*: the sounds and musics used by the engine
+- *resources/*: all the resources used by the engine. It contains multiple subfolders:
+  - *fonts/*: the fonts used by the engine
+  - *img/*: the images (backgrounds, character and GUI elements images) used by the engine
+  - *sounds/*: the sounds and musics used by the engine
 - *include/* and *src/*: the project's header and source files, respectively. These folders are divided into multiple subfolders:
   - *Color/*: classes that allow the use of multiple types of color representation (RGBA, RGBA8, HSVA, HSVA8 and hexadecimal)
+  - *GameStates/*: classes that describe the game states of the engine (main menu, settings, in game, history menu)
   - *GUI/*: classes attached to the GUI system (buttons, textbuttons, texttoggles, checkboxes, inputfields, sliders)
   - *Managers/*: classes of the various engine resource managers (audio, background, character, music, sound, textbox and UI)
   - *RAII_SDL2/*: SDL2 encapsulation according to the RAII principle
@@ -50,8 +51,8 @@ If you would like to test the current version (on Windows only for now), you can
 - Drag-and-drop system using UI elements for menu creation
 - Possible switch to SDL3 if it's worth it
 
-## Dependencies: 
-- [SDL2](https://wiki.libsdl.org/SDL2/FrontPage)
-- [SDL_image](https://wiki.libsdl.org/SDL2_image/FrontPage)
-- [SDL_mixer](https://wiki.libsdl.org/SDL2_mixer/FrontPage)
-- [SDL_ttf](https://wiki.libsdl.org/SDL2_ttf/FrontPage)
+## Dependencies:
+- [SDL2 2.30.3](https://wiki.libsdl.org/SDL2/FrontPage)
+- [SDL_image 2.8.2](https://wiki.libsdl.org/SDL2_image/FrontPage)
+- [SDL_mixer 2.8.0](https://wiki.libsdl.org/SDL2_mixer/FrontPage)
+- [SDL_ttf 2.22.0](https://wiki.libsdl.org/SDL2_ttf/FrontPage)
