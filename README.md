@@ -11,7 +11,7 @@ For now, the engine is not yet complete: not all features have been implemented 
 If you would like to test the current version (on Windows only for now), you can:
 1. Download the Release
 2. Inside the folder you just downloaded, type ```cmake -B build``` and ```cmake --build build```
-3. Open *build/EZVN.sln* with Visual Studio 2022 and launch the project. You can also take *EZVN.exe* from *build/Release*, put it inside *build/* and run it
+3. Open *build/EZVN.sln* with Visual Studio 2022 and launch the project. You can also take *EZVN.exe* from *build/Debug* or *build/Release*, put it inside *build/* and run it
 
 ## Project architecture: 
 - *resources/*: all the resources used by the engine. It contains multiple subfolders:
