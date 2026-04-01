@@ -153,7 +153,11 @@ void ScriptRunner::draw(sdl::Renderer& renderer)
 {
 	background_manager_.draw(renderer);
 	character_manager_.draw(renderer);
-	choice_menu_manager_.draw(renderer);
+
+	if(current_script_index_ != 0 && std::holds_alternative<Script::InfoChoiceMenu>(script_.script_information_[current_script_index_ - 1]))
+	{
+		choice_menu_manager_.draw(renderer);
+	}
 
 	if(!transition_manager_.transition_playing_)
 	{
@@ -239,7 +243,11 @@ void ScriptRunner::update()
 		is_choice_menu_visible_ = false;
 		is_dialogue_of_choice_menu_visible_ = false;
 
-		//dialogue qui suit le choix 
+		//reset du scroll de la souris après notre choix
+		script_index_when_prev_.saved_script_index_ = current_script_index_;
+		script_index_when_prev_.is_saved_ = true;
+
+		//dialogue qui suit le choix => on le modifie avec les bonnes valeurs selon le choix effectué
 		Script::InfoTextbox& after_choice_dialogue = std::get<Script::InfoTextbox>(script_.script_information_[current_script_index_ + 1]);
 		after_choice_dialogue.character_variable_ = choice_menu_manager_.after_choice_dialogue_.character_variable_;
 		after_choice_dialogue.t_.textbox_command_value_ = choice_menu_manager_.after_choice_dialogue_.dialogue_;
@@ -316,7 +324,6 @@ void ScriptRunner::rebuild()
 	is_choice_menu_visible_ = false;
 	is_dialogue_of_choice_menu_visible_ = false;
 
-
 	//TODO : mettre dans une fonction
 	size_t target_script_index = get_script_index_of_previous_dialogue().value();
 	for(size_t i = 0; i <= target_script_index; ++i)
@@ -352,9 +359,10 @@ void ScriptRunner::rebuild()
 			}
 			character_manager_.update_characters_dialogue(info_textbox);
 		}
-		else if(std::holds_alternative<Script::InfoChoiceMenu>(current_script_information))
+		else if(std::holds_alternative<Script::InfoChoiceMenu>(current_script_information) && i == target_script_index - 1)
 		{
 			choice_menu_manager_.update(std::get<Script::InfoChoiceMenu>(current_script_information));
+			is_choice_menu_visible_ = true;
 		}
 		//ne pas rejouer les transitions
 	}
