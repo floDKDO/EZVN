@@ -4,7 +4,7 @@
 #include <iostream>
 
 InGame::InGame(Game& game, sdl::Renderer& renderer)
-	: GameState(game), script_runner_(game, renderer), renderer_(renderer)
+	: GameState(game, renderer), script_runner_(game, renderer), renderer_(renderer)
 {}
 
 void InGame::handle_events(const SDL_Event& e)

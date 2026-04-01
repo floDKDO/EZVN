@@ -10,7 +10,7 @@
 #include <set>
 
 SettingsMenu::SettingsMenu(Game& game, sdl::Renderer& renderer)
-	: GameState(game), background_(constants::default_menu_background_, 0, 0, renderer)
+	: GameState(game, renderer), background_(constants::default_menu_background_, 0, 0, renderer)
 {
 	create_resolutions_scroll_area(renderer);
 	build_ui_elements(renderer);

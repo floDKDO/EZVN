@@ -72,6 +72,7 @@ inline constexpr std::string_view confirmationpopup_font_ = "resources/fonts/All
 inline constexpr int confirmationpopup_text_size_ = 20;
 inline constexpr int confirmationpopup_text_x_delta_ = 30;
 inline const Color confirmationpopup_text_color_ = Color::from_rgba8(255, 255, 255);
+inline constexpr std::string_view confirmationpopup_message_ = "Are you sure you want to quit?";
 
 inline constexpr int slider_container_width_ = 300;
 inline constexpr int slider_container_height_ = 18;

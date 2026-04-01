@@ -2,42 +2,55 @@
 #include "GUI/slider.h"
 #include "GUI/inputfield.h"
 #include "GUI/scrollbar.h"
-//#include "GUI/confirmation_popup.h"
+#include "GUI/confirmation_popup.h"
 #include "constants.h"
 #include "utils.h"
 #include "GUI/ui_group.h"
 
 #include <iostream>
 
-UiManager::UiManager(AudioManager& audio_manager)
-	: is_mouse_on_widget_(false), previous_selected_(nullptr), current_selected_(nullptr), is_mouse_left_button_held_down_(false),
-	audio_manager_(audio_manager), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
+const size_t UiManager::modal_ui_ = 1;
+const size_t UiManager::normal_ui_ = 0;
+
+UiManager::UiManager(AudioManager& audio_manager, sdl::Renderer& renderer)
+	: is_mouse_on_widget_(false), previous_selected_(nullptr), current_selected_(nullptr), current_selected_normal_ui_(nullptr), is_mouse_left_button_held_down_(false), is_pop_up_visible_(false),
+	audio_manager_(audio_manager), renderer_(renderer), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
-void UiManager::reset()
+void UiManager::reset_normal_ui()
 {
-	for(std::unique_ptr<Ui>& ui : ui_elements_)
+	for(std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
 	{
 		ui.reset();
 	}
-	ui_elements_.clear();
+	ui_elements_[normal_ui_].clear();
+	navigation_list_[normal_ui_].clear();
+}
 
-	navigation_list_.clear();
+void UiManager::reset_modal_ui()
+{
+	for(std::unique_ptr<Ui>& ui : ui_elements_[modal_ui_])
+	{
+		ui.reset();
+	}
+	ui_elements_[modal_ui_].clear();
+	navigation_list_[modal_ui_].clear();
+}
+
+void UiManager::reset()
+{
+	reset_modal_ui();
+	reset_normal_ui();
 }
 
 void UiManager::add_element(std::unique_ptr<Ui> ui)
 {
-	ui_elements_.push_back(std::move(ui));
+	ui_elements_[normal_ui_].push_back(std::move(ui));
 }
-
-/*Ui* UiManager::get_last_element()
-{
-	return ui_elements_.back().get();
-}*/
 
 void UiManager::set_elements()
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_)
+	for(const std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
 	{
 		std::vector<UiWidget*> nodes;
 		if(UiWidget* widget = dynamic_cast<UiWidget*>(ui.get()); widget != nullptr)
@@ -51,20 +64,13 @@ void UiManager::set_elements()
 
 		for(UiWidget* widget : nodes)
 		{
-			navigation_list_.push_back(widget);
+			navigation_list_[normal_ui_].push_back(widget);
 		}
-
-		/*TextButton* textbutton = nullptr; 
-		if((textbutton = dynamic_cast<TextButton*>(ui.get())) != nullptr && textbutton->confirmationpopup_ != nullptr)
-		{
-			std::vector<Ui*> textbuttons_popup = textbutton->confirmationpopup_->get_navigation_nodes(); 
-			navigation_list_.insert(navigation_list_.end(), textbuttons_popup.begin(), textbuttons_popup.end()); //Also add the textbuttons of the ConfirmationPopUp
-		}*/
 	}
 
-	assign_widget_on_moving();
+	assign_widget_on_moving(normal_ui_);
 
-	for(UiWidget* widget : navigation_list_)
+	for(UiWidget* widget : navigation_list_[normal_ui_])
 	{
 		if(widget->state_ == UiWidget::State::SELECTED)
 		{
@@ -73,9 +79,9 @@ void UiManager::set_elements()
 		}
 	}
 
-	if(navigation_list_.size() > 0)
+	if(navigation_list_[normal_ui_].size() > 0)
 	{
-		current_selected_ = navigation_list_[0];
+		current_selected_ = navigation_list_[normal_ui_][0]; //sélectionner le premier UI (= [0]) de navigation_list
 		current_selected_->state_ = UiWidget::State::SELECTED;
 	}
 	else
@@ -84,19 +90,38 @@ void UiManager::set_elements()
 	}
 }
 
-bool UiManager::is_widget1_facing_widget2(SDL_Rect pos_ui1, SDL_Rect pos_ui2, Axis mode) const
+void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function)
+{
+	std::unique_ptr<ConfirmationPopUp> confirmation_popup = std::make_unique<ConfirmationPopUp>(text, renderer_, callback_function);
+
+	ConfirmationPopUp* p = confirmation_popup.get();
+	navigation_list_[modal_ui_].push_back(&p->no_);
+	navigation_list_[modal_ui_].push_back(&p->yes_);
+	ui_elements_[modal_ui_].push_back(std::move(confirmation_popup));
+
+	current_selected_normal_ui_ = current_selected_; //enregistrer le current_selected_ de normal_ui_
+
+	current_selected_ = navigation_list_[modal_ui_][0]; //sélectionner "no" par défaut
+	current_selected_->state_ = UiWidget::State::SELECTED;
+
+	assign_widget_on_moving(modal_ui_);
+
+	is_pop_up_visible_ = true;
+}
+
+bool UiManager::is_widget1_facing_widget2(SDL_Rect pos_widget1, SDL_Rect pos_widget2, Axis mode) const
 {
 	SDL_assert(mode == Axis::X || mode == Axis::Y);
 
 	if(mode == Axis::X)
 	{
-		return (pos_ui1.x >= pos_ui2.x && pos_ui1.x <= pos_ui2.x + pos_ui2.w)
-			|| (pos_ui1.x + pos_ui1.w >= pos_ui2.x && pos_ui1.x + pos_ui1.w <= pos_ui2.x + pos_ui2.w);
+		return (pos_widget1.x >= pos_widget2.x && pos_widget1.x <= pos_widget2.x + pos_widget2.w)
+			|| (pos_widget1.x + pos_widget1.w >= pos_widget2.x && pos_widget1.x + pos_widget1.w <= pos_widget2.x + pos_widget2.w);
 	}
 	else if(mode == Axis::Y)
 	{
-		return (pos_ui1.y >= pos_ui2.y && pos_ui1.y <= pos_ui2.y + pos_ui2.h)
-			|| (pos_ui1.y + pos_ui1.h >= pos_ui2.y && pos_ui1.y + pos_ui1.h <= pos_ui2.y + pos_ui2.h);
+		return (pos_widget1.y >= pos_widget2.y && pos_widget1.y <= pos_widget2.y + pos_widget2.h)
+			|| (pos_widget1.y + pos_widget1.h >= pos_widget2.y && pos_widget1.y + pos_widget1.h <= pos_widget2.y + pos_widget2.h);
 	}
 	else
 	{
@@ -167,16 +192,16 @@ UiWidget* UiManager::get_widget_facing(const UiWidget* widget, UiWidget* candida
 	return new_best_widget;
 }
 
-void UiManager::assign_widget_on_moving() const
+void UiManager::assign_widget_on_moving(size_t ui_level) const
 {
-	for(UiWidget* widget : navigation_list_)
+	for(UiWidget* widget : navigation_list_[ui_level])
 	{
 		UiWidget* current_best_up = nullptr;
 		UiWidget* current_best_down = nullptr;
 		UiWidget* current_best_left = nullptr;
 		UiWidget* current_best_right = nullptr;
 
-		for(UiWidget* candidate : navigation_list_)
+		for(UiWidget* candidate : navigation_list_[ui_level])
 		{
 			if(candidate == widget) { continue; }
 
@@ -245,8 +270,14 @@ void UiManager::unselect_previous(UiWidget* widget, PointerEventData pointer_eve
 
 bool UiManager::is_mouse_on_widget(PointerEventData pointer_event_data)
 {
+	size_t index = normal_ui_;
+	if(is_pop_up_visible_)
+	{
+		index = modal_ui_;
+	}
+
 	bool result = false;
-	for(UiWidget* widget : navigation_list_)
+	for(UiWidget* widget : navigation_list_[index])
 	{
 		result = is_mouse_on_specific_widget(widget, pointer_event_data);
 	}
@@ -357,7 +388,13 @@ void UiManager::on_input_released(const SDL_Event& e)
 
 void UiManager::handle_events(const SDL_Event& e)
 {
-	for(UiWidget* widget : navigation_list_)
+	size_t index = normal_ui_;
+	if(is_pop_up_visible_)
+	{
+		index = modal_ui_;
+	}
+
+	for(UiWidget* widget : navigation_list_[index])
 	{
 		if(e.type == SDL_MOUSEMOTION)
 		{
@@ -463,16 +500,35 @@ void UiManager::handle_events(const SDL_Event& e)
 
 void UiManager::draw(sdl::Renderer& renderer)
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_) 
+	for(const std::vector<std::unique_ptr<Ui>>& ui_vector : ui_elements_)
 	{
-		ui->draw(renderer);
+		for(const std::unique_ptr<Ui>& ui : ui_vector)
+		{
+			ui->draw(renderer);
+		}
 	}
 }
 
 void UiManager::update()
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_) 
+	if(ui_elements_[modal_ui_].size() > 0)
 	{
-		ui->update();
+		if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements_[modal_ui_].front().get()); popup != nullptr)
+		{
+			if(!popup->is_confirmationpopup_visible_)
+			{
+				is_pop_up_visible_ = false;
+				reset_modal_ui();
+				current_selected_ = current_selected_normal_ui_;
+			}
+		}
+	}
+
+	for(const std::vector<std::unique_ptr<Ui>>& ui_vector : ui_elements_)
+	{
+		for(const std::unique_ptr<Ui>& ui : ui_vector)
+		{
+			ui->update();
+		}
 	}
 }

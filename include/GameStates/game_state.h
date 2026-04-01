@@ -18,7 +18,7 @@ class GameState
 		virtual void on_hide() {};
 
 	protected:
-		explicit GameState(Game& game);
+		GameState(Game& game, sdl::Renderer& renderer);
 		Game& game_;
 		UiManager ui_manager_;
 };

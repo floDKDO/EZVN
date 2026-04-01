@@ -5,7 +5,7 @@
 #include <iostream>
 
 MainMenu::MainMenu(Game& game, sdl::Renderer& renderer)
-	: GameState(game), background_(constants::default_menu_background_, 0, 0, renderer)
+	: GameState(game, renderer), background_(constants::default_menu_background_, 0, 0, renderer)
 {
 	build_ui_elements(renderer);
 }
@@ -15,7 +15,6 @@ void MainMenu::build_ui_elements(sdl::Renderer& renderer)
 	//ici, std::placeholders::_1 est nécessaire car l'appel à la fonction de callback (ce qui est retourné par std::bind) est de la forme : f(this) => on spécifie l'argument lors de l'appel au callable et pas directement sa valeur dans std::bind
 	ui_manager_.add_element(std::make_unique<TextButton>("Play", 600, 200, renderer, std::bind(&MainMenu::play_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<TextButton>("Settings", 600, 350, renderer, std::bind(&MainMenu::settings_function, this, std::placeholders::_1)));
-	//ui_elements_.push_back(std::make_unique<TextButton>("Quit", 600, 500, renderer, "Are you sure you want to quit?", std::bind(&MainMenu::confirmationpopup_quit_function, this, std::placeholders::_1)));
 	ui_manager_.add_element(std::make_unique<TextButton>("Quit", 600, 500, renderer, std::bind(&MainMenu::confirmationpopup_quit_function, this, std::placeholders::_1)));
 
 	ui_manager_.set_elements();
@@ -52,6 +51,10 @@ void MainMenu::settings_function([[maybe_unused]] Ui* ui)
 
 void MainMenu::confirmationpopup_quit_function([[maybe_unused]] Ui* ui)
 {
-	std::cout << "Pressed Yes!" << std::endl;
-	game_.quit_game();
+	std::cout << "Pressed Quit!" << std::endl;
+	ui_manager_.show_pop_up(constants::confirmationpopup_message_, 
+		[this]([[maybe_unused]] Ui* ui){
+		std::cout << "Pressed Yes!" << std::endl; 
+		game_.quit_game(); 
+	});
 }

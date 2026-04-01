@@ -1,6 +1,5 @@
 #include "GUI/text_button.h"
 #include "constants.h"
-//#include "GUI/confirmation_popup.h"
 
 #include <iostream>
 
@@ -14,29 +13,9 @@ TextButton::TextButton(std::string_view text, int x, int y, sdl::Renderer& rende
 	rect_ = text_.position_;
 }
 
-/*TextButton::TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::string_view text_popup, std::function<void(Ui* ui)> callback_function, TextButtonKind textbutton_kind)
-	: Ui(renderer),
-	text_(text, constants::textbutton_normal_color_, constants::textbutton_font_, textbutton_kind == TextButtonKind::ON_TEXTBOX ? constants::textbox_ui_elements_text_size_ : textbutton_kind == TextButtonKind::ON_FRAME ? constants::confirmationpopup_text_size_ : constants::textbutton_text_size_, x, y, renderer),
-	confirmationpopup_(std::make_unique<ConfirmationPopUp>(text_popup, renderer, callback_function))
-{
-	callback_function_ = [&]([[maybe_unused]] Ui* ui)
-	{
-		confirmationpopup_->is_confirmationpopup_visible_ = true; 
-		//Ui::is_pop_up_visible_ = true; 
-		state_ = State::NORMAL;  
-		confirmationpopup_->no_.state_ = State::SELECTED; 
-	};
-
-	pointer_on_ui_when_pointer_up_ = true;
-}*/
-
 void TextButton::draw(sdl::Renderer& renderer)
 {
 	text_.draw(renderer);
-	/*if(confirmationpopup_)
-	{
-		confirmationpopup_->draw(renderer);
-	}*/
 }
 
 void TextButton::update()
@@ -73,11 +52,6 @@ void TextButton::update()
 			text_.change_color(constants::textbutton_pressed_color_);
 		}
 	}
-	
-	/*if(confirmationpopup_)
-	{
-		confirmationpopup_->update();
-	}*/
 }
 
 void TextButton::change_position(int x, int y)

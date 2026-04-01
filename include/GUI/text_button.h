@@ -3,8 +3,6 @@
 #include "GUI/ui_widget.h"
 #include "text.h"
 
-//class ConfirmationPopUp;
-
 class TextButton : public UiWidget
 {
 	public:
@@ -16,13 +14,11 @@ class TextButton : public UiWidget
 		};
 
 		TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function, Kind textbutton_kind = Kind::NORMAL);
-		//TextButton(std::string_view text, int x, int y, sdl::Renderer& renderer, std::string_view text_popup, std::function<void(Ui* ui)> callback_function, TextButtonKind textbutton_kind = TextButtonKind::NORMAL);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 		void change_position(int x, int y) override;
 
 		Text text_;
-		//std::unique_ptr<ConfirmationPopUp> confirmationpopup_;
 };
 

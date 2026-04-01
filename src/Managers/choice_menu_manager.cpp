@@ -4,7 +4,7 @@
 #include <iostream>
 
 ChoiceMenuManager::ChoiceMenuManager(sdl::Renderer& renderer, Game& game)
-	: choice_made_(false), ui_group_(nullptr), ui_manager_(game.audio_manager_), renderer_(renderer)
+	: choice_made_(false), ui_group_(nullptr), ui_manager_(game.audio_manager_, renderer), renderer_(renderer)
 {
 	build_ui_elements(renderer);
 }

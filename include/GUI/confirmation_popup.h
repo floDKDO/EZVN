@@ -6,7 +6,7 @@
 class ConfirmationPopUp : public UiWidget
 {
 	public:
-		ConfirmationPopUp(std::string_view text, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
+		ConfirmationPopUp(std::string_view message, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
@@ -19,7 +19,7 @@ class ConfirmationPopUp : public UiWidget
 		TextButton no_;
 
 	private:
-		Text text_;
+		Text message_;
 		Image frame_;
 		Image background_;
 };
