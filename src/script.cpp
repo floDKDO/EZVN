@@ -168,15 +168,23 @@ void Script::stop_music(int fadeout_length)
 	script_information_.push_back(InfoMusic(std::make_pair(AudioProperties{0, fadeout_length, true}, std::nullopt))); //TODO : std::make_pair a l'air obligatoire ici
 }
 
-void Script::insert_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::string> texts)
+void Script::insert_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::pair<std::string, ChoiceMenuNextDialogue>> texts)
 {
 	script_information_.push_back(InfoChoiceMenu(texts));
+
+	//TODO : problème avec le clavier si j'appuie sur entrée
 
 	InfoTextbox info_textbox;
 	info_textbox.character_variable_ = character_variable;
 	info_textbox.t_.textbox_command_kind_ = TextboxCommandKind::DIALOGUE;
 	info_textbox.t_.textbox_command_value_ = std::string(dialogue);
 	script_information_.push_back(InfoTextbox(info_textbox));
+
+	InfoTextbox info_textbox_after_choice; //for the dialogue showed after a choice => will be filled by ScriptRunner
+	info_textbox_after_choice.character_variable_ = constants::default_narrator_name_;
+	info_textbox_after_choice.t_.textbox_command_kind_ = TextboxCommandKind::DIALOGUE;
+	info_textbox_after_choice.t_.textbox_command_value_ = "";
+	script_information_.push_back(InfoTextbox(info_textbox_after_choice));
 }
 
 void Script::insert_autofocus(bool autofocus)

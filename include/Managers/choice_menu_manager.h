@@ -15,6 +15,8 @@ class ChoiceMenuManager
 		void reset();
 
 		bool choice_made_;
+		std::vector<Script::ChoiceMenuNextDialogue> all_after_choice_dialogues_;
+		Script::ChoiceMenuNextDialogue after_choice_dialogue_;
 
 	private:
 		UiGroup* ui_group_;

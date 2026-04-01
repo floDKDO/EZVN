@@ -62,13 +62,31 @@ class Script
 		using InfoMusic = std::pair<AudioProperties, std::optional<Music>>;
 		using InfoSound = std::pair<AudioProperties, std::optional<Sound>>;
 
+		struct ChoiceMenuNextDialogue
+		{
+			ChoiceMenuNextDialogue(std::string character_variable, std::string dialogue)
+				: character_variable_(character_variable), dialogue_(dialogue)
+			{}
+
+			ChoiceMenuNextDialogue(std::string dialogue)
+				: character_variable_(std::string(constants::default_narrator_name_)), dialogue_(dialogue)
+			{}
+
+			ChoiceMenuNextDialogue()
+				: character_variable_(std::string(constants::default_narrator_name_)), dialogue_("")
+			{}
+
+			std::string character_variable_;
+			std::string dialogue_;
+		};
+
 		struct ChoiceMenu
 		{
-			explicit ChoiceMenu(std::initializer_list<std::string> texts)
+			explicit ChoiceMenu(std::initializer_list<std::pair<std::string, ChoiceMenuNextDialogue>> texts)
 				: texts_(texts)
 			{}
 
-			std::vector<std::string> texts_;
+			std::vector<std::pair<std::string, ChoiceMenuNextDialogue>> texts_;
 		};
 		using InfoChoiceMenu = ChoiceMenu;
 
@@ -130,14 +148,13 @@ class Script
 		void play_music(std::string_view music_path, int fadein_length, int fadeout_length, float volume_multiplier, bool loop);
 		void stop_music(int fadeout_length);
 
-		void insert_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::string> texts);
+		void insert_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::pair<std::string, ChoiceMenuNextDialogue>> texts);
 
 		void insert_autofocus(bool autofocus);
 		void insert_autozorder(bool autozorder);
 
 		std::vector<ScriptInformation> script_information_;
 		std::unordered_map<std::string, CharacterDefinition> character_definitions_;
-
 
 	private:
 		sdl::Renderer& renderer_;

@@ -90,8 +90,24 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 224, 255));
 	game.move_textbox("bottom");
 	game.show_dialogue("Sayori", "Or blue?");
-	game.show_dialogue("MC", "I...");
-	//game.show_choice_menu("MC", "I...", {"Green", "Purple", "Pink", "Blue"}); //pas encore complètement fonctionnel
+	//game.show_dialogue("MC", "I...");
+	game.show_choice_menu("MC", "I...", { //pas encore complètement fonctionnel
+		{"Green", 
+			{"MC", "I choose green!"}
+		}, 
+		{"Purple", 
+			{"MC", "I choose purple!"}
+		}, 
+		{"Pink", 
+			{"MC", "I choose pink!"}
+		}, 
+		{"Blue", 
+			{"MC", "I choose blue!"}
+		},
+		{"Heu...",
+			{"I don't know..."}
+		}
+	}); 
 	game.play_sound("resources/sounds/door_open.ogg");
 	game.show_dialogue("Sayori", "Follow me!");
 	game.show_character("Sayori", "lhide");
@@ -117,6 +133,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 }
 
 //TODO : les paramètres "inutiles" des fonctions de la SDL pourraient être préremplis (valeur fixée pour ces paramètres) => ex : les 2 premiers paramètres de sdl::Texture::query()
+// idem pour les valeurs fixées (ex : -1 pour tous les channels) => rendre ça plus intuitif
 
 //TODO : utiliser std::clamp pour s'assurer qu'une valeur soit dans un intervalle
 

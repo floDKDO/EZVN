@@ -238,6 +238,12 @@ void ScriptRunner::update()
 	{
 		is_choice_menu_visible_ = false;
 		is_dialogue_of_choice_menu_visible_ = false;
+
+		//dialogue qui suit le choix 
+		Script::InfoTextbox& after_choice_dialogue = std::get<Script::InfoTextbox>(script_.script_information_[current_script_index_ + 1]);
+		after_choice_dialogue.character_variable_ = choice_menu_manager_.after_choice_dialogue_.character_variable_;
+		after_choice_dialogue.t_.textbox_command_value_ = choice_menu_manager_.after_choice_dialogue_.dialogue_;
+
 		textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NEXT, false, false};
 	}
 

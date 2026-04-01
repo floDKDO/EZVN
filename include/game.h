@@ -40,6 +40,7 @@ class Game
 		void create_character(std::string_view character_variable, std::string_view character_name, Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
 		void rename_character(std::string_view character_variable, std::string_view new_character_name);
 
+		//TODO : créer une struct CharacterInfo
 		//std::pair<std::string_view, std::string_view> => first = character_variable, second = composite_image_name
 		void show_character(std::pair<std::string_view, std::string_view> character_info, std::string transform_name, unsigned int zorder);
 		void show_character(std::string_view character_variable, std::string_view transform_name, unsigned int zorder);
@@ -71,8 +72,26 @@ class Game
 		void play_music(std::string_view music_path, int fadein_length=0, int fadeout_length=0, float volume_multiplier = 1.0, bool loop = true);
 		void stop_music(int fadeout_length=0);
 
-		void show_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::string> texts);
-		void show_choice_menu(std::string_view dialogue, std::initializer_list<std::string> texts);
+		//TODO : créer une struct pour le dernier élément de la paire (dernier argument) => il faudra sûrement créer plusieurs versions de cette fonction
+		//TODO : Possibilités : 
+		//- dialogue : std::string
+		// 
+		//- dialogue + character_variable : std::string, std::string
+		//- dialogue + character_info : std::string, std::pair<std::string_view, std::string_view>
+		// 
+		//- dialogue + character_variable + zorder : std::string, std::string, unsigned int
+		//- dialogue + character_variable + transform_name : std::string, std::string, std::string
+		//- dialogue + character_variable + transform_name + zorder : std::string, std::string, std::string, unsigned int
+		//
+		//- dialogue + character_info + zorder : std::string, std::pair<std::string_view, std::string_view>, unsigned int
+		//- dialogue + character_info + transform_name : std::string, std::pair<std::string_view, std::string_view>, std::string
+		//- dialogue + character_info + transform_name + zorder : std::string, std::pair<std::string_view, std::string_view>, std::string, unsigned int
+
+		//Pour l'instant : uniquement gérer "dialogue" et "dialogue + character_variable" => dialogue obligatoire
+
+		//TODO : utiliser using pour simplifier le type du dernier paramètre
+		void show_choice_menu(std::string_view character_variable, std::string_view dialogue, std::initializer_list<std::pair<std::string, Script::ChoiceMenuNextDialogue>> texts);
+		void show_choice_menu(std::string_view dialogue, std::initializer_list<std::pair<std::string, Script::ChoiceMenuNextDialogue>> texts);
 
 		void autofocus_enable();
 		void autofocus_disable();

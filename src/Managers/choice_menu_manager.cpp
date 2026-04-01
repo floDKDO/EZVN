@@ -35,13 +35,22 @@ void ChoiceMenuManager::draw(sdl::Renderer& renderer)
 
 void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 {
+	//TODO : pas ouf...
 	//if(ui_group_ == nullptr)
 	if(ui_group_->ui_elements_.size() == 0) 
 	{
 		choice_made_ = false;
 		for(int i = 0; i < info_choice_menu.texts_.size(); ++i)
 		{
-			ui_group_->add_ui_element(std::make_unique<Button>(info_choice_menu.texts_[i], 0, 0, renderer_, [this, info_choice_menu, i]([[maybe_unused]] Ui* ui){std::cout << info_choice_menu.texts_[i] << std::endl; choice_made_ = true; })); //TODO : hardcodé
+			ui_group_->add_ui_element(std::make_unique<Button>(info_choice_menu.texts_[i].first, 0, 0, renderer_, 
+				[this, info_choice_menu, i]([[maybe_unused]] Ui* ui)
+				{
+					std::cout << "You chose: " << info_choice_menu.texts_[i].first << std::endl; 
+					choice_made_ = true; 
+					after_choice_dialogue_ = {info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_}; 
+				}
+			)); 
+			all_after_choice_dialogues_.push_back({info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_});
 		}
 		ui_manager_.set_elements();
 	}
@@ -60,5 +69,8 @@ void ChoiceMenuManager::reset()
 	ui_manager_.reset();
 	build_ui_elements(renderer_);
 
+	all_after_choice_dialogues_.clear();
+	after_choice_dialogue_.character_variable_.clear();
+	after_choice_dialogue_.dialogue_.clear();
 	choice_made_ = false;
 }
