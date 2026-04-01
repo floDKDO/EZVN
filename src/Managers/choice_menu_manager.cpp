@@ -11,7 +11,7 @@ ChoiceMenuManager::ChoiceMenuManager(sdl::Renderer& renderer, Game& game)
 
 void ChoiceMenuManager::build_ui_elements([[maybe_unused]] sdl::Renderer& renderer)
 {
-	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>(550, 80);
+	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>(0, constants::choice_menu_y_delta_); 
 	ui_group_ = ui_group.get();
 	ui_manager_.add_element(std::move(ui_group));
 	ui_manager_.set_elements();
@@ -40,9 +40,10 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 	if(ui_group_->ui_elements_.size() == 0) 
 	{
 		choice_made_ = false;
+
 		for(int i = 0; i < info_choice_menu.texts_.size(); ++i)
 		{
-			ui_group_->add_ui_element(std::make_unique<Button>(info_choice_menu.texts_[i].first, 0, 0, renderer_, 
+			ui_group_->add_ui_element(std::make_unique<Button>(constants::choice_button_normal_, constants::choice_button_selected_, constants::choice_button_pressed_, info_choice_menu.texts_[i].first, 0, 0, renderer_, 
 				[this, info_choice_menu, i]([[maybe_unused]] Ui* ui)
 				{
 					std::cout << "You chose: " << info_choice_menu.texts_[i].first << std::endl; 
@@ -52,6 +53,8 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 			)); 
 			all_after_choice_dialogues_.push_back({info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_});
 		}
+		ui_group_->set_center();
+
 		ui_manager_.set_elements();
 	}
 	else

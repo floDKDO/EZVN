@@ -1,21 +1,24 @@
 #include "GUI/button.h"
 #include "constants.h"
 
+#include <iostream>
+
 Button::Button(std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: Button(constants::button_normal_, constants::button_selected_, constants::button_pressed_, text, x, y, renderer, callback_function)
+	: Button(constants::choice_button_normal_, constants::choice_button_selected_, constants::choice_button_selected_, text, x, y, renderer, callback_function)
 {}
 
-Button::Button(std::string_view path_normal, std::string_view path_selected, std::string_view path_clicked, std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
+Button::Button(std::string_view path_normal, std::string_view path_selected, std::string_view path_pressed, std::string_view text, int x, int y, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
 	: UiWidget(renderer), 
-	text_(text, constants::button_text_color_, constants::button_font_, constants::button_text_size_, x, y, renderer),
+	text_(text, constants::button_text_color_, constants::button_font_, constants::choice_button_text_size_, x, y, renderer), //TODO : que pour choice button
 	normal_(path_normal, x, y, renderer),
 	selected_(path_selected, x, y, renderer),
-	pressed_(path_clicked, x, y, renderer)
+	pressed_(path_pressed, x, y, renderer)
 {
 	callback_function_ = callback_function;
 	pointer_on_ui_when_pointer_up_ = true;
 
 	text_.position_.x = normal_.position_.x + normal_.position_.w / 2 - text_.get_width_text() / 2;
+	text_.position_.y = normal_.position_.y + normal_.position_.h / 2 - text_.get_height_text() / 2;
 
 	rect_ = normal_.position_;
 }
@@ -24,14 +27,17 @@ void Button::draw(sdl::Renderer& renderer)
 {
 	if(state_ == State::NORMAL)
 	{
+		text_.change_color(Color::from_rgba8(255, 255, 255)); //TODO : que pour choice button
 		normal_.draw(renderer);
 	}
 	else if(state_ == State::SELECTED)
 	{
+		text_.change_color(Color::from_rgba8(0, 0, 0)); //TODO : que pour choice button
 		selected_.draw(renderer);
 	}
 	else if(state_ == State::PRESSED)
 	{
+		text_.change_color(Color::from_rgba8(0, 0, 0)); //TODO : que pour choice button
 		pressed_.draw(renderer);
 	}
 
@@ -48,8 +54,8 @@ void Button::update()
 
 void Button::change_position(int x, int y)
 {
-	text_.position_.x = x;
-	text_.position_.y = y;
+	text_.position_.x = x + normal_.position_.w / 2 - text_.get_width_text() / 2;
+	text_.position_.y = y + normal_.position_.h / 2 - text_.get_height_text() / 2;
 
 	normal_.position_.x = x;
 	normal_.position_.y = y;

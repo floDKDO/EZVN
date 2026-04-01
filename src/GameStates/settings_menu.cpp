@@ -159,5 +159,5 @@ void SettingsMenu::texttoggle_resolution_function(Ui* ui)
 		game_.window_.set_center(); //centrer la fenêtre après qu'elle ait été redimensionnée
 	}
 	
-	std::cout << "Clicked on " << texttoggle_resolution->text_.text_ << std::endl;
+	std::cout << "You chose: " << texttoggle_resolution->text_.text_ << std::endl;
 }

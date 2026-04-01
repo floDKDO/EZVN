@@ -89,6 +89,14 @@ void UiGroup::set_title(std::string_view title)
 	title_->text_ = title;
 }
 
+void UiGroup::set_center()
+{
+	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
+	{
+		ui_widget->change_position((constants::window_width_ / 2) - (ui_widget->rect_.w / 2), ui_widget->rect_.y);
+	}
+}
+
 
 //Les 3 méthodes suivantes sont utilisées uniquement pour les éléments de type Checkable
 

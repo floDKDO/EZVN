@@ -21,6 +21,7 @@ class UiGroup : public Ui
 		virtual void add_ui_element(std::unique_ptr<UiWidget> widget);
 
 		void set_title(std::string_view title);
+		void set_center();
 
 		std::vector<std::unique_ptr<UiWidget>> ui_elements_;
 		std::unique_ptr<Text> title_;

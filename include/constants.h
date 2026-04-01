@@ -28,8 +28,12 @@ inline Color text_outline_color_ = Color::from_rgba8(255, 205, 230);
 inline constexpr std::string_view button_normal_ = "resources/img/gui/button_normal.png";
 inline constexpr std::string_view button_selected_ = "resources/img/gui/button_selected.png";
 inline constexpr std::string_view button_pressed_ = "resources/img/gui/button_pressed.png";
+inline constexpr std::string_view choice_button_normal_ = "resources/img/gui/choice_button_normal.png";
+inline constexpr std::string_view choice_button_selected_ = "resources/img/gui/choice_button_selected.png";
+inline constexpr std::string_view choice_button_pressed_ = "resources/img/gui/choice_button_selected.png"; //identique à selected
 inline constexpr std::string_view button_font_ = "resources/fonts/Aller_Rg.ttf";
 inline constexpr int button_text_size_ = 30;
+inline constexpr int choice_button_text_size_ = 25;
 inline const Color button_text_color_ = Color::from_rgba8(255, 255, 255);
 
 inline constexpr int checkboxgroup_y_spacing_ = 150;
@@ -143,6 +147,7 @@ inline constexpr std::string_view namebox_font_ = "resources/fonts/Aller_Rg.ttf"
 inline constexpr int namebox_text_size_ = 30;
 inline const Color namebox_text_color_ = Color::from_rgba8(255, 255, 255);
 
+inline constexpr int choice_menu_y_delta_ = 180; //from the top of the screen
 inline constexpr int buttongroup_y_spacing_ = 60; //= choice menu
 inline constexpr int buttongroup_width_ = 400; //= choice menu
 
