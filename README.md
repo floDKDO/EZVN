@@ -40,11 +40,11 @@ If you would like to test the current version (on Windows only for now), you can
 - Rename characters
 - Autofocus that highlights a character who is speaking by changing their size and zorder
 - History menu that displays dialogue history
+- Pop-up that displays when we try to quit the game
 
 ## Remaining features to be implemented: 
 - Add choice menus
 - Add other transitions for backgrounds (only fade for now) 
-- Add a modal window for pop-ups
 - Add a logging system to obtain information about the engine states
 - Save/load system and persistent variables
 - Domain Specific Language like Ren'Py's
