@@ -17,6 +17,11 @@ UiManager::UiManager(AudioManager& audio_manager, sdl::Renderer& renderer)
 	audio_manager_(audio_manager), renderer_(renderer), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
+void UiManager::clear_navigation_list(size_t ui_level)
+{
+	navigation_list_[ui_level].clear();
+}
+
 void UiManager::reset_normal_ui()
 {
 	for(std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])

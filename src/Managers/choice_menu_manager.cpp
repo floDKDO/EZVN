@@ -4,7 +4,7 @@
 #include <iostream>
 
 ChoiceMenuManager::ChoiceMenuManager(sdl::Renderer& renderer, Game& game)
-	: choice_made_(false), ui_group_(nullptr), ui_manager_(game.audio_manager_, renderer), renderer_(renderer)
+	: choice_made_(false), is_visible_(false), ui_group_(nullptr), ui_manager_(game.audio_manager_, renderer), renderer_(renderer)
 {
 	build_ui_elements(renderer);
 }
@@ -17,9 +17,20 @@ void ChoiceMenuManager::build_ui_elements([[maybe_unused]] sdl::Renderer& render
 	ui_manager_.set_elements();
 }
 
+void ChoiceMenuManager::clear_before_update()
+{
+	all_after_choice_dialogues_.clear();
+	for(std::unique_ptr<UiWidget>& ui_widget : ui_group_->ui_elements_)
+	{
+		ui_widget.reset();
+	}
+	ui_group_->ui_elements_.clear();
+	ui_manager_.clear_navigation_list(UiManager::normal_ui_);
+}
+
 void ChoiceMenuManager::handle_events(const SDL_Event& e)
 {
-	if(ui_group_->ui_elements_.size() > 0 && !choice_made_)
+	if(is_visible_)
 	{
 		ui_manager_.handle_events(e);
 	}
@@ -27,7 +38,7 @@ void ChoiceMenuManager::handle_events(const SDL_Event& e)
 
 void ChoiceMenuManager::draw(sdl::Renderer& renderer)
 {
-	if(ui_group_ != nullptr && !choice_made_)
+	if(is_visible_)
 	{
 		ui_group_->draw(renderer);
 	}
@@ -35,45 +46,41 @@ void ChoiceMenuManager::draw(sdl::Renderer& renderer)
 
 void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 {
-	//TODO : pas ouf...
-	//if(ui_group_ == nullptr)
-	if(ui_group_->ui_elements_.size() == 0) 
+	clear_before_update();
+
+	for(int i = 0; i < info_choice_menu.texts_.size(); ++i)
 	{
-		choice_made_ = false;
-
-		for(int i = 0; i < info_choice_menu.texts_.size(); ++i)
+		ui_group_->add_ui_element(std::make_unique<Button>(constants::choice_button_normal_, constants::choice_button_selected_, constants::choice_button_pressed_, info_choice_menu.texts_[i].first, 0, 0, renderer_,
+			[this, info_choice_menu, i]([[maybe_unused]] Ui* ui)
 		{
-			ui_group_->add_ui_element(std::make_unique<Button>(constants::choice_button_normal_, constants::choice_button_selected_, constants::choice_button_pressed_, info_choice_menu.texts_[i].first, 0, 0, renderer_, 
-				[this, info_choice_menu, i]([[maybe_unused]] Ui* ui)
-				{
-					std::cout << "You chose: " << info_choice_menu.texts_[i].first << std::endl; 
-					choice_made_ = true; 
-					after_choice_dialogue_ = {info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_}; 
-				}
-			)); 
-			all_after_choice_dialogues_.push_back({info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_});
+			std::cout << "You chose: " << info_choice_menu.texts_[i].first << std::endl;
+			after_choice_dialogue_ = {info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_};
+			choice_made_ = true;
+			is_visible_ = false;
 		}
-		ui_group_->set_center();
-
-		ui_manager_.set_elements();
+		));
+		all_after_choice_dialogues_.push_back({info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_});
 	}
-	else
+	ui_group_->set_center();
+	ui_manager_.set_elements();
+
+	choice_made_ = false;
+	is_visible_ = true;
+}
+
+void ChoiceMenuManager::update_buttons()
+{
+	if(is_visible_)
 	{
-		//ui_group_.reset();
-		if(!choice_made_)
-		{
-			ui_group_->update();
-		}
+		ui_group_->update();
 	}
 }
 
 void ChoiceMenuManager::reset()
 {
-	ui_manager_.reset();
-	build_ui_elements(renderer_);
-
 	all_after_choice_dialogues_.clear();
 	after_choice_dialogue_.character_variable_.clear();
 	after_choice_dialogue_.dialogue_.clear();
 	choice_made_ = false;
+	is_visible_ = false;
 }

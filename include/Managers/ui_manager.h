@@ -12,6 +12,7 @@ class UiManager
 	public:
 		UiManager(AudioManager& audio_manager, sdl::Renderer& renderer);
 
+		void clear_navigation_list(size_t ui_level);
 		void reset_normal_ui();
 		void reset_modal_ui();
 		void reset();
@@ -24,6 +25,9 @@ class UiManager
 		void update();
 
 		bool is_mouse_on_widget(PointerEventData pointer_event_data);
+
+		static const size_t modal_ui_; //= 1
+		static const size_t normal_ui_; //= 0
 
 		bool is_mouse_on_widget_;
 
@@ -47,8 +51,6 @@ class UiManager
 		void on_input_released(const SDL_Event& e);
 
 		static constexpr size_t ui_levels_ = 2; //= 2
-		static const size_t modal_ui_; //= 1
-		static const size_t normal_ui_; //= 0
 
 		//2 niveaux : [1] pour les UI modals, [0] pour les UI classiques
 		std::array<std::vector<UiWidget*>, ui_levels_> navigation_list_;

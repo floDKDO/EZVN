@@ -5,7 +5,7 @@
 //TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
 
 ScriptRunner::ScriptRunner(Game& game, sdl::Renderer& renderer)
-	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false), is_choice_menu_visible_(false), is_dialogue_of_choice_menu_visible_(false),
+	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false), is_dialogue_of_choice_menu_visible_(false),
 	character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(renderer, game), choice_menu_manager_(renderer, game)
 {
 	character_manager_.create_narrator();
@@ -120,7 +120,7 @@ void ScriptRunner::init_to_first_dialogue()
 
 void ScriptRunner::handle_events(const SDL_Event& e)
 {
-	if(is_dialogue_of_choice_menu_visible_)
+	if(is_dialogue_of_choice_menu_visible_) //empêcher l'utilisation du clic gauche et de la touche espace quand le choice menu est affiché
 	{
 		textbox_manager_.handle_events_ui_manager(e);
 		textbox_manager_.handle_events_mouse_wheel(e); 
@@ -193,7 +193,7 @@ void ScriptRunner::apply_line()
 	}
 	else if(std::holds_alternative<Script::InfoTextbox>(current_script_information))
 	{
-		if(is_choice_menu_visible_)
+		if(choice_menu_manager_.is_visible_)
 		{
 			is_dialogue_of_choice_menu_visible_ = true;
 			textbox_manager_.uncheck_auto_toggle();
@@ -213,7 +213,6 @@ void ScriptRunner::apply_line()
 	else if(std::holds_alternative<Script::InfoChoiceMenu>(current_script_information))
 	{
 		choice_menu_manager_.update(std::get<Script::InfoChoiceMenu>(current_script_information));
-		is_choice_menu_visible_ = true;
 	}
 }
 
@@ -228,31 +227,37 @@ void ScriptRunner::update()
 		rebuild();
 	}
 
-	if(!is_choice_menu_visible_)
+	if(is_dialogue_of_choice_menu_visible_)
 	{
-		textbox_manager_.update_skip_auto_modes(); //car doit être exécuté avant move_dialogue()
+		if((!textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_ && choice_menu_manager_.choice_made_)
+		|| (textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_ && textbox_manager_.dialogue_instruction_.where_ == TextboxManager::Where::NEXT)) //on a scrollé pour passer le choice menu et on avait déjà fait un choix auparavant
+		{
+			choice_menu_manager_.is_visible_ = false;
+			is_dialogue_of_choice_menu_visible_ = false;
+			choice_menu_manager_.choice_made_ = false;
+
+			if(!textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_)
+			{
+				//reset du scroll de la souris après notre choix
+				script_index_when_prev_.saved_script_index_ = current_script_index_;
+				script_index_when_prev_.is_saved_ = true;
+				textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NEXT, false, false};
+
+				//dialogue qui suit le choix => on le modifie avec les bonnes valeurs selon le choix effectué
+				Script::InfoTextbox& after_choice_dialogue = std::get<Script::InfoTextbox>(script_.script_information_[current_script_index_ + 1]);
+				after_choice_dialogue.character_variable_ = choice_menu_manager_.after_choice_dialogue_.character_variable_;
+				after_choice_dialogue.t_.textbox_command_value_ = choice_menu_manager_.after_choice_dialogue_.dialogue_;
+			}
+		}
+	}
+	else
+	{
+		textbox_manager_.update_skip_auto_modes(); //placée ici car doit être exécutée avant move_dialogue()
 	}
 
 	if(textbox_manager_.skip_mode_) //don't play background transition in skip mode
 	{
 		transition_manager_.reset();
-	}
-
-	if(is_choice_menu_visible_ && choice_menu_manager_.choice_made_)
-	{
-		is_choice_menu_visible_ = false;
-		is_dialogue_of_choice_menu_visible_ = false;
-
-		//reset du scroll de la souris après notre choix
-		script_index_when_prev_.saved_script_index_ = current_script_index_;
-		script_index_when_prev_.is_saved_ = true;
-
-		//dialogue qui suit le choix => on le modifie avec les bonnes valeurs selon le choix effectué
-		Script::InfoTextbox& after_choice_dialogue = std::get<Script::InfoTextbox>(script_.script_information_[current_script_index_ + 1]);
-		after_choice_dialogue.character_variable_ = choice_menu_manager_.after_choice_dialogue_.character_variable_;
-		after_choice_dialogue.t_.textbox_command_value_ = choice_menu_manager_.after_choice_dialogue_.dialogue_;
-
-		textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NEXT, false, false};
 	}
 
 	if(!transition_manager_.transition_playing_)
@@ -272,6 +277,7 @@ void ScriptRunner::update()
 	
 	character_manager_.update_characters();
 	transition_manager_.update_transition();
+	choice_menu_manager_.update_buttons();
 }
 
 void ScriptRunner::play_all_sounds_before_previous_dialogue(size_t target_script_index)
@@ -321,7 +327,7 @@ void ScriptRunner::rebuild()
 	background_manager_.reset();
 	transition_manager_.reset();
 	choice_menu_manager_.reset();
-	is_choice_menu_visible_ = false;
+
 	is_dialogue_of_choice_menu_visible_ = false;
 
 	//TODO : mettre dans une fonction
@@ -362,7 +368,6 @@ void ScriptRunner::rebuild()
 		else if(std::holds_alternative<Script::InfoChoiceMenu>(current_script_information) && i == target_script_index - 1)
 		{
 			choice_menu_manager_.update(std::get<Script::InfoChoiceMenu>(current_script_information));
-			is_choice_menu_visible_ = true;
 		}
 		//ne pas rejouer les transitions
 	}
