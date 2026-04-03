@@ -91,7 +91,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.move_textbox("bottom");
 	game.show_dialogue("Sayori", "Or blue?");
 	//game.show_dialogue("MC", "I...");
-	game.show_choice_menu("MC", "I...", { //pas encore complètement fonctionnel
+	game.show_choice_menu("MC", "I...", { //ne supporte pas encore complètement un choix réalisé avec la touche Entrée
 		{"Green", 
 			{"MC", "I choose green!"}
 		}, 
@@ -132,10 +132,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
-//TODO : bug quand on fait un choix dans un choice menu, qu'on va un dialogue en arrière puis un dialogue en avant avec la molette de la souris => on ne peut plus avancer dans les dialogues !
-//De plus, quand on passe la souris sur là où était le choice menu, on entend encore ses bruits même s'il n'est plus affiché
-//Problème : les variables is_choice_menu_visible_ et is_dialogue_of_choice_menu_visible_ restent à true même si le choice menu n'est plus affiché 
-//choice_menu_manager_.choice_made_ a aussi sûrement un problème
+//TODO : la souris entre en collision avec des éléments non affichés de la scrollable area
+
+//TODO : déplacements entre UI bizarre dans le menu Options
+
+//TODO : il faudrait un unique UiManager partagé entre InGame et les Managers
 
 //TODO : les paramètres "inutiles" des fonctions de la SDL pourraient être préremplis (valeur fixée pour ces paramètres) => ex : les 2 premiers paramètres de sdl::Texture::query()
 // idem pour les valeurs fixées (ex : -1 pour tous les channels) => rendre ça plus intuitif

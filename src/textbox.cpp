@@ -12,7 +12,7 @@ Textbox::Textbox(sdl::Renderer& renderer)
 	: is_first_dialogue_(true), text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, true, 10),
 	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""), 
 	namebox_(constants::namebox_image_, 0, 0, renderer),
-	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer), //TODO : paramètres de position inutiles 
+	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer),
 	end_dialogue_indicator_(constants::textbox_end_dialogue_indicator_, 0, 0, renderer)
 {
 	set_textbox_position(constants::default_textbox_position_); 

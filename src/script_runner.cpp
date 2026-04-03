@@ -255,7 +255,7 @@ void ScriptRunner::update()
 		textbox_manager_.update_skip_auto_modes(); //placée ici car doit être exécutée avant move_dialogue()
 	}
 
-	if(textbox_manager_.skip_mode_) //don't play background transition in skip mode
+	if(textbox_manager_.skip_mode_ || textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_) //don't play background transition in skip mode or when we scroll with the mouse wheel
 	{
 		transition_manager_.reset();
 	}

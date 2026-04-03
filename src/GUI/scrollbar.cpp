@@ -11,8 +11,8 @@ Scrollbar::Scrollbar(int x, int y, int container_h, int handle_h, sdl::Renderer&
 	container_outline_({x, y, constants::scrollbar_container_width_, container_h}),
 	handle_({x, y, constants::scrollbar_handle_width_, handle_h}), 
 	handle_outline_({x, y, constants::scrollbar_handle_width_, handle_h}), 
-	up_triangle_("resources/img/gui/triangle_scrollbar.png", "resources/img/gui/triangle_scrollbar.png", "resources/img/gui/triangle_scrollbar.png", "", x + 4, y - 10, renderer, callback_function), //TODO : hardcodé
-	down_triangle_("resources/img/gui/triangle_scrollbar_reversed.png", "resources/img/gui/triangle_scrollbar_reversed.png", "resources/img/gui/triangle_scrollbar_reversed.png", "", x + 4, y + container_h + 2, renderer, callback_function), //TODO : hardcodé
+	up_triangle_(constants::scrollbar_up_arrow_normal_, constants::scrollbar_up_arrow_selected_, constants::scrollbar_up_arrow_pressed_, "", x + 4, y - 10, renderer, std::bind(&Scrollbar::up_callback_function, this, std::placeholders::_1)), //TODO : hardcodé
+	down_triangle_(constants::scrollbar_down_arrow_normal_, constants::scrollbar_down_arrow_selected_, constants::scrollbar_down_arrow_pressed_, "", x + 4, y + container_h + 2, renderer, std::bind(&Scrollbar::down_callback_function, this, std::placeholders::_1)), //TODO : hardcodé
 	delta_mouse_handle_y_(0), step_y_(container_h / constants::scrollbar_step_count_), info_when_click_({0, 0, InfoWhenClick::WhereWasMouse::ABOVE, false}),
 	mouse_is_on_handle_(false)
 {
@@ -25,6 +25,38 @@ Scrollbar::Scrollbar(int x, int y, int container_h, int handle_h, sdl::Renderer&
 	callback_called_when_pointer_up_ = false; //= down
 
 	rect_ = container_;
+}
+
+void Scrollbar::up_callback_function([[maybe_unused]] Ui* ui)
+{
+	handle_.y -= container_.h / constants::scrollbar_step_count_;
+	handle_outline_.y = handle_.y;
+
+	int low = get_low_bound();
+	if(handle_.y < low)
+	{
+		handle_.y = low;
+		handle_outline_.y = handle_.y;
+	}
+
+	update_current_value();
+	callback_function_(this);
+}
+
+void Scrollbar::down_callback_function([[maybe_unused]] Ui* ui)
+{
+	handle_.y += container_.h / constants::scrollbar_step_count_;
+	handle_outline_.y = handle_.y;
+
+	int high = get_high_bound();
+	if(handle_.y > high)
+	{
+		handle_.y = high;
+		handle_outline_.y = handle_.y;
+	}
+
+	update_current_value();
+	callback_function_(this);
 }
 
 int Scrollbar::get_low_bound() const

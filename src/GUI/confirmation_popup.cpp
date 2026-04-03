@@ -13,18 +13,17 @@ ConfirmationPopUp::ConfirmationPopUp(std::string_view message, sdl::Renderer& re
 		is_confirmationpopup_visible_ = false;  
 	}, 
 	TextButton::Kind::ON_FRAME), 
-	message_(message, constants::confirmationpopup_text_color_, constants::confirmationpopup_font_, constants::confirmationpopup_text_size_, 0, 0, renderer, false, constants::confirmationpopup_width_ - constants::confirmationpopup_text_x_delta_),
+	message_(message, constants::confirmationpopup_text_color_, constants::confirmationpopup_font_, constants::confirmationpopup_text_size_, 0, 0, renderer, false, constants::confirmationpopup_width_),
 	frame_(constants::confirmationpopup_frame_, 0, 0, renderer),
 	background_(constants::confirmationpopup_background_, 0, 0, renderer)
 {
 	frame_.set_center();
 
-	yes_.change_position(frame_.position_.x + 120, frame_.position_.y + 100); //TODO : hardcodé
-	no_.change_position(frame_.position_.x + 280, frame_.position_.y + 100); //TODO : hardcodé
+	yes_.change_position(frame_.position_.x + constants::confirmationpopup_buttons_x_delta_, frame_.position_.y + constants::confirmationpopup_buttons_y_delta_); 
+	no_.change_position(frame_.position_.x + frame_.position_.w - no_.rect_.w - constants::confirmationpopup_buttons_x_delta_, frame_.position_.y + constants::confirmationpopup_buttons_y_delta_); 
 
 	message_.set_center();
-	message_.position_.y = frame_.position_.y + 50; //TODO : hardcodé
-	//message_.position_.x -= constants::confirmationpopup_text_x_delta_; //TODO : inutile ?
+	message_.position_.y = frame_.position_.y + constants::confirmationpopup_text_y_delta_; 
 	rect_ = frame_.position_;
 }
 

@@ -69,12 +69,14 @@ inline const Color inputfield_placeholder_text_color_ = Color::from_rgba8(204, 2
 inline constexpr int inputfield_caret_blink_time_ = 300;
 inline constexpr int inputfield_idle_time_ = 500;
 
-inline constexpr std::string_view confirmationpopup_frame_ = "resources/img/GUI/confirmation_pop_up.png";
+inline constexpr std::string_view confirmationpopup_frame_ = "resources/img/gui/confirmation_pop_up.png";
 inline constexpr int confirmationpopup_width_ = 411;
-inline constexpr std::string_view confirmationpopup_background_ = "resources/img/GUI/confirm.png";
+inline constexpr std::string_view confirmationpopup_background_ = "resources/img/gui/confirm.png";
 inline constexpr std::string_view confirmationpopup_font_ = "resources/fonts/Aller_Rg.ttf";
-inline constexpr int confirmationpopup_text_size_ = 20;
-inline constexpr int confirmationpopup_text_x_delta_ = 30;
+inline constexpr int confirmationpopup_text_size_ = 22;
+inline constexpr int confirmationpopup_text_y_delta_ = 40;
+inline constexpr int confirmationpopup_buttons_x_delta_ = 120;
+inline constexpr int confirmationpopup_buttons_y_delta_ = 100;
 inline const Color confirmationpopup_text_color_ = Color::from_rgba8(255, 255, 255);
 inline constexpr std::string_view confirmationpopup_message_ = "Are you sure you want to quit?";
 
@@ -94,6 +96,12 @@ inline constexpr int slider_text_size_ = 40;
 inline const Color slider_text_color_ = Color::from_rgba8(174, 84, 135);
 inline constexpr int slider_step_count_ = 10;
 
+inline constexpr std::string_view scrollbar_up_arrow_normal_ = "resources/img/gui/triangle_scrollbar_normal.png";
+inline constexpr std::string_view scrollbar_up_arrow_selected_ = "resources/img/gui/triangle_scrollbar_selected.png";
+inline constexpr std::string_view scrollbar_up_arrow_pressed_ = "resources/img/gui/triangle_scrollbar_selected.png"; //identique à selected
+inline constexpr std::string_view scrollbar_down_arrow_normal_ = "resources/img/gui/triangle_scrollbar_reversed_normal.png";
+inline constexpr std::string_view scrollbar_down_arrow_selected_ = "resources/img/gui/triangle_scrollbar_reversed_selected.png";
+inline constexpr std::string_view scrollbar_down_arrow_pressed_ = "resources/img/gui/triangle_scrollbar_reversed_selected.png"; //identique à selected
 inline constexpr int scrollbar_container_width_ = 18;
 inline constexpr int scrollbar_handle_width_ = scrollbar_container_width_ - 2;
 inline const Color scrollbar_container_color_ = Color::from_rgba8(255, 255, 255);

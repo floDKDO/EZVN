@@ -43,6 +43,9 @@ class Scrollbar : public UiWidget
 	protected:
 
 	private:
+		void up_callback_function(Ui* ui);
+		void down_callback_function(Ui* ui);
+
 		SDL_Rect container_;
 		SDL_Rect container_outline_;
 		SDL_Rect handle_;

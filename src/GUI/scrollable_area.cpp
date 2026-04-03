@@ -21,7 +21,6 @@ ScrollableArea::ScrollableArea(std::string_view title, int x, int y, int w, int 
 		title_->position_.x += (frame_.w - title_->get_width_text()) / 2;
 		title_->position_.y -= title_->get_height_text();
 	}
-
 	rect_ = frame_;
 }
 
@@ -118,7 +117,7 @@ void ScrollableArea::update()
 
 std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 {
-	std::vector<UiWidget*> vector;
+	std::vector<UiWidget*> vector = scrollbar_.get_navigation_nodes(); //concaténation des éléments de la scrollbar
 	for(auto& pair : elements_value_)
 	{
 		if(std::holds_alternative<UiWidget*>(pair.first))
@@ -127,7 +126,6 @@ std::vector<UiWidget*> ScrollableArea::get_navigation_nodes()
 			vector.push_back(widget);
 		}
 	}
-	vector.push_back(&scrollbar_);
 	return vector;
 }
 
