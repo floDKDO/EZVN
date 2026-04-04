@@ -51,7 +51,42 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_background("resources/img/backgrounds/cafeteria.png", "fade");
 	game.play_sound("resources/sounds/school_bell.ogg");
 	game.show_dialogue("I am feeling quite lonely right now...");
+	game.show_choice_menu("I...", { //ne supporte pas encore complètement un choix réalisé avec la touche Entrée
+		{"Green1",
+			{"I choose green1!"}
+		},
+		{"Purple1",
+			{"I choose purple1!"}
+		},
+		{"Pink1",
+			{"I choose pink1!"}
+		},
+		{"Blue1",
+			{"I choose blue1!"}
+		},
+		{"Um...1",
+			{"I don't know1..."}
+		}
+	});
 	game.show_dialogue("I know, I should try to find Sayori!");
+	game.show_choice_menu("I...", { //ne supporte pas encore complètement un choix réalisé avec la touche Entrée
+		{"Green2",
+			{"I choose green2!"}
+		},
+		{"Purple2",
+			{"I choose purple2!"}
+		},
+		{"Pink2",
+			{"I choose pink2!"}
+		},
+		{"Blue2",
+			{"I choose blue2!"}
+		},
+		{"Um...2",
+			{"I don't know2..."}
+		}
+	});
+	game.show_dialogue("...");
 	game.play_music("resources/sounds/2.ogg");
 	game.show_character({"Sayori", "4x"}, "t11");
 	game.show_dialogue("Sayori", "No need, I'm already there!");

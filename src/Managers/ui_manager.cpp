@@ -102,6 +102,7 @@ void UiManager::set_elements()
 
 void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function)
 {
+	//TODO
 	/*std::unique_ptr<ConfirmationPopUp> confirmation_popup = std::make_unique<ConfirmationPopUp>(text, renderer_, callback_function);
 
 	ConfirmationPopUp* p = confirmation_popup.get();
@@ -244,6 +245,12 @@ void UiManager::assign_widget_on_moving(size_t ui_level) const
 
 void UiManager::select_new(UiWidget* widget)
 {
+	if(!widget->is_visible_)
+	{
+		std::cout << "Trying to select a UI that is not visible!\n";
+		return;
+	}
+
 	audio_manager_.play_sound(ui_select_sound_, -1, false);
 	
 	previous_selected_ = current_selected_;
@@ -514,13 +521,29 @@ void UiManager::draw(sdl::Renderer& renderer)
 	{
 		for(Ui* ui : ui_vector)
 		{
-			ui->draw(renderer);
+			if(ui->is_visible_)
+			{
+				ui->draw(renderer);
+			}
 		}
 	}
 }
 
 void UiManager::update()
 {
+	if(!current_selected_->is_visible_)
+	{
+		for(UiWidget* widget : navigation_list_[normal_ui_])
+		{
+			if(widget->is_visible_)
+			{
+				current_selected_ = widget;
+				current_selected_->state_ = UiWidget::State::SELECTED;
+				break;
+			}
+		}
+	}
+
 	if(ui_elements2_[modal_ui_].size() > 0)
 	{
 		if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements2_[modal_ui_].front()); popup != nullptr)
@@ -538,7 +561,10 @@ void UiManager::update()
 	{
 		for(Ui* ui : ui_vector)
 		{
-			ui->update();
+			if(ui->is_visible_)
+			{
+				ui->update();
+			}
 		}
 	}
 }

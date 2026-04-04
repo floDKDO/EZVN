@@ -251,6 +251,14 @@ void ScriptRunner::update()
 		|| (textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_ && textbox_manager_.dialogue_instruction_.where_ == TextboxManager::Where::NEXT)) //on a scrollé pour passer le choice menu et on avait déjà fait un choix auparavant
 		{
 			choice_menu_manager_.is_visible_ = false;
+			choice_menu_manager_.ui_group_->is_visible_ = false;
+
+			//TODO : pas propre
+			for(const std::unique_ptr<UiWidget>& ui : choice_menu_manager_.ui_group_->ui_elements_)
+			{
+				ui->is_visible_ = false;
+			}
+
 			is_dialogue_of_choice_menu_visible_ = false;
 			choice_menu_manager_.choice_made_ = false;
 
@@ -304,6 +312,7 @@ void ScriptRunner::update()
 		choice_menu_manager_.update_buttons();
 		textbox_manager_.update_textbox();
 	}
+	ui_manager_.update();
 }
 
 void ScriptRunner::play_all_sounds_before_previous_dialogue(size_t target_script_index)

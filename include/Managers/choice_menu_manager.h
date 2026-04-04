@@ -20,9 +20,9 @@ class ChoiceMenuManager
 		bool is_visible_;
 		std::vector<Script::ChoiceMenuNextDialogue> all_after_choice_dialogues_;
 		Script::ChoiceMenuNextDialogue after_choice_dialogue_;
+		std::unique_ptr<UiGroup> ui_group_;
 
 	private:
-		std::unique_ptr<UiGroup> ui_group_;
 		UiManager& ui_manager_;
 		sdl::Renderer& renderer_;
 };

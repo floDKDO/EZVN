@@ -6,11 +6,15 @@
 
 UiGroup::UiGroup(int x, int y)
 	: title_(nullptr), frame_({x, y, 0, 0}), only_one_has_to_be_checked_(true)
-{}
+{
+	is_visible_ = true;
+}
 
 UiGroup::UiGroup(std::string_view title, int x, int y, sdl::Renderer& renderer)
 	: frame_({x, y, 0, 0}), title_(std::make_unique<Text>(title, constants::textbutton_normal_color_, constants::textbutton_font_, constants::textbutton_text_size_, x, y, renderer)), only_one_has_to_be_checked_(true)
-{}
+{
+	is_visible_ = true;
+}
 
 void UiGroup::draw(sdl::Renderer& renderer)
 {
