@@ -16,7 +16,8 @@ class UiManager
 		void reset_normal_ui();
 		void reset_modal_ui();
 		void reset();
-		void add_element(std::unique_ptr<Ui> ui);
+		void register_element(Ui* ui);
+		//void add_element(std::unique_ptr<Ui> ui);
 		void set_elements();
 		void show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function);
 
@@ -54,7 +55,9 @@ class UiManager
 
 		//2 niveaux : [1] pour les UI modals, [0] pour les UI classiques
 		std::array<std::vector<UiWidget*>, ui_levels_> navigation_list_;
-		std::array<std::vector<std::unique_ptr<Ui>>, 2> ui_elements_;
+		//std::array<std::vector<std::unique_ptr<Ui>>, ui_levels_> ui_elements_;
+
+		std::array<std::vector<Ui*>, ui_levels_> ui_elements2_;
 
 		UiWidget* previous_selected_;
 		UiWidget* current_selected_;

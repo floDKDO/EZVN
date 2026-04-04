@@ -6,6 +6,7 @@
 #include <vector>
 #include <string_view>
 
+//TODO : pas besoin de virtual car cette classe n'est héritée par personne
 class UiGroup : public Ui
 {
 	friend class Checkable;
@@ -18,7 +19,7 @@ class UiGroup : public Ui
 		virtual void draw(sdl::Renderer& renderer) override;
 		virtual void update() override;
 		virtual std::vector<UiWidget*> get_navigation_nodes();
-		virtual void add_ui_element(std::unique_ptr<UiWidget> widget);
+		virtual UiWidget* add_ui_element(std::unique_ptr<UiWidget> widget);
 
 		void set_title(std::string_view title);
 		void set_center();

@@ -2,11 +2,10 @@
 
 #include <iostream>
 
-//TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
-
-ScriptRunner::ScriptRunner(Game& game, sdl::Renderer& renderer)
-	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false), is_dialogue_of_choice_menu_visible_(false),
-	character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(renderer, game), choice_menu_manager_(renderer, game)
+ScriptRunner::ScriptRunner(TextboxManager::UiOnTextbox ui_on_textbox, UiManager& ui_manager, Game& game, sdl::Renderer& renderer)
+	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false), is_dialogue_of_choice_menu_visible_(false), hide_ui_(false),
+	ui_manager_(ui_manager), character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), 
+	music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(ui_on_textbox, renderer, game), choice_menu_manager_(ui_manager, renderer, game)
 {
 	character_manager_.create_narrator();
 	init_dialogues_script_index();
@@ -120,14 +119,24 @@ void ScriptRunner::init_to_first_dialogue()
 
 void ScriptRunner::handle_events(const SDL_Event& e)
 {
+	if(!hide_ui_)
+	{
+		textbox_manager_.handle_events_mouse_wheel(e);
+		ui_manager_.handle_events(e);
+		if(!ui_manager_.is_mouse_on_widget_) //uniquement s'il n'y a pas de collision avec un textbutton, gérer les événements "clic" et "espace" de la Textbox (= passer au prochain dialogue)
+		{
+			textbox_manager_.handle_events_keyboard_mouse(e);
+		}
+	}
+
 	if(is_dialogue_of_choice_menu_visible_) //empêcher l'utilisation du clic gauche et de la touche espace quand le choice menu est affiché
 	{
-		textbox_manager_.handle_events_ui_manager(e);
+		//textbox_manager_.handle_events_ui_manager(e);
 		textbox_manager_.handle_events_mouse_wheel(e); 
 	}
 	else
 	{
-		textbox_manager_.handle_events(e);
+		//textbox_manager_.handle_events(e);
 	}
 
 	transition_manager_.handle_events(e);
@@ -147,6 +156,10 @@ void ScriptRunner::handle_events(const SDL_Event& e)
 			sound_manager_.fade_in(*sound_manager_.sound_, sound_manager_.audio_properties_); 
 		}
 	}
+	else if(e.type == SDL_MOUSEBUTTONDOWN && (e.button.button == SDL_BUTTON_RIGHT || e.button.button == SDL_BUTTON_MIDDLE))
+	{
+		hide_ui_ = !hide_ui_;
+	}
 }
 
 void ScriptRunner::draw(sdl::Renderer& renderer)
@@ -154,14 +167,19 @@ void ScriptRunner::draw(sdl::Renderer& renderer)
 	background_manager_.draw(renderer);
 	character_manager_.draw(renderer);
 
-	if(current_script_index_ != 0 && std::holds_alternative<Script::InfoChoiceMenu>(script_.script_information_[current_script_index_ - 1]))
+	if(!hide_ui_)
 	{
-		choice_menu_manager_.draw(renderer);
-	}
+		if(current_script_index_ != 0 && std::holds_alternative<Script::InfoChoiceMenu>(script_.script_information_[current_script_index_ - 1]))
+		{
+			choice_menu_manager_.draw(renderer);
+		}
 
-	if(!transition_manager_.transition_playing_)
-	{
-		textbox_manager_.draw(renderer);
+		if(!transition_manager_.transition_playing_)
+		{
+			textbox_manager_.draw(renderer);
+		}
+
+		ui_manager_.draw(renderer);
 	}
 
 	transition_manager_.draw(renderer);
@@ -252,7 +270,10 @@ void ScriptRunner::update()
 	}
 	else
 	{
-		textbox_manager_.update_skip_auto_modes(); //placée ici car doit être exécutée avant move_dialogue()
+		if(!hide_ui_)
+		{
+			textbox_manager_.update_skip_auto_modes(); //placée ici car doit être exécutée avant move_dialogue()
+		}
 	}
 
 	if(textbox_manager_.skip_mode_ || textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_) //don't play background transition in skip mode or when we scroll with the mouse wheel
@@ -277,7 +298,12 @@ void ScriptRunner::update()
 	
 	character_manager_.update_characters();
 	transition_manager_.update_transition();
-	choice_menu_manager_.update_buttons();
+
+	if(!hide_ui_)
+	{
+		choice_menu_manager_.update_buttons();
+		textbox_manager_.update_textbox();
+	}
 }
 
 void ScriptRunner::play_all_sounds_before_previous_dialogue(size_t target_script_index)

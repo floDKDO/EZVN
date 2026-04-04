@@ -9,7 +9,6 @@ class HistoryMenu : public GameState
 	public:
 		HistoryMenu(Game& game, sdl::Renderer& renderer);
 
-		void create_history_scroll_area(sdl::Renderer& renderer);
 		void build_ui_elements(sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;

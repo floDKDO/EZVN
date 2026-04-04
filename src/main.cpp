@@ -132,6 +132,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
+//TODO : nommage des éléments. Exemple : "Play - MainMenu"
+
+//TODO : bug avec les boutons de la scrollbar => le son de sélection se joue en boucle quand on bouge la souris sur le bouton
+
 //TODO : la souris entre en collision avec des éléments non affichés de la scrollable area
 
 //TODO : déplacements entre UI bizarre dans le menu Options

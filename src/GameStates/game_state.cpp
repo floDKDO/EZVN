@@ -19,3 +19,11 @@ void GameState::update()
 {
 	ui_manager_.update();
 }
+
+Ui* GameState::add_ui_element(std::unique_ptr<Ui> ui)
+{
+	Ui* ui_ptr = ui.get();
+	ui_elements_.push_back(std::move(ui));
+	ui_manager_.register_element(ui_ptr);
+	return ui_ptr;
+}

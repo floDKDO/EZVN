@@ -3,29 +3,29 @@
 
 #include <iostream>
 
-ChoiceMenuManager::ChoiceMenuManager(sdl::Renderer& renderer, Game& game)
-	: choice_made_(false), is_visible_(false), ui_group_(nullptr), ui_manager_(game.audio_manager_, renderer), renderer_(renderer)
+ChoiceMenuManager::ChoiceMenuManager(UiManager& ui_manager, sdl::Renderer& renderer, Game& game)
+	: choice_made_(false), is_visible_(false), ui_group_(nullptr), ui_manager_(ui_manager), renderer_(renderer)
 {
 	build_ui_elements(renderer);
 }
 
 void ChoiceMenuManager::build_ui_elements([[maybe_unused]] sdl::Renderer& renderer)
 {
-	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>(0, constants::choice_menu_y_delta_); 
-	ui_group_ = ui_group.get();
-	ui_manager_.add_element(std::move(ui_group));
+	ui_group_ = std::make_unique<UiGroup>(0, constants::choice_menu_y_delta_); 
+	ui_manager_.register_element(ui_group_.get());
 	ui_manager_.set_elements();
 }
 
 void ChoiceMenuManager::clear_before_update()
 {
-	all_after_choice_dialogues_.clear();
+	//TODO
+	/*all_after_choice_dialogues_.clear();
 	for(std::unique_ptr<UiWidget>& ui_widget : ui_group_->ui_elements_)
 	{
 		ui_widget.reset();
 	}
 	ui_group_->ui_elements_.clear();
-	ui_manager_.clear_navigation_list(UiManager::normal_ui_);
+	ui_manager_.clear_navigation_list(UiManager::normal_ui_);*/
 }
 
 void ChoiceMenuManager::handle_events(const SDL_Event& e)
@@ -46,7 +46,7 @@ void ChoiceMenuManager::draw(sdl::Renderer& renderer)
 
 void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 {
-	clear_before_update();
+	//clear_before_update(); //TODO
 
 	for(int i = 0; i < info_choice_menu.texts_.size(); ++i)
 	{

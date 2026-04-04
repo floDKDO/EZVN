@@ -4,43 +4,17 @@
 
 #include <iostream>
 
-TextboxManager::TextboxManager(sdl::Renderer& renderer, Game& game)
-	: dialogue_instruction_({Where::NONE, false, false}), skip_mode_(false), last_time_(0), auto_mode_(false), hide_ui_textbox_(false), where_(constants::default_textbox_position_),
-	textbox_(renderer), ui_manager_(game.audio_manager_, renderer), history_button_(nullptr), skip_toggle_(nullptr), auto_toggle_(nullptr), save_button_(nullptr), 
-	load_button_(nullptr), settings_button_(nullptr), game_(game), renderer_(renderer)
+TextboxManager::TextboxManager(UiOnTextbox ui_on_textbox, sdl::Renderer& renderer, Game& game)
+	: dialogue_instruction_({Where::NONE, false, false}), skip_mode_(false), last_time_(0), auto_mode_(false), where_(constants::default_textbox_position_),
+	textbox_(renderer), ui_on_textbox_(ui_on_textbox), game_(game), renderer_(renderer)
 {
-	build_ui_elements(renderer);
-}
-
-void TextboxManager::build_ui_elements(sdl::Renderer& renderer)
-{
-	std::unique_ptr<TextButton> history_ui = std::make_unique<TextButton>("History", 0, 0, renderer, std::bind(&TextboxManager::history_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	history_button_ = history_ui.get();
-	ui_manager_.add_element(std::move(history_ui));
-
-	std::unique_ptr<TextToggle> skip_ui = std::make_unique<TextToggle>("Skip", 0, 0, false, renderer, std::bind(&TextboxManager::skip_function, this, std::placeholders::_1), TextToggle::Kind::ON_TEXTBOX);
-	skip_toggle_ = skip_ui.get();
-	ui_manager_.add_element(std::move(skip_ui));
-
-	std::unique_ptr<TextToggle> auto_ui = std::make_unique<TextToggle>("Auto", 0, 0, false, renderer, std::bind(&TextboxManager::auto_function, this, std::placeholders::_1), TextToggle::Kind::ON_TEXTBOX);
-	auto_toggle_ = auto_ui.get();
-	ui_manager_.add_element(std::move(auto_ui));
-
-	std::unique_ptr<TextButton> save_ui = std::make_unique<TextButton>("Save", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	save_button_ = save_ui.get();
-	ui_manager_.add_element(std::move(save_ui));
-
-	std::unique_ptr<TextButton> load_ui = std::make_unique<TextButton>("Load", 0, 0, renderer, std::bind(&TextboxManager::temp_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	load_button_ = load_ui.get();
-	ui_manager_.add_element(std::move(load_ui));
-
-	std::unique_ptr<TextButton> settings_ui = std::make_unique<TextButton>("Settings", 0, 0, renderer, std::bind(&TextboxManager::settings_function, this, std::placeholders::_1), TextButton::Kind::ON_TEXTBOX);
-	settings_button_ = settings_ui.get();
-	ui_manager_.add_element(std::move(settings_ui));
-
-	set_position_ui_textbox(constants::default_textbox_position_); 
-
-	ui_manager_.set_elements();
+	ui_on_textbox_.history_button_->callback_function_ = std::bind(&TextboxManager::history_function, this, std::placeholders::_1);
+	ui_on_textbox_.save_button_->callback_function_ = std::bind(&TextboxManager::temp_function, this, std::placeholders::_1);
+	ui_on_textbox_.load_button_->callback_function_ = std::bind(&TextboxManager::temp_function, this, std::placeholders::_1);
+	ui_on_textbox_.settings_button_->callback_function_ = std::bind(&TextboxManager::settings_function, this, std::placeholders::_1);
+	ui_on_textbox_.skip_toggle_->callback_function_ = std::bind(&TextboxManager::skip_function, this, std::placeholders::_1);
+	ui_on_textbox_.auto_toggle_->callback_function_ = std::bind(&TextboxManager::auto_function, this, std::placeholders::_1);
+	set_position_ui_textbox(constants::default_textbox_position_);
 }
 
 void TextboxManager::set_position_ui_textbox(std::string_view where)
@@ -52,22 +26,22 @@ void TextboxManager::set_position_ui_textbox(std::string_view where)
 	int x_textbutton = textbox_.textbox_.position_.x + constants::textbox_ui_elements_x_delta_;
 	int y_textbutton = textbox_.textbox_.position_.y + textbox_.textbox_.position_.h + constants::textbox_ui_elements_y_delta_;
 
-	history_button_->change_position(x_textbutton, y_textbutton);
-	x_textbutton += history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_on_textbox_.history_button_->change_position(x_textbutton, y_textbutton);
+	x_textbutton += ui_on_textbox_.history_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	skip_toggle_->change_position(x_textbutton, y_textbutton);
-	x_textbutton += skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_on_textbox_.skip_toggle_->change_position(x_textbutton, y_textbutton);
+	x_textbutton += ui_on_textbox_.skip_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	auto_toggle_->change_position(x_textbutton, y_textbutton);
-	x_textbutton += auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_on_textbox_.auto_toggle_->change_position(x_textbutton, y_textbutton);
+	x_textbutton += ui_on_textbox_.auto_toggle_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	save_button_->change_position(x_textbutton, y_textbutton);
-	x_textbutton += save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_on_textbox_.save_button_->change_position(x_textbutton, y_textbutton);
+	x_textbutton += ui_on_textbox_.save_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	load_button_->change_position(x_textbutton, y_textbutton);
-	x_textbutton += load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
+	ui_on_textbox_.load_button_->change_position(x_textbutton, y_textbutton);
+	x_textbutton += ui_on_textbox_.load_button_->text_.get_width_text() + constants::textbox_ui_elements_x_spacing_;
 
-	settings_button_->change_position(x_textbutton, y_textbutton);
+	ui_on_textbox_.settings_button_->change_position(x_textbutton, y_textbutton);
 }
 
 std::string TextboxManager::get_dialogue()
@@ -82,19 +56,19 @@ std::string TextboxManager::get_speaker_name()
 
 void TextboxManager::uncheck_skip_toggle()
 {
-	skip_toggle_->change_checked(false);
+	ui_on_textbox_.skip_toggle_->change_checked(false);
 	skip_mode_ = false;
 }
 
 void TextboxManager::uncheck_auto_toggle()
 {
-	auto_toggle_->change_checked(false);
+	ui_on_textbox_.auto_toggle_->change_checked(false);
 	auto_mode_ = false;
 }
 
 void TextboxManager::handle_events_ui_manager(const SDL_Event& e)
 {
-	ui_manager_.handle_events(e);
+	//ui_manager_.handle_events(e);
 }
 
 void TextboxManager::handle_events_mouse_wheel(const SDL_Event& e)
@@ -133,30 +107,18 @@ void TextboxManager::handle_events_keyboard_mouse(const SDL_Event& e)
 
 void TextboxManager::handle_events(const SDL_Event& e)
 {
-	if(!hide_ui_textbox_)
-	{
-		handle_events_mouse_wheel(e);
-		handle_events_ui_manager(e);
-		if(ui_manager_.is_mouse_on_widget_)
-		{
-			return; //si collision avec un textbutton, ne pas gérer les événements "clic" et "espace" de la Textbox (= ne pas passer au prochain dialogue)
-		}
-		handle_events_keyboard_mouse(e);
-	}
-
-	if(e.type == SDL_MOUSEBUTTONDOWN && (e.button.button == SDL_BUTTON_RIGHT || e.button.button == SDL_BUTTON_MIDDLE))
-	{
-		hide_ui_textbox_ = !hide_ui_textbox_;
-	}
+	handle_events_mouse_wheel(e);
+	//handle_events_ui_manager(e);
+	//if(ui_manager_.is_mouse_on_widget_)
+	//{
+	//	return; //si collision avec un textbutton, ne pas gérer les événements "clic" et "espace" de la Textbox (= ne pas passer au prochain dialogue)
+	//}
+	handle_events_keyboard_mouse(e);
 }
 
 void TextboxManager::draw(sdl::Renderer& renderer)
 {
-	if(!hide_ui_textbox_)
-	{
-		textbox_.draw(renderer);
-		ui_manager_.draw(renderer);
-	}
+	textbox_.draw(renderer);
 }
 
 //Fonctions de callback///////////////////////////////////////////
@@ -215,15 +177,14 @@ void TextboxManager::update_skip_auto_modes()
 	}
 }
 
+void TextboxManager::update_textbox()
+{
+	textbox_.update();
+}
+
 void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Character& character)
 {
 	//update_skip_auto_modes();
-
-	if(!hide_ui_textbox_)
-	{
-		ui_manager_.update();
-		textbox_.update();
-	}
 
 	if(info_textbox.t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE)
 	{

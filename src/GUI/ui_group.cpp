@@ -48,7 +48,7 @@ std::vector<UiWidget*> UiGroup::get_navigation_nodes()
 	return widgets;
 }
 
-void UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
+UiWidget* UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 {
 	if(Checkable* c = dynamic_cast<Checkable*>(widget.get()); c != nullptr)
 	{
@@ -81,7 +81,9 @@ void UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 	}
 	widget->change_position(rect.x, rect.y);
 
+	UiWidget* widget_ptr = widget.get();
 	ui_elements_.push_back(std::move(widget));
+	return widget_ptr;
 }
 
 void UiGroup::set_title(std::string_view title)

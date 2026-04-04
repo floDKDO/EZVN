@@ -6,7 +6,7 @@
 class ChoiceMenuManager
 {
 	public:
-		ChoiceMenuManager(sdl::Renderer& renderer, Game& game);
+		ChoiceMenuManager(UiManager& ui_manager, sdl::Renderer& renderer, Game& game);
 
 		void clear_before_update();
 		void handle_events(const SDL_Event& e);
@@ -22,8 +22,8 @@ class ChoiceMenuManager
 		Script::ChoiceMenuNextDialogue after_choice_dialogue_;
 
 	private:
-		UiGroup* ui_group_;
-		UiManager ui_manager_;
+		std::unique_ptr<UiGroup> ui_group_;
+		UiManager& ui_manager_;
 		sdl::Renderer& renderer_;
 };
 

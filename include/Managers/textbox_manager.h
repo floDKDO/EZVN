@@ -22,7 +22,17 @@ class TextboxManager
 			bool wait_for_end_of_dialogue_;
 		};
 
-		TextboxManager(sdl::Renderer& renderer, Game& game);
+		struct UiOnTextbox
+		{
+			TextButton* history_button_;
+			TextToggle* skip_toggle_;
+			TextToggle* auto_toggle_;
+			TextButton* save_button_;
+			TextButton* load_button_;
+			TextButton* settings_button_;
+		};
+
+		TextboxManager(UiOnTextbox ui_on_textbox, sdl::Renderer& renderer, Game& game);
 
 		std::string get_dialogue();
 		std::string get_speaker_name();
@@ -46,6 +56,7 @@ class TextboxManager
 		void temp_function(Ui* ui);
 
 		void update_skip_auto_modes();
+		void update_textbox();
 		void update(const Script::InfoTextbox& info_textbox, const Character& character);
 
 		void reset();
@@ -55,23 +66,10 @@ class TextboxManager
 
 	private:
 		Uint64 last_time_;
-
 		bool auto_mode_;
-		bool hide_ui_textbox_;
-
 		std::string where_;
-
 		Textbox textbox_;
-		
-		UiManager ui_manager_; 
-
-		TextButton* history_button_;
-		TextToggle* skip_toggle_;
-		TextToggle* auto_toggle_;
-		TextButton* save_button_;
-		TextButton* load_button_;
-		TextButton* settings_button_;
-
+		UiOnTextbox ui_on_textbox_;
 		Game& game_;
 		sdl::Renderer& renderer_;
 };

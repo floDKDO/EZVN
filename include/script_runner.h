@@ -13,7 +13,7 @@
 class ScriptRunner
 {
 	public:
-		ScriptRunner(Game& game, sdl::Renderer& renderer);
+		ScriptRunner(TextboxManager::UiOnTextbox ui_on_textbox, UiManager& ui_manager, Game& game, sdl::Renderer& renderer);
 
 		void init_dialogues_script_index();
 		std::optional<size_t> get_script_index_of_previous_dialogue();
@@ -51,7 +51,9 @@ class ScriptRunner
 
 		bool init_;
 		bool is_dialogue_of_choice_menu_visible_;
+		bool hide_ui_;
 
+		UiManager& ui_manager_;
 		CharacterManager character_manager_;
 		BackgroundManager background_manager_;
 		MusicManager music_manager_;  

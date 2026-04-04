@@ -24,22 +24,22 @@ void UiManager::clear_navigation_list(size_t ui_level)
 
 void UiManager::reset_normal_ui()
 {
-	for(std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
+	/*for(std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
 	{
 		ui.reset();
 	}
 	ui_elements_[normal_ui_].clear();
-	navigation_list_[normal_ui_].clear();
+	navigation_list_[normal_ui_].clear();*/
 }
 
 void UiManager::reset_modal_ui()
 {
-	for(std::unique_ptr<Ui>& ui : ui_elements_[modal_ui_])
+	/*for(std::unique_ptr<Ui>& ui : ui_elements_[modal_ui_])
 	{
 		ui.reset();
 	}
 	ui_elements_[modal_ui_].clear();
-	navigation_list_[modal_ui_].clear();
+	navigation_list_[modal_ui_].clear();*/
 }
 
 void UiManager::reset()
@@ -48,21 +48,26 @@ void UiManager::reset()
 	reset_normal_ui();
 }
 
-void UiManager::add_element(std::unique_ptr<Ui> ui)
+void UiManager::register_element(Ui* ui)
 {
-	ui_elements_[normal_ui_].push_back(std::move(ui));
+	ui_elements2_[normal_ui_].push_back(ui);
 }
+
+//void UiManager::add_element(std::unique_ptr<Ui> ui)
+//{
+//	ui_elements_[normal_ui_].push_back(std::move(ui));
+//}
 
 void UiManager::set_elements()
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
+	for(Ui* ui : ui_elements2_[normal_ui_])
 	{
 		std::vector<UiWidget*> nodes;
-		if(UiWidget* widget = dynamic_cast<UiWidget*>(ui.get()); widget != nullptr)
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(ui); widget != nullptr)
 		{
 			nodes = widget->get_navigation_nodes();
 		}
-		else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(ui.get()); ui_group != nullptr)
+		else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(ui); ui_group != nullptr)
 		{
 			nodes = ui_group->get_navigation_nodes();
 		}
@@ -97,7 +102,7 @@ void UiManager::set_elements()
 
 void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function)
 {
-	std::unique_ptr<ConfirmationPopUp> confirmation_popup = std::make_unique<ConfirmationPopUp>(text, renderer_, callback_function);
+	/*std::unique_ptr<ConfirmationPopUp> confirmation_popup = std::make_unique<ConfirmationPopUp>(text, renderer_, callback_function);
 
 	ConfirmationPopUp* p = confirmation_popup.get();
 	navigation_list_[modal_ui_].push_back(&p->no_);
@@ -111,7 +116,7 @@ void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> c
 
 	assign_widget_on_moving(modal_ui_);
 
-	is_pop_up_visible_ = true;
+	is_pop_up_visible_ = true;*/
 }
 
 bool UiManager::is_widget1_facing_widget2(SDL_Rect pos_widget1, SDL_Rect pos_widget2, Axis mode) const
@@ -505,9 +510,9 @@ void UiManager::handle_events(const SDL_Event& e)
 
 void UiManager::draw(sdl::Renderer& renderer)
 {
-	for(const std::vector<std::unique_ptr<Ui>>& ui_vector : ui_elements_)
+	for(const std::vector<Ui*>& ui_vector : ui_elements2_)
 	{
-		for(const std::unique_ptr<Ui>& ui : ui_vector)
+		for(Ui* ui : ui_vector)
 		{
 			ui->draw(renderer);
 		}
@@ -516,9 +521,9 @@ void UiManager::draw(sdl::Renderer& renderer)
 
 void UiManager::update()
 {
-	if(ui_elements_[modal_ui_].size() > 0)
+	if(ui_elements2_[modal_ui_].size() > 0)
 	{
-		if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements_[modal_ui_].front().get()); popup != nullptr)
+		if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements2_[modal_ui_].front()); popup != nullptr)
 		{
 			if(!popup->is_confirmationpopup_visible_)
 			{
@@ -529,9 +534,9 @@ void UiManager::update()
 		}
 	}
 
-	for(const std::vector<std::unique_ptr<Ui>>& ui_vector : ui_elements_)
+	for(const std::vector<Ui*>& ui_vector : ui_elements2_)
 	{
-		for(const std::unique_ptr<Ui>& ui : ui_vector)
+		for(Ui* ui : ui_vector)
 		{
 			ui->update();
 		}
