@@ -14,7 +14,7 @@ InGame::InGame(Game& game, sdl::Renderer& renderer)
 
 void InGame::build_ui_elements(sdl::Renderer& renderer)
 {
-	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>("", 100, 100, renderer);
+	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>("", 0, 0, renderer);
 	ui_on_textbox_.history_button_ = dynamic_cast<TextButton*>(ui_group->add_ui_element(std::make_unique<TextButton>("History", 0, 0, renderer, nullptr, TextButton::Kind::ON_TEXTBOX))); //TODO : pas ouf => à terme, utiliser des forwarding references pour que le bon type soit retourné //pas de fonction de callback
 	ui_on_textbox_.skip_toggle_ = dynamic_cast<TextToggle*>(ui_group->add_ui_element(std::make_unique<TextToggle>("Skip", 0, 0, false, renderer, nullptr, TextToggle::Kind::ON_TEXTBOX))); //TODO : pas ouf => à terme, utiliser des forwarding references pour que le bon type soit retourné
 	ui_on_textbox_.auto_toggle_ = dynamic_cast<TextToggle*>(ui_group->add_ui_element(std::make_unique<TextToggle>("Auto", 0, 0, false, renderer, nullptr, TextToggle::Kind::ON_TEXTBOX))); //TODO : pas ouf => à terme, utiliser des forwarding references pour que le bon type soit retourné

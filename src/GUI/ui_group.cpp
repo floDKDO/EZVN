@@ -1,17 +1,16 @@
 #include "GUI/ui_group.h"
-#include "GUI/checkable.h"
 #include "constants.h"
 
 #include <iostream>
 
 UiGroup::UiGroup(int x, int y)
-	: title_(nullptr), frame_({x, y, 0, 0}), only_one_has_to_be_checked_(true)
+	: title_(nullptr), frame_({x, y, 0, 0})
 {
 	is_visible_ = true;
 }
 
 UiGroup::UiGroup(std::string_view title, int x, int y, sdl::Renderer& renderer)
-	: frame_({x, y, 0, 0}), title_(std::make_unique<Text>(title, constants::textbutton_normal_color_, constants::textbutton_font_, constants::textbutton_text_size_, x, y, renderer)), only_one_has_to_be_checked_(true)
+	: frame_({x, y, 0, 0}), title_(std::make_unique<Text>(title, constants::textbutton_normal_color_, constants::textbutton_font_, constants::textbutton_text_size_, x, y, renderer))
 {
 	is_visible_ = true;
 }
@@ -54,11 +53,6 @@ std::vector<UiWidget*> UiGroup::get_navigation_nodes()
 
 UiWidget* UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 {
-	if(Checkable* c = dynamic_cast<Checkable*>(widget.get()); c != nullptr)
-	{
-		c->checkable_group_ = this;
-	}
-
 	SDL_Rect rect = widget->rect_;
 
 	int x_offset = 0;
@@ -100,37 +94,5 @@ void UiGroup::set_center()
 	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
 	{
 		ui_widget->change_position((constants::window_width_ / 2) - (ui_widget->rect_.w / 2), ui_widget->rect_.y);
-	}
-}
-
-
-//Les 3 méthodes suivantes sont utilisées uniquement pour les éléments de type Checkable
-
-void UiGroup::uncheck_all_others(const Checkable* checkable_to_not_uncheck)
-{
-	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
-	{
-		Checkable* c = dynamic_cast<Checkable*>(ui_widget.get());
-		if(c != nullptr && c != checkable_to_not_uncheck)
-		{
-			c->change_checked(false);
-		}
-	}
-}
-
-void UiGroup::handle_only_one_has_to_be_checked(Checkable* checkable_to_not_uncheck)
-{
-	if(checkable_to_not_uncheck->previous_checked_) //Cas press sur un checkable déjà coché => ne pas le décocher dans ce cas
-	{
-		checkable_to_not_uncheck->change_checked(true);
-	}
-	uncheck_all_others(checkable_to_not_uncheck);
-}
-
-void UiGroup::on_press(Checkable* c)
-{
-	if(only_one_has_to_be_checked_ && (c->is_checked_ || c->previous_checked_))
-	{
-		handle_only_one_has_to_be_checked(c);
 	}
 }

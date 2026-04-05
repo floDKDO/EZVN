@@ -47,6 +47,8 @@ void TextToggle::update()
 	}
 	else if(state_ == State::SELECTED)
 	{
+		//std::cout << text_.text_ << ", " << std::boolalpha << is_checked_ << std::endl;
+
 		if(is_checked_)
 		{
 			if(text_.color_.r_ != constants::texttoggle_selected_checked_color_.r_

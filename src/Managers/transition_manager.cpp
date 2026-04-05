@@ -6,6 +6,11 @@ TransitionManager::TransitionManager()
 	: transition_playing_(false), new_background_displayed_(false)
 {}
 
+bool TransitionManager::is_first_part_finished() const
+{
+	return transition_->first_part_finished_;
+}
+
 void TransitionManager::handle_events(const SDL_Event& e)
 {
 	if((e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)

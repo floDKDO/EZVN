@@ -11,6 +11,7 @@ CharacterManager::CharacterManager(sdl::Renderer& renderer, std::unordered_map<s
 
 void CharacterManager::create_narrator()
 {
+	std::cout << "Create narrator!\n";
 	std::string narrator_string = std::string(constants::default_narrator_name_);
 	CharacterDefinition& character_definition = character_definitions_.at(narrator_string);
 	active_characters_.insert(std::make_pair(narrator_string, Character(character_definition)));

@@ -24,6 +24,11 @@ Text::Text(std::string_view text, Color color, std::string_view font_path, int f
 
 	texture_ = std::make_unique<sdl::Texture>(renderer_, surface_);
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
+
+	if(is_animated)
+	{
+		std::cout << "CONSTRUCTEUR: " << text << ", " << x << ", " << y << ", font_size: " << font_size << ", is_animated: " << std::boolalpha << is_animated << std::endl;
+	}
 }
 
 sdl::Font Text::create_outline()
@@ -188,13 +193,14 @@ void Text::update()
 			last_time_ = now;
 		}
 
-		if(text_.length() == 0 || index_dialogue_ == text_.length() - 1) //TODO : text_.length() == 0 obligatoire ??
+		if(/*text_.length() == 0 ||*/ index_dialogue_ == text_.length()) //TODO : text_.length() == 0 obligatoire ??
 		{
 			is_finished_ = true;
 		}
 	}
 	else
 	{
+		//std::cout << "NOT ANIMATED: " << text_ << std::endl;
 		is_finished_ = true; //pour bouton Skip
 	}
 

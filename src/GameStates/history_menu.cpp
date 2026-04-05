@@ -45,6 +45,11 @@ void HistoryMenu::add_dialogue_to_history(std::string_view character_name, std::
 	});
 }
 
+void HistoryMenu::remove_last_dialogue_from_history()
+{
+	scroll_ptr_->remove_last_text();
+}
+
 void HistoryMenu::previous_menu_function([[maybe_unused]] Ui* ui)
 {
 	std::cout << "Pressed => go back to previous menu!" << std::endl;

@@ -2,8 +2,6 @@
 
 #include "game_state.h"
 #include "image.h"
-#include "GUI/scrollable_area.h"
-#include "GUI/ui_group.h"
 
 class SettingsMenu : public GameState
 {

@@ -2,6 +2,7 @@
 
 #include "constants.h"
 #include "GameStates/game_state.h"
+#include "GameStates/history_menu.h"
 #include "Managers/ui_manager.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
@@ -104,6 +105,8 @@ class Game
 		void change_namebox_text_color(std::string_view character_variable, Color namebox_text_color);
 
 		void move_textbox(std::string_view where);
+
+		HistoryMenu* history_menu_ptr_;
 
 	private:
 		enum class Action

@@ -24,7 +24,7 @@ class ScriptRunner
 		bool is_current_script_index_a_dialogue();
 		bool is_script_index_a_dialogue(size_t script_index);
 		void save_current_script_index_when_scroll_back();
-		void move_dialogue(TextboxManager::Where where, bool is_from_mouse_wheel_);
+		void move_dialogue();
 		void init_to_first_dialogue();
 
 		void handle_events(const SDL_Event& e);
@@ -49,9 +49,9 @@ class ScriptRunner
 
 		std::set<size_t> dialogues_script_index_;
 
-		bool init_;
+		bool init_on_first_dialogue_;
 		bool is_dialogue_of_choice_menu_visible_;
-		bool hide_ui_;
+		bool are_ui_hidden_;
 
 		UiManager& ui_manager_;
 		CharacterManager character_manager_;

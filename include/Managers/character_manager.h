@@ -22,12 +22,12 @@ class CharacterManager
 		void reset();
 
 		std::unordered_map<std::string, Character> active_characters_;
-		bool autofocus_;
-		bool autozorder_;
 
 	private:
+		bool autofocus_;
+		bool autozorder_;
 		std::unordered_map<std::string, CharacterDefinition>& character_definitions_;
-		std::vector<std::string> draw_characters_order_;
 		sdl::Renderer& renderer_;
+		std::vector<std::string> draw_characters_order_;
 };
 
