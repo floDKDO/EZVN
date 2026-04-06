@@ -212,7 +212,7 @@ void ScriptRunner::apply_script_line()
 		textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_)); //TODO : erreur si le personnage n'a pas déjà été show alors que cela devrait marcher dans ce cas là
 		character_manager_.update_characters_dialogue(info_textbox);
 
-		if(choice_menu_manager_.is_visible_ && textbox_manager_.textbox_.text_.is_finished_)
+		if(choice_menu_manager_.is_visible_ && textbox_manager_.is_dialogue_finished())
 		{
 			is_dialogue_of_choice_menu_visible_ = true; 
 		}

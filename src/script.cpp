@@ -172,8 +172,6 @@ void Script::insert_choice_menu(std::string_view character_variable, std::string
 {
 	script_information_.push_back(InfoChoiceMenu(texts));
 
-	//TODO : problème avec le clavier si j'appuie sur entrée
-
 	InfoTextbox info_textbox;
 	info_textbox.character_variable_ = character_variable;
 	info_textbox.t_.textbox_command_kind_ = TextboxCommandKind::DIALOGUE;

@@ -2,7 +2,6 @@
 #include "GUI/slider.h"
 #include "GUI/inputfield.h"
 #include "GUI/scrollbar.h"
-#include "GUI/confirmation_popup.h"
 #include "constants.h"
 #include "utils.h"
 #include "GUI/ui_group.h"
@@ -13,37 +12,27 @@ const size_t UiManager::modal_ui_ = 1;
 const size_t UiManager::normal_ui_ = 0;
 
 UiManager::UiManager(AudioManager& audio_manager, sdl::Renderer& renderer)
-	: is_mouse_on_widget_(false), previous_selected_(nullptr), current_selected_(nullptr), current_selected_normal_ui_(nullptr), is_mouse_left_button_held_down_(false), is_pop_up_visible_(false),
-	audio_manager_(audio_manager), renderer_(renderer), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
+	: is_mouse_on_widget_(false), confirmation_popup_(std::make_unique<ConfirmationPopUp>("", renderer, nullptr)), previous_selected_(nullptr), current_selected_(nullptr), 
+	current_selected_normal_ui_(nullptr), is_mouse_left_button_held_down_(false), is_pop_up_visible_(false), audio_manager_(audio_manager), renderer_(renderer), 
+	ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
-//TODO : paramètre inutile
-void UiManager::update_navigation_list(size_t ui_level)
+void UiManager::update_navigation_list()
 {
 	navigation_list_[normal_ui_].clear();
 	set_elements();
 }
 
-//TODO : inutile 
 void UiManager::reset_normal_ui()
 {
-	/*for(std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
-	{
-		ui.reset();
-	}
 	ui_elements_[normal_ui_].clear();
-	navigation_list_[normal_ui_].clear();*/
+	navigation_list_[normal_ui_].clear();
 }
 
-//TODO : inutile 
 void UiManager::reset_modal_ui()
 {
-	/*for(std::unique_ptr<Ui>& ui : ui_elements_[modal_ui_])
-	{
-		ui.reset();
-	}
 	ui_elements_[modal_ui_].clear();
-	navigation_list_[modal_ui_].clear();*/
+	navigation_list_[modal_ui_].clear();
 }
 
 void UiManager::reset()
@@ -101,13 +90,14 @@ void UiManager::set_elements()
 
 void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function)
 {
-	//TODO
-	/*std::unique_ptr<ConfirmationPopUp> confirmation_popup = std::make_unique<ConfirmationPopUp>(text, renderer_, callback_function);
+	confirmation_popup_->change_callback(callback_function);
+	confirmation_popup_->change_message(text);
+	confirmation_popup_->is_confirmationpopup_visible_ = true;
 
-	ConfirmationPopUp* p = confirmation_popup.get();
+	ConfirmationPopUp* p = confirmation_popup_.get();
 	navigation_list_[modal_ui_].push_back(&p->no_);
 	navigation_list_[modal_ui_].push_back(&p->yes_);
-	ui_elements_[modal_ui_].push_back(std::move(confirmation_popup));
+	ui_elements_[modal_ui_].push_back(p);
 
 	current_selected_normal_ui_ = current_selected_; //enregistrer le current_selected_ de normal_ui_
 
@@ -116,7 +106,7 @@ void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> c
 
 	assign_widget_on_moving(modal_ui_);
 
-	is_pop_up_visible_ = true;*/
+	is_pop_up_visible_ = true;
 }
 
 bool UiManager::is_widget1_facing_widget2(SDL_Rect pos_widget1, SDL_Rect pos_widget2, Axis mode) const

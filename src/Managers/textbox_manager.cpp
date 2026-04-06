@@ -75,6 +75,11 @@ bool TextboxManager::is_dialogue_instruction_prev() const
 	return dialogue_instruction_.instruction_ == Instruction::PREV;
 }
 
+bool TextboxManager::is_dialogue_finished() const
+{
+	return textbox_.text_.is_finished_;
+}
+
 std::string TextboxManager::get_dialogue()
 {
 	return textbox_.get_dialogue();

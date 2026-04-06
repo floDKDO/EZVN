@@ -8,6 +8,8 @@ class ConfirmationPopUp : public UiWidget
 	public:
 		ConfirmationPopUp(std::string_view message, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function);
 
+		void change_callback(std::function<void(Ui* ui)> callback_function);
+		void change_message(std::string_view message);
 		void draw(sdl::Renderer& renderer) override;
 		void update() override;
 		std::vector<UiWidget*> get_navigation_nodes() override;

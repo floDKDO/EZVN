@@ -27,7 +27,7 @@ void ChoiceMenuManager::clear_before_update()
 {
 	all_after_choice_dialogues_.clear();
 	ui_group_->clear();
-	ui_manager_.update_navigation_list(UiManager::normal_ui_);
+	ui_manager_.update_navigation_list();
 }
 
 void ChoiceMenuManager::draw(sdl::Renderer& renderer)
@@ -40,7 +40,7 @@ void ChoiceMenuManager::draw(sdl::Renderer& renderer)
 
 void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 {
-	clear_before_update(); //TODO
+	clear_before_update(); 
 
 	for(int i = 0; i < info_choice_menu.texts_.size(); ++i)
 	{
@@ -61,7 +61,7 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 	is_visible_ = true;
 	ui_group_->is_visible_ = true;
 
-	ui_manager_.update_navigation_list(UiManager::normal_ui_);
+	ui_manager_.update_navigation_list();
 }
 
 void ChoiceMenuManager::update_buttons()

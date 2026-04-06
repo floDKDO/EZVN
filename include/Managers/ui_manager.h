@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GUI/ui_widget.h"
+#include "GUI/confirmation_popup.h"
 #include "Managers/audio_manager.h"
 
 #include <vector>
@@ -12,7 +13,7 @@ class UiManager
 	public:
 		UiManager(AudioManager& audio_manager, sdl::Renderer& renderer);
 
-		void update_navigation_list(size_t ui_level);
+		void update_navigation_list();
 		void reset_normal_ui();
 		void reset_modal_ui();
 		void reset();
@@ -56,6 +57,7 @@ class UiManager
 		std::array<std::vector<UiWidget*>, ui_levels_> navigation_list_;
 		std::array<std::vector<Ui*>, ui_levels_> ui_elements_;
 
+		std::unique_ptr<ConfirmationPopUp> confirmation_popup_;
 		UiWidget* previous_selected_;
 		UiWidget* current_selected_;
 		UiWidget* current_selected_normal_ui_;

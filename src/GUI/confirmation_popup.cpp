@@ -27,6 +27,18 @@ ConfirmationPopUp::ConfirmationPopUp(std::string_view message, sdl::Renderer& re
 	rect_ = frame_.position_;
 }
 
+void ConfirmationPopUp::change_callback(std::function<void(Ui* ui)> callback_function)
+{
+	yes_.callback_function_ = callback_function;
+}
+
+void ConfirmationPopUp::change_message(std::string_view message)
+{
+	message_.change_text(message);
+	message_.set_center();
+	message_.position_.y = frame_.position_.y + constants::confirmationpopup_text_y_delta_;
+}
+
 void ConfirmationPopUp::draw(sdl::Renderer& renderer)
 {
 	if(is_confirmationpopup_visible_)

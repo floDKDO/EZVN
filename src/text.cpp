@@ -24,11 +24,6 @@ Text::Text(std::string_view text, Color color, std::string_view font_path, int f
 
 	texture_ = std::make_unique<sdl::Texture>(renderer_, surface_);
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
-
-	if(is_animated)
-	{
-		std::cout << "CONSTRUCTEUR: " << text << ", " << x << ", " << y << ", font_size: " << font_size << ", is_animated: " << std::boolalpha << is_animated << std::endl;
-	}
 }
 
 sdl::Font Text::create_outline()
@@ -79,6 +74,22 @@ void Text::recreate_surfaces_texture()
 
 	texture_ = std::make_unique<sdl::Texture>(renderer_, surface_);
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
+}
+
+void Text::change_text(std::string_view text)
+{
+	text_ = text;
+
+	recreate_surfaces_texture();
+
+	if(is_animated_)
+	{
+		previous_text_ = text_dialogue_;
+	}
+	else
+	{
+		previous_text_ = text_;
+	}
 }
 
 void Text::set_italic()
