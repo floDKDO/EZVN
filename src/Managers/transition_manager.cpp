@@ -3,7 +3,7 @@
 #include <iostream>
 
 TransitionManager::TransitionManager()
-	: transition_playing_(false), new_background_displayed_(false)
+	: transition_playing_(false)
 {}
 
 bool TransitionManager::is_first_part_finished() const
@@ -42,16 +42,11 @@ void TransitionManager::update_transition()
 	if(transition_ != nullptr)
 	{
 		transition_->update();
-		if(transition_->first_part_finished_ && !transition_->transition_finished_)
+		/*if(transition_->first_part_finished_ && !transition_->transition_finished_)
 		{
-			//if(!one_time_)
-			{
-				//std::cout << "FIRST PART FINISHED\n";
-				//current_script_index_ += 1;
-				//new_background_displayed_ = true;
-			}
+
 		}
-		else if(transition_->transition_finished_)
+		else*/ if(transition_->transition_finished_)
 		{
 			reset();
 		}
@@ -62,6 +57,5 @@ void TransitionManager::reset()
 {
 	transition_.reset();
 	transition_ = nullptr;
-	new_background_displayed_ = false;
 	transition_playing_ = false;
 }

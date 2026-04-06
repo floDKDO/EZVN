@@ -12,12 +12,11 @@ class UiManager
 	public:
 		UiManager(AudioManager& audio_manager, sdl::Renderer& renderer);
 
-		void clear_navigation_list(size_t ui_level);
+		void update_navigation_list(size_t ui_level);
 		void reset_normal_ui();
 		void reset_modal_ui();
 		void reset();
 		void register_element(Ui* ui);
-		//void add_element(std::unique_ptr<Ui> ui);
 		void set_elements();
 		void show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function);
 

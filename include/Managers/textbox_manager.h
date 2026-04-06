@@ -67,13 +67,14 @@ class TextboxManager
 		void reset();
 
 		bool skip_mode_;
+		Textbox textbox_; //TODO : remettre en private
 
 	private:
 		DialogueInstruction dialogue_instruction_;
 		Uint64 last_time_;
 		bool auto_mode_;
 		std::string position_;
-		Textbox textbox_;
+		
 		UiOnTextbox ui_on_textbox_;
 
 		Game& game_;

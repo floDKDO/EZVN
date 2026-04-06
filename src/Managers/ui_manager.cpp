@@ -17,9 +17,28 @@ UiManager::UiManager(AudioManager& audio_manager, sdl::Renderer& renderer)
 	audio_manager_(audio_manager), renderer_(renderer), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
-void UiManager::clear_navigation_list(size_t ui_level)
+void UiManager::update_navigation_list(size_t ui_level)
 {
-	navigation_list_[ui_level].clear();
+	assign_widget_on_moving(normal_ui_);
+
+	for(UiWidget* widget : navigation_list_[normal_ui_])
+	{
+		if(widget->state_ == UiWidget::State::SELECTED)
+		{
+			current_selected_ = widget;
+			return;
+		}
+	}
+
+	if(navigation_list_[normal_ui_].size() > 0)
+	{
+		current_selected_ = navigation_list_[normal_ui_][0]; //sélectionner le premier UI (= [0]) de navigation_list
+		current_selected_->state_ = UiWidget::State::SELECTED;
+	}
+	else
+	{
+		current_selected_ = nullptr;
+	}
 }
 
 void UiManager::reset_normal_ui()
@@ -52,11 +71,6 @@ void UiManager::register_element(Ui* ui)
 {
 	ui_elements2_[normal_ui_].push_back(ui);
 }
-
-//void UiManager::add_element(std::unique_ptr<Ui> ui)
-//{
-//	ui_elements_[normal_ui_].push_back(std::move(ui));
-//}
 
 void UiManager::set_elements()
 {
@@ -214,6 +228,11 @@ void UiManager::assign_widget_on_moving(size_t ui_level) const
 
 		for(UiWidget* candidate : navigation_list_[ui_level])
 		{
+			if(candidate == nullptr)
+			{
+				std::cout << "NULLPTR!\n";
+			}
+
 			if(candidate == widget) { continue; }
 
 			const SDL_Rect candidate_pos = candidate->rect_;

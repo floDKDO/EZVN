@@ -16,7 +16,6 @@ class TransitionManager
 		void reset();
 
 		bool transition_playing_;
-		bool new_background_displayed_;
 
 	private:
 		std::unique_ptr<Transition> transition_;

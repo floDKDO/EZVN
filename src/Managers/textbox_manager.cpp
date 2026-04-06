@@ -207,10 +207,6 @@ void TextboxManager::update_textbox()
 
 void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Character& character)
 {
-	//update_skip_auto_modes();
-
-	update_textbox();
-
 	if(info_textbox.t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE)
 	{
 		if(dialogue_instruction_.instruction_ == Instruction::NONE && !textbox_.is_first_dialogue_)
@@ -219,12 +215,10 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 		}
 
 		//std::cout << std::boolalpha << "is_finished: " << textbox_.is_text_finished() << ", text: " << textbox_.text_.text_ << std::endl;
-
 		textbox_.show_new_dialogue(info_textbox.t_.textbox_command_value_, character.properties_.name_, skip_mode_);
 		textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 		textbox_.change_namebox(character.properties_.namebox_path_, renderer_);
 		textbox_.change_namebox_text_color(character.properties_.namebox_text_color_); 
-		//reset_dialogue_instruction();
 		game_.history_menu_ptr_->add_dialogue_to_history(get_speaker_name(), get_dialogue(), character.properties_.namebox_text_color_, textbox_.textbox_.position_.w, renderer_);
 
 		if(!skip_mode_)

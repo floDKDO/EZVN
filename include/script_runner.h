@@ -24,12 +24,14 @@ class ScriptRunner
 		bool is_current_script_index_a_dialogue();
 		bool is_script_index_a_dialogue(size_t script_index);
 		void save_current_script_index_when_scroll_back();
-		void move_dialogue();
+		void update_script_index();
 		void init_to_first_dialogue();
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
-		void apply_line();
+		void apply_script_line();
+		void choice_made_from_choice_menu();
+		void update_managers();
 		void update();
 		void rebuild();
 		void play_all_sounds_before_previous_dialogue(size_t target_script_index);

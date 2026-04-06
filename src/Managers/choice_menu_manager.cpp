@@ -16,6 +16,18 @@ void ChoiceMenuManager::build_ui_elements([[maybe_unused]] sdl::Renderer& render
 	ui_manager_.set_elements();
 }
 
+void ChoiceMenuManager::hide()
+{
+	is_visible_ = false;
+	ui_group_->is_visible_ = false;
+	for(const std::unique_ptr<UiWidget>& ui : ui_group_->ui_elements_)
+	{
+		ui->is_visible_ = false;
+	}
+	choice_made_ = false;
+	clear_before_update();
+}
+
 void ChoiceMenuManager::clear_before_update()
 {
 	//TODO
@@ -25,16 +37,7 @@ void ChoiceMenuManager::clear_before_update()
 		ui_widget.reset();
 	}
 	ui_group_->ui_elements_.clear();
-	ui_manager_.clear_navigation_list(UiManager::normal_ui_);
-}
-
-//TODO : ne fait rien
-void ChoiceMenuManager::handle_events(const SDL_Event& e)
-{
-	/*if(is_visible_)
-	{
-		ui_manager_.handle_events(e);
-	}*/
+	ui_manager_.update_navigation_list(UiManager::normal_ui_);
 }
 
 void ChoiceMenuManager::draw(sdl::Renderer& renderer)
@@ -55,7 +58,7 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 			[this, info_choice_menu, i]([[maybe_unused]] Ui* ui)
 		{
 			std::cout << "You chose: " << info_choice_menu.texts_[i].first << std::endl;
-			after_choice_dialogue_ = {info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_};
+			after_choice_dialogue_chosen_ = {info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_};
 			choice_made_ = true;
 			is_visible_ = false;
 		}
@@ -63,7 +66,7 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 		all_after_choice_dialogues_.push_back({info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_});
 	}
 	ui_group_->set_center();
-	ui_manager_.set_elements();
+	ui_manager_.update_navigation_list(UiManager::normal_ui_);
 
 	choice_made_ = false;
 	is_visible_ = true;
@@ -82,8 +85,8 @@ void ChoiceMenuManager::reset()
 {
 	clear_before_update();
 	//all_after_choice_dialogues_.clear();
-	after_choice_dialogue_.character_variable_.clear();
-	after_choice_dialogue_.dialogue_.clear();
+	after_choice_dialogue_chosen_.character_variable_.clear();
+	after_choice_dialogue_chosen_.dialogue_.clear();
 	choice_made_ = false;
 	is_visible_ = false;
 }
