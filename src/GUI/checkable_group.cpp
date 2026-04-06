@@ -1,12 +1,12 @@
 #include "GUI/checkable_group.h"
 #include "GUI/checkable.h"
 
-CheckableGroup::CheckableGroup(int x, int y, bool only_one_has_to_be_checked)
-	: UiGroup(x, y), only_one_has_to_be_checked_(only_one_has_to_be_checked)
+CheckableGroup::CheckableGroup(int x, int y, bool only_one_has_to_be_checked, Layout layout)
+	: UiGroup(x, y, layout), only_one_has_to_be_checked_(only_one_has_to_be_checked)
 {}
 
-CheckableGroup::CheckableGroup(std::string_view title, int x, int y, bool only_one_has_to_be_checked, sdl::Renderer& renderer)
-	: UiGroup(title, x, y, renderer), only_one_has_to_be_checked_(only_one_has_to_be_checked)
+CheckableGroup::CheckableGroup(std::string_view title, int x, int y, bool only_one_has_to_be_checked, Layout layout, sdl::Renderer& renderer)
+	: UiGroup(title, x, y, layout, renderer), only_one_has_to_be_checked_(only_one_has_to_be_checked)
 {}
 
 Checkable* CheckableGroup::add_ui_element(std::unique_ptr<Checkable> checkable)

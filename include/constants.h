@@ -147,7 +147,7 @@ inline constexpr int textbox_end_dialogue_indicator_y_delta_ = 115;
 inline constexpr std::string_view textbox_end_dialogue_indicator_ = "resources/img/gui/textbox_end_dialogue_indicator.png";
 
 inline constexpr int ui_group_y_spacing_at_top_ = 80;
-inline constexpr int ui_group_y_spacing_between_ui_ = 20;
+inline constexpr int ui_group_spacing_between_ui_ = 20;
 
 inline constexpr int namebox_textbox_x_delta_ = 37;
 inline constexpr std::string_view namebox_image_ = "resources/img/gui/namebox.png";

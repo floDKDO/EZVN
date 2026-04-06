@@ -18,7 +18,7 @@ SettingsMenu::SettingsMenu(Game& game, sdl::Renderer& renderer)
 
 void SettingsMenu::create_display_choices(sdl::Renderer& renderer)
 {
-	std::unique_ptr<CheckableGroup> checkable_group = std::make_unique<CheckableGroup>("Display", 100, 100, true, renderer);
+	std::unique_ptr<CheckableGroup> checkable_group = std::make_unique<CheckableGroup>("Display", 100, 100, true, Layout::VERTICAL, renderer);
 	checkable_group->add_ui_element(std::make_unique<TextToggle>("Windowed", 0, 0, true, renderer, std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1)));
 	checkable_group->add_ui_element(std::make_unique<TextToggle>("Fullscreen", 0, 0, false, renderer, std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)));
 	add_ui_element(std::move(checkable_group));
@@ -27,7 +27,7 @@ void SettingsMenu::create_display_choices(sdl::Renderer& renderer)
 void SettingsMenu::create_resolutions_scroll_area(sdl::Renderer& renderer)
 {
 	std::unique_ptr<ScrollableArea> scroll = std::make_unique<ScrollableArea>("Resolutions", 950, 170, 200, 500, renderer);
-	std::unique_ptr<CheckableGroup> checkable_group = std::make_unique<CheckableGroup>(950, 170, true);
+	std::unique_ptr<CheckableGroup> checkable_group = std::make_unique<CheckableGroup>(950, 170, true, Layout::VERTICAL);
 
 	SDL_DisplayMode window_mode;
 	game_.window_.get_display_mode(&window_mode);

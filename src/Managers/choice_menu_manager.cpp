@@ -6,14 +6,9 @@
 ChoiceMenuManager::ChoiceMenuManager(UiManager& ui_manager, sdl::Renderer& renderer, Game& game)
 	: choice_made_(false), is_visible_(false), ui_group_(nullptr), ui_manager_(ui_manager), renderer_(renderer)
 {
-	build_ui_elements(renderer);
-}
-
-void ChoiceMenuManager::build_ui_elements([[maybe_unused]] sdl::Renderer& renderer)
-{
-	ui_group_ = std::make_unique<UiGroup>(0, constants::choice_menu_y_delta_); 
+	ui_group_ = std::make_unique<UiGroup>(0, constants::choice_menu_y_delta_, Layout::VERTICAL);
 	ui_manager_.register_element(ui_group_.get());
-	ui_manager_.set_elements();
+	//ui_manager_.set_elements();
 }
 
 void ChoiceMenuManager::hide()
@@ -30,13 +25,8 @@ void ChoiceMenuManager::hide()
 
 void ChoiceMenuManager::clear_before_update()
 {
-	//TODO
 	all_after_choice_dialogues_.clear();
-	for(std::unique_ptr<UiWidget>& ui_widget : ui_group_->ui_elements_)
-	{
-		ui_widget.reset();
-	}
-	ui_group_->ui_elements_.clear();
+	ui_group_->clear();
 	ui_manager_.update_navigation_list(UiManager::normal_ui_);
 }
 
@@ -66,11 +56,12 @@ void ChoiceMenuManager::update(const Script::InfoChoiceMenu& info_choice_menu)
 		all_after_choice_dialogues_.push_back({info_choice_menu.texts_[i].second.character_variable_, info_choice_menu.texts_[i].second.dialogue_});
 	}
 	ui_group_->set_center();
-	ui_manager_.update_navigation_list(UiManager::normal_ui_);
 
 	choice_made_ = false;
 	is_visible_ = true;
 	ui_group_->is_visible_ = true;
+
+	ui_manager_.update_navigation_list(UiManager::normal_ui_);
 }
 
 void ChoiceMenuManager::update_buttons()

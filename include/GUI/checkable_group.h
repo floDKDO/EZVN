@@ -7,8 +7,8 @@ class CheckableGroup : public UiGroup
 	friend class Checkable;
 
 	public:
-		CheckableGroup(int x, int y, bool only_one_has_to_be_checked);
-		CheckableGroup(std::string_view title, int x, int y, bool only_one_has_to_be_checked, sdl::Renderer& renderer);
+		CheckableGroup(int x, int y, bool only_one_has_to_be_checked, Layout layout);
+		CheckableGroup(std::string_view title, int x, int y, bool only_one_has_to_be_checked, Layout layout, sdl::Renderer& renderer);
 
 		Checkable* add_ui_element(std::unique_ptr<Checkable> checkable);
 

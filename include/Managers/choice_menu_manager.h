@@ -10,7 +10,6 @@ class ChoiceMenuManager
 
 		void hide();
 		void clear_before_update();
-		void build_ui_elements(sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer);
 		void update(const Script::InfoChoiceMenu& info_choice_menu);
 		void update_buttons();

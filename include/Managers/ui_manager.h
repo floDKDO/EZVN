@@ -54,9 +54,7 @@ class UiManager
 
 		//2 niveaux : [1] pour les UI modals, [0] pour les UI classiques
 		std::array<std::vector<UiWidget*>, ui_levels_> navigation_list_;
-		//std::array<std::vector<std::unique_ptr<Ui>>, ui_levels_> ui_elements_;
-
-		std::array<std::vector<Ui*>, ui_levels_> ui_elements2_;
+		std::array<std::vector<Ui*>, ui_levels_> ui_elements_;
 
 		UiWidget* previous_selected_;
 		UiWidget* current_selected_;

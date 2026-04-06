@@ -166,7 +166,7 @@ void ScriptRunner::draw(sdl::Renderer& renderer)
 			choice_menu_manager_.draw(renderer);
 		}
 
-		if(!transition_manager_.transition_playing_)
+		if(init_on_first_dialogue_ && !transition_manager_.transition_playing_)
 		{
 			textbox_manager_.draw(renderer);
 			ui_manager_.draw(renderer);

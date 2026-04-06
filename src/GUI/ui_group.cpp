@@ -3,14 +3,14 @@
 
 #include <iostream>
 
-UiGroup::UiGroup(int x, int y)
-	: title_(nullptr), frame_({x, y, 0, 0})
+UiGroup::UiGroup(int x, int y, Layout layout)
+	: title_(nullptr), frame_({x, y, 0, 0}), layout_(layout)
 {
 	is_visible_ = true;
 }
 
-UiGroup::UiGroup(std::string_view title, int x, int y, sdl::Renderer& renderer)
-	: frame_({x, y, 0, 0}), title_(std::make_unique<Text>(title, constants::textbutton_normal_color_, constants::textbutton_font_, constants::textbutton_text_size_, x, y, renderer))
+UiGroup::UiGroup(std::string_view title, int x, int y, Layout layout, sdl::Renderer& renderer)
+	: frame_({x, y, 0, 0}), title_(std::make_unique<Text>(title, constants::textbutton_normal_color_, constants::textbutton_font_, constants::textbutton_text_size_, x, y, renderer)), layout_(layout)
 {
 	is_visible_ = true;
 }
@@ -64,7 +64,7 @@ UiWidget* UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 
 	if(ui_elements_.size() == 0)
 	{
-		if(title_ == nullptr)
+		if(title_ == nullptr || title_->text_.empty())
 		{
 			rect.y = frame_.y;
 		}
@@ -75,13 +75,29 @@ UiWidget* UiGroup::add_ui_element(std::unique_ptr<UiWidget> widget)
 	}
 	else
 	{
-		rect.y = ui_elements_.back()->rect_.y + rect.h + constants::ui_group_y_spacing_between_ui_; // + espace entre chaque ui
+		if(layout_ == Layout::HORIZONTAL)
+		{
+			rect.x = ui_elements_.back()->rect_.x + ui_elements_.back()->rect_.w + constants::ui_group_spacing_between_ui_; // + espace entre chaque ui
+		}
+		else if(layout_ == Layout::VERTICAL)
+		{
+			rect.y = ui_elements_.back()->rect_.y + ui_elements_.back()->rect_.h + constants::ui_group_spacing_between_ui_; // + espace entre chaque ui
+		}
 	}
 	widget->change_position(rect.x, rect.y);
 
 	UiWidget* widget_ptr = widget.get();
 	ui_elements_.push_back(std::move(widget));
 	return widget_ptr;
+}
+
+void UiGroup::clear()
+{
+	for(std::unique_ptr<UiWidget>& ui_widget : ui_elements_)
+	{
+		ui_widget.reset();
+	}
+	ui_elements_.clear();
 }
 
 void UiGroup::set_title(std::string_view title)

@@ -73,18 +73,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_choice_menu("I...", { //ne supporte pas encore complètement un choix réalisé avec la touche Entrée
 		{"Green2",
 			{"I choose green2!"}
-		},
-		{"Purple2",
-			{"I choose purple2!"}
-		},
-		{"Pink2",
-			{"I choose pink2!"}
-		},
-		{"Blue2",
-			{"I choose blue2!"}
-		},
-		{"Um...2",
-			{"I don't know2..."}
 		}
 	});
 	game.show_dialogue("...");
