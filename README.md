@@ -41,9 +41,9 @@ If you would like to test the current version (on Windows only for now), you can
 - Autofocus that highlights a character who is speaking by changing their size and zorder
 - History menu that displays dialogue history
 - Pop-up that displays when we try to quit the game
+- Choice menus (display a dialogue based on the choice you made)
 
 ## Remaining features to be implemented: 
-- Add choice menus
 - Add other transitions for backgrounds (only fade for now) 
 - Add a logging system to obtain information about the engine states
 - Save/load system and persistent variables
