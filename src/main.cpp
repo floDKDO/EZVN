@@ -90,24 +90,23 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.change_namebox_text_color("Sayori", Color::from_rgba8(168, 224, 255));
 	game.move_textbox("bottom");
 	game.show_dialogue("Sayori", "Or blue?");
-	//game.show_dialogue("MC", "I...");
-	game.show_choice_menu("MC", "I...", { //ne supporte pas encore complètement un choix réalisé avec la touche Entrée
-		{"Green", 
+	game.show_choice_menu("MC", "I...", { 
+		{"Green",
 			{"MC", "I choose green!"}
-		}, 
-		{"Purple", 
+		},
+		{"Purple",
 			{"MC", "I choose purple!"}
-		}, 
-		{"Pink", 
+		},
+		{"Pink",
 			{"MC", "I choose pink!"}
-		}, 
-		{"Blue", 
+		},
+		{"Blue",
 			{"MC", "I choose blue!"}
 		},
 		{"Um...",
 			{"I don't know..."}
 		}
-	}); 
+	});
 	game.play_sound("resources/sounds/door_open.ogg");
 	game.show_dialogue("Sayori", "Follow me!");
 	game.show_character("Sayori", "lhide");
@@ -120,7 +119,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_character({"Natsuki", "5c"}, "t44", 1);
 	game.show_dialogue("Sayori", "Look everyone, I brought a new member.");
 	game.show_dialogue("Monika", "Hi there!");
-	game.show_character({"Monika", "2b"}); 
+	game.show_character({"Monika", "2b"});
 	game.show_dialogue("Yuri", "Hello, nice to meet you");
 	game.show_dialogue("Natsuki", "Hey.");
 	game.show_dialogue("Gulp...");
@@ -132,11 +131,19 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	return 0;
 }
 
+//TODO : créer des dossiers pour stocker chaque classe (.cpp et .h)
+
+//TODO : ne pas accéder directement aux membres des classes en utilisant des méthodes à la place quand c'est possible
+
+//TODO : convention pour placer la valeur "NONE" / "DEFAULT" / "NORMAL" dans les enum => la placer en première ?
+
+//TODO : nommage des éléments. Exemple : "Play - MainMenu"
+
+//TODO : bug avec les boutons de la scrollbar => le son de sélection se joue en boucle quand on bouge la souris sur le bouton
+
 //TODO : la souris entre en collision avec des éléments non affichés de la scrollable area
 
 //TODO : déplacements entre UI bizarre dans le menu Options
-
-//TODO : il faudrait un unique UiManager partagé entre InGame et les Managers
 
 //TODO : les paramètres "inutiles" des fonctions de la SDL pourraient être préremplis (valeur fixée pour ces paramètres) => ex : les 2 premiers paramètres de sdl::Texture::query()
 // idem pour les valeurs fixées (ex : -1 pour tous les channels) => rendre ça plus intuitif

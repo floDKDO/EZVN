@@ -2,13 +2,11 @@
 
 #include <iostream>
 
-//TODO : le code des dialogues devra être modifié quand il y aura l'ajout de pauses, animations d'images, choice menus etc.
-
-ScriptRunner::ScriptRunner(Game& game, sdl::Renderer& renderer)
-	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_(false), is_dialogue_of_choice_menu_visible_(false),
-	character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(renderer, game), choice_menu_manager_(renderer, game)
+ScriptRunner::ScriptRunner(TextboxManager::UiOnTextbox ui_on_textbox, UiManager& ui_manager, Game& game, sdl::Renderer& renderer)
+	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_on_first_dialogue_(false), is_dialogue_of_choice_menu_visible_(false), are_ui_hidden_(false),
+	ui_manager_(ui_manager), character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), 
+	music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(ui_on_textbox, renderer, game), choice_menu_manager_(ui_manager, renderer, game)
 {
-	character_manager_.create_narrator();
 	init_dialogues_script_index();
 }
 
@@ -16,7 +14,8 @@ void ScriptRunner::init_dialogues_script_index()
 {
 	for(size_t i = 0; i < script_.script_information_.size(); ++i)
 	{
-		if(std::holds_alternative<Script::InfoTextbox>(script_.script_information_[i]) && std::get<Script::InfoTextbox>(script_.script_information_[i]).t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE)
+		if(std::holds_alternative<Script::InfoTextbox>(script_.script_information_[i]) 
+		&& std::get<Script::InfoTextbox>(script_.script_information_[i]).t_.textbox_command_kind_ == Script::TextboxCommandKind::DIALOGUE)
 		{
 			dialogues_script_index_.insert(i);
 		}
@@ -74,22 +73,22 @@ void ScriptRunner::save_current_script_index_when_scroll_back()
 	}
 }
 
-void ScriptRunner::move_dialogue(TextboxManager::Where where, bool is_from_mouse_wheel_)
+void ScriptRunner::update_script_index()
 {
-	//std::cout << "AVANT: " << current_script_index_ << ", " << std::boolalpha << (where == TextboxManager::Where::none) << std::endl;
-	if(where == TextboxManager::Where::NEXT)
+	//std::cout << "AVANT: " << current_script_index_ << ", " << std::boolalpha << (where == TextboxManager::Instruction::NONE) << std::endl;
+	if(textbox_manager_.is_dialogue_instruction_next() /*&& !is_dialogue_of_choice_menu_visible_*/)
 	{
-		if(is_from_mouse_wheel_ && current_script_index_ < script_index_when_prev_.saved_script_index_)
+		if(textbox_manager_.is_input_source_mouse_wheel() && current_script_index_ < script_index_when_prev_.saved_script_index_)
 		{
 			increment_script_index();
 		}
-		else if(!is_from_mouse_wheel_)
+		else if(!textbox_manager_.is_input_source_mouse_wheel() && !is_dialogue_of_choice_menu_visible_)
 		{
 			script_index_when_prev_.is_saved_ = false; //when we pass a dialogue, reset the mouse wheel dialogues
 			increment_script_index();
 		}
 	}
-	else if(where == TextboxManager::Where::PREV)
+	else if(textbox_manager_.is_dialogue_instruction_prev())
 	{
 		save_current_script_index_when_scroll_back();
 		decrement_script_index();
@@ -104,34 +103,33 @@ void ScriptRunner::move_dialogue(TextboxManager::Where where, bool is_from_mouse
 
 void ScriptRunner::init_to_first_dialogue()
 {
-	if(!init_)
+	if(!init_on_first_dialogue_)
 	{
 		if(!is_current_script_index_a_dialogue())
 		{
-			textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NEXT, false, false};
+			textbox_manager_.go_to_next_dialogue();
 		}
 		else
 		{
-			textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NONE, false, false}; //TODO : utile ??
-			init_ = true;
+			//textbox_manager_.reset_dialogue_instruction(); //TODO : utile ??
+			init_on_first_dialogue_ = true;
 		}
 	}
 }
 
 void ScriptRunner::handle_events(const SDL_Event& e)
 {
-	if(is_dialogue_of_choice_menu_visible_) //empêcher l'utilisation du clic gauche et de la touche espace quand le choice menu est affiché
+	if(!are_ui_hidden_)
 	{
-		textbox_manager_.handle_events_ui_manager(e);
-		textbox_manager_.handle_events_mouse_wheel(e); 
-	}
-	else
-	{
-		textbox_manager_.handle_events(e);
+		textbox_manager_.handle_events_mouse_wheel(e);
+		ui_manager_.handle_events(e);
+		if(!ui_manager_.is_mouse_on_widget_) //uniquement s'il n'y a pas de collision avec un textbutton, gérer les événements "clic" et "espace" de la Textbox (= passer au prochain dialogue)
+		{
+			textbox_manager_.handle_events_keyboard_mouse(e);
+		}
 	}
 
 	transition_manager_.handle_events(e);
-	choice_menu_manager_.handle_events(e);
 
 	if(e.type == AudioManager::END_MUSIC_EVENT_)
 	{
@@ -147,6 +145,13 @@ void ScriptRunner::handle_events(const SDL_Event& e)
 			sound_manager_.fade_in(*sound_manager_.sound_, sound_manager_.audio_properties_); 
 		}
 	}
+	else if(e.type == SDL_MOUSEBUTTONDOWN && (e.button.button == SDL_BUTTON_RIGHT || e.button.button == SDL_BUTTON_MIDDLE))
+	{
+		if(!textbox_manager_.skip_mode_) //on ne peut pas cacher les UI quand on est en mode Skip
+		{
+			are_ui_hidden_ = !are_ui_hidden_;
+		}
+	}
 }
 
 void ScriptRunner::draw(sdl::Renderer& renderer)
@@ -154,21 +159,25 @@ void ScriptRunner::draw(sdl::Renderer& renderer)
 	background_manager_.draw(renderer);
 	character_manager_.draw(renderer);
 
-	if(current_script_index_ != 0 && std::holds_alternative<Script::InfoChoiceMenu>(script_.script_information_[current_script_index_ - 1]))
+	if(!are_ui_hidden_)
 	{
-		choice_menu_manager_.draw(renderer);
-	}
+		if(current_script_index_ != 0 && std::holds_alternative<Script::InfoChoiceMenu>(script_.script_information_[current_script_index_ - 1])) //TODO : utile ?
+		{
+			choice_menu_manager_.draw(renderer);
+		}
 
-	if(!transition_manager_.transition_playing_)
-	{
-		textbox_manager_.draw(renderer);
+		if(init_on_first_dialogue_ && !transition_manager_.transition_playing_)
+		{
+			textbox_manager_.draw(renderer);
+			ui_manager_.draw(renderer);
+		}
 	}
 
 	transition_manager_.draw(renderer);
 }
 
 //TODO : utiliser std::visit ??
-void ScriptRunner::apply_line()
+void ScriptRunner::apply_script_line()
 {
 	Script::ScriptInformation& current_script_information = script_.script_information_[current_script_index_];
 	if(std::holds_alternative<Script::InfoBackground>(current_script_information))
@@ -195,7 +204,6 @@ void ScriptRunner::apply_line()
 	{
 		if(choice_menu_manager_.is_visible_)
 		{
-			is_dialogue_of_choice_menu_visible_ = true;
 			textbox_manager_.uncheck_auto_toggle();
 			textbox_manager_.uncheck_skip_toggle();
 		}
@@ -204,7 +212,10 @@ void ScriptRunner::apply_line()
 		textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_)); //TODO : erreur si le personnage n'a pas déjà été show alors que cela devrait marcher dans ce cas là
 		character_manager_.update_characters_dialogue(info_textbox);
 
-		//textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::none, false, false};
+		if(choice_menu_manager_.is_visible_ && textbox_manager_.is_dialogue_finished())
+		{
+			is_dialogue_of_choice_menu_visible_ = true; 
+		}
 	}
 	else if(std::holds_alternative<Script::InfoTransition>(current_script_information))
 	{
@@ -216,68 +227,78 @@ void ScriptRunner::apply_line()
 	}
 }
 
-void ScriptRunner::update()
+void ScriptRunner::choice_made_from_choice_menu()
 {
-	//std::cout << "CURRENT: " << current_script_index_ << std::endl;
-	//std::cout << script_index_when_prev_.saved_script_index_ << std::endl;
-	//std::cout << std::boolalpha << autofocus_manager_.autofocus_ << std::endl;
-
-	if(textbox_manager_.dialogue_instruction_.where_ == TextboxManager::Where::PREV)
-	{
-		rebuild();
-	}
-
 	if(is_dialogue_of_choice_menu_visible_)
 	{
-		if((!textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_ && choice_menu_manager_.choice_made_)
-		|| (textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_ && textbox_manager_.dialogue_instruction_.where_ == TextboxManager::Where::NEXT)) //on a scrollé pour passer le choice menu et on avait déjà fait un choix auparavant
+		if((!textbox_manager_.is_input_source_mouse_wheel() && choice_menu_manager_.choice_made_)
+		|| (textbox_manager_.is_input_source_mouse_wheel() && textbox_manager_.is_dialogue_instruction_next() 
+			&& script_index_when_prev_.saved_script_index_ > current_script_index_)) //on a scrollé pour passer le choice menu et on avait déjà fait un choix auparavant (<=> revenu avant le choice menu et scroll avant pour dépasser le choice menu)
 		{
-			choice_menu_manager_.is_visible_ = false;
+			choice_menu_manager_.hide();
 			is_dialogue_of_choice_menu_visible_ = false;
-			choice_menu_manager_.choice_made_ = false;
 
-			if(!textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_)
+			if(!textbox_manager_.is_input_source_mouse_wheel())
 			{
 				//reset du scroll de la souris après notre choix
 				script_index_when_prev_.saved_script_index_ = current_script_index_;
 				script_index_when_prev_.is_saved_ = true;
-				textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NEXT, false, false};
+				textbox_manager_.go_to_next_dialogue();
 
 				//dialogue qui suit le choix => on le modifie avec les bonnes valeurs selon le choix effectué
 				Script::InfoTextbox& after_choice_dialogue = std::get<Script::InfoTextbox>(script_.script_information_[current_script_index_ + 1]);
-				after_choice_dialogue.character_variable_ = choice_menu_manager_.after_choice_dialogue_.character_variable_;
-				after_choice_dialogue.t_.textbox_command_value_ = choice_menu_manager_.after_choice_dialogue_.dialogue_;
+				after_choice_dialogue.character_variable_ = choice_menu_manager_.after_choice_dialogue_chosen_.character_variable_;
+				after_choice_dialogue.t_.textbox_command_value_ = choice_menu_manager_.after_choice_dialogue_chosen_.dialogue_;
 			}
 		}
 	}
 	else
 	{
-		textbox_manager_.update_skip_auto_modes(); //placée ici car doit être exécutée avant move_dialogue()
+		textbox_manager_.update_textbox();
 	}
+}
 
-	if(textbox_manager_.skip_mode_ || textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_) //don't play background transition in skip mode or when we scroll with the mouse wheel
+void ScriptRunner::update_managers()
+{
+	if(textbox_manager_.skip_mode_ || textbox_manager_.is_input_source_mouse_wheel()) //don't play background transition in skip mode or when we scroll with the mouse wheel
 	{
 		transition_manager_.reset();
 	}
-
-	if(!transition_manager_.transition_playing_)
+	else
 	{
-		move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
-	}
-	else if(transition_manager_.transition_playing_ && transition_manager_.transition_->first_part_finished_ && !transition_manager_.new_background_displayed_)
-	{
-		move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
-		transition_manager_.new_background_displayed_ = true;
+		transition_manager_.update_transition(); //peut être placé avant ou après
 	}
 
-	init_to_first_dialogue(); //doit être après move_dialogue()
+	if(!are_ui_hidden_)
+	{
+		choice_menu_manager_.update_buttons();
+		ui_manager_.update();
+		textbox_manager_.update_skip_auto_modes(); //peut être placé avant ou après
+	}
 
-	apply_line(); 
-	//move_dialogue(textbox_manager_.dialogue_instruction_.where_, textbox_manager_.dialogue_instruction_.is_from_mouse_wheel_);
-	
-	character_manager_.update_characters();
-	transition_manager_.update_transition();
-	choice_menu_manager_.update_buttons();
+	character_manager_.update_characters(); //doit être placé après apply_script_line()
+}
+
+void ScriptRunner::update()
+{
+	if(textbox_manager_.is_dialogue_instruction_prev())
+	{
+		rebuild();
+	}
+
+	init_to_first_dialogue(); 
+
+	choice_made_from_choice_menu();
+
+	if(!transition_manager_.transition_playing_ 
+	|| (transition_manager_.transition_playing_ && transition_manager_.is_first_part_finished()))
+	{
+		update_script_index();
+	}
+
+	apply_script_line();
+
+	update_managers();
 }
 
 void ScriptRunner::play_all_sounds_before_previous_dialogue(size_t target_script_index)
@@ -375,6 +396,6 @@ void ScriptRunner::rebuild()
 	play_all_sounds_before_previous_dialogue(target_script_index);
 	handle_music_when_scroll_back(target_script_index);
 	
-	textbox_manager_.dialogue_instruction_ = {TextboxManager::Where::NONE, false, false};
+	textbox_manager_.reset_dialogue_instruction();
 	current_script_index_ = target_script_index;
 }

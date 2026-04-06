@@ -17,9 +17,13 @@ class GameState
 		virtual void on_show() {};
 		virtual void on_hide() {};
 
+		Ui* add_ui_element(std::unique_ptr<Ui> ui);
+
 	protected:
 		GameState(Game& game, sdl::Renderer& renderer);
 		Game& game_;
 		UiManager ui_manager_;
+
+		std::vector<std::unique_ptr<Ui>> ui_elements_;
 };
 

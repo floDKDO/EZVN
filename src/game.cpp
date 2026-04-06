@@ -8,7 +8,7 @@
 #include <iostream>
 
 Game::Game()
-	: sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
+	: history_menu_ptr_(nullptr), sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
 	window_(constants::game_name_, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	audio_manager_(),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
@@ -29,6 +29,8 @@ void Game::init_game_states()
 	game_states_map_.insert({constants::settings_menu_unique_id_, std::make_unique<SettingsMenu>(*this, renderer_)}); 
 	game_states_map_.insert({constants::history_menu_unique_id_, std::make_unique<HistoryMenu>(*this, renderer_)});
 	push_state(game_states_map_.at(constants::main_menu_unique_id_).get());
+
+	history_menu_ptr_ = dynamic_cast<HistoryMenu*>(get_state(constants::history_menu_unique_id_));
 }
 
 void Game::run()

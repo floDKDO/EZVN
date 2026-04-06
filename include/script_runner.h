@@ -13,7 +13,7 @@
 class ScriptRunner
 {
 	public:
-		ScriptRunner(Game& game, sdl::Renderer& renderer);
+		ScriptRunner(TextboxManager::UiOnTextbox ui_on_textbox, UiManager& ui_manager, Game& game, sdl::Renderer& renderer);
 
 		void init_dialogues_script_index();
 		std::optional<size_t> get_script_index_of_previous_dialogue();
@@ -24,12 +24,14 @@ class ScriptRunner
 		bool is_current_script_index_a_dialogue();
 		bool is_script_index_a_dialogue(size_t script_index);
 		void save_current_script_index_when_scroll_back();
-		void move_dialogue(TextboxManager::Where where, bool is_from_mouse_wheel_);
+		void update_script_index();
 		void init_to_first_dialogue();
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
-		void apply_line();
+		void apply_script_line();
+		void choice_made_from_choice_menu();
+		void update_managers();
 		void update();
 		void rebuild();
 		void play_all_sounds_before_previous_dialogue(size_t target_script_index);
@@ -49,9 +51,11 @@ class ScriptRunner
 
 		std::set<size_t> dialogues_script_index_;
 
-		bool init_;
+		bool init_on_first_dialogue_;
 		bool is_dialogue_of_choice_menu_visible_;
+		bool are_ui_hidden_;
 
+		UiManager& ui_manager_;
 		CharacterManager character_manager_;
 		BackgroundManager background_manager_;
 		MusicManager music_manager_;  

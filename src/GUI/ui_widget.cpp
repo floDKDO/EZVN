@@ -8,7 +8,9 @@ UiWidget::UiWidget(sdl::Renderer& renderer)
 	has_keyboard_focus_(false), mouse_entered_(false), mouse_was_on_ui_before_drag_(false), pointer_on_ui_when_pointer_up_(true), callback_called_when_pointer_up_(true),
 	wants_text_input_(false), renderer_(renderer),
 	callback_function_(nullptr)
-{}
+{
+	is_visible_ = true;
+}
 
 void UiWidget::on_pointer_up(PointerEventData pointer_event_data)
 {

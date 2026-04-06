@@ -4,6 +4,7 @@
 #include "GUI/slider.h"
 #include "game.h"
 #include "RAII_SDL2/display.h"
+#include "GUI/checkable_group.h"
 
 #include <iostream>
 #include <sstream>
@@ -12,14 +13,21 @@
 SettingsMenu::SettingsMenu(Game& game, sdl::Renderer& renderer)
 	: GameState(game, renderer), background_(constants::default_menu_background_, 0, 0, renderer)
 {
-	create_resolutions_scroll_area(renderer);
 	build_ui_elements(renderer);
+}
+
+void SettingsMenu::create_display_choices(sdl::Renderer& renderer)
+{
+	std::unique_ptr<CheckableGroup> checkable_group = std::make_unique<CheckableGroup>("Display", 100, 100, true, Layout::VERTICAL, renderer);
+	checkable_group->add_ui_element(std::make_unique<TextToggle>("Windowed", 0, 0, true, renderer, std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1)));
+	checkable_group->add_ui_element(std::make_unique<TextToggle>("Fullscreen", 0, 0, false, renderer, std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)));
+	add_ui_element(std::move(checkable_group));
 }
 
 void SettingsMenu::create_resolutions_scroll_area(sdl::Renderer& renderer)
 {
-	scroll_ = std::make_unique<ScrollableArea>("Resolutions", 950, 170, 200, 500, renderer);
-	ui_group_ = std::make_unique<UiGroup>(950, 170);
+	std::unique_ptr<ScrollableArea> scroll = std::make_unique<ScrollableArea>("Resolutions", 950, 170, 200, 500, renderer);
+	std::unique_ptr<CheckableGroup> checkable_group = std::make_unique<CheckableGroup>(950, 170, true, Layout::VERTICAL);
 
 	SDL_DisplayMode window_mode;
 	game_.window_.get_display_mode(&window_mode);
@@ -43,27 +51,22 @@ void SettingsMenu::create_resolutions_scroll_area(sdl::Renderer& renderer)
 			}
 
 			std::string resolution = std::to_string(mode.w) + 'x' + std::to_string(mode.h);
-			ui_group_->add_ui_element(std::make_unique<TextToggle>(resolution, 0, 0, checked, renderer, std::bind(&SettingsMenu::texttoggle_resolution_function, this, std::placeholders::_1)));
+			checkable_group->add_ui_element(std::make_unique<TextToggle>(resolution, 0, 0, checked, renderer, std::bind(&SettingsMenu::texttoggle_resolution_function, this, std::placeholders::_1)));
 		}
 	}
-	scroll_->add_ui_element(std::move(ui_group_));
+	scroll->add_ui_element(std::move(checkable_group));
+	add_ui_element(std::move(scroll));
 }
 
 void SettingsMenu::build_ui_elements(sdl::Renderer& renderer)
 {
-	ui_manager_.add_element(std::make_unique<TextButton>("Return", 100, 550, renderer, std::bind(&SettingsMenu::previous_menu_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(0, 100, 100, 450, 170, "Music effect", renderer, std::bind(&SettingsMenu::slider_music_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(0, 100, 100, 450, 300, "Sound effect", renderer, std::bind(&SettingsMenu::slider_sound_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::make_unique<Slider>(30, 60, Text::global_text_divisor_, 450, 430, "Text speed", renderer, std::bind(&SettingsMenu::slider_text_function, this, std::placeholders::_1)));
-	//ui_manager_.add_element(std::make_unique<TextToggleGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)}));
-	//ui_manager_.add_element(std::make_unique<CheckboxGroup<2>>("Display", std::vector<std::string>{"Windowed", "Fullscreen"}, 50, 100, true, renderer, std::vector<std::function<void(Ui* ui)>>{std::bind(&Game::texttoggle_windowed_function, this, std::placeholders::_1), std::bind(&Game::texttoggle_full_screen_function, this, std::placeholders::_1)}));
+	add_ui_element(std::make_unique<TextButton>("Return", 100, 550, renderer, std::bind(&SettingsMenu::previous_menu_function, this, std::placeholders::_1)));
+	add_ui_element(std::make_unique<Slider>(0, 100, 100, 450, 170, "Music effect", renderer, std::bind(&SettingsMenu::slider_music_function, this, std::placeholders::_1)));
+	add_ui_element(std::make_unique<Slider>(0, 100, 100, 450, 300, "Sound effect", renderer, std::bind(&SettingsMenu::slider_sound_function, this, std::placeholders::_1)));
+	add_ui_element(std::make_unique<Slider>(30, 60, Text::global_text_divisor_, 450, 430, "Text speed", renderer, std::bind(&SettingsMenu::slider_text_function, this, std::placeholders::_1)));
 
-	std::unique_ptr<UiGroup> ui_group = std::make_unique<UiGroup>("Display", 100, 100, renderer);
-	ui_group->add_ui_element(std::make_unique<TextToggle>("Windowed", 0, 0, true, renderer, std::bind(&SettingsMenu::texttoggle_windowed_function, this, std::placeholders::_1)));
-	ui_group->add_ui_element(std::make_unique<TextToggle>("Fullscreen", 0, 0, false, renderer, std::bind(&SettingsMenu::texttoggle_full_screen_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::move(ui_group));
-
-	ui_manager_.add_element(std::move(scroll_));
+	create_display_choices(renderer);
+	create_resolutions_scroll_area(renderer);
 
 	ui_manager_.set_elements();
 }

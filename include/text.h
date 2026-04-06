@@ -13,6 +13,7 @@ class Text : public Displayable
 		Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer);
 		Text(std::string_view text, Color color, std::string_view font_path, int font_size, int x, int y, sdl::Renderer& renderer, bool is_animated, Uint32 wrap_length);
 
+		void change_text(std::string_view text);
 		void set_italic();
 		void set_bold();
 		void set_underline();

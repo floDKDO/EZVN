@@ -8,5 +8,7 @@ class Ui
 		virtual ~Ui() = default;
 		virtual void draw(sdl::Renderer& renderer) = 0;
 		virtual void update() = 0;
+
+		bool is_visible_;
 };
 

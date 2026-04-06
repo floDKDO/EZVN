@@ -76,6 +76,22 @@ void Text::recreate_surfaces_texture()
 	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
 }
 
+void Text::change_text(std::string_view text)
+{
+	text_ = text;
+
+	recreate_surfaces_texture();
+
+	if(is_animated_)
+	{
+		previous_text_ = text_dialogue_;
+	}
+	else
+	{
+		previous_text_ = text_;
+	}
+}
+
 void Text::set_italic()
 {
 	font_style_ |= TTF_STYLE_ITALIC;
@@ -188,13 +204,14 @@ void Text::update()
 			last_time_ = now;
 		}
 
-		if(text_.length() == 0 || index_dialogue_ == text_.length() - 1) //TODO : text_.length() == 0 obligatoire ??
+		if(/*text_.length() == 0 ||*/ index_dialogue_ == text_.length()) //TODO : text_.length() == 0 obligatoire ??
 		{
 			is_finished_ = true;
 		}
 	}
 	else
 	{
+		//std::cout << "NOT ANIMATED: " << text_ << std::endl;
 		is_finished_ = true; //pour bouton Skip
 	}
 

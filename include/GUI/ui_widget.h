@@ -95,12 +95,13 @@ class UiWidget : public Ui
 		bool pointer_on_ui_when_pointer_up_;
 		bool callback_called_when_pointer_up_;
 
+		std::function<void(UiWidget* widget)> callback_function_;
+
 	protected:
 		explicit UiWidget(sdl::Renderer& renderer);
 
 		Uint64 last_time_;
 		sdl::Renderer& renderer_;
-		std::function<void(UiWidget* widget)> callback_function_;
 
 	private:
 

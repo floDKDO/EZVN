@@ -9,7 +9,7 @@ const Uint64 Textbox::maximum_time_ = 10000; //10s
 const Uint64 Textbox::base_delay_ = 1750; //1.75s
 
 Textbox::Textbox(sdl::Renderer& renderer)
-	: is_first_dialogue_(true), text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, true, 10),
+	: is_first_dialogue_(true), text_("", constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, true, 0),
 	textbox_(constants::textbox_image_, 0, 0, renderer), current_speaker_(""), 
 	namebox_(constants::namebox_image_, 0, 0, renderer),
 	text_name_box_("", constants::namebox_text_color_, constants::namebox_font_, constants::namebox_text_size_, 0, 0, renderer),
@@ -86,29 +86,31 @@ void Textbox::set_textbox_position(std::string_view where)
 	end_dialogue_indicator_.position_.y = textbox_.position_.y + constants::textbox_end_dialogue_indicator_y_delta_;
 }
 
-void Textbox::show_new_dialogue(std::string_view new_dialogue, std::string speaker, bool in_skip_mode, bool wait_for_end_of_dialogue)
+void Textbox::show_new_dialogue(std::string_view new_dialogue, std::string speaker, bool in_skip_mode)
 {
-	if(is_first_dialogue_ || (text_.is_finished_ && wait_for_end_of_dialogue) || !wait_for_end_of_dialogue)
-	{
-		current_speaker_ = speaker;
-		text_name_box_.text_ = current_speaker_;
-		text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
+	current_speaker_ = speaker;
+	text_name_box_.text_ = current_speaker_;
+	text_name_box_.position_.x = namebox_.position_.x + ((namebox_.position_.w - text_name_box_.get_width_text()) / 2);
 		
-		text_.is_finished_ = false;
-		text_.index_dialogue_ = 0;
-		text_.text_.clear();
-		text_.text_dialogue_.clear();
-		text_.text_ = new_dialogue;
-		text_.is_animated_ = !in_skip_mode;
+	text_.is_finished_ = false;
+	text_.index_dialogue_ = 0;
+	text_.text_.clear();
+	text_.text_dialogue_.clear();
+	text_.text_ = new_dialogue;
+	text_.is_animated_ = !in_skip_mode;
 
-		if(!current_speaker_.empty())
-		{
-			text_.text_.insert(0, "\"");
-			text_.text_.append("\"");
-		}
-
-		is_first_dialogue_ = false;
+	if(!current_speaker_.empty())
+	{
+		text_.text_.insert(0, "\"");
+		text_.text_.append("\"");
 	}
+
+	is_first_dialogue_ = false;
+}
+
+bool Textbox::is_text_finished()
+{
+	return text_.is_finished_;
 }
 
 Uint64 Textbox::get_text_delay()

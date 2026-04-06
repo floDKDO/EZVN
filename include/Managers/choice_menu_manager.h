@@ -6,11 +6,10 @@
 class ChoiceMenuManager
 {
 	public:
-		ChoiceMenuManager(sdl::Renderer& renderer, Game& game);
+		ChoiceMenuManager(UiManager& ui_manager, sdl::Renderer& renderer, Game& game);
 
+		void hide();
 		void clear_before_update();
-		void handle_events(const SDL_Event& e);
-		void build_ui_elements(sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer);
 		void update(const Script::InfoChoiceMenu& info_choice_menu);
 		void update_buttons();
@@ -19,11 +18,11 @@ class ChoiceMenuManager
 		bool choice_made_;
 		bool is_visible_;
 		std::vector<Script::ChoiceMenuNextDialogue> all_after_choice_dialogues_;
-		Script::ChoiceMenuNextDialogue after_choice_dialogue_;
+		Script::ChoiceMenuNextDialogue after_choice_dialogue_chosen_;
+		std::unique_ptr<UiGroup> ui_group_;
 
 	private:
-		UiGroup* ui_group_;
-		UiManager ui_manager_;
+		UiManager& ui_manager_;
 		sdl::Renderer& renderer_;
 };
 

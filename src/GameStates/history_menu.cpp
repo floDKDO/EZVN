@@ -7,20 +7,14 @@
 HistoryMenu::HistoryMenu(Game& game, sdl::Renderer& renderer)
 	: GameState(game, renderer), background_(constants::default_menu_background_, 0, 0, renderer)
 {
-	create_history_scroll_area(renderer);
 	build_ui_elements(renderer);
-}
-
-void HistoryMenu::create_history_scroll_area(sdl::Renderer& renderer)
-{
-	scroll_ = std::make_unique<ScrollableArea>("History", 370, 50, 900, 650, renderer);
-	scroll_ptr_ = scroll_.get();
 }
 
 void HistoryMenu::build_ui_elements(sdl::Renderer& renderer)
 {
-	ui_manager_.add_element(std::make_unique<TextButton>("Return", 100, 550, renderer, std::bind(&HistoryMenu::previous_menu_function, this, std::placeholders::_1)));
-	ui_manager_.add_element(std::move(scroll_));
+	add_ui_element(std::make_unique<TextButton>("Return", 100, 550, renderer, std::bind(&HistoryMenu::previous_menu_function, this, std::placeholders::_1)));
+	scroll_ptr_ = dynamic_cast<ScrollableArea*>(add_ui_element(std::make_unique<ScrollableArea>("History", 370, 50, 900, 650, renderer))); //TODO : pas ouf => à terme, utiliser des forwarding references pour que le bon type soit retourné
+
 	ui_manager_.set_elements();
 }
 
@@ -49,6 +43,11 @@ void HistoryMenu::add_dialogue_to_history(std::string_view character_name, std::
 		std::make_unique<Text>(character_name, namebox_text_color, constants::namebox_font_, constants::textbox_text_size_, 0, 0, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2)),
 		std::make_unique<Text>(dialogue, constants::textbox_text_color_, constants::textbox_font_, constants::textbox_text_size_, 0, 0, renderer, false, textbox_width - (constants::textbox_text_x_delta_ * 2))
 	});
+}
+
+void HistoryMenu::remove_last_dialogue_from_history()
+{
+	scroll_ptr_->remove_last_text();
 }
 
 void HistoryMenu::previous_menu_function([[maybe_unused]] Ui* ui)

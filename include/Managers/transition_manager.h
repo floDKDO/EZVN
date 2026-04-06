@@ -8,6 +8,7 @@ class TransitionManager
 	public:
 		TransitionManager();
 
+		bool is_first_part_finished() const;
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 		void update(const Script::InfoTransition& info_transition);
@@ -15,9 +16,8 @@ class TransitionManager
 		void reset();
 
 		bool transition_playing_;
-		std::unique_ptr<Transition> transition_;
-		bool new_background_displayed_;
 
 	private:
+		std::unique_ptr<Transition> transition_;
 };
 

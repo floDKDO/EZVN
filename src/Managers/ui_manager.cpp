@@ -2,7 +2,6 @@
 #include "GUI/slider.h"
 #include "GUI/inputfield.h"
 #include "GUI/scrollbar.h"
-#include "GUI/confirmation_popup.h"
 #include "constants.h"
 #include "utils.h"
 #include "GUI/ui_group.h"
@@ -13,31 +12,25 @@ const size_t UiManager::modal_ui_ = 1;
 const size_t UiManager::normal_ui_ = 0;
 
 UiManager::UiManager(AudioManager& audio_manager, sdl::Renderer& renderer)
-	: is_mouse_on_widget_(false), previous_selected_(nullptr), current_selected_(nullptr), current_selected_normal_ui_(nullptr), is_mouse_left_button_held_down_(false), is_pop_up_visible_(false),
-	audio_manager_(audio_manager), renderer_(renderer), ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
+	: is_mouse_on_widget_(false), confirmation_popup_(std::make_unique<ConfirmationPopUp>("", renderer, nullptr)), previous_selected_(nullptr), current_selected_(nullptr), 
+	current_selected_normal_ui_(nullptr), is_mouse_left_button_held_down_(false), is_pop_up_visible_(false), audio_manager_(audio_manager), renderer_(renderer), 
+	ui_select_sound_({sdl::Chunk{constants::ui_sound_select_}, 1.0}), ui_press_sound_({sdl::Chunk{constants::ui_sound_press_}, 1.0}), last_time_(0)
 {}
 
-void UiManager::clear_navigation_list(size_t ui_level)
+void UiManager::update_navigation_list()
 {
-	navigation_list_[ui_level].clear();
+	navigation_list_[normal_ui_].clear();
+	set_elements();
 }
 
 void UiManager::reset_normal_ui()
 {
-	for(std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
-	{
-		ui.reset();
-	}
 	ui_elements_[normal_ui_].clear();
 	navigation_list_[normal_ui_].clear();
 }
 
 void UiManager::reset_modal_ui()
 {
-	for(std::unique_ptr<Ui>& ui : ui_elements_[modal_ui_])
-	{
-		ui.reset();
-	}
 	ui_elements_[modal_ui_].clear();
 	navigation_list_[modal_ui_].clear();
 }
@@ -48,21 +41,21 @@ void UiManager::reset()
 	reset_normal_ui();
 }
 
-void UiManager::add_element(std::unique_ptr<Ui> ui)
+void UiManager::register_element(Ui* ui)
 {
-	ui_elements_[normal_ui_].push_back(std::move(ui));
+	ui_elements_[normal_ui_].push_back(ui);
 }
 
 void UiManager::set_elements()
 {
-	for(const std::unique_ptr<Ui>& ui : ui_elements_[normal_ui_])
+	for(Ui* ui : ui_elements_[normal_ui_])
 	{
 		std::vector<UiWidget*> nodes;
-		if(UiWidget* widget = dynamic_cast<UiWidget*>(ui.get()); widget != nullptr)
+		if(UiWidget* widget = dynamic_cast<UiWidget*>(ui); widget != nullptr)
 		{
 			nodes = widget->get_navigation_nodes();
 		}
-		else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(ui.get()); ui_group != nullptr)
+		else if(UiGroup* ui_group = dynamic_cast<UiGroup*>(ui); ui_group != nullptr)
 		{
 			nodes = ui_group->get_navigation_nodes();
 		}
@@ -97,12 +90,14 @@ void UiManager::set_elements()
 
 void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function)
 {
-	std::unique_ptr<ConfirmationPopUp> confirmation_popup = std::make_unique<ConfirmationPopUp>(text, renderer_, callback_function);
+	confirmation_popup_->change_callback(callback_function);
+	confirmation_popup_->change_message(text);
+	confirmation_popup_->is_confirmationpopup_visible_ = true;
 
-	ConfirmationPopUp* p = confirmation_popup.get();
+	ConfirmationPopUp* p = confirmation_popup_.get();
 	navigation_list_[modal_ui_].push_back(&p->no_);
 	navigation_list_[modal_ui_].push_back(&p->yes_);
-	ui_elements_[modal_ui_].push_back(std::move(confirmation_popup));
+	ui_elements_[modal_ui_].push_back(p);
 
 	current_selected_normal_ui_ = current_selected_; //enregistrer le current_selected_ de normal_ui_
 
@@ -208,6 +203,11 @@ void UiManager::assign_widget_on_moving(size_t ui_level) const
 
 		for(UiWidget* candidate : navigation_list_[ui_level])
 		{
+			if(candidate == nullptr)
+			{
+				std::cout << "NULLPTR!\n";
+			}
+
 			if(candidate == widget) { continue; }
 
 			const SDL_Rect candidate_pos = candidate->rect_;
@@ -239,6 +239,12 @@ void UiManager::assign_widget_on_moving(size_t ui_level) const
 
 void UiManager::select_new(UiWidget* widget)
 {
+	if(!widget->is_visible_)
+	{
+		std::cout << "Trying to select a UI that is not visible!\n";
+		return;
+	}
+
 	audio_manager_.play_sound(ui_select_sound_, -1, false);
 	
 	previous_selected_ = current_selected_;
@@ -505,20 +511,36 @@ void UiManager::handle_events(const SDL_Event& e)
 
 void UiManager::draw(sdl::Renderer& renderer)
 {
-	for(const std::vector<std::unique_ptr<Ui>>& ui_vector : ui_elements_)
+	for(const std::vector<Ui*>& ui_vector : ui_elements_)
 	{
-		for(const std::unique_ptr<Ui>& ui : ui_vector)
+		for(Ui* ui : ui_vector)
 		{
-			ui->draw(renderer);
+			if(ui->is_visible_)
+			{
+				ui->draw(renderer);
+			}
 		}
 	}
 }
 
 void UiManager::update()
 {
+	if(!current_selected_->is_visible_)
+	{
+		for(UiWidget* widget : navigation_list_[normal_ui_])
+		{
+			if(widget->is_visible_)
+			{
+				current_selected_ = widget;
+				current_selected_->state_ = UiWidget::State::SELECTED;
+				break;
+			}
+		}
+	}
+
 	if(ui_elements_[modal_ui_].size() > 0)
 	{
-		if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements_[modal_ui_].front().get()); popup != nullptr)
+		if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements_[modal_ui_].front()); popup != nullptr)
 		{
 			if(!popup->is_confirmationpopup_visible_)
 			{
@@ -529,11 +551,14 @@ void UiManager::update()
 		}
 	}
 
-	for(const std::vector<std::unique_ptr<Ui>>& ui_vector : ui_elements_)
+	for(const std::vector<Ui*>& ui_vector : ui_elements_)
 	{
-		for(const std::unique_ptr<Ui>& ui : ui_vector)
+		for(Ui* ui : ui_vector)
 		{
-			ui->update();
+			if(ui->is_visible_)
+			{
+				ui->update();
+			}
 		}
 	}
 }
