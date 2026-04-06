@@ -15,8 +15,6 @@ class ConfirmationPopUp : public UiWidget
 		std::vector<UiWidget*> get_navigation_nodes() override;
 		void change_position(int x, int y) override;
 
-		bool is_confirmationpopup_visible_;
-
 		TextButton yes_;
 		TextButton no_;
 

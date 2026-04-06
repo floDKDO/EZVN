@@ -92,7 +92,7 @@ void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> c
 {
 	confirmation_popup_->change_callback(callback_function);
 	confirmation_popup_->change_message(text);
-	confirmation_popup_->is_confirmationpopup_visible_ = true;
+	confirmation_popup_->is_visible_ = true;
 
 	ConfirmationPopUp* p = confirmation_popup_.get();
 	navigation_list_[modal_ui_].push_back(&p->no_);
@@ -542,7 +542,7 @@ void UiManager::update()
 	{
 		if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements_[modal_ui_].front()); popup != nullptr)
 		{
-			if(!popup->is_confirmationpopup_visible_)
+			if(!popup->is_visible_)
 			{
 				is_pop_up_visible_ = false;
 				reset_modal_ui();

@@ -4,8 +4,6 @@
 
 #include <string_view>
 
-//TODO : centrer les boutons du menu principal
-
 namespace constants
 {
 

@@ -4,13 +4,13 @@
 #include <iostream>
 
 ConfirmationPopUp::ConfirmationPopUp(std::string_view message, sdl::Renderer& renderer, std::function<void(Ui* ui)> callback_function)
-	: UiWidget(renderer), is_confirmationpopup_visible_(true),
+	: UiWidget(renderer), 
 	yes_("Yes", 0, 0, renderer_, callback_function, TextButton::Kind::ON_FRAME), 
 	no_("No", 0, 0, renderer_, 
 	[&]([[maybe_unused]] Ui* ui)
 	{
 		std::cout << "Pressed No!" << std::endl;
-		is_confirmationpopup_visible_ = false;  
+		is_visible_ = false;  
 	}, 
 	TextButton::Kind::ON_FRAME), 
 	message_(message, constants::confirmationpopup_text_color_, constants::confirmationpopup_font_, constants::confirmationpopup_text_size_, 0, 0, renderer, false, constants::confirmationpopup_width_),
@@ -41,7 +41,7 @@ void ConfirmationPopUp::change_message(std::string_view message)
 
 void ConfirmationPopUp::draw(sdl::Renderer& renderer)
 {
-	if(is_confirmationpopup_visible_)
+	if(is_visible_)
 	{
 		background_.draw(renderer);
 		frame_.draw(renderer);
@@ -53,7 +53,7 @@ void ConfirmationPopUp::draw(sdl::Renderer& renderer)
 
 void ConfirmationPopUp::update()
 {
-	if(is_confirmationpopup_visible_)
+	if(is_visible_)
 	{
 		message_.update();
 		yes_.update();
