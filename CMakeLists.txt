@@ -36,10 +36,20 @@ target_link_directories(${PROJECT_NAME} PRIVATE
     ${SDL2_ROOT}/lib
 )
 
+add_library(nlohmann_json INTERFACE)
+
+target_include_directories(nlohmann_json INTERFACE
+    ${CMAKE_SOURCE_DIR}/third_party/nlohmann_json
+)
+
 target_link_libraries(${PROJECT_NAME}
     SDL2
     SDL2main
     SDL2_image
     SDL2_mixer
     SDL2_ttf
+    nlohmann_json
 )
+
+
+
