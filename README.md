@@ -56,3 +56,4 @@ If you would like to test the current version (on Windows only for now), you can
 - [SDL_image 2.8.2](https://wiki.libsdl.org/SDL2_image/FrontPage)
 - [SDL_mixer 2.8.0](https://wiki.libsdl.org/SDL2_mixer/FrontPage)
 - [SDL_ttf 2.22.0](https://wiki.libsdl.org/SDL2_ttf/FrontPage)
+- [nlohmann_json 3.12.0](https://github.com/nlohmann/json)
