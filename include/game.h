@@ -20,7 +20,7 @@ class InGame;
 
 class Game
 {
-	using PersistentType = std::variant<int, float, char, std::string>;
+	using PersistentType = std::variant<float, int, std::string>;
 
 	public:
 		Game();
@@ -110,7 +110,7 @@ class Game
 
 		void create_persistent_variable(std::string_view persistent_variable_name, PersistentType value);
 		void edit_persistent_variable(std::string_view persistent_variable_name, PersistentType new_value);
-		void save_persistent_variable(std::string_view persistent_variable_name);
+		PersistentType get_persistent_variable_value(std::string_view persistent_variable_name);
 
 		HistoryMenu* history_menu_ptr_;
 

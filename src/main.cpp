@@ -44,8 +44,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 		ImageInfo("resources/img/characters/c.png", 18, 22)
 	});
 
-	game.create_persistent_variable("test", "test");
-	game.edit_persistent_variable("test", 89);
+	game.create_persistent_variable("girl_name", "Kotonoha");
 
 	//Second step : write your own story!
 	game.autofocus_enable();
@@ -53,6 +52,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 	game.show_background("resources/img/backgrounds/cafeteria.png", "fade");
 	game.play_sound("resources/sounds/school_bell.ogg");
 	game.show_dialogue("I am feeling quite lonely right now...");
+	game.show_dialogue("Where are you " + std::get<std::string>(game.get_persistent_variable_value("girl_name")) + "...");
+	game.edit_persistent_variable("girl_name", "Sayonika");
+	game.show_dialogue("Heu... I was talking about " + std::get<std::string>(game.get_persistent_variable_value("girl_name")) + "!");
 	game.show_dialogue("I know, I should try to find Sayori!");
 	game.play_music("resources/sounds/2.ogg");
 	game.show_character({"Sayori", "4x"}, "t11");

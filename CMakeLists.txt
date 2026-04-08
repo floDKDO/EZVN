@@ -12,7 +12,7 @@ endif()
 file(GLOB_RECURSE SOURCES src/*.cpp include/*.h)
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# copier les dossier resources/ et saves/ dans le dossier build/
+# copier le dossier resources/ dans le dossier build/
 add_custom_command(
   TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources ${CMAKE_CURRENT_BINARY_DIR}/resources)
