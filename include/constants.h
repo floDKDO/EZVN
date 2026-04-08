@@ -10,6 +10,8 @@ namespace constants
 inline constexpr int window_width_ = 1280;
 inline constexpr int window_height_ = 720;
 
+inline constexpr std::string_view persistent_variables_file_ = "persistent_variables.json";
+
 inline constexpr unsigned int default_zorder_ = 0;
 inline constexpr bool default_autofocus_ = false;
 inline constexpr bool default_autozorder_ = false;
@@ -17,7 +19,6 @@ inline constexpr int default_minimum_character_for_autofocus_ = 2;
 inline constexpr std::string_view default_textbox_position_ = "bottom";
 inline constexpr std::string_view default_menu_background_ = "resources/img/backgrounds/night.png";
 inline constexpr std::string_view default_narrator_name_ = "Narrator";
-
 inline constexpr int default_fade_transition_length_ = 500; //ms
 
 inline constexpr int text_outline_size_ = 1;

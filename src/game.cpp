@@ -4,8 +4,13 @@
 #include "GameStates/settings_menu.h"
 #include "GameStates/history_menu.h"
 #include "utils.h"
+#include "RAII_SDL2/pref_path.h"
 
+#include <nlohmann/json.hpp>
+#include <fstream>
 #include <iostream>
+
+using json = nlohmann::json;
 
 Game::Game()
 	: history_menu_ptr_(nullptr), sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
@@ -16,10 +21,20 @@ Game::Game()
 	window_icon_(constants::window_icon_), 
 	window_is_open_(true), script_(renderer_)
 {
+	create_persistent_variables_file();
+
 	window_.set_icon(window_icon_);
 
 	renderer_.set_logical_size(constants::window_width_, constants::window_height_);
 	renderer_.set_draw_blend_mode(SDL_BLENDMODE_BLEND);
+}
+
+void Game::create_persistent_variables_file()
+{
+	sdl::PrefPath pref_path;
+	persistent_variables_filename_ = pref_path.get_pref_path() + '\\' + std::string(constants::persistent_variables_file_);
+	std::ofstream output_file(persistent_variables_filename_, std::ios_base::app);
+	output_file.close();
 }
 
 void Game::init_game_states()
@@ -361,4 +376,109 @@ void Game::change_namebox_text_color(std::string_view character_variable, Color 
 void Game::move_textbox(std::string_view where)
 {
 	script_.move_textbox(where);
+}
+
+//si la variable n'existe pas encore (lecture sur le disque), la créer et lui assigner la valeur (écriture sur le disque)
+//si la variable existe déjà (lecture sur le disque) avec possiblement une autre valeur, ne rien faire
+void Game::create_persistent_variable(std::string_view persistent_variable_name, PersistentType value)
+{
+	std::ifstream input_file(persistent_variables_filename_);
+	json data;
+
+	if(input_file.is_open())
+	{
+		data = json::parse(input_file, nullptr, false);
+
+		if(data.is_discarded())
+		{
+			data = json::object();
+		}
+	}
+	input_file.close();
+	
+	if(data.contains(persistent_variable_name))
+	{
+		return;
+	}
+	else
+	{
+		std::ofstream output_file(persistent_variables_filename_);
+
+		//TODO : utiliser std::visit
+		if(std::holds_alternative<int>(value))
+		{
+			data[persistent_variable_name] = std::get<int>(value);
+		}
+		else if(std::holds_alternative<float>(value))
+		{
+			data[persistent_variable_name] = std::get<float>(value);
+		}
+		else if(std::holds_alternative<char>(value))
+		{
+			data[persistent_variable_name] = std::get<char>(value);
+		}
+		if(std::holds_alternative<std::string>(value))
+		{
+			data[persistent_variable_name] = std::get<std::string>(value);
+		}
+		output_file << data.dump(4);
+		output_file.close();
+
+		//TODO : sauvegarder dans persistent_variables_
+	}
+}
+
+void Game::edit_persistent_variable(std::string_view persistent_variable_name, PersistentType new_value)
+{
+	std::ifstream input_file(persistent_variables_filename_);
+	json data;
+
+	if(input_file.is_open())
+	{
+		data = json::parse(input_file, nullptr, false);
+
+		if(data.is_discarded())
+		{
+			data = json::object();
+		}
+	}
+	input_file.close();
+
+	if(data.contains(persistent_variable_name))
+	{
+		std::ofstream output_file(persistent_variables_filename_);
+
+		//TODO : utiliser std::visit
+		if(std::holds_alternative<int>(new_value))
+		{
+			data[persistent_variable_name] = std::get<int>(new_value);
+		}
+		else if(std::holds_alternative<float>(new_value))
+		{
+			data[persistent_variable_name] = std::get<float>(new_value);
+		}
+		else if(std::holds_alternative<char>(new_value))
+		{
+			data[persistent_variable_name] = std::get<char>(new_value);
+		}
+		if(std::holds_alternative<std::string>(new_value))
+		{
+			data[persistent_variable_name] = std::get<std::string>(new_value);
+		}
+		output_file << data.dump(4);
+		output_file.close();
+
+		//TODO : sauvegarder dans persistent_variables_
+
+		return;
+	}
+	else
+	{
+		std::cerr << "La variable persistante demandée n'existe pas => erreur !\n";
+	}
+}
+
+void Game::save_persistent_variable(std::string_view persistent_variable_name)
+{
+	//TODO
 }

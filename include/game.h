@@ -20,6 +20,8 @@ class InGame;
 
 class Game
 {
+	using PersistentType = std::variant<int, float, char, std::string>;
+
 	public:
 		Game();
 
@@ -106,6 +108,10 @@ class Game
 
 		void move_textbox(std::string_view where);
 
+		void create_persistent_variable(std::string_view persistent_variable_name, PersistentType value);
+		void edit_persistent_variable(std::string_view persistent_variable_name, PersistentType new_value);
+		void save_persistent_variable(std::string_view persistent_variable_name);
+
 		HistoryMenu* history_menu_ptr_;
 
 	private:
@@ -123,6 +129,7 @@ class Game
 
 		std::stack<RequestedAction> requested_actions_;
 
+		void create_persistent_variables_file();
 		void push_state(GameState* state);
 		void pop_state();
 		GameState* get_current_state() const;
@@ -146,6 +153,9 @@ class Game
 		std::unordered_map<std::string_view /* unique_id_ of the state */, std::unique_ptr<GameState>> game_states_map_; 
 		bool window_is_open_;
 		std::stack<GameState*> game_states_stack_;
+
+		std::string persistent_variables_filename_;
+		std::unordered_map<std::string, PersistentType> persistent_variables_;
 
 	public: 
 		Script script_;

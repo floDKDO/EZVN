@@ -44,6 +44,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) //mandatory t
 		ImageInfo("resources/img/characters/c.png", 18, 22)
 	});
 
+	game.create_persistent_variable("test", "test");
+	game.edit_persistent_variable("test", 89);
 
 	//Second step : write your own story!
 	game.autofocus_enable();
