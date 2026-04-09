@@ -395,27 +395,32 @@ void Game::create_persistent_variable(std::string_view persistent_variable_name,
 		}
 	}
 	input_file.close();
+
+	std::string persistent_variable_name_string = std::string(persistent_variable_name);
 	
 	if(data.contains(persistent_variable_name))
 	{
 		if(data[persistent_variable_name].is_number_float())
 		{
-			persistent_variables_.insert({(std::string(persistent_variable_name)), float(data[persistent_variable_name])});
+			float v = float(data[persistent_variable_name]);
+			persistent_variables_.insert({persistent_variable_name_string, {value, v}});
 		}
 		else if(data[persistent_variable_name].is_number_integer())
 		{
-			persistent_variables_.insert({(std::string(persistent_variable_name)), int(data[persistent_variable_name])});
+			int v = int(data[persistent_variable_name]);
+			persistent_variables_.insert({persistent_variable_name_string, {value, v}});
 		}
 		else if(data[persistent_variable_name].is_string())
 		{
-			persistent_variables_.insert({(std::string(persistent_variable_name)), std::string(data[persistent_variable_name])});
+			std::string v = std::string(data[persistent_variable_name]);
+			persistent_variables_.insert({persistent_variable_name_string, {value, v}});
 		}
 		return;
 	}
 	else
 	{
 		std::ofstream output_file(persistent_variables_filename_);
-		std::visit([this, &data, &persistent_variable_name](auto&& v){data[persistent_variable_name] = v; persistent_variables_.insert({(std::string(persistent_variable_name)), v}); }, value);
+		std::visit([this, &data, &persistent_variable_name_string, &value](auto&& v){data[persistent_variable_name_string] = v; persistent_variables_.insert({persistent_variable_name_string, {value, v}}); }, value);
 		output_file << data.dump(4);
 		output_file.close();
 	}
@@ -437,10 +442,12 @@ void Game::edit_persistent_variable(std::string_view persistent_variable_name, P
 	}
 	input_file.close();
 
+	std::string persistent_variable_name_string = std::string(persistent_variable_name);
+
 	if(data.contains(persistent_variable_name))
 	{
 		std::ofstream output_file(persistent_variables_filename_);
-		std::visit([this, &data, &persistent_variable_name](auto&& v){data[persistent_variable_name] = v; persistent_variables_.at(std::string(persistent_variable_name)) = v; }, new_value);
+		std::visit([this, &data, &persistent_variable_name_string](auto&& v){data[persistent_variable_name_string] = v; persistent_variables_.at(persistent_variable_name_string).current_value_ = v; }, new_value);
 		output_file << data.dump(4);
 		output_file.close();
 		return;
@@ -451,7 +458,96 @@ void Game::edit_persistent_variable(std::string_view persistent_variable_name, P
 	}
 }
 
-Game::PersistentType Game::get_persistent_variable_value(std::string_view persistent_variable_name)
+float Game::get_persistent_variable_value_float(std::string_view persistent_variable_name) const
 {
-	return persistent_variables_.at(std::string(persistent_variable_name));
+	std::string persistent_variable_name_string = std::string(persistent_variable_name);
+	if(persistent_variables_.count(persistent_variable_name_string))
+	{
+		if(std::holds_alternative<float>(persistent_variables_.at(persistent_variable_name_string).current_value_))
+		{
+			return std::get<float>(persistent_variables_.at(persistent_variable_name_string).current_value_);
+		}
+		else
+		{
+			std::cerr << "The requested persistent variable does not have a value for this type!\n";
+		}
+	}
+	else
+	{
+		std::cerr << "The requested persistent variable does not exist!\n";
+	}
+}
+
+int Game::get_persistent_variable_value_int(std::string_view persistent_variable_name) const
+{
+	std::string persistent_variable_name_string = std::string(persistent_variable_name);
+	if(persistent_variables_.count(persistent_variable_name_string))
+	{
+		if(std::holds_alternative<int>(persistent_variables_.at(persistent_variable_name_string).current_value_))
+		{
+			return std::get<int>(persistent_variables_.at(persistent_variable_name_string).current_value_);
+		}
+		else
+		{
+			std::cerr << "The requested persistent variable does not have a value for this type!\n";
+		}
+	}
+	else
+	{
+		std::cerr << "The requested persistent variable does not exist!\n";
+	}
+}
+
+std::string Game::get_persistent_variable_value_string(std::string_view persistent_variable_name) const
+{
+	std::string persistent_variable_name_string = std::string(persistent_variable_name);
+	if(persistent_variables_.count(persistent_variable_name_string))
+	{
+		if(std::holds_alternative<std::string>(persistent_variables_.at(persistent_variable_name_string).current_value_))
+		{
+			return std::get<std::string>(persistent_variables_.at(persistent_variable_name_string).current_value_);
+		}
+		else
+		{
+			std::cerr << "The requested persistent variable does not have a value for this type!\n";
+		}
+	}
+	else
+	{
+		std::cerr << "The requested persistent variable does not exist!\n";
+	}
+}
+
+void Game::clear_persistent_variables()
+{
+	for(std::pair<const std::string, PersistentValue>& var : persistent_variables_)
+	{
+		std::visit([&var](auto&& v){ var.second.current_value_ = v; }, var.second.default_value_);
+	}
+
+	std::ifstream input_file(persistent_variables_filename_);
+	json data;
+
+	if(input_file.is_open())
+	{
+		data = json::parse(input_file, nullptr, false);
+
+		if(data.is_discarded())
+		{
+			data = json::object();
+		}
+	}
+	input_file.close();
+
+	for(auto it = data.begin(); it != data.end(); ++it)
+	{
+		if(persistent_variables_.count(it.key()))
+		{
+			std::visit([this, &it](auto&& v){*it = v; }, persistent_variables_.at(it.key()).default_value_);
+		}
+	}
+
+	std::ofstream output_file(persistent_variables_filename_);
+	output_file << data.dump(4);
+	output_file.close();
 }

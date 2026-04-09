@@ -110,9 +110,12 @@ class Game
 
 		void create_persistent_variable(std::string_view persistent_variable_name, PersistentType value);
 		void edit_persistent_variable(std::string_view persistent_variable_name, PersistentType new_value);
-		PersistentType get_persistent_variable_value(std::string_view persistent_variable_name);
+		float get_persistent_variable_value_float(std::string_view persistent_variable_name) const;
+		int get_persistent_variable_value_int(std::string_view persistent_variable_name) const;
+		std::string get_persistent_variable_value_string(std::string_view persistent_variable_name) const;
+		void clear_persistent_variables();
 
-		HistoryMenu* history_menu_ptr_;
+		HistoryMenu* history_menu_ptr_; 
 
 	private:
 		enum class Action
@@ -147,6 +150,12 @@ class Game
 		AudioManager audio_manager_;
 
 	private:
+		struct PersistentValue
+		{
+			PersistentType default_value_;
+			PersistentType current_value_;
+		};
+
 		sdl::Renderer renderer_;
 		sdl::GameController game_controller_;
 		sdl::Surface window_icon_;
@@ -155,7 +164,7 @@ class Game
 		std::stack<GameState*> game_states_stack_;
 
 		std::string persistent_variables_filename_;
-		std::unordered_map<std::string, PersistentType> persistent_variables_;
+		std::unordered_map<std::string, PersistentValue> persistent_variables_;
 
 	public: 
 		Script script_;
