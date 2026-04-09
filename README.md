@@ -42,11 +42,12 @@ If you would like to test the current version (on Windows only for now), you can
 - History menu that displays dialogue history
 - Pop-up that displays when we try to quit the game
 - Choice menus (display a dialogue based on the choice you made)
+- Persistent variables
 
 ## Remaining features to be implemented: 
 - Add other transitions for backgrounds (only fade for now) 
 - Add a logging system to obtain information about the engine states
-- Save/load system and persistent variables
+- Save/load system 
 - Domain Specific Language like Ren'Py's
 - Drag-and-drop system using UI elements for menu creation
 - Possible switch to SDL3 if it's worth it
