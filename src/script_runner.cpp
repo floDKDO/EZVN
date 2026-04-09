@@ -451,7 +451,7 @@ void ScriptRunner::rebuild(size_t target_script_index)
 				textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
 			}
 
-			if(is_load && i != target_script_index)
+			if(is_load && i != target_script_index) // "i != target_script_index" pour ne pas ajouter le dernier dialogue deux fois dans l'historique
 			{
 				textbox_manager_.update_history(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
 			}

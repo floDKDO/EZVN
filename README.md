@@ -6,6 +6,11 @@ EZVN, a visual novel game engine written in modern C++ (C++17) and using the SDL
   <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image2.png" alt="Image 2" width="400"/>
 </p>
 
+<p align="center">
+  <img src="https://github.com/floDKDO/EZVN/blob/main/showcase/image3.png" alt="Image 3" width="400"/>
+</p>
+
+
 ## Build & install
 For now, the engine is not yet complete: not all features have been implemented and bugs may still be present.
 If you would like to test the current version (on Windows only for now), you can:
