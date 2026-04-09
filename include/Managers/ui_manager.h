@@ -20,11 +20,13 @@ class UiManager
 		void register_element(Ui* ui);
 		void set_elements();
 		void show_pop_up(std::string_view text, std::function<void(Ui* ui)> callback_function);
+		void hide_pop_up();
 
 		void handle_events(const SDL_Event& e);
 		void draw(sdl::Renderer& renderer);
 		void update();
 
+		bool is_modal_ui_visible() const;
 		bool is_mouse_on_widget(PointerEventData pointer_event_data);
 
 		static const size_t modal_ui_; //= 1

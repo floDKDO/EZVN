@@ -1,13 +1,28 @@
 #include "script_runner.h"
+#include "RAII_SDL2/pref_path.h"
 
+#include <nlohmann/json.hpp>
+#include <fstream>
 #include <iostream>
+
+using json = nlohmann::json;
+
 
 ScriptRunner::ScriptRunner(TextboxManager::UiOnTextbox ui_on_textbox, UiManager& ui_manager, Game& game, sdl::Renderer& renderer)
 	: current_script_index_(0), script_index_when_prev_({false, current_script_index_}), script_(game.script_), init_on_first_dialogue_(false), is_dialogue_of_choice_menu_visible_(false), are_ui_hidden_(false),
 	ui_manager_(ui_manager), character_manager_(renderer, game.script_.character_definitions_), background_manager_(renderer), 
-	music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(ui_on_textbox, renderer, game), choice_menu_manager_(ui_manager, renderer, game)
+	music_manager_(game.audio_manager_), sound_manager_(game.audio_manager_), textbox_manager_(ui_manager, ui_on_textbox, renderer, game), choice_menu_manager_(ui_manager, renderer, game)
 {
+	create_save_file();
 	init_dialogues_script_index();
+}
+
+void ScriptRunner::create_save_file()
+{
+	sdl::PrefPath pref_path;
+	save_filename_ = pref_path.get_pref_path() + '\\' + std::string(constants::save_file_);
+	std::ofstream output_file(save_filename_, std::ios_base::app);
+	output_file.close();
 }
 
 void ScriptRunner::init_dialogues_script_index()
@@ -123,7 +138,7 @@ void ScriptRunner::handle_events(const SDL_Event& e)
 	{
 		textbox_manager_.handle_events_mouse_wheel(e);
 		ui_manager_.handle_events(e);
-		if(!ui_manager_.is_mouse_on_widget_) //uniquement s'il n'y a pas de collision avec un textbutton, gérer les événements "clic" et "espace" de la Textbox (= passer au prochain dialogue)
+		if(!ui_manager_.is_mouse_on_widget_ && !ui_manager_.is_modal_ui_visible()) //uniquement s'il n'y a pas de collision avec un textbutton, gérer les événements "clic" et "espace" de la Textbox (= passer au prochain dialogue)
 		{
 			textbox_manager_.handle_events_keyboard_mouse(e);
 		}
@@ -301,6 +316,51 @@ void ScriptRunner::update()
 	update_managers();
 }
 
+void ScriptRunner::save()
+{
+	std::ifstream input_file(save_filename_);
+	json data;
+
+	if(input_file.is_open())
+	{
+		data = json::parse(input_file, nullptr, false);
+
+		if(data.is_discarded())
+		{
+			data = json::object();
+		}
+	}
+	input_file.close();
+
+	std::ofstream output_file(save_filename_);
+	data["save"] = current_script_index_;
+	output_file << data.dump(4);
+	output_file.close();
+}
+
+void ScriptRunner::load()
+{
+	std::ifstream input_file(save_filename_);
+	json data;
+
+	if(input_file.is_open())
+	{
+		data = json::parse(input_file, nullptr, false);
+
+		if(data.is_discarded())
+		{
+			data = json::object();
+		}
+	}
+	input_file.close();
+
+	if(data.contains("save"))
+	{
+		size_t v = int(data["save"]);
+		rebuild(v);
+	}
+}
+
 void ScriptRunner::play_all_sounds_before_previous_dialogue(size_t target_script_index)
 {
 	for(size_t i = target_script_index; i-- > 0; )
@@ -335,15 +395,22 @@ void ScriptRunner::handle_music_when_scroll_back(size_t target_script_index)
 	}
 }
 
-void ScriptRunner::rebuild()
+//méthode appelée dans deux cas : scroll sur un dialogue précédent ou load 
+void ScriptRunner::rebuild(size_t target_script_index)
 {
-	if(!get_script_index_of_previous_dialogue().has_value()) //cas où on tente d'aller à un dialogue précédent alors qu'on est déjà sur le premier dialogue
+	bool is_load = !textbox_manager_.is_dialogue_instruction_prev();
+	if(textbox_manager_.is_dialogue_instruction_prev() && !get_script_index_of_previous_dialogue().has_value()) //cas où on tente d'aller à un dialogue précédent alors qu'on est déjà sur le premier dialogue
 	{
 		return;
 	}
 
+	if(!is_load)
+	{
+		target_script_index = get_script_index_of_previous_dialogue().value();
+	}
+
 	character_manager_.reset();
-	textbox_manager_.reset();
+	textbox_manager_.reset(is_load);
 	sound_manager_.reset();
 	background_manager_.reset();
 	transition_manager_.reset();
@@ -352,7 +419,6 @@ void ScriptRunner::rebuild()
 	is_dialogue_of_choice_menu_visible_ = false;
 
 	//TODO : mettre dans une fonction
-	size_t target_script_index = get_script_index_of_previous_dialogue().value();
 	for(size_t i = 0; i <= target_script_index; ++i)
 	{
 		Script::ScriptInformation& current_script_information = script_.script_information_[i];
@@ -384,6 +450,12 @@ void ScriptRunner::rebuild()
 			{
 				textbox_manager_.update(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
 			}
+
+			if(is_load && i != target_script_index)
+			{
+				textbox_manager_.update_history(info_textbox, character_manager_.active_characters_.at(info_textbox.character_variable_));
+			}
+
 			character_manager_.update_characters_dialogue(info_textbox);
 		}
 		else if(std::holds_alternative<Script::InfoChoiceMenu>(current_script_information) && i == target_script_index - 1)

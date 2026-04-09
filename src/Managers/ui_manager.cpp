@@ -109,6 +109,14 @@ void UiManager::show_pop_up(std::string_view text, std::function<void(Ui* ui)> c
 	is_pop_up_visible_ = true;
 }
 
+void UiManager::hide_pop_up()
+{
+	if(ConfirmationPopUp* popup = dynamic_cast<ConfirmationPopUp*>(ui_elements_[modal_ui_].front()); popup != nullptr)
+	{
+		popup->is_visible_ = false;
+	}
+}
+
 bool UiManager::is_widget1_facing_widget2(SDL_Rect pos_widget1, SDL_Rect pos_widget2, Axis mode) const
 {
 	SDL_assert(mode == Axis::X || mode == Axis::Y);
@@ -277,6 +285,11 @@ void UiManager::unselect_previous(UiWidget* widget, PointerEventData pointer_eve
 			}
 		}
 	}
+}
+
+bool UiManager::is_modal_ui_visible() const
+{
+	return !ui_elements_[modal_ui_].empty();
 }
 
 bool UiManager::is_mouse_on_widget(PointerEventData pointer_event_data)

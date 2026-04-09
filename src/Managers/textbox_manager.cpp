@@ -1,16 +1,17 @@
 #include "Managers/textbox_manager.h"
 #include "game.h"
 #include "GameStates/history_menu.h"
+#include "GameStates/in_game.h"
 
 #include <iostream>
 
-TextboxManager::TextboxManager(UiOnTextbox ui_on_textbox, sdl::Renderer& renderer, Game& game)
+TextboxManager::TextboxManager(UiManager& ui_manager, UiOnTextbox ui_on_textbox, sdl::Renderer& renderer, Game& game)
 	: dialogue_instruction_({Instruction::NONE, false}), skip_mode_(false), last_time_(0), auto_mode_(false), position_(constants::default_textbox_position_),
-	textbox_(renderer), ui_on_textbox_(ui_on_textbox), game_(game), renderer_(renderer)
+	textbox_(renderer), ui_on_textbox_(ui_on_textbox), ui_manager_(ui_manager), game_(game), renderer_(renderer)
 {
 	ui_on_textbox_.history_button_->callback_function_ = std::bind(&TextboxManager::history_function, this, std::placeholders::_1);
-	ui_on_textbox_.save_button_->callback_function_ = std::bind(&TextboxManager::temp_function, this, std::placeholders::_1);
-	ui_on_textbox_.load_button_->callback_function_ = std::bind(&TextboxManager::temp_function, this, std::placeholders::_1);
+	ui_on_textbox_.save_button_->callback_function_ = std::bind(&TextboxManager::save_function, this, std::placeholders::_1);
+	ui_on_textbox_.load_button_->callback_function_ = std::bind(&TextboxManager::load_function, this, std::placeholders::_1);
 	ui_on_textbox_.settings_button_->callback_function_ = std::bind(&TextboxManager::settings_function, this, std::placeholders::_1);
 	ui_on_textbox_.skip_toggle_->callback_function_ = std::bind(&TextboxManager::skip_function, this, std::placeholders::_1);
 	ui_on_textbox_.auto_toggle_->callback_function_ = std::bind(&TextboxManager::auto_function, this, std::placeholders::_1);
@@ -172,11 +173,35 @@ void TextboxManager::settings_function([[maybe_unused]] Ui* ui)
 	game_.request_push_state(constants::settings_menu_unique_id_);
 }
 
-void TextboxManager::temp_function([[maybe_unused]] Ui* ui)
+void TextboxManager::save_function([[maybe_unused]] Ui* ui)
 {
-	std::cout << "Pressed!\n";
+	std::cout << "Pressed Save!\n";
+	ui_manager_.show_pop_up("Are you sure you want to overwrite your save?",
+		[this]([[maybe_unused]] Ui* ui){
+		std::cout << "Pressed Yes!" << std::endl;
+		InGame* ingame_ptr = dynamic_cast<InGame*>(game_.get_state(constants::ingame_unique_id_));
+		ingame_ptr->script_runner_->save();
+		ui_manager_.hide_pop_up();
+	});
+}
+
+void TextboxManager::load_function([[maybe_unused]] Ui* ui)
+{
+	std::cout << "Pressed Load!\n";
+	ui_manager_.show_pop_up("Load will lose unsaved progress.\n Are you sure you want to do this?",
+		[this]([[maybe_unused]] Ui* ui){
+		std::cout << "Pressed Yes!" << std::endl;
+		InGame* ingame_ptr = dynamic_cast<InGame*>(game_.get_state(constants::ingame_unique_id_));
+		ingame_ptr->script_runner_->load();
+		ui_manager_.hide_pop_up();
+	});
 }
 //////////////////////////////////////////////////////////////////
+
+void TextboxManager::update_history(const Script::InfoTextbox& info_textbox, const Character& character)
+{
+	game_.history_menu_ptr_->add_dialogue_to_history(character.properties_.name_, info_textbox.t_.textbox_command_value_, character.properties_.namebox_text_color_, textbox_.textbox_.position_.w, renderer_);
+}
 
 void TextboxManager::update_skip_auto_modes()
 {
@@ -224,7 +249,7 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 		textbox_.change_textbox(character.properties_.textbox_path_, renderer_);
 		textbox_.change_namebox(character.properties_.namebox_path_, renderer_);
 		textbox_.change_namebox_text_color(character.properties_.namebox_text_color_); 
-		game_.history_menu_ptr_->add_dialogue_to_history(get_speaker_name(), get_dialogue(), character.properties_.namebox_text_color_, textbox_.textbox_.position_.w, renderer_);
+		update_history(info_textbox, character);
 
 		if(!skip_mode_)
 		{
@@ -242,10 +267,18 @@ void TextboxManager::update(const Script::InfoTextbox& info_textbox, const Chara
 	}
 }
 
-void TextboxManager::reset()
+void TextboxManager::reset(bool is_load)
 {
 	textbox_.text_.text_.clear();
 	textbox_.is_first_dialogue_ = true;
 	position_.clear();
-	game_.history_menu_ptr_->remove_last_dialogue_from_history();
+
+	if(!is_load)
+	{
+		game_.history_menu_ptr_->remove_last_dialogue_from_history(); 
+	}
+	else
+	{
+		game_.history_menu_ptr_->clear();
+	}
 }

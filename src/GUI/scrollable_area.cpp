@@ -196,6 +196,18 @@ void ScrollableArea::add_text(DialoguePtr text)
 	elements_value_.push_back(std::make_pair(std::make_pair(character_name, dialogue), dialogue->position_.y)); //character_name et dialogue ont la même valeur pour y
 }
 
+void ScrollableArea::clear()
+{
+	for(ElementPtr& dialogue_ptr : elements_)
+	{
+		std::get<DialoguePtr>(dialogue_ptr).first.reset();
+		std::get<DialoguePtr>(dialogue_ptr).second.reset();
+	}
+
+	elements_.clear();
+	elements_value_.clear();
+}
+
 void ScrollableArea::remove_last_text()
 {
 	//supprimer le dialogue courant et le dialogue précédent dans le cas d'un scrollback

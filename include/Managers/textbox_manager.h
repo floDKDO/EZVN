@@ -31,7 +31,7 @@ class TextboxManager
 			TextButton* settings_button_;
 		};
 
-		TextboxManager(UiOnTextbox ui_on_textbox, sdl::Renderer& renderer, Game& game);
+		TextboxManager(UiManager& ui_manager, UiOnTextbox ui_on_textbox, sdl::Renderer& renderer, Game& game);
 
 		void go_to_next_dialogue(bool is_input_source_mouse_wheel = false);
 		void go_to_prev_dialogue(bool is_input_source_mouse_wheel = false);
@@ -58,14 +58,16 @@ class TextboxManager
 		void history_function(Ui* ui);
 		void auto_function(Ui* ui);
 		void skip_function(Ui* ui);
+		void save_function(Ui* ui);
+		void load_function(Ui* ui);
 		void settings_function(Ui* ui);
-		void temp_function(Ui* ui);
 
+		void update_history(const Script::InfoTextbox& info_textbox, const Character& character);
 		void update_skip_auto_modes();
 		void update_textbox();
 		void update(const Script::InfoTextbox& info_textbox, const Character& character);
 
-		void reset();
+		void reset(bool is_load);
 
 		bool skip_mode_;
 
@@ -77,6 +79,7 @@ class TextboxManager
 		Textbox textbox_; 
 		UiOnTextbox ui_on_textbox_;
 
+		UiManager& ui_manager_;
 		Game& game_;
 		sdl::Renderer& renderer_;
 };

@@ -11,6 +11,7 @@ inline constexpr int window_width_ = 1280;
 inline constexpr int window_height_ = 720;
 
 inline constexpr std::string_view persistent_variables_file_ = "persistent_variables.json";
+inline constexpr std::string_view save_file_ = "saves.json";
 
 inline constexpr unsigned int default_zorder_ = 0;
 inline constexpr bool default_autofocus_ = false;

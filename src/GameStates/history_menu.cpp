@@ -36,6 +36,11 @@ void HistoryMenu::on_show()
 	scroll_ptr_->scroll_elements(); //màj des éléments
 }
 
+void HistoryMenu::clear()
+{
+	scroll_ptr_->clear();
+}
+
 void HistoryMenu::add_dialogue_to_history(std::string_view character_name, std::string_view dialogue, Color namebox_text_color, int textbox_width, sdl::Renderer& renderer)
 {
 	//TODO : j'ai dû mettre la taille "constants::textbox_text_size_" pour la nom des personnages pour garder l'alignement
