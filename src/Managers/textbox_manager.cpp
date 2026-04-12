@@ -176,13 +176,14 @@ void TextboxManager::settings_function([[maybe_unused]] Ui* ui)
 void TextboxManager::save_function([[maybe_unused]] Ui* ui)
 {
 	std::cout << "Pressed Save!\n";
-	ui_manager_.show_pop_up("Are you sure you want to overwrite your save?",
+	/*ui_manager_.show_pop_up("Are you sure you want to overwrite your save?",
 		[this]([[maybe_unused]] Ui* ui){
 		std::cout << "Pressed Yes!" << std::endl;
 		InGame* ingame_ptr = dynamic_cast<InGame*>(game_.get_state(constants::ingame_unique_id_));
-		ingame_ptr->script_runner_->save();
+		ingame_ptr->script_runner_->save(renderer_);
 		ui_manager_.hide_pop_up();
-	});
+	});*/
+	game_.request_push_state(constants::save_load_menu_unique_id_);
 }
 
 void TextboxManager::load_function([[maybe_unused]] Ui* ui)

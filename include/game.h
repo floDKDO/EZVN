@@ -3,7 +3,6 @@
 #include "constants.h"
 #include "GameStates/game_state.h"
 #include "GameStates/history_menu.h"
-#include "Managers/ui_manager.h"
 #include "RAII_SDL2/window.h"
 #include "RAII_SDL2/renderer.h"
 #include "RAII_SDL2/game_controller.h"
@@ -38,6 +37,7 @@ class Game
 		void update();
 
 		void update_fps_count(std::string_view fps) const;
+		void take_screenshot();
 
 		void create_composite_image(std::string_view character_variable, std::string_view composite_image_name, int w, int h, std::initializer_list<ImageInfo> images_info);
 		void create_character(std::string_view character_variable, std::string_view character_name, Color namebox_text_color = constants::namebox_text_color_, std::string_view textbox_path = "", std::string_view namebox_path = "");
@@ -116,6 +116,7 @@ class Game
 		void clear_persistent_variables();
 
 		HistoryMenu* history_menu_ptr_; 
+		SDL_Surface* screenshot_;
 
 	private:
 		enum class Action

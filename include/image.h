@@ -16,6 +16,7 @@ class Image : public Displayable
 		Image(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer, unsigned int zorder = constants::default_zorder_);
 
 		void init_image(std::string_view new_path, int x, int y, sdl::Renderer& renderer);
+		void new_image(std::string_view new_path, sdl::Renderer& renderer);
 		void create_image_from_composite(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer);
 		void change_image(const CompositeImage& composite_image, sdl::Renderer& renderer);
 		void draw(sdl::Renderer& renderer) override;

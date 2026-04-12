@@ -176,5 +176,6 @@ inline constexpr std::string_view main_menu_unique_id_ = "Main";
 inline constexpr std::string_view settings_menu_unique_id_ = "Settings";
 inline constexpr std::string_view ingame_unique_id_ = "InGame";
 inline constexpr std::string_view history_menu_unique_id_ = "History";
+inline constexpr std::string_view save_load_menu_unique_id_ = "SaveLoad";
 
 }

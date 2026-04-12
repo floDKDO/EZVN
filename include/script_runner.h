@@ -33,13 +33,14 @@ class ScriptRunner
 		void choice_made_from_choice_menu();
 		void update_managers();
 		void update();
-		void save();
+		void save(sdl::Renderer& renderer);
 		void load();
 		void rebuild(size_t target_script_index = 0);
 		void play_all_sounds_before_previous_dialogue(size_t target_script_index);
 		void handle_music_when_scroll_back(size_t target_script_index);
 
 		size_t current_script_index_;
+		std::string save_filename_; //TODO : remettre en private
 
 	private:
 		void create_save_file();
@@ -55,7 +56,6 @@ class ScriptRunner
 
 		std::set<size_t> dialogues_script_index_;
 
-		std::string save_filename_;
 		bool init_on_first_dialogue_;
 		bool is_dialogue_of_choice_menu_visible_;
 		bool are_ui_hidden_;

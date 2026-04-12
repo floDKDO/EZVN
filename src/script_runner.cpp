@@ -3,6 +3,7 @@
 
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <ctime>
 #include <iostream>
 
 using json = nlohmann::json;
@@ -316,7 +317,7 @@ void ScriptRunner::update()
 	update_managers();
 }
 
-void ScriptRunner::save()
+void ScriptRunner::save(sdl::Renderer& renderer)
 {
 	std::ifstream input_file(save_filename_);
 	json data;
@@ -332,8 +333,26 @@ void ScriptRunner::save()
 	}
 	input_file.close();
 
+	/* Structure d'une sauvegarde :
+	* saveX: { //avec X l'emplacement de la sauvegarde
+	*   "current_script_index_": valeur,
+	*   "screenshot": chemin du screenshot,
+	*   "time": date et heure
+	* }
+	*/ 
+
 	std::ofstream output_file(save_filename_);
 	data["save"] = current_script_index_;
+	std::time_t date = std::time(nullptr);
+	std::cout << std::ctime(&date); //TODO : à remplacer
+
+	//TODO : créer des méthodes
+	//TODO : cela sera effectué par Game quand on va dans le menu Save (il sauvegarder une surface MAIS n'appelle pas IMG_SavePNG). 
+	//		 Le menu Save, si une sauvegarde est réalisée, appelle IMG_SavePNG en récupérant la surface sauvegardée par Game
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, constants::window_width_, constants::window_height_, 32, 0, 0, 0, 0);
+	SDL_RenderReadPixels(renderer.fetch(), nullptr, 0, surface->pixels, surface->pitch);
+	IMG_SavePNG(surface, "temp.png");
+
 	output_file << data.dump(4);
 	output_file.close();
 }

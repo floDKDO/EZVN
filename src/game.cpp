@@ -3,6 +3,7 @@
 #include "GameStates/main_menu.h"
 #include "GameStates/settings_menu.h"
 #include "GameStates/history_menu.h"
+#include "GameStates/save_load_menu.h"
 #include "utils.h"
 #include "RAII_SDL2/pref_path.h"
 
@@ -13,7 +14,8 @@
 using json = nlohmann::json;
 
 Game::Game()
-	: history_menu_ptr_(nullptr), sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
+	: history_menu_ptr_(nullptr), screenshot_(nullptr), 
+	sdl_(SDL_INIT_EVERYTHING), sdl_img_(IMG_INIT_PNG | IMG_INIT_JPG), sdl_mixer_(MIX_INIT_OGG | MIX_INIT_MP3), sdl_ttf_(),
 	window_(constants::game_name_, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, constants::window_width_, constants::window_height_, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI),
 	audio_manager_(),
 	renderer_(window_, -1, SDL_RENDERER_PRESENTVSYNC),
@@ -43,6 +45,7 @@ void Game::init_game_states()
 	game_states_map_.insert({constants::main_menu_unique_id_, std::make_unique<MainMenu>(*this, renderer_)}); 
 	game_states_map_.insert({constants::settings_menu_unique_id_, std::make_unique<SettingsMenu>(*this, renderer_)}); 
 	game_states_map_.insert({constants::history_menu_unique_id_, std::make_unique<HistoryMenu>(*this, renderer_)});
+	game_states_map_.insert({constants::save_load_menu_unique_id_, std::make_unique<SaveLoadMenu>(*this, renderer_)});
 	push_state(game_states_map_.at(constants::main_menu_unique_id_).get());
 
 	history_menu_ptr_ = dynamic_cast<HistoryMenu*>(get_state(constants::history_menu_unique_id_));
@@ -119,6 +122,10 @@ void Game::handle_requests()
 		RequestedAction top = requested_actions_.top();
 		if(top.action_ == Action::PUSH)
 		{
+			if(top.unique_id_ == constants::save_load_menu_unique_id_)
+			{
+				take_screenshot();
+			}
 			push_state(game_states_map_.at(top.unique_id_).get());
 		}
 		else if(top.action_ == Action::POP)
@@ -201,6 +208,13 @@ void Game::update()
 void Game::update_fps_count(std::string_view fps) const
 {
 	window_.set_title(std::string(constants::game_name_) + std::string(fps));
+}
+
+void Game::take_screenshot()
+{
+	screenshot_ = SDL_CreateRGBSurface(0, constants::window_width_, constants::window_height_, 32, 0, 0, 0, 0);
+	SDL_RenderReadPixels(renderer_.fetch(), nullptr, 0, screenshot_->pixels, screenshot_->pitch);
+	//IMG_SavePNG(screenshot_, "temp.png");
 }
 
 void Game::create_composite_image(std::string_view character_variable, std::string_view composite_image_name, int w, int h, std::initializer_list<ImageInfo> images_info)

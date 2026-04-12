@@ -70,6 +70,40 @@ void Image::init_image(std::string_view new_path, int x, int y, sdl::Renderer& r
 	initial_rect_ = position_;
 }
 
+void Image::new_image(std::string_view new_path, sdl::Renderer& renderer)
+{
+	path_ = new_path;
+
+	if(path_.find("resources/img/characters/") != std::string_view::npos)
+	{
+		image_type_ = Kind::CHARACTER;
+	}
+	else if(path_.find("resources/img/gui/") != std::string_view::npos)
+	{
+		image_type_ = Kind::GUI;
+	}
+	else if(path_.find("resources/img/backgrounds/") != std::string_view::npos)
+	{
+		image_type_ = Kind::BACKGROUND;
+	}
+	else
+	{
+		image_type_ = Kind::NONE;
+	}
+
+	if(animated_image_.has_value())
+	{
+		texture_ = std::make_unique<sdl::Texture>(renderer, animated_image_->fetch()->frames[frame_index_]);
+	}
+	else
+	{
+		texture_ = std::make_unique<sdl::Texture>(renderer, new_path);
+	}
+
+	texture_->set_blend_mode(SDL_BLENDMODE_BLEND);
+	initial_rect_ = position_;
+}
+
 void Image::create_image_from_composite(const CompositeImage& composite_image, int x, int y, sdl::Renderer& renderer)
 {
 	position_.x = x;
